@@ -5,14 +5,14 @@ using Bridge.InjectionBuildTask.Properties;
 namespace Bridge.InjectionBuildTask
 {
 
-    public enum VisualStudioVersion
+    internal enum VisualStudioVersion
     {
         VS2010,
         VS2012
 
     }
 
-    public static class VisualStudioOptions
+    internal static class VisualStudioOptions
     {
         private static readonly string MyDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
