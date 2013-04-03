@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Bridge.TypeMapper;
 using Bridge.Visualizers;
 
@@ -25,11 +26,16 @@ namespace Bridge.InjectionBuildTask
 
             VisualStudioOptions.VisualStudioPaths[VisualStudioVersion.VS2010].ForEach(typeMapper.Save);
 
+            //Copy the resources associated with the visualizer
+            VisualStudioOptions.VisualStudioPaths[VisualStudioVersion.VS2010].ForEach(path => File.Copy(Visualizers.Properties.Resources.LINQPadExe, path + Visualizers.Properties.Resources.LINQPadExe, true));
+            VisualStudioOptions.VisualStudioPaths[VisualStudioVersion.VS2010].ForEach(path => File.Copy(Visualizers.Properties.Resources.LINQPadExe, path + Visualizers.Properties.Resources.LINQPadQuery, true));
+
+
             return true;
         }
 
         [Required]
-        public string Assembly { get; set; }
+        public string Assembly { private get; set; }
 
         [Required]
         public string References { get; set; }

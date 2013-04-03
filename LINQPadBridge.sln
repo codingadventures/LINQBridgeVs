@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.Visualizers", "LINQPadVisualizer\Bridge.Visualizers.csproj", "{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.TypeMapper", "VisualizerTypeMapper\Bridge.TypeMapper.csproj", "{FCC8BF06-3173-4D21-A157-D1167B6407C9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.TypeMapper", "Bridge.TypeMapper\Bridge.TypeMapper.csproj", "{FCC8BF06-3173-4D21-A157-D1167B6407C9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{15295B1F-D517-4D5B-91C6-6682BE1E4B16}"
 	ProjectSection(SolutionItems) = preProject

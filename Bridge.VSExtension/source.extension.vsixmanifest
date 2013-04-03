@@ -1,18 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
-  <Metadata>
-    <Identity Id="fa136bfd-0b1d-4721-9159-1dbefcb5c4fc" Version="0.1" Language="en-US" Publisher="Giovanni Campo" />
-    <DisplayName>Bridge.VSExtension</DisplayName>
-    <Description>Enable/Disable the creation of a custom debugger visualizer and the transformation of the target project in a fully serializable library</Description>
-  </Metadata>
-  <Installation InstalledByMsi="false">
-    <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="11.0" />
-  </Installation>
-  <Dependencies>
-    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="4.5" />
-    <Dependency Id="Microsoft.VisualStudio.MPF.11.0" DisplayName="Visual Studio MPF 11.0" d:Source="Installed" Version="11.0" />
-  </Dependencies>
-  <Assets>
-    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
-  </Assets>
+    <Metadata>
+        <Identity Id="fa136bfd-0b1d-4721-9159-1dbefcb5c4fc" Version="0.1" Language="en-US" Publisher="Giovanni Campo" />
+        <DisplayName>Bridge.VSExtension</DisplayName>
+        <Description>Enable/Disable the creation of a custom debugger visualizer and the transformation of the target project in a fully serializable library</Description>
+    </Metadata>
+    <Installation InstalledByMsi="false" AllUsers="true">
+        <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="11.0" />
+        <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="10.0" />
+        <InstallationTarget Id="Microsoft.VisualStudio.Premium" Version="11.0" />
+        <InstallationTarget Id="Microsoft.VisualStudio.Premium" Version="10.0" />
+    </Installation>
+    <Dependencies>
+        <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="4.0" />
+        <Dependency Id="Microsoft.VisualStudio.MPF" DisplayName="Visual Studio MPF" d:Source="Installed" Version="10.0" />
+    </Dependencies>
+    <Assets>
+        <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+        <!-- Hack taken from http://stackoverflow.com/questions/6974244/vsix-package-doesnt-include-localized-resources-of-referenced-assembly-->
+        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="Bridge.InjectionBuildTask" Path="|Bridge.InjectionBuildTask|" AssemblyName="|Bridge.InjectionBuildTask;AssemblyName;BuiltProjectOutputGroup;BuiltProjectOutputGroupDependencies;GetCopyToOutputDirectoryItems;SatelliteDllsProjectOutputGroup" />
+    </Assets>
 </PackageManifest>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -45,7 +46,7 @@ namespace GiovanniCampo.Bridge_VSExtension
     {
         private readonly DTE2 _application;
         private readonly Dictionary<string, ProjectInfo> _projects = new Dictionary<string, ProjectInfo>(StringComparer.InvariantCultureIgnoreCase);
-        private const string Targets = "KindOfMagic.targets";
+        private const string Targets = "SInjectBuilder.targets";
 
         private static readonly XName Import = XName.Get("Import", "http://schemas.microsoft.com/developer/msbuild/2003");
         private static readonly string Path = System.IO.Path.Combine(GetInstallDir(), Targets);
@@ -104,7 +105,7 @@ namespace GiovanniCampo.Bridge_VSExtension
             return !IsBridgeEnabled(project);
         }
 
-        public void EnableBridge(CommandAction action)
+        public void Execute(CommandAction action)
         {
 
             if (SupportedProjects == null)
@@ -127,15 +128,39 @@ namespace GiovanniCampo.Bridge_VSExtension
                 _projects.Remove(proj.FullName);
         }
 
+        public void UpdateCommand(MenuCommand cmd, CommandAction action)
+        {
+            var states = GetStatus(action);
+            cmd.Visible = (CommandStates.Visible & states) != 0;
+            cmd.Enabled = (CommandStates.Enabled & states) != 0;
+        }
+
+        private static void RemoveImports(XElement e)
+        {
+            var imports = FindImport(e, false).ToList();
+
+            foreach (var import in imports)
+                import.Remove();
+        }
+
         private static void Enable(Project project)
         {
+            var e = XElement.Load(project.FullName);
 
+            RemoveImports(e);
+
+            e.Add(new XElement(Import, new XAttribute("Project", Path)));
+            e.Save(project.FullName);
 
         }
 
         private static void Disable(Project project)
         {
+            var e = XElement.Load(project.FullName);
 
+            RemoveImports(e);
+
+            e.Save(project.FullName);
 
         }
 
@@ -151,18 +176,53 @@ namespace GiovanniCampo.Bridge_VSExtension
             }
         }
 
-        static string GetInstallDir()
+        private CommandStates GetStatus(CommandAction action)
         {
-            var x = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var home = Environment.GetEnvironmentVariable("KINDOFMAGIC");
+            return GetCommandStatus(GetMultiStatus(), action);
+        }
+
+        private int GetMultiStatus()
+        {
+            var result = 0;
+
+            var projects = SupportedProjects;
+            if (projects == null)
+                return result;
+
+            if (projects.Any(IsBridgeDisabled))
+                result |= 1;
+
+            if (projects.Any(IsBridgeEnabled))
+                result |= 2;
+
+            return result;
+        }
+
+        private CommandStates GetCommandStatus(int status, CommandAction action)
+        {
+            if (status == 0)
+                return CommandStates.None;
+
+            var result = ((action == CommandAction.Disable ? status >> 1 : status) & 1) != 0;
+
+            if (result)
+                return CommandStates.Enabled | CommandStates.Visible;
+
+            return CommandStates.None;
+        }
+
+        private static string GetInstallDir()
+        {
+            var x = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var home = Environment.GetEnvironmentVariable("LINQPadBridge");
 
             if (x != home)
             {
-                Environment.SetEnvironmentVariable("KINDOFMAGIC", x, EnvironmentVariableTarget.User);
-                Environment.SetEnvironmentVariable("KINDOFMAGIC", x);
+                Environment.SetEnvironmentVariable("LINQPadBridge", x, EnvironmentVariableTarget.User);
+                Environment.SetEnvironmentVariable("LINQPadBridge", x);
             }
 
-            return "$(KINDOFMAGIC)";
+            return "$(LINQPadBridge)";
         }
 
         static IEnumerable<XElement> FindImport(XElement root, bool strict)

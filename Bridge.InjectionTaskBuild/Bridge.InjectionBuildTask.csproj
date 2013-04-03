@@ -73,7 +73,7 @@
       <Project>{c6798d16-89f5-4bff-8b62-2be6d4bbc192}</Project>
       <Name>Bridge.Visualizers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\VisualizerTypeMapper\Bridge.TypeMapper.csproj">
+    <ProjectReference Include="..\Bridge.TypeMapper\Bridge.TypeMapper.csproj">
       <Project>{fcc8bf06-3173-4d21-a157-d1167b6407c9}</Project>
       <Name>Bridge.TypeMapper</Name>
     </ProjectReference>
@@ -86,7 +86,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="SInjectBuilder.targets" />
+    <None Include="SInjectBuilder.targets">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

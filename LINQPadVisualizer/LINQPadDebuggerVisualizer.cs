@@ -42,7 +42,7 @@ namespace Bridge.Visualizers
 
     }
 
-    public static class AsyncVisualizerGetData
+    internal static class AsyncVisualizerGetData
     {
 
         public static void ManipulateData(IVisualizerObjectProvider objectProvider)

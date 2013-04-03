@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.ComponentModel.Design;
+using EnvDTE;
+using EnvDTE80;
 using Microsoft.Win32;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -29,7 +31,7 @@ namespace GiovanniCampo.Bridge_VSExtension
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
     // This attribute is needed to let the shell know that this package exposes some menus.
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [Guid(GuidList.guidBridge_VSExtensionPkgString)]
+    [Guid(GuidList.GuidBridgeVsExtensionPkgString)]
     public sealed class Bridge_VSExtensionPackage : Package
     {
         /// <summary>
@@ -56,50 +58,28 @@ namespace GiovanniCampo.Bridge_VSExtension
         /// </summary>
         protected override void Initialize()
         {
-            Debug.WriteLine (string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this.ToString()));
+            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this.ToString()));
             base.Initialize();
+
+            var dte = (DTE2)GetService(typeof(DTE));
+            var bridge = new Bridge(dte);
 
             // Add our command handlers for menu (commands must exist in the .vsct file)
             var mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
-            if ( null != mcs )
-            {
-                // Create the command for the menu item.
-                var enableCommand = new CommandID(GuidList.guidBridge_VSExtensionCmdSet, (int)PkgCmdIdList.CmdIdEnableBridge);
-                var menuItemEnable = new MenuCommand(MenuItemCallback, enableCommand);
+            if (null == mcs) return;
 
-                var disableCommand = new CommandID(GuidList.guidBridge_VSExtensionCmdSet, (int)PkgCmdIdList.CmdIdDisableBridge);
-                var menuItemDisable = new MenuCommand(MenuItemCallback, disableCommand);
+            // Create the command for the menu item.
+            var enableCommand = new CommandID(GuidList.GuidBridgeVsExtensionCmdSet, (int)PkgCmdIdList.CmdIdEnableBridge);
+            var menuItemEnable = new OleMenuCommand((s, e) => bridge.Execute(CommandAction.Enable), enableCommand);
+            menuItemEnable.BeforeQueryStatus += (s, e) => bridge.UpdateCommand(menuItemEnable, CommandAction.Enable);
 
-                mcs.AddCommand(menuItemEnable);
-                mcs.AddCommand(menuItemDisable);
-            }
+
+            var disableCommand = new CommandID(GuidList.GuidBridgeVsExtensionCmdSet, (int)PkgCmdIdList.CmdIdDisableBridge);
+            var menuItemDisable = new OleMenuCommand((s, e) => bridge.Execute(CommandAction.Disable), disableCommand);
+
+            mcs.AddCommand(menuItemEnable);
+            mcs.AddCommand(menuItemDisable);
         }
         #endregion
-
-        /// <summary>
-        /// This function is the callback used to execute a command when the a menu item is clicked.
-        /// See the Initialize method to see how the menu item is associated to this function using
-        /// the OleMenuCommandService service and the MenuCommand class.
-        /// </summary>
-        private void MenuItemCallback(object sender, EventArgs e)
-        {
-            // Show a Message Box to prove we were here
-            IVsUIShell uiShell = (IVsUIShell)GetService(typeof(SVsUIShell));
-            Guid clsid = Guid.Empty;
-            int result;
-            Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(uiShell.ShowMessageBox(
-                       0,
-                       ref clsid,
-                       "Bridge.VSExtension",
-                       string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.ToString()),
-                       string.Empty,
-                       0,
-                       OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                       OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST,
-                       OLEMSGICON.OLEMSGICON_INFO,
-                       0,        // false
-                       out result));
-        }
-
     }
 }
