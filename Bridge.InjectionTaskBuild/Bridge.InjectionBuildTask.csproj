@@ -88,6 +88,7 @@
     <None Include="packages.config" />
     <None Include="SInjectBuilder.targets">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

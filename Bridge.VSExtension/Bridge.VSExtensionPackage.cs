@@ -1,17 +1,13 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.ComponentModel.Design;
 using EnvDTE;
 using EnvDTE80;
-using Microsoft.Win32;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.OLE.Interop;
+using GiovanniCampo.Bridge_VSExtension;
 using Microsoft.VisualStudio.Shell;
 
-namespace GiovanniCampo.Bridge_VSExtension
+namespace Bridge.VSExtension
 {
     /// <summary>
     /// This is the class that implements the package exposed by this assembly.
@@ -62,7 +58,7 @@ namespace GiovanniCampo.Bridge_VSExtension
             base.Initialize();
 
             var dte = (DTE2)GetService(typeof(DTE));
-            var bridge = new Bridge(dte);
+            var bridge = new GiovanniCampo.Bridge_VSExtension.Bridge(dte);
 
             // Add our command handlers for menu (commands must exist in the .vsct file)
             var mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;

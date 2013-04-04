@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project  xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <UsingTask TaskName="SInjectionBuildTask" AssemblyFile="Bridge.InjectionBuildTask.dll" />
-    <UsingTask TaskName="MapperBuildTask" AssemblyFile="Bridge.InjectionBuildTask.dll" />
-    <Target Name="AfterCompile" DependsOnTargets="CoreCompile">
-        <SInjectionBuildTask Assembly="@(IntermediateAssembly->'%(FullPath)')" References="Empty"  />
-        <MapperBuildTask Assembly="@(IntermediateAssembly->'%(FullPath)')" References="Empty"  />
-    </Target>
+  <UsingTask TaskName="SInjectionBuildTask" AssemblyFile="Bridge.InjectionBuildTask.dll" />
+  <UsingTask TaskName="MapperBuildTask" AssemblyFile="Bridge.InjectionBuildTask.dll" />
+  <Target Name="AfterBuild" DependsOnTargets="CoreCompile">
+    <SInjectionBuildTask Assembly="@(IntermediateAssembly->'%(FullPath)')"   />
+    <MapperBuildTask Assembly="@(IntermediateAssembly->'%(FullPath)')"   VisualStudioVer=""  />
+  </Target>
 </Project>

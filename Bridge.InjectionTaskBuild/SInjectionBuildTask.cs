@@ -11,8 +11,17 @@ namespace Bridge.InjectionBuildTask
     {
         public bool Execute()
         {
-            var sInjection = new SInjection(Assembly, PatchMode.Debug);
-            sInjection.Patch(SerializationTypes.BinarySerialization);
+            try
+            {
+                var sInjection = new SInjection(Assembly, PatchMode.Debug);
+                sInjection.Patch(SerializationTypes.BinarySerialization);
+            }
+            catch (Exception e)
+            {
+
+                //Console.WriteLine(e);
+                return false;
+            }
 
             return true;
         }
@@ -20,8 +29,7 @@ namespace Bridge.InjectionBuildTask
         [Required]
         public string Assembly { get; set; }
 
-        [Required]
-        public string References { get; set; }
+       
         public IBuildEngine BuildEngine { get; set; }
         public ITaskHost HostObject { get; set; }
     }

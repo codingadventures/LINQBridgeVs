@@ -8,6 +8,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Xml.XPath;
+using Bridge.VSExtension.Utils;
 using EnvDTE;
 using EnvDTE80;
 
@@ -49,14 +51,35 @@ namespace GiovanniCampo.Bridge_VSExtension
         private const string Targets = "SInjectBuilder.targets";
 
         private static readonly XName Import = XName.Get("Import", "http://schemas.microsoft.com/developer/msbuild/2003");
+        private static readonly XNamespace NsSys = "http://schemas.microsoft.com/developer/msbuild/2003";
+
         private static readonly string Path = System.IO.Path.Combine(GetInstallDir(), Targets);
+
 
 
         public Bridge(DTE2 app)
         {
             _application = app;
+            SetVisualStudioVersion();
+
         }
 
+        private static void SetVisualStudioVersion()
+        {
+            var e = XDocument.Load(Path);
+
+            var xElement = e.Element(NsSys + "Project")
+                            .Element(NsSys + "Target")
+                            .Element(NsSys + "MapperBuildTask");
+
+            if (VSVersion.VS2010)
+                xElement.SetAttributeValue("VisualStudioVer", "VS2010");
+            else if (VSVersion.VS2012)
+                xElement.SetAttributeValue("VisualStudioVer", "VS2012");
+
+            e.Save(Path);
+
+        }
 
         private static bool IsSupported(Project proj)
         {
@@ -213,16 +236,9 @@ namespace GiovanniCampo.Bridge_VSExtension
 
         private static string GetInstallDir()
         {
-            var x = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var home = Environment.GetEnvironmentVariable("LINQPadBridge");
+            var x = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\Load\";
 
-            if (x != home)
-            {
-                Environment.SetEnvironmentVariable("LINQPadBridge", x, EnvironmentVariableTarget.User);
-                Environment.SetEnvironmentVariable("LINQPadBridge", x);
-            }
-
-            return "$(LINQPadBridge)";
+            return x;
         }
 
         static IEnumerable<XElement> FindImport(XElement root, bool strict)

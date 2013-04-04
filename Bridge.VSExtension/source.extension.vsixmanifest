@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+<!--<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
         <Identity Id="fa136bfd-0b1d-4721-9159-1dbefcb5c4fc" Version="0.1" Language="en-US" Publisher="Giovanni Campo" />
         <DisplayName>Bridge.VSExtension</DisplayName>
@@ -17,7 +17,45 @@
     </Dependencies>
     <Assets>
         <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
-        <!-- Hack taken from http://stackoverflow.com/questions/6974244/vsix-package-doesnt-include-localized-resources-of-referenced-assembly-->
+        -->
+<!-- Hack taken from http://stackoverflow.com/questions/6974244/vsix-package-doesnt-include-localized-resources-of-referenced-assembly-->
+<!--
         <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="Bridge.InjectionBuildTask" Path="|Bridge.InjectionBuildTask|" AssemblyName="|Bridge.InjectionBuildTask;AssemblyName;BuiltProjectOutputGroup;BuiltProjectOutputGroupDependencies;GetCopyToOutputDirectoryItems;SatelliteDllsProjectOutputGroup" />
     </Assets>
-</PackageManifest>
+</PackageManifest>-->
+<Vsix Version="1.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
+  <Identifier Id="fa136bfd-0b1d-4721-9159-1dbefcb5c4fc">
+    <Name>Bridge.VSExtension</Name>
+    <Author>Giovanni Campo</Author>
+    <Version>0.1</Version>
+    <Description xml:space="preserve">Enable/Disable the creation of a custom debugger visualizer and the transformation of the target project in a fully serializable library</Description>
+    <Locale>1033</Locale>
+    <InstalledByMsi>false</InstalledByMsi>
+    <AllUsers>true</AllUsers>
+    <SupportedProducts>
+      <VisualStudio Version="10.0">
+        <Edition>Pro</Edition>
+      </VisualStudio>
+      <VisualStudio Version="11.0">
+        <Edition>Pro</Edition>
+      </VisualStudio>
+      <!--   <VisualStudio Version="10.0">
+        <Edition>Ultimate</Edition>
+      </VisualStudio>
+      <VisualStudio Version="11.0">
+        <Edition>Pro</Edition>
+      </VisualStudio>-->
+      <!---->
+    </SupportedProducts>
+    <SupportedFrameworkRuntimeEdition MinVersion="4.0" MaxVersion="4.0" />
+  </Identifier>
+  <References>
+    <Reference Id="Microsoft.VisualStudio.MPF" MinVersion="10.0">
+      <Name>Visual Studio MPF</Name>
+    </Reference>
+  </References>
+  <Content>
+    <VsPackage>|%CurrentProject%;PkgdefProjectOutputGroup|</VsPackage>
+    <Assembly AssemblyName="|Bridge.InjectionBuildTask;AssemblyName;BuiltProjectOutputGroup;BuiltProjectOutputGroupDependencies;GetCopyToOutputDirectoryItems;SatelliteDllsProjectOutputGroup"></Assembly>
+  </Content>
+</Vsix>

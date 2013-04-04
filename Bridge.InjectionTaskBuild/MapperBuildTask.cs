@@ -20,6 +20,9 @@ namespace Bridge.InjectionBuildTask
         /// </returns>
         public bool Execute()
         {
+#if DEBUG
+            System.Diagnostics.Debugger.Launch();
+#endif
             var typeMapper = new VisualizerTypeMapper<LINQPadDebuggerVisualizer>(Assembly, Visualizers.Properties.Resources.VisualizerName);
 
             typeMapper.Create(new List<Type> { typeof(Dictionary<,>), typeof(List<>) });
@@ -38,7 +41,9 @@ namespace Bridge.InjectionBuildTask
         public string Assembly { private get; set; }
 
         [Required]
-        public string References { get; set; }
+        public string VisualStudioVer { private get; set; }
+
+        public string Resources { private get; set; }
 
         public IBuildEngine BuildEngine { get; set; }
         public ITaskHost HostObject { get; set; }

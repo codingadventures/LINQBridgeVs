@@ -68,7 +68,8 @@ namespace Bridge.TypeMapper
 
             _visualizerAttributeInjector.SaveDebuggerVisualizer(debuggerVisualizerAssemblyLocation);
 
-
+            //Deploy the resources
+         //   File.Copy(Bridge. Properties.Resources.LINQPadExe, path + Visualizers.Properties.Resources.LINQPadExe, true)
 
         }
 

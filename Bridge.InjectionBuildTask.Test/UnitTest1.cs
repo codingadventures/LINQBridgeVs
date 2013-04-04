@@ -14,33 +14,33 @@ namespace Bridge.InjectionBuildTask.Test
         [ClassInitialize]
         public static void Init(TestContext context)
         {
-            _assemblyModel = typeof (CustomType1).Assembly;
+            _assemblyModel = typeof(CustomType1).Assembly;
 
         }
 
         [TestMethod]
         public void TestMethod1()
         {
-           
+
             var mapper = new MapperBuildTask()
                         {
                             Assembly = _assemblyModel.Location,
-                            References = string.Empty
+                            Resources = " ",
+                            VisualStudioVer = ""
                         };
 
 
             mapper.Execute();
 
-        } 
-        
+        }
+
         [TestMethod]
         public void TestMethod2()
         {
-           
+
             var sInjectionBuildTask = new SInjectionBuildTask()
                         {
-                            Assembly = _assemblyModel.Location,
-                            References = string.Empty
+                            Assembly = _assemblyModel.Location
                         };
 
 
