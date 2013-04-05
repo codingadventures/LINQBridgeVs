@@ -23,15 +23,17 @@ namespace Bridge.InjectionBuildTask
 #if DEBUG
             System.Diagnostics.Debugger.Launch();
 #endif
+            var vsVer = (VisualStudioVersion)Enum.Parse(typeof(VisualStudioVersion), VisualStudioVer);
+
             var typeMapper = new VisualizerTypeMapper<LINQPadDebuggerVisualizer>(Assembly, Visualizers.Properties.Resources.VisualizerName);
 
             typeMapper.Create(new List<Type> { typeof(Dictionary<,>), typeof(List<>) });
 
-            VisualStudioOptions.VisualStudioPaths[VisualStudioVersion.VS2010].ForEach(typeMapper.Save);
+            VisualStudioOptions.VisualStudioPaths[vsVer].ForEach(typeMapper.Save);
 
             //Copy the resources associated with the visualizer
-            VisualStudioOptions.VisualStudioPaths[VisualStudioVersion.VS2010].ForEach(path => File.Copy(Visualizers.Properties.Resources.LINQPadExe, path + Visualizers.Properties.Resources.LINQPadExe, true));
-            VisualStudioOptions.VisualStudioPaths[VisualStudioVersion.VS2010].ForEach(path => File.Copy(Visualizers.Properties.Resources.LINQPadExe, path + Visualizers.Properties.Resources.LINQPadQuery, true));
+            VisualStudioOptions.VisualStudioPaths[vsVer].ForEach(path => File.Copy(Visualizers.Properties.Resources.LINQPadExe, path + Visualizers.Properties.Resources.LINQPadExe, true));
+            VisualStudioOptions.VisualStudioPaths[vsVer].ForEach(path => File.Copy(Visualizers.Properties.Resources.LINQPadExe, path + Visualizers.Properties.Resources.LINQPadQuery, true));
 
 
             return true;

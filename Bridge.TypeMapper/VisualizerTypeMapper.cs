@@ -49,7 +49,7 @@ namespace Bridge.TypeMapper
         }
 
         /// <summary>
-        /// Saves the specified debugger visualizer assembly location.
+        /// Saves the specified debugger visualizer assembly to a given Path.
         /// </summary>
         /// <param name="debuggerVisualizerPath">The debugger visualizer assembly location.</param>
         public void Save(string debuggerVisualizerPath)
@@ -69,8 +69,21 @@ namespace Bridge.TypeMapper
             _visualizerAttributeInjector.SaveDebuggerVisualizer(debuggerVisualizerAssemblyLocation);
 
             //Deploy the resources
-         //   File.Copy(Bridge. Properties.Resources.LINQPadExe, path + Visualizers.Properties.Resources.LINQPadExe, true)
+            File.Copy(Bridge.Visualizers.Resources.LINQPadExe,
+                      debuggerVisualizerPath + Visualizers.Properties.Resources.LINQPadExe, true);
 
+        }
+
+        /// <summary>
+        /// Saves the specified debugger visualizer to a given set of Paths.
+        /// </summary>
+        /// <param name="debuggerVisualizerPaths">The debugger visualizer Paths.</param>
+        public void Save(IEnumerable<string> debuggerVisualizerPaths)
+        {
+            foreach (var debuggerVisualizerPath in debuggerVisualizerPaths)
+            {
+                Save(debuggerVisualizerPath);
+            }
         }
 
     }

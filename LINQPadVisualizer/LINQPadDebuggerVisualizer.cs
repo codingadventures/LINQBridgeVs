@@ -5,6 +5,9 @@ using Microsoft.VisualStudio.DebuggerVisualizers;
 
 namespace Bridge.Visualizers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class LINQPadDebuggerVisualizer : DialogDebuggerVisualizer
     {
         private delegate void AsyncMethodCaller(IVisualizerObjectProvider objectProvider);
