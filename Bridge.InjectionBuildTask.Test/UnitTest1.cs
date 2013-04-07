@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Linq;
+using Bridge.BuildTasks;
 using Bridge.Test.AssemblyModel;
 using System.Reflection;
+using Bridge.Visualizers;
+using Microsoft.VisualStudio.DebuggerVisualizers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Bridge.InjectionBuildTask.Test
@@ -23,11 +26,11 @@ namespace Bridge.InjectionBuildTask.Test
         {
 
             var mapper = new MapperBuildTask()
-                        {
-                            Assembly = _assemblyModel.Location,
-                            Resources = " ",
-                            VisualStudioVer = ""
-                        };
+                             {
+                                 Assembly = _assemblyModel.Location,
+                                 Resources = "LINQPad\\LINQPAD.exe;LINQPAD\\debugging.linq",
+                                 VisualStudioVer = "VS2010"
+                             };
 
 
             mapper.Execute();
@@ -39,13 +42,26 @@ namespace Bridge.InjectionBuildTask.Test
         {
 
             var sInjectionBuildTask = new SInjectionBuildTask()
-                        {
-                            Assembly = _assemblyModel.Location
-                        };
+                                          {
+                                              Assembly = _assemblyModel.Location
+                                          };
 
 
             sInjectionBuildTask.Execute();
 
         }
+
+        [TestMethod]
+        public void TestVisualizer()
+        {
+
+            VisualizationTestClass c = new VisualizationTestClass();
+
+            var myHost = new VisualizerDevelopmentHost(c, typeof(LINQPadDebuggerVisualizer));
+            myHost.ShowVisualizer();
+        }
     }
 }
+
+
+

@@ -44,7 +44,6 @@ namespace Bridge.TypeMapper
         {
             _visualizerAttributeInjector.MapSystemType(typeof(Dictionary<,>));
             _visualizerAttributeInjector.MapSystemType(typeof(List<>));
-
             _visualizerAttributeInjector.MapTypesFromAssembly(typesToExclude);
         }
 
@@ -52,9 +51,8 @@ namespace Bridge.TypeMapper
         /// Saves the specified debugger visualizer assembly to a given Path.
         /// </summary>
         /// <param name="debuggerVisualizerPath">The debugger visualizer assembly location.</param>
-        public void Save(string debuggerVisualizerPath)
+        private void Save(string debuggerVisualizerPath)
         {
-
             var debuggerVisualizerAssemblyLocation = debuggerVisualizerPath + TManifestModuleName;
 
             if (!Directory.Exists(debuggerVisualizerPath))
@@ -64,14 +62,7 @@ namespace Bridge.TypeMapper
                 //Get all the custom attributes that map other type and import them into the current visualizer
                 _visualizerAttributeInjector.SyncronizeMappedTypes(debuggerVisualizerAssemblyLocation);
 
-
-
             _visualizerAttributeInjector.SaveDebuggerVisualizer(debuggerVisualizerAssemblyLocation);
-
-            //Deploy the resources
-            File.Copy(Bridge.Visualizers.Resources.LINQPadExe,
-                      debuggerVisualizerPath + Visualizers.Properties.Resources.LINQPadExe, true);
-
         }
 
         /// <summary>

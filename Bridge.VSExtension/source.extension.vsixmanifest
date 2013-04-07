@@ -26,5 +26,6 @@
   <Content>
     <VsPackage>|%CurrentProject%;PkgdefProjectOutputGroup|</VsPackage>
     <Assembly AssemblyName="|Bridge.InjectionBuildTask;AssemblyName;BuiltProjectOutputGroup;BuiltProjectOutputGroupDependencies;GetCopyToOutputDirectoryItems;SatelliteDllsProjectOutputGroup"></Assembly>
+    
   </Content>
 </Vsix>

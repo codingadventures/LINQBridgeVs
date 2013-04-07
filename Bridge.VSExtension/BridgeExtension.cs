@@ -5,15 +5,13 @@ using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
-using System.Xml.XPath;
 using Bridge.VSExtension.Utils;
 using EnvDTE;
 using EnvDTE80;
+using System.Xml.XPath;
 
-namespace GiovanniCampo.Bridge_VSExtension
+namespace Bridge.VSExtension
 {
     [Flags]
     public enum CommandStates
@@ -44,40 +42,81 @@ namespace GiovanniCampo.Bridge_VSExtension
         public bool IsEnabled { get { return _isEnabled; } }
     }
 
-    public class Bridge
+    public class BridgeExtension
     {
         private readonly DTE2 _application;
         private readonly Dictionary<string, ProjectInfo> _projects = new Dictionary<string, ProjectInfo>(StringComparer.InvariantCultureIgnoreCase);
-        private const string Targets = "SInjectBuilder.targets";
 
         private static readonly XName Import = XName.Get("Import", "http://schemas.microsoft.com/developer/msbuild/2003");
-        private static readonly XNamespace NsSys = "http://schemas.microsoft.com/developer/msbuild/2003";
+        private static readonly XNamespace Namespace = "http://schemas.microsoft.com/developer/msbuild/2003";
 
-        private static readonly string Path = System.IO.Path.Combine(GetInstallDir(), Targets);
-
-
-
-        public Bridge(DTE2 app)
+        private static string InstallFolder
         {
-            _application = app;
-            SetVisualStudioVersion();
-
+            get { return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location); }
         }
 
-        private static void SetVisualStudioVersion()
+        private static string LibrariesFolder
         {
-            var e = XDocument.Load(Path);
+            get { return Path.Combine(InstallFolder, "Load"); }
+        }
+        private static readonly string Target = Path.Combine(InstallFolder, Resources.Targets);
+        private static readonly string LinqPadQueryPath = Path.Combine(InstallFolder, Resources.Query);
+        private static readonly string LinqPadExePath = Path.Combine(InstallFolder, Resources.LINQPad);
 
-            var xElement = e.Element(NsSys + "Project")
-                            .Element(NsSys + "Target")
-                            .Element(NsSys + "MapperBuildTask");
+
+        public BridgeExtension(DTE2 app)
+        {
+            _application = app;
+            SetTargets();
+            SetEnvironment();
+            DeployScripts();
+        }
+
+        private static void DeployScripts()
+        {
+            var scriptFileName = Path.GetFileName(LinqPadQueryPath);
+            var dstScriptPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                                             "LINQPad Queries");
+            if (scriptFileName == null) return;
+
+            var dst = Path.Combine(dstScriptPath, scriptFileName);
+            if (!File.Exists(dst))
+                File.Copy(LinqPadQueryPath, dst);
+        }
+
+        private static void SetEnvironment()
+        {
+            var linqPadPath = Path.GetDirectoryName(LinqPadExePath);
+
+            var path = Environment.GetEnvironmentVariable("Path") ?? string.Empty;
+
+            if (linqPadPath == null || path.IndexOf(linqPadPath, StringComparison.InvariantCultureIgnoreCase) != -1) return;
+
+            Environment.SetEnvironmentVariable("Path", path + ";" + linqPadPath);
+            Environment.SetEnvironmentVariable("Path", path + ";" + linqPadPath, EnvironmentVariableTarget.Machine);
+        }
+
+        private static void SetTargets()
+        {
+            var e = XDocument.Load(Target);
+
+            var usingTaskElement = e.XPathSelectElements("/Project/UsingTask");
+            var mapperBuildTaskElement = e.XPathSelectElement("/Project/Target/MapperBuildTask");
 
             if (VSVersion.VS2010)
-                xElement.SetAttributeValue("VisualStudioVer", "VS2010");
+                mapperBuildTaskElement.SetAttributeValue("VisualStudioVer", "VS2010");
             else if (VSVersion.VS2012)
-                xElement.SetAttributeValue("VisualStudioVer", "VS2012");
+                mapperBuildTaskElement.SetAttributeValue("VisualStudioVer", "VS2012");
 
-            e.Save(Path);
+            foreach (var xElement in usingTaskElement)
+            {
+                var assemblyName = xElement.Attribute("AssemblyFile").Value;
+
+                xElement.SetAttributeValue("AssemblyFile", Path.Combine(LibrariesFolder, assemblyName));
+            }
+
+
+            e.Save(Target);
 
         }
 
@@ -166,13 +205,25 @@ namespace GiovanniCampo.Bridge_VSExtension
                 import.Remove();
         }
 
+      
+
         private static void Enable(Project project)
         {
             var e = XElement.Load(project.FullName);
+            var targetToAdd = XDocument.Load(Target);
+            //RemoveImports(e);
 
-            RemoveImports(e);
+            if (targetToAdd.Root != null)
+            {
+             
+                var xTargets = targetToAdd.Root.Element("Target");
+                var xTasks = targetToAdd.Root.Elements("UsingTask").ToList();
+                targetToAdd.Root.SetDefaultXmlNamespace(Namespace);
 
-            e.Add(new XElement(Import, new XAttribute("Project", Path)));
+                e.Add(xTasks);
+                e.Add(xTargets);
+            }
+
             e.Save(project.FullName);
 
         }
@@ -234,12 +285,7 @@ namespace GiovanniCampo.Bridge_VSExtension
             return CommandStates.None;
         }
 
-        private static string GetInstallDir()
-        {
-            var x = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\Load\";
 
-            return x;
-        }
 
         static IEnumerable<XElement> FindImport(XElement root, bool strict)
         {
@@ -252,12 +298,12 @@ namespace GiovanniCampo.Bridge_VSExtension
 
             if (strict)
                 return from i in candidates
-                       where string.Equals(i.Project, Path, StringComparison.InvariantCultureIgnoreCase)
+                       where string.Equals(i.Project, Target, StringComparison.InvariantCultureIgnoreCase)
                        select i.Element;
 
             return from i in candidates
-                   let file = System.IO.Path.GetFileName(i.Project)
-                   where string.Equals(file, Targets, StringComparison.InvariantCultureIgnoreCase)
+                   let file = Path.GetFileName(i.Project)
+                   where string.Equals(file, Target, StringComparison.InvariantCultureIgnoreCase)
                    select i.Element;
         }
     }

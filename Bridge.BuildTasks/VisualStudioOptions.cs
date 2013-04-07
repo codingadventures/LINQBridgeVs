@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Bridge.InjectionBuildTask.Properties;
+using Bridge.BuildTasks.Properties;
 
-namespace Bridge.InjectionBuildTask
+namespace Bridge.BuildTasks
 {
 
     internal enum VisualStudioVersion

@@ -1,11 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
-using System.Runtime.CompilerServices;
+﻿using System.Reflection;
 using System.Runtime.InteropServices;
-using Bridge.Test.AssemblyModel;
-using Bridge.Visualizers;
-using Bridge.Visualizers.Properties;
-using Microsoft.VisualStudio.DebuggerVisualizers;
+
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information

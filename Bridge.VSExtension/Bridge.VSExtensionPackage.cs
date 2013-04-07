@@ -54,11 +54,11 @@ namespace Bridge.VSExtension
         /// </summary>
         protected override void Initialize()
         {
-            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this.ToString()));
+        //    Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this.ToString()));
             base.Initialize();
 
             var dte = (DTE2)GetService(typeof(DTE));
-            var bridge = new GiovanniCampo.Bridge_VSExtension.Bridge(dte);
+            var bridge = new BridgeExtension(dte);
 
             // Add our command handlers for menu (commands must exist in the .vsct file)
             var mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;

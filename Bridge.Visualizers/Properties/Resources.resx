@@ -117,11 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="LINQPadCommands" xml:space="preserve">
+    <value>-run</value>
+  </data>
   <data name="LINQPadExe" xml:space="preserve">
-    <value>LINQPad\LINQPad.exe</value>
+    <value>LINQPad.exe</value>
   </data>
   <data name="LINQPadQuery" xml:space="preserve">
-    <value>LINQPad\Debugging.linq</value>
+    <value>LINQPad Queries\Inspection.linq</value>
   </data>
   <data name="VisualizerName" xml:space="preserve">
     <value>LINQPad Visualizer</value>

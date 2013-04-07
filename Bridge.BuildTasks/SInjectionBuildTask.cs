@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
 using Microsoft.Build.Framework;
 using SInject;
 
-namespace Bridge.InjectionBuildTask
+namespace Bridge.BuildTasks
 {
     public class SInjectionBuildTask : ITask
     {
+        [Required]
+        public string Assembly { get; set; }
+
         public bool Execute()
         {
             try
@@ -18,7 +19,6 @@ namespace Bridge.InjectionBuildTask
             }
             catch (Exception e)
             {
-
                 //Console.WriteLine(e);
                 return false;
             }
@@ -26,10 +26,7 @@ namespace Bridge.InjectionBuildTask
             return true;
         }
 
-        [Required]
-        public string Assembly { get; set; }
 
-       
         public IBuildEngine BuildEngine { get; set; }
         public ITaskHost HostObject { get; set; }
     }

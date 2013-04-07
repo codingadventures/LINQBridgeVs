@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.VisualStudio.DebuggerVisualizers, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -58,13 +59,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bridge.InjectionTaskBuild\Bridge.InjectionBuildTask.csproj">
+    <ProjectReference Include="..\Bridge.BuildTasks\Bridge.BuildTasks.csproj">
       <Project>{276f3935-e0ca-450f-a55f-aed56dc2024e}</Project>
-      <Name>Bridge.InjectionBuildTask</Name>
+      <Name>Bridge.BuildTasks</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Bridge.Test.AssemblyModel\Bridge.Test.AssemblyModel.csproj">
+    <ProjectReference Include="..\Bridge.AssemblyModel.Test\Bridge.AssemblyModel.Test.csproj">
       <Project>{8a5e73f6-2093-4669-9c09-beab033be56c}</Project>
-      <Name>Bridge.Test.AssemblyModel</Name>
+      <Name>Bridge.AssemblyModel.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Bridge.Visualizers\Bridge.Visualizers.csproj">
+      <Project>{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}</Project>
+      <Name>Bridge.Visualizers</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

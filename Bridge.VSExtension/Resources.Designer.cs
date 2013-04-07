@@ -59,5 +59,41 @@ namespace Bridge.VSExtension {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LINQPad\LINQPad.exe.
+        /// </summary>
+        internal static string LINQPad {
+            get {
+                return ResourceManager.GetString("LINQPad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LINQPad\LINQPadConfig.config.
+        /// </summary>
+        internal static string LINQPadConfig {
+            get {
+                return ResourceManager.GetString("LINQPadConfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LINQPad\Inspection.linq.
+        /// </summary>
+        internal static string Query {
+            get {
+                return ResourceManager.GetString("Query", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Targets\BridgeBuildTask.targets.
+        /// </summary>
+        internal static string Targets {
+            get {
+                return ResourceManager.GetString("Targets", resourceCulture);
+            }
+        }
     }
 }

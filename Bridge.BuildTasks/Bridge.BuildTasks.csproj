@@ -1,15 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+
 <!--EXTERNAL_PROPERTIES: VisualStudioVersion-->
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FCC8BF06-3173-4D21-A157-D1167B6407C9}</ProjectGuid>
+    <ProjectGuid>{276F3935-E0CA-450F-A55F-AED56DC2024E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Bridge.TypeMapper</RootNamespace>
-    <AssemblyName>Bridge.TypeMapper</AssemblyName>
+    <RootNamespace>Bridge.BuildTasks</RootNamespace>
+    <AssemblyName>Bridge.BuildTasks</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -33,19 +34,29 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <Choose>
-    <When Condition="'$(VisualStudioVersion)'=='11.0'">
+    <When Condition=" '$(VisualStudioVersion)'=='11.0' ">
+
       <ItemGroup>
+        <Reference Include="Microsoft.Build.Framework" />
         <Reference Include="Microsoft.VisualStudio.DebuggerVisualizers, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
         <Reference Include="Mono.Cecil, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
           <Private>True</Private>
           <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.dll</HintPath>
         </Reference>
+        <Reference Include="Mono.Cecil.Mdb">
+          <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Mdb.dll</HintPath>
+        </Reference>
         <Reference Include="Mono.Cecil.Pdb, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
           <Private>True</Private>
           <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
         </Reference>
-        <Reference Include="Mono.Cecil.Rocks">
+        <Reference Include="Mono.Cecil.Rocks, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+          <SpecificVersion>False</SpecificVersion>
           <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
+        </Reference>
+        <Reference Include="SInject, Version=0.1.4845.33883, Culture=neutral, processorArchitecture=MSIL">
+          <SpecificVersion>False</SpecificVersion>
+          <HintPath>..\packages\SInject.0.1.2-alpha\lib\net40\SInject.dll</HintPath>
         </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />
@@ -58,17 +69,26 @@
     </When>
     <Otherwise>
       <ItemGroup>
+        <Reference Include="Microsoft.Build.Framework" />
         <Reference Include="Microsoft.VisualStudio.DebuggerVisualizers, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
         <Reference Include="Mono.Cecil, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
           <Private>True</Private>
           <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.dll</HintPath>
         </Reference>
+        <Reference Include="Mono.Cecil.Mdb">
+          <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Mdb.dll</HintPath>
+        </Reference>
         <Reference Include="Mono.Cecil.Pdb, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
           <Private>True</Private>
           <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
         </Reference>
-        <Reference Include="Mono.Cecil.Rocks">
+        <Reference Include="Mono.Cecil.Rocks, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+          <SpecificVersion>False</SpecificVersion>
           <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
+        </Reference>
+        <Reference Include="SInject, Version=0.1.4845.33883, Culture=neutral, processorArchitecture=MSIL">
+          <SpecificVersion>False</SpecificVersion>
+          <HintPath>..\packages\SInject.0.1.2-alpha\lib\net40\SInject.dll</HintPath>
         </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />
@@ -81,10 +101,31 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Comparer\DebuggerVisualizerAttributeComparer.cs" />
+    <Compile Include="MapperBuildTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VisualizerAttributeInjector.cs" />
-    <Compile Include="VisualizerTypeMapper.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SInjectionBuildTask.cs" />
+    <Compile Include="VisualStudioOptions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bridge.TypeMapper\Bridge.TypeMapper.csproj">
+      <Project>{fcc8bf06-3173-4d21-a157-d1167b6407c9}</Project>
+      <Name>Bridge.TypeMapper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Bridge.Visualizers\Bridge.Visualizers.csproj">
+      <Project>{c6798d16-89f5-4bff-8b62-2be6d4bbc192}</Project>
+      <Name>Bridge.Visualizers</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

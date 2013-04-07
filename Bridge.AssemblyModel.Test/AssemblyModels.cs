@@ -24,4 +24,10 @@ namespace Bridge.Test.AssemblyModel
 
         public List<int?> Prop1 { get; set; }
     }
+
+    [Serializable]
+    public class VisualizationTestClass
+    {
+        
+    }
 }
