@@ -34,13 +34,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
-//[assembly: System.Diagnostics.DebuggerVisualizer(
-//typeof(LINQPadDebuggerVisualizer),
-//typeof(LINQPadDebuggerVisualizerObjectSource), Target = typeof(List<>), Description = "LINQPad Visualizer")]
-
-//[assembly: System.Diagnostics.DebuggerVisualizer(
-//typeof(LINQPadDebuggerVisualizer),
-//typeof(LINQPadDebuggerVisualizerObjectSource), Target = typeof(Dictionary<,>), Description = "LINQPad Visualizer")]
-
 
 

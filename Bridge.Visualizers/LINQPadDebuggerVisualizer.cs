@@ -48,32 +48,5 @@ namespace Bridge.Visualizers
         }
     }
 
-    public class LINQPadDebuggerVisualizerObjectSource : VisualizerObjectSource
-    {
 
-    }
-
-    internal static class AsyncVisualizerGetData
-    {
-
-        public static void ManipulateData(IVisualizerObjectProvider objectProvider)
-        {
-            var debugStream = objectProvider.GetData();
-            var streamLength = debugStream.Length;
-
-            var buffer = new byte[streamLength];
-            using (var br = new BinaryReader(debugStream))
-                br.Read(buffer, 0, (int)streamLength);
-
-            using (var mmf = MemoryMappedFile.CreateNew(@"Debug", streamLength, MemoryMappedFileAccess.ReadWrite))
-            {
-                using (var accessor = mmf.CreateViewAccessor())
-                {
-                    accessor.WriteArray(0, buffer, 0, (int)streamLength);
-                }
-            }
-        }
-
-
-    }
 }
