@@ -22,23 +22,25 @@ namespace Bridge.InjectionBuildTask.Test
         }
 
         [TestMethod]
-        public void TestMethod1()
+        public void MapperBuildTaskTest()
         {
 
             var mapper = new MapperBuildTask()
                              {
                                  Assembly = _assemblyModel.Location,
                                  Resources = "LINQPad\\LINQPAD.exe;LINQPAD\\debugging.linq",
-                                 VisualStudioVer = "VS2010"
+                                 VisualStudioVer = "VS2012"
                              };
 
 
-            mapper.Execute();
+            var result = mapper.Execute();
+
+            Assert.IsTrue(result, "Mapper Build Task Execute return false.");
 
         }
 
         [TestMethod]
-        public void TestMethod2()
+        public void SInjectionBuildTaskTest()
         {
 
             var sInjectionBuildTask = new SInjectionBuildTask()
@@ -47,12 +49,14 @@ namespace Bridge.InjectionBuildTask.Test
                                           };
 
 
-            sInjectionBuildTask.Execute();
+            var result = sInjectionBuildTask.Execute();
+
+            Assert.IsTrue(result, "SInjection Build Task Execute return false.");
 
         }
 
         [TestMethod]
-        public void TestVisualizer()
+        public void LINQPadDebuggerVisualizerTest()
         {
 
             VisualizationTestClass c = new VisualizationTestClass();

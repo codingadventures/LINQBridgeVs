@@ -59,13 +59,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bridge.BuildTasks\Bridge.BuildTasks.csproj">
-      <Project>{276f3935-e0ca-450f-a55f-aed56dc2024e}</Project>
-      <Name>Bridge.BuildTasks</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Bridge.AssemblyModel.Test\Bridge.AssemblyModel.Test.csproj">
       <Project>{8a5e73f6-2093-4669-9c09-beab033be56c}</Project>
       <Name>Bridge.AssemblyModel.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Bridge.BuildTasks\Bridge.BuildTasks.csproj">
+      <Project>{276f3935-e0ca-450f-a55f-aed56dc2024e}</Project>
+      <Name>Bridge.BuildTasks</Name>
     </ProjectReference>
     <ProjectReference Include="..\Bridge.Visualizers\Bridge.Visualizers.csproj">
       <Project>{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}</Project>

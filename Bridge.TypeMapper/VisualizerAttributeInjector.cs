@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Bridge.TypeMapper.Comparer;
+using Bridge.VisualStudio;
 using Mono.Cecil.Rocks;
 using Mono.Cecil.Pdb;
 using Mono.Cecil;
@@ -30,9 +31,8 @@ namespace Bridge.TypeMapper
 
         #region [ Fields ]
         private readonly AssemblyDefinition _assemblyToMap;
-        private readonly ReaderParameters _readerParameters;
         private readonly AssemblyDefinition _assembly;
-        private readonly WriterParameters _writerParameters = new WriterParameters() { WriteSymbols = true };
+        private readonly WriterParameters _writerParameters = new WriterParameters() { WriteSymbols = true, SymbolWriterProvider = new PdbWriterProvider() };
         #endregion
 
         #region [ Constants ]
@@ -246,9 +246,21 @@ namespace Bridge.TypeMapper
         /// Saves the debugger visualizer.
         /// </summary>
         /// <param name="location">The location.</param>
-        public void SaveDebuggerVisualizer(string location)
+        /// <param name="references">The Assembly references</param>
+        public void SaveDebuggerVisualizer(string location, IEnumerable<string> references = null)
         {
             _assembly.Write(location, _writerParameters);
+            if (references != null)
+                DeployReferences(references, location);
+        }
+
+        private static void DeployReferences(IEnumerable<string> references, string location)
+        {
+            foreach (var reference in references)
+            {
+                File.Copy(reference, location, true);
+            }
+
         }
 
         /// <summary>
@@ -281,5 +293,41 @@ namespace Bridge.TypeMapper
         }
 
 
+        //public void SyncronizeDebuggerVisualizerVersion(VisualStudioVersion visualStudioVersion)
+        //{
+        //    //AssemblyNameReference assemblyNameReference = null;
+        //    AssemblyDefinition assdef = null;
+        //    var vsvisualizerReference = _assembly.MainModule.AssemblyReferences.SingleOrDefault(
+        //   reference => reference.Name.Contains("Microsoft.VisualStudio.DebuggerVisualizers"));
+
+
+        //    switch (visualStudioVersion)
+        //    {
+        //        case VisualStudioVersion.VS2012:
+        //            assdef =
+        //                //    "Microsoft.VisualStudio.DebuggerVisualizers, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
+        //                AssemblyDefinition.ReadAssembly(
+        //                    @"C:\Program Files (x86)\Microsoft Visual Studio 11.0\Common7\IDE\ReferenceAssemblies\v2.0\Microsoft.VisualStudio.DebuggerVisualizers.dll");
+        //            break;
+        //        case VisualStudioVersion.VS2010:
+        //            //assemblyNameReference = AssemblyNameReference.Parse(
+        //            //   "Microsoft.VisualStudio.DebuggerVisualizers, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
+
+        //            break;
+        //        default:
+        //            throw new ArgumentOutOfRangeException("visualStudioVersion");
+        //    }
+
+
+        //    _assembly.MainModule.AssemblyReferences.Remove(vsvisualizerReference);
+
+        //    for (int i = 1; i < assdef.MainModule.Types.Count - 1; i++)
+        //    {
+        //        _assembly.MainModule.Import(assdef.MainModule.Types[i]);
+        //    }
+
+
+
+        //}
     }
 }

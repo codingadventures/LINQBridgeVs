@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using Bridge.BuildTasks.Properties;
+ 
+using Bridge.VisualStudio.Properties;
 
-namespace Bridge.BuildTasks
+namespace Bridge.VisualStudio
 {
 
-    internal enum VisualStudioVersion
+    public enum VisualStudioVersion
     {
         VS2010,
         VS2012
 
     }
 
-    internal static class VisualStudioOptions
+    public static class VisualStudioOptions
     {
         private static readonly string MyDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 

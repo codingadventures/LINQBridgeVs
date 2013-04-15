@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Bridge.VisualStudio;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 
 namespace Bridge.TypeMapper
@@ -13,6 +14,7 @@ namespace Bridge.TypeMapper
         where T : DialogDebuggerVisualizer
     {
         private readonly string _targetVisualizerAssembly;
+        private readonly VisualStudioVersion _visualStudioVersion;
         private readonly VisualizerAttributeInjector _visualizerAttributeInjector;
 
         private static string TAssemblyLocation { get { return typeof(T).Assembly.Location; } }
@@ -24,9 +26,11 @@ namespace Bridge.TypeMapper
         /// </summary>
         /// <param name="targetAssemblyToMap">The target assembly to Map with the Visualizer.</param>
         /// <param name="visualizerDescriptionName">Visualizer description.</param>
-        public VisualizerTypeMapper(string targetAssemblyToMap, string visualizerDescriptionName)
+        /// <param name="visualStudioVersion"> Visual Studio Version</param>
+        public VisualizerTypeMapper(string targetAssemblyToMap, string visualizerDescriptionName, VisualStudioVersion visualStudioVersion = VisualStudioVersion.VS2012)
         {
             _targetVisualizerAssembly = targetAssemblyToMap;
+            _visualStudioVersion = visualStudioVersion;
             _visualizerAttributeInjector = new VisualizerAttributeInjector(TAssemblyLocation, _targetVisualizerAssembly, visualizerDescriptionName);
 
         }
@@ -44,6 +48,7 @@ namespace Bridge.TypeMapper
         {
             _visualizerAttributeInjector.MapSystemType(typeof(Dictionary<,>));
             _visualizerAttributeInjector.MapSystemType(typeof(List<>));
+
             _visualizerAttributeInjector.MapTypesFromAssembly(typesToExclude);
         }
 
@@ -61,6 +66,8 @@ namespace Bridge.TypeMapper
             if (IsAlreadyDeployed(debuggerVisualizerAssemblyLocation))
                 //Get all the custom attributes that map other type and import them into the current visualizer
                 _visualizerAttributeInjector.SyncronizeMappedTypes(debuggerVisualizerAssemblyLocation);
+
+           // _visualizerAttributeInjector.SyncronizeDebuggerVisualizerVersion(_visualStudioVersion);
 
             _visualizerAttributeInjector.SaveDebuggerVisualizer(debuggerVisualizerAssemblyLocation);
         }

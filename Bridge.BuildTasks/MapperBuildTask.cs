@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Bridge.TypeMapper;
+using Bridge.VisualStudio;
 using Bridge.Visualizers;
 using Microsoft.Build.Framework;
 
