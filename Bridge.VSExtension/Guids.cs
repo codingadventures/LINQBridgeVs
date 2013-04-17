@@ -1,8 +1,9 @@
 ﻿// Guids.cs
 // MUST match guids.h
+
 using System;
 
-namespace GiovanniCampo.Bridge_VSExtension
+namespace Bridge.VSExtension
 {
     static class GuidList
     {

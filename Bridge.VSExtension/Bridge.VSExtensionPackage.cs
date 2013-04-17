@@ -4,7 +4,6 @@ using System.Runtime.InteropServices;
 using System.ComponentModel.Design;
 using EnvDTE;
 using EnvDTE80;
-using GiovanniCampo.Bridge_VSExtension;
 using Microsoft.VisualStudio.Shell;
 
 namespace Bridge.VSExtension
@@ -60,11 +59,11 @@ namespace Bridge.VSExtension
             var dte = (DTE2)GetService(typeof(DTE));
             var bridge = new BridgeExtension(dte);
 
-            // Add our command handlers for menu (commands must exist in the .vsct file)
+            //// Add our command handlers for menu (commands must exist in the .vsct file)
             var mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (null == mcs) return;
 
-            // Create the command for the menu item.
+            //// Create the command for the menu item.
             var enableCommand = new CommandID(GuidList.GuidBridgeVsExtensionCmdSet, (int)PkgCmdIdList.CmdIdEnableBridge);
             var menuItemEnable = new OleMenuCommand((s, e) => bridge.Execute(CommandAction.Enable), enableCommand);
             menuItemEnable.BeforeQueryStatus += (s, e) => bridge.UpdateCommand(menuItemEnable, CommandAction.Enable);

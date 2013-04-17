@@ -22,7 +22,7 @@ namespace Bridge.VSExtension {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Bridge.VSExtension {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Bridge.VSExtension.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace Bridge.VSExtension {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Bridge.VSExtension {
         /// <summary>
         ///   Looks up a localized string similar to LINQPad\LINQPad.exe.
         /// </summary>
-        internal static string LINQPad {
+        public static string LINQPad {
             get {
                 return ResourceManager.GetString("LINQPad", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace Bridge.VSExtension {
         /// <summary>
         ///   Looks up a localized string similar to LINQPad\LINQPadConfig.config.
         /// </summary>
-        internal static string LINQPadConfig {
+        public static string LINQPadConfig {
             get {
                 return ResourceManager.GetString("LINQPadConfig", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace Bridge.VSExtension {
         /// <summary>
         ///   Looks up a localized string similar to LINQPad\Inspection.linq.
         /// </summary>
-        internal static string Query {
+        public static string Query {
             get {
                 return ResourceManager.GetString("Query", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace Bridge.VSExtension {
         /// <summary>
         ///   Looks up a localized string similar to Targets\BridgeBuildTask.targets.
         /// </summary>
-        internal static string Targets {
+        public static string Targets {
             get {
                 return ResourceManager.GetString("Targets", resourceCulture);
             }

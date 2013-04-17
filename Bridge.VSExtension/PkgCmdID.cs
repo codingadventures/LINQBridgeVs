@@ -1,8 +1,7 @@
 ﻿// PkgCmdID.cs
 // MUST match PkgCmdID.h
-using System;
 
-namespace GiovanniCampo.Bridge_VSExtension
+namespace Bridge.VSExtension
 {
     internal static class PkgCmdIdList
     {

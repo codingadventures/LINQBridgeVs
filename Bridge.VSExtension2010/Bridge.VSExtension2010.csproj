@@ -4,14 +4,14 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{ef94167d-0fc9-48a7-a4bb-dd958e4a3fb5}</ProjectGuid>
+    <ProjectGuid>{EF94167D-0FC9-48A7-A4BB-DD958E4A3FB5}</ProjectGuid>
     <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Company.VSPackage1</RootNamespace>
-    <AssemblyName>VSPackage1</AssemblyName>
+    <RootNamespace>Bridge.VSExtension</RootNamespace>
+    <AssemblyName>Bridge.VSExtension2010</AssemblyName>
     <SignAssembly>True</SignAssembly>
-    <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\Bridge.VSExtension\Key.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -51,6 +51,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="EnvDTE">
@@ -109,48 +110,88 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Guids.cs" />
-    <Compile Include="Resources.Designer.cs">
+    <Compile Include="..\Bridge.VSExtension\Bridge.VSExtensionPackage.cs">
+      <Link>Bridge.VSExtensionPackage.cs</Link>
+    </Compile>
+    <Compile Include="..\Bridge.VSExtension\BridgeExtension.cs">
+      <Link>BridgeExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\Bridge.VSExtension\Guids.cs">
+      <Link>Guids.cs</Link>
+    </Compile>
+    <Compile Include="..\Bridge.VSExtension\PkgCmdID.cs">
+      <Link>PkgCmdID.cs</Link>
+    </Compile>
+    <Compile Include="..\Bridge.VSExtension\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="VSPackage1Package.cs" />
+    <Compile Include="..\Bridge.VSExtension\GlobalSuppressions.cs">
+      <Link>GlobalSuppressions.cs </Link>
+    </Compile>
+    <Compile Include="..\Bridge.VSExtension\Utils\VsVersion.cs">
+      <Link>Utils\VsVersion.cs</Link>
+    </Compile>
+    <Compile Include="..\Bridge.VSExtension\Utils\XmlUtil.cs">
+      <Link>Utils\XmlUtil.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-
-    <Compile Include="PkgCmdID.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+    <EmbeddedResource Include="..\Bridge.VSExtension\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="VSPackage.resx">
+    <EmbeddedResource Include="..\Bridge.VSExtension\VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
       <ManifestResourceName>VSPackage</ManifestResourceName>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="source.extension.vsixmanifest">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Key.snk" />
-  </ItemGroup>
-  <ItemGroup>
-    <VSCTCompile Include="VSPackage1.vsct">
+    <VSCTCompile Include="..\Bridge.VSExtension\Bridge.VSExtension.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
+      <Link>\Bridge.VSExtension.vsct </Link>
     </VSCTCompile>
+    <Content Include="..\Bridge.VSExtension\LINQPad\Inspection.linq">
+      <Link>LINQPad\Inspection.linq</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="..\Bridge.VSExtension\LINQPad\LINQPad.exe.config">
+      <Link>LINQPad\LINQPad.exe.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    
+    <None Include="source.extension.vsixmanifest">
+    </None>
+    <Resource Include="..\Bridge.VSExtension\Resources\Images.png">
+      <Link>Resources\Images.png</Link>
+    </Resource>
+    <Resource Include="..\Bridge.VSExtension\Resources\Package.ico">
+      <Link>Resources\Package.ico</Link>
+    </Resource>
+    <Content Include="..\Bridge.VSExtension\Targets\BridgeBuildTask.targets">
+      <Link>Targets\BridgeBuildTask.targets</Link>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Images_32bit.bmp" />
+    <Content Include="..\Bridge.VSExtension\LINQPad\LINQPad.exe">
+      <Link>LINQPad\LINQPad.exe</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
   </ItemGroup>
-
   <ItemGroup>
-    <Content Include="Resources\Package.ico" />
+    <ProjectReference Include="..\Bridge.BuildTasks\Bridge.BuildTasks.csproj">
+      <Project>{276F3935-E0CA-450F-A55F-AED56DC2024E}</Project>
+      <Name>Bridge.BuildTasks</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>
