@@ -9,7 +9,7 @@
     <InstalledByMsi>false</InstalledByMsi>
     <AllUsers>true</AllUsers>
     <SupportedProducts>
-      <VisualStudio Version="11.0">
+      <VisualStudio Version="11.0" >
         <Edition>Pro</Edition>
       </VisualStudio>
     </SupportedProducts>

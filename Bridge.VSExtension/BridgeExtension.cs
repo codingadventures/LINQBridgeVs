@@ -55,10 +55,6 @@ namespace Bridge.VSExtension
             get { return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location); }
         }
 
-        private static string LibrariesFolder
-        {
-            get { return Path.Combine(InstallFolder, "Load"); }
-        }
         private static readonly string Target = Path.Combine(InstallFolder, Resources.Targets);
         private static readonly string LinqPadQueryPath = Path.Combine(InstallFolder, Resources.Query);
         private static readonly string LinqPadExePath = Path.Combine(InstallFolder, Resources.LINQPad);
@@ -102,17 +98,21 @@ namespace Bridge.VSExtension
 
             var usingTaskElement = e.XPathSelectElements("/Project/UsingTask");
             var mapperBuildTaskElement = e.XPathSelectElement("/Project/Target/MapperBuildTask");
-
             if (VSVersion.VS2010)
+            {
+
                 mapperBuildTaskElement.SetAttributeValue("VisualStudioVer", "VS2010");
+            }
             else if (VSVersion.VS2012)
+            {
                 mapperBuildTaskElement.SetAttributeValue("VisualStudioVer", "VS2012");
+            }
 
             foreach (var xElement in usingTaskElement)
             {
                 var assemblyName = xElement.Attribute("AssemblyFile").Value;
 
-                xElement.SetAttributeValue("AssemblyFile", Path.Combine(LibrariesFolder, assemblyName));
+                xElement.SetAttributeValue("AssemblyFile", Path.Combine(InstallFolder, assemblyName));
             }
 
 
@@ -205,7 +205,7 @@ namespace Bridge.VSExtension
                 import.Remove();
         }
 
-      
+
 
         private static void Enable(Project project)
         {
@@ -215,7 +215,7 @@ namespace Bridge.VSExtension
 
             if (targetToAdd.Root != null)
             {
-             
+
                 var xTargets = targetToAdd.Root.Element("Target");
                 var xTasks = targetToAdd.Root.Elements("UsingTask").ToList();
                 targetToAdd.Root.SetDefaultXmlNamespace(Namespace);
