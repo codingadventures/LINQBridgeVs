@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5030F9B8-D21E-456D-8A92-F92567D11104}</ProjectGuid>
+    <ProjectGuid>{DDF44401-F193-46B8-BA6C-A3DE88BAED46}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Bridge.InjectionBuildTask.Test</RootNamespace>
-    <AssemblyName>Bridge.InjectionBuildTask.Test</AssemblyName>
+    <RootNamespace>Bridge.Visualizers.Test</RootNamespace>
+    <AssemblyName>Bridge.Visualizers.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.VisualStudio.DebuggerVisualizers, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -54,17 +54,18 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="LINQPadDebuggerVisualizerObjectSourceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="LINQPadDebuggerVisualizerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bridge.AssemblyModel.Test\Bridge.AssemblyModel.Test.csproj">
-      <Project>{8a5e73f6-2093-4669-9c09-beab033be56c}</Project>
+      <Project>{8A5E73F6-2093-4669-9C09-BEAB033BE56C}</Project>
       <Name>Bridge.AssemblyModel.Test</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Bridge.BuildTasks\Bridge.BuildTasks.csproj">
-      <Project>{276f3935-e0ca-450f-a55f-aed56dc2024e}</Project>
-      <Name>Bridge.BuildTasks</Name>
+    <ProjectReference Include="..\Bridge.Visualizers\Bridge.Visualizers.csproj">
+      <Project>{c6798d16-89f5-4bff-8b62-2be6d4bbc192}</Project>
+      <Name>Bridge.Visualizers</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

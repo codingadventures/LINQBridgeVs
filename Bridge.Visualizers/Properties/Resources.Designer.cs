@@ -79,7 +79,7 @@ namespace Bridge.Visualizers.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to LINQPad Queries\Inspection.linq.
+        ///   Looks up a localized string similar to LINQPad Queries.
         /// </summary>
         public static string LINQPadQuery {
             get {

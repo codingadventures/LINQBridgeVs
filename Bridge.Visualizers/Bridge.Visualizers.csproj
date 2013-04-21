@@ -49,7 +49,6 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="AsyncVisualizerGetData.cs" />
     <Compile Include="LINQPadDebuggerVisualizer.cs" />
     <Compile Include="LINQPadDebuggerVisualizerObjectSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -58,6 +57,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Template\Inspection.cs">
+      <DependentUpon>Inspection.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Template\Template.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -66,17 +71,21 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Grapple">
+      <HintPath>..\packages\Grapple.0.1.2\lib\Grapple.dll</HintPath>
+      <Ilmerge>true</Ilmerge>
+    </Reference>
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Template\Inspection.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>Inspection.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Grapple\Bridge.Grapple\Bridge.Grapple.csproj">
-      <Project>{79c0c9ed-d22c-4855-97c1-f6bd0127a531}</Project>
-      <Name>Bridge.Grapple</Name>
-	  <Ilmerge>True</Ilmerge>
-    </ProjectReference>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <!--   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" /> -->
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

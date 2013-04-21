@@ -164,7 +164,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    
     <None Include="source.extension.vsixmanifest">
     </None>
     <Resource Include="..\Bridge.VSExtension\Resources\Images.png">
@@ -191,6 +190,7 @@
     <ProjectReference Include="..\Bridge.BuildTasks\Bridge.BuildTasks.csproj">
       <Project>{276F3935-E0CA-450F-A55F-AED56DC2024E}</Project>
       <Name>Bridge.BuildTasks</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies</IncludeOutputGroupsInVSIX>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

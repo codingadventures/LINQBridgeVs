@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.IO.MemoryMappedFiles;
 using Bridge.Visualizers.Properties;
+using Bridge.Visualizers.Template;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 
 namespace Bridge.Visualizers
@@ -12,15 +13,15 @@ namespace Bridge.Visualizers
     /// </summary>
     public class LINQPadDebuggerVisualizer : DialogDebuggerVisualizer
     {
-        private delegate void AsyncMethodCaller(IVisualizerObjectProvider objectProvider);
 
         protected override void Show(IDialogVisualizerService windowService, IVisualizerObjectProvider objectProvider)
         {
+            string outputFileName;
 
-            var asyncVisualizerGetData = new AsyncMethodCaller(AsyncVisualizerGetData.ManipulateData);
-
-            var result = asyncVisualizerGetData.BeginInvoke(objectProvider, delegate { }, 0);
-
+            using (var stream = new StreamReader(objectProvider.GetData()))
+            {
+                outputFileName = stream.ReadToEnd();
+            }
             using (var process = new Process())
             {
 
@@ -32,19 +33,13 @@ namespace Bridge.Visualizers
                                         Arguments =
                                             Path.Combine(
                                                 Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                                                Resources.LINQPadQuery) + " " + Resources.LINQPadCommands,
+                                                Resources.LINQPadQuery, outputFileName) + " " + Resources.LINQPadCommands,
 
                                     };
 
                 process.StartInfo = startInfo;
                 process.Start();
             }
-
-            asyncVisualizerGetData.EndInvoke(result);
-
-            result.AsyncWaitHandle.Close();
-
-
         }
     }
 

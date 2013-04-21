@@ -3,8 +3,7 @@ using System.Linq;
 using Bridge.BuildTasks;
 using Bridge.Test.AssemblyModel;
 using System.Reflection;
-using Bridge.Visualizers;
-using Microsoft.VisualStudio.DebuggerVisualizers;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Bridge.InjectionBuildTask.Test
@@ -55,15 +54,7 @@ namespace Bridge.InjectionBuildTask.Test
 
         }
 
-        [TestMethod]
-        public void LINQPadDebuggerVisualizerTest()
-        {
-
-            VisualizationTestClass c = new VisualizationTestClass();
-
-            var myHost = new VisualizerDevelopmentHost(c, typeof(LINQPadDebuggerVisualizer));
-            myHost.ShowVisualizer();
-        }
+        
     }
 }
 

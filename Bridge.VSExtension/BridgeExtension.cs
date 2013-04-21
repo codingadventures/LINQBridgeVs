@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
+ 
 using Bridge.VSExtension.Utils;
 using EnvDTE;
 using EnvDTE80;
@@ -65,21 +66,10 @@ namespace Bridge.VSExtension
             _application = app;
             SetTargets();
             SetEnvironment();
-            DeployScripts();
+          
         }
 
-        private static void DeployScripts()
-        {
-            var scriptFileName = Path.GetFileName(LinqPadQueryPath);
-            var dstScriptPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                                             "LINQPad Queries");
-            if (scriptFileName == null) return;
-
-            var dst = Path.Combine(dstScriptPath, scriptFileName);
-            if (!File.Exists(dst))
-                File.Copy(LinqPadQueryPath, dst);
-        }
-
+       
         private static void SetEnvironment()
         {
             var linqPadPath = Path.GetDirectoryName(LinqPadExePath);
