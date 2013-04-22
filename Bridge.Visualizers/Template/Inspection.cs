@@ -33,7 +33,7 @@ namespace Bridge.Visualizers.Template
                     "</Namespace>\r\n  <Namespace>Bridge.Grapple</Namespace>\r\n  <Namespace>");
             
             #line 13 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\Bridge.Visualizers\Template\Inspection.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TypeToRetrieve.Namespace));
+            this.Write(this.ToStringHelper.ToStringWithCulture(TypeNamespace));
             
             #line default
             #line hidden
@@ -69,7 +69,7 @@ namespace Bridge.Visualizers.Template
                     "     var obj = instance.Get<");
             
             #line 25 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\Bridge.Visualizers\Template\Inspection.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TypeToRetrieve.FullName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(TypeToRetrieveFullName));
             
             #line default
             #line hidden

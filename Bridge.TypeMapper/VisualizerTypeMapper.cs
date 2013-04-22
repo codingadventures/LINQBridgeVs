@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Bridge.VisualStudio;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 
@@ -48,6 +49,8 @@ namespace Bridge.TypeMapper
         {
             _visualizerAttributeInjector.MapSystemType(typeof(Dictionary<,>));
             _visualizerAttributeInjector.MapSystemType(typeof(List<>));
+            _visualizerAttributeInjector.MapSystemType(typeof(IEnumerable<>));
+            _visualizerAttributeInjector.MapSystemType(typeof(IOrderedEnumerable<>));
 
             _visualizerAttributeInjector.MapTypesFromAssembly(typesToExclude);
         }
