@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.AssemblyModel.Test",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.InjectionBuildTask.Test", "Bridge.InjectionBuildTask.Test\Bridge.InjectionBuildTask.Test.csproj", "{5030F9B8-D21E-456D-8A92-F92567D11104}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.Grapple", "..\Grapple\Bridge.Grapple\Bridge.Grapple.csproj", "{79C0C9ED-D22C-4855-97C1-F6BD0127A531}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.VSExtension2010", "Bridge.VSExtension2010\Bridge.VSExtension2010.csproj", "{EF94167D-0FC9-48A7-A4BB-DD958E4A3FB5}"
 EndProject
 Global
@@ -47,10 +45,6 @@ Global
 		{5030F9B8-D21E-456D-8A92-F92567D11104}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5030F9B8-D21E-456D-8A92-F92567D11104}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5030F9B8-D21E-456D-8A92-F92567D11104}.Release|Any CPU.Build.0 = Release|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EF94167D-0FC9-48A7-A4BB-DD958E4A3FB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EF94167D-0FC9-48A7-A4BB-DD958E4A3FB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF94167D-0FC9-48A7-A4BB-DD958E4A3FB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
