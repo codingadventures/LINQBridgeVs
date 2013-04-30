@@ -12,9 +12,11 @@
   <Namespace>Bridge.Grapple</Namespace>
   <Namespace><#= TypeNamespace #></Namespace>
   <Reference><#= this.GetType().Assembly.Location #></Reference>
-  <# foreach(var elem in this.Assemblies){#>
+  <# foreach(var elem in this.Assemblies){
+    if (!elem.Contains("mscorlib")) {
+  #>
   <Reference><#=elem#></Reference>
-  <#}#> 
+  <#}}#> 
 </Query>
 
 
@@ -23,6 +25,6 @@ void Main()
      
         Bus instance = Bus.Instance;
         var obj = instance.Get<<#=TypeToRetrieveFullName#>>();
-        obj.Dump();
+        obj.Dump("<#=TypeNamespace#>");
         
 }

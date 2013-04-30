@@ -48,32 +48,41 @@ namespace Bridge.Visualizers.Template
             
             #line 15 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\Bridge.Visualizers\Template\Inspection.tt"
  foreach(var elem in this.Assemblies){
+    if (!elem.Contains("mscorlib")) {
+  
             
             #line default
             #line hidden
             this.Write("  <Reference>");
             
-            #line 16 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\Bridge.Visualizers\Template\Inspection.tt"
+            #line 18 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\Bridge.Visualizers\Template\Inspection.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(elem));
             
             #line default
             #line hidden
             this.Write("</Reference>\r\n  ");
             
-            #line 17 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\Bridge.Visualizers\Template\Inspection.tt"
-}
+            #line 19 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\Bridge.Visualizers\Template\Inspection.tt"
+}}
             
             #line default
             #line hidden
             this.Write(" \r\n</Query>\r\n\r\n\r\nvoid Main()\r\n{\r\n     \r\n        Bus instance = Bus.Instance;\r\n   " +
                     "     var obj = instance.Get<");
             
-            #line 25 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\Bridge.Visualizers\Template\Inspection.tt"
+            #line 27 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\Bridge.Visualizers\Template\Inspection.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeToRetrieveFullName));
             
             #line default
             #line hidden
-            this.Write(">();\r\n        obj.Dump();\r\n        \r\n}");
+            this.Write(">();\r\n        obj.Dump(\"");
+            
+            #line 28 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\Bridge.Visualizers\Template\Inspection.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(TypeNamespace));
+            
+            #line default
+            #line hidden
+            this.Write("\");\r\n        \r\n}");
             return this.GenerationEnvironment.ToString();
         }
     }
