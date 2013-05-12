@@ -187,6 +187,18 @@
       <Name>Bridge.BuildTasks</Name>
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies</IncludeOutputGroupsInVSIX>
     </ProjectReference>
+    <ProjectReference Include="..\Bridge.TypeMapper\Bridge.TypeMapper.csproj">
+      <Project>{FCC8BF06-3173-4D21-A157-D1167B6407C9}</Project>
+      <Name>Bridge.TypeMapper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Bridge.Visualizers\Bridge.Visualizers.csproj">
+      <Project>{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}</Project>
+      <Name>Bridge.Visualizers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Bridge.VisualStudio\Bridge.VisualStudio.csproj">
+      <Project>{8F6409F1-33E3-4310-BE84-12C4F838C0B0}</Project>
+      <Name>Bridge.VisualStudio</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>

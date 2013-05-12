@@ -33,7 +33,7 @@ namespace Bridge.TypeMapper
         private readonly AssemblyDefinition _assemblyToMap;
         private readonly AssemblyDefinition _assembly;
         private readonly WriterParameters _writerParameters = new WriterParameters() { WriteSymbols = true, SymbolWriterProvider = new PdbWriterProvider() };
-        private bool _skipSave = true;
+
         #endregion
 
         #region [ Constants ]
@@ -211,14 +211,17 @@ namespace Bridge.TypeMapper
             var filteredTypes = _assemblyToMap
                 .MainModule
                 .Types
-                .Where(AbstractTypesFilter)
-                .Where(definition =>
-                       typesToExclude != null &&
-                       !typesToExclude.Any(type => BaseTypeFilter(definition, type.Name)));
+                .Where(AbstractTypesFilter);
 
+            //TypeDefinition d = new TypeDefinition();
+            if (typesToExclude != null && typesToExclude.Any())
+            {
+                filteredTypes =
+                    filteredTypes
+                        .Except(typesToExclude); //.Any(type => BaseTypeFilter(definition, type.FullName)));
+            }
             foreach (var type in filteredTypes)
             {
-                _skipSave = false;
                 var customAttribute = new CustomAttribute(_assembly.MainModule.Import(ctor));
                 var customDebuggerVisualizer = new CustomAttributeArgument(systemType, customDebuggerVisualizerType);
 
@@ -249,8 +252,7 @@ namespace Bridge.TypeMapper
         /// <param name="references">The Assembly references</param>
         public void SaveDebuggerVisualizer(string location, IEnumerable<string> references = null)
         {
-            if (_skipSave) return;
-
+           
             _assembly.Write(location, _writerParameters);
             if (references != null)
                 DeployReferences(references, location);
@@ -271,8 +273,7 @@ namespace Bridge.TypeMapper
         /// <param name="aStream">A stream.</param>
         public void SaveDebuggerVisualizer(Stream aStream)
         {
-            if (_skipSave) return;
-
+           
             _assembly.Write(aStream, _writerParameters);
         }
 

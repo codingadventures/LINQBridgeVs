@@ -22,6 +22,5 @@
   </References>
   <Content>
     <VsPackage>|%CurrentProject%;PkgdefProjectOutputGroup|</VsPackage>
-    <Assembly AssemblyName="|Bridge.InjectionBuildTask;AssemblyName;"></Assembly>
   </Content>
 </Vsix>
