@@ -22,7 +22,7 @@ namespace Bridge.TypeMapper
             = typeDef => typeDef.IsPublic && !typeDef.IsInterface && !typeDef.IsAbstract;
 
         private static readonly Func<TypeDefinition, string, bool> BaseTypeFilter
-            = (typeDef, toCompare) => typeDef.BaseType != null && typeDef.BaseType.FullName.Contains(toCompare);
+            = (typeDef, toCompare) => typeDef.BaseType != null && typeDef.BaseType.Name.Contains(toCompare);
 
         private static readonly Func<TypeDefinition, string, bool> TypeFilter
             = (typeDef, toCompare) => typeDef.FullName.Contains(toCompare);
@@ -177,12 +177,11 @@ namespace Bridge.TypeMapper
         /// <summary>
         /// Maps the types from assembly.
         /// </summary>
-        /// <param name="typesToExclude">The types to exclude.</param>
-        public void MapTypesFromAssembly(List<Type> typesToExclude = null)
+        public void MapTypesFromAssembly( )
         {
 
             TypeReference systemType;
-
+            
             _assembly.MainModule.TryGetTypeReference(SystemType, out systemType);
 
             var debuggerAttributeType = _assembly.MainModule.Import(typeof(System.Diagnostics.DebuggerVisualizerAttribute));
@@ -213,13 +212,6 @@ namespace Bridge.TypeMapper
                 .Types
                 .Where(AbstractTypesFilter);
 
-            //TypeDefinition d = new TypeDefinition();
-            if (typesToExclude != null && typesToExclude.Any())
-            {
-                filteredTypes =
-                    filteredTypes
-                        .Except(typesToExclude); //.Any(type => BaseTypeFilter(definition, type.FullName)));
-            }
             foreach (var type in filteredTypes)
             {
                 var customAttribute = new CustomAttribute(_assembly.MainModule.Import(ctor));
@@ -228,12 +220,10 @@ namespace Bridge.TypeMapper
                 var visualizerObjectSource =
                     new CustomAttributeArgument(systemType, customDebuggerVisualizerObjectSource);
                  
-
                 var targetType = new CustomAttributeArgument(systemType, _assembly.MainModule.Import(type));
                 var descriptionType = new CustomAttributeArgument(_assembly.MainModule.TypeSystem.String, _visualizerDescriptionName);
                 var targetTypeProperty = new CustomAttributeNamedArgument("Target", targetType);
                 var descriptionTypeProperty = new CustomAttributeNamedArgument("Description", descriptionType);
-
 
                 customAttribute.ConstructorArguments.Add(customDebuggerVisualizer);
                 customAttribute.ConstructorArguments.Add(visualizerObjectSource);

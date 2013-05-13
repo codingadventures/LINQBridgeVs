@@ -34,7 +34,7 @@ namespace Bridge.BuildTasks
                                                                                  Visualizers.Properties.Resources
                                                                                             .VisualizerName);
 
-            typeMapper.Create(new List<Type> { typeof(Dictionary<,>), typeof(List<>) });
+            typeMapper.Create();
 
             typeMapper.Save(VisualStudioOptions.VisualStudioPaths[vsVer]);
 

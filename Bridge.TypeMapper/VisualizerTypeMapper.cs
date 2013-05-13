@@ -44,15 +44,14 @@ namespace Bridge.TypeMapper
         /// <summary>
         /// Creates the specified types to exclude.
         /// </summary>
-        /// <param name="typesToExclude">The types to exclude.</param>
-        public void Create(List<Type> typesToExclude = null)
+        public void Create( )
         {
             _visualizerAttributeInjector.MapSystemType(typeof(Dictionary<,>));
             _visualizerAttributeInjector.MapSystemType(typeof(List<>));
             _visualizerAttributeInjector.MapSystemType(typeof(IEnumerable<>));
             _visualizerAttributeInjector.MapSystemType(typeof(IOrderedEnumerable<>));
 
-            _visualizerAttributeInjector.MapTypesFromAssembly(typesToExclude);
+            _visualizerAttributeInjector.MapTypesFromAssembly();
         }
 
         /// <summary>
@@ -70,7 +69,7 @@ namespace Bridge.TypeMapper
                 //Get all the custom attributes that map other type and import them into the current visualizer
                 _visualizerAttributeInjector.SyncronizeMappedTypes(debuggerVisualizerAssemblyLocation);
 
-           // _visualizerAttributeInjector.SyncronizeDebuggerVisualizerVersion(_visualStudioVersion);
+            // _visualizerAttributeInjector.SyncronizeDebuggerVisualizerVersion(_visualStudioVersion);
 
             _visualizerAttributeInjector.SaveDebuggerVisualizer(debuggerVisualizerAssemblyLocation);
         }

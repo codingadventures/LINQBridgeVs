@@ -4,7 +4,7 @@
   <Target Name="AfterBuild"> 
 
     
-    <CreateItem Include="@(ReferencePath)" Condition="'%(CopyLocal)'=='true' and '%(ReferencePath.IlMerge)'=='true'"> 
+    <CreateItem Include="@(ReferencePath)" Condition="'%(CopyLocal)'=='false' and '%(ReferencePath.IlMerge)'=='true'"> 
 
     
       <Output TaskParameter="Include" ItemName="IlmergeAssemblies"/> 
