@@ -1,11 +1,10 @@
-<Project>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <UsingTask TaskName="SInjectionBuildTask" AssemblyFile="Bridge.BuildTasks.dll" />
-  <UsingTask TaskName="MapperBuildTask" AssemblyFile="Bridge.BuildTasks.dll" />
+  <UsingTask TaskName="SInjectionBuildTask" AssemblyFile="../Bridge.BuildTasks.dll" />
+  <UsingTask TaskName="MapperBuildTask" AssemblyFile="../Bridge.BuildTasks.dll" />
 
   <Target Name="AfterBuild" DependsOnTargets="CoreCompile">
-
     <SInjectionBuildTask Assembly="@(MainAssembly->'%(FullPath)')"   />
-    <MapperBuildTask Assembly="@(MainAssembly->'%(FullPath)')"   VisualStudioVer=""   />
+    <MapperBuildTask Assembly="@(MainAssembly->'%(FullPath)')"   VisualStudioVer="$(VisualStudioVersion)"   />
   </Target>
 </Project>

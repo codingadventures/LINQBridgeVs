@@ -20,7 +20,7 @@ namespace Bridge.Visualizers
             var dstScriptPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                                              "LINQPad Queries");
 
-            var dst = Path.Combine(dstScriptPath, string.Format(message.FileName,message.TypeFullName));
+            var dst = Path.Combine(dstScriptPath, string.Format(message.FileName, message.TypeFullName));
             if (File.Exists(dst)) return;
 
             var linqQuery = new Inspection(new List<string> { message.TypeLocation }, message.TypeFullName, message.TypeNamespace);
@@ -45,7 +45,8 @@ namespace Bridge.Visualizers
                                     {
                                         WindowStyle = ProcessWindowStyle.Normal,
                                         LoadUserProfile = true,
-                                        FileName = Resources.LINQPadExe,
+                                        FileName = Environment.GetEnvironmentVariable("LinqPadPath") + @"\" + Resources.LINQPadExe,
+
                                         Arguments =
                                             Path.Combine(
                                                 Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),

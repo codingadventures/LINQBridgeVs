@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
- 
+
 using Bridge.VisualStudio.Properties;
 
 namespace Bridge.VisualStudio
@@ -16,18 +16,16 @@ namespace Bridge.VisualStudio
     public static class VisualStudioOptions
     {
         private static readonly string MyDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-
-        public static readonly Dictionary<VisualStudioVersion, List<string>> VisualStudioPaths = new Dictionary<VisualStudioVersion, List<string>>(){
+        public static readonly Dictionary<string, List<string>> VisualStudioPaths = new Dictionary<string, List<string>>(){
             {
-                VisualStudioVersion.VS2010, new List<string>()
+                "10.0", new List<string>()
                                         {
                                             MyDocuments + Resources.VS2010Path1,
                                             MyDocuments + Resources.VS2010Path2
                                         }},
             
             {
-                VisualStudioVersion.VS2012, new List<string>()
+                "11.0", new List<string>()
                                             {
                                                 MyDocuments + Resources.VS2012Path1
                                         }}

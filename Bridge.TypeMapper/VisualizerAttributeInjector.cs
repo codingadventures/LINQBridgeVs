@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using Bridge.TypeMapper.Comparer;
-using Bridge.VisualStudio;
 using Mono.Cecil.Rocks;
 using Mono.Cecil.Pdb;
 using Mono.Cecil;
@@ -24,22 +23,22 @@ namespace Bridge.TypeMapper
         private static readonly Func<TypeDefinition, string, bool> BaseTypeFilter
             = (typeDef, toCompare) => typeDef.BaseType != null && typeDef.BaseType.Name.Contains(toCompare);
 
-        private static readonly Func<TypeDefinition, string, bool> TypeFilter
-            = (typeDef, toCompare) => typeDef.FullName.Contains(toCompare);
+        //private static readonly Func<TypeDefinition, string, bool> TypeFilter
+        //    = (typeDef, toCompare) => typeDef.FullName.Contains(toCompare);
 
         #endregion
 
         #region [ Fields ]
         private readonly AssemblyDefinition _assemblyToMap;
         private readonly AssemblyDefinition _assembly;
-        private readonly WriterParameters _writerParameters = new WriterParameters() { WriteSymbols = true, SymbolWriterProvider = new PdbWriterProvider() };
+        private readonly WriterParameters _writerParameters = new WriterParameters { WriteSymbols = true, SymbolWriterProvider = new PdbWriterProvider() };
 
         #endregion
 
         #region [ Constants ]
         private const string SystemType = "System.Type";
         private const string SystemDiagnosticsDebuggerVisualizerAttribute = "System.Diagnostics.DebuggerVisualizerAttribute";
-        private const int Target = 0;
+        
         #endregion
 
         #endregion

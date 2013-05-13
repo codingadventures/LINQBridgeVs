@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using Bridge.VisualStudio;
+using System.Linq; 
 using Microsoft.VisualStudio.DebuggerVisualizers;
 
 namespace Bridge.TypeMapper
@@ -15,7 +14,7 @@ namespace Bridge.TypeMapper
         where T : DialogDebuggerVisualizer
     {
         private readonly string _targetVisualizerAssembly;
-        private readonly VisualStudioVersion _visualStudioVersion;
+        //private readonly VisualStudioVersion _visualStudioVersion;
         private readonly VisualizerAttributeInjector _visualizerAttributeInjector;
 
         private static string TAssemblyLocation { get { return typeof(T).Assembly.Location; } }
@@ -28,10 +27,9 @@ namespace Bridge.TypeMapper
         /// <param name="targetAssemblyToMap">The target assembly to Map with the Visualizer.</param>
         /// <param name="visualizerDescriptionName">Visualizer description.</param>
         /// <param name="visualStudioVersion"> Visual Studio Version</param>
-        public VisualizerTypeMapper(string targetAssemblyToMap, string visualizerDescriptionName, VisualStudioVersion visualStudioVersion = VisualStudioVersion.VS2012)
+        public VisualizerTypeMapper(string targetAssemblyToMap, string visualizerDescriptionName)
         {
             _targetVisualizerAssembly = targetAssemblyToMap;
-            _visualStudioVersion = visualStudioVersion;
             _visualizerAttributeInjector = new VisualizerAttributeInjector(TAssemblyLocation, _targetVisualizerAssembly, visualizerDescriptionName);
 
         }

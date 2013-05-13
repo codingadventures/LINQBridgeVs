@@ -2,15 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
- 
-using Bridge.VSExtension.Utils;
+
 using EnvDTE;
 using EnvDTE80;
-using System.Xml.XPath;
+using Process = System.Diagnostics.Process;
 
 namespace Bridge.VSExtension
 {
@@ -49,7 +49,6 @@ namespace Bridge.VSExtension
         private readonly Dictionary<string, ProjectInfo> _projects = new Dictionary<string, ProjectInfo>(StringComparer.InvariantCultureIgnoreCase);
 
         private static readonly XName Import = XName.Get("Import", "http://schemas.microsoft.com/developer/msbuild/2003");
-        private static readonly XNamespace Namespace = "http://schemas.microsoft.com/developer/msbuild/2003";
 
         private static string InstallFolder
         {
@@ -57,57 +56,41 @@ namespace Bridge.VSExtension
         }
 
         private static readonly string Target = Path.Combine(InstallFolder, Resources.Targets);
-        private static readonly string LinqPadQueryPath = Path.Combine(InstallFolder, Resources.Query);
         private static readonly string LinqPadExePath = Path.Combine(InstallFolder, Resources.LINQPad);
 
 
         public BridgeExtension(DTE2 app)
         {
             _application = app;
-            SetTargets();
             SetEnvironment();
-          
+
         }
 
-       
+
         private static void SetEnvironment()
         {
             var linqPadPath = Path.GetDirectoryName(LinqPadExePath);
 
-            var path = Environment.GetEnvironmentVariable("Path") ?? string.Empty;
-
-            if (linqPadPath == null || path.IndexOf(linqPadPath, StringComparison.InvariantCultureIgnoreCase) != -1) return;
-
-            Environment.SetEnvironmentVariable("Path", path + ";" + linqPadPath);
-            Environment.SetEnvironmentVariable("Path", path + ";" + linqPadPath, EnvironmentVariableTarget.Machine);
-        }
-
-        private static void SetTargets()
-        {
-            var e = XDocument.Load(Target);
-
-            var usingTaskElement = e.XPathSelectElements("/Project/UsingTask");
-            var mapperBuildTaskElement = e.XPathSelectElement("/Project/Target/MapperBuildTask");
-            if (VSVersion.VS2010)
+            using (var process = new Process())
             {
+                var startInfo = new ProcessStartInfo
+                {
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    LoadUserProfile = true,
+                    CreateNoWindow = true,
+                    UseShellExecute = true,
+                    FileName = "setx",
+                    Arguments = string.Format("/M LinqPadPath \"{0}\"", linqPadPath)
+                };
 
-                mapperBuildTaskElement.SetAttributeValue("VisualStudioVer", "VS2010");
+                process.StartInfo = startInfo;
+                process.Start();
             }
-            else if (VSVersion.VS2012)
-            {
-                mapperBuildTaskElement.SetAttributeValue("VisualStudioVer", "VS2012");
-            }
+            //var path = Environment.GetEnvironmentVariable("Path") ?? string.Empty;
 
-            foreach (var xElement in usingTaskElement)
-            {
-                var assemblyName = xElement.Attribute("AssemblyFile").Value;
+            //if (linqPadPath == null || path.IndexOf(linqPadPath, StringComparison.InvariantCultureIgnoreCase) != -1) return;
 
-                xElement.SetAttributeValue("AssemblyFile", Path.Combine(InstallFolder, assemblyName));
-            }
-
-
-            e.Save(Target);
-
+            //Environment.SetEnvironmentVariable("Path", path + ";" + linqPadPath, EnvironmentVariableTarget.User);
         }
 
         private static bool IsSupported(Project proj)
@@ -200,19 +183,10 @@ namespace Bridge.VSExtension
         private static void Enable(Project project)
         {
             var e = XElement.Load(project.FullName);
-            var targetToAdd = XDocument.Load(Target);
-            //RemoveImports(e);
 
-            if (targetToAdd.Root != null)
-            {
+            RemoveImports(e);
 
-                var xTargets = targetToAdd.Root.Element("Target");
-                var xTasks = targetToAdd.Root.Elements("UsingTask").ToList();
-                targetToAdd.Root.SetDefaultXmlNamespace(Namespace);
-
-                e.Add(xTasks);
-                e.Add(xTargets);
-            }
+            e.Add(new XElement(Import, new XAttribute("Project", Target)));
 
             e.Save(project.FullName);
 

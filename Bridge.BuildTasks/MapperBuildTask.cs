@@ -28,15 +28,12 @@ namespace Bridge.BuildTasks
         /// </returns>
         public bool Execute()
         {
-            var vsVer = (VisualStudioVersion)Enum.Parse(typeof(VisualStudioVersion), VisualStudioVer);
-
             var typeMapper = new VisualizerTypeMapper<LINQPadDebuggerVisualizer>(Assembly,
                                                                                  Visualizers.Properties.Resources
                                                                                             .VisualizerName);
 
             typeMapper.Create();
-
-            typeMapper.Save(VisualStudioOptions.VisualStudioPaths[vsVer]);
+            typeMapper.Save(VisualStudioOptions.VisualStudioPaths[VisualStudioVer]);
 
             return true;
         }

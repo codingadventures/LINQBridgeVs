@@ -33,6 +33,10 @@
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Bridge.Visualizers">
+      <HintPath>..\Bridge.Visualizers\bin\Debug\Bridge.Visualizers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.OLE.Interop" />
     <Reference Include="Microsoft.VisualStudio.Shell.Interop" />
@@ -130,12 +134,6 @@
     <Compile Include="..\Bridge.VSExtension\GlobalSuppressions.cs">
       <Link>GlobalSuppressions.cs </Link>
     </Compile>
-    <Compile Include="..\Bridge.VSExtension\Utils\VsVersion.cs">
-      <Link>Utils\VsVersion.cs</Link>
-    </Compile>
-    <Compile Include="..\Bridge.VSExtension\Utils\XmlUtil.cs">
-      <Link>Utils\XmlUtil.cs</Link>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -190,11 +188,6 @@
     <ProjectReference Include="..\Bridge.TypeMapper\Bridge.TypeMapper.csproj">
       <Project>{FCC8BF06-3173-4D21-A157-D1167B6407C9}</Project>
       <Name>Bridge.TypeMapper</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\Bridge.Visualizers\Bridge.Visualizers.csproj">
-      <Project>{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}</Project>
-      <Name>Bridge.Visualizers</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\Bridge.VisualStudio\Bridge.VisualStudio.csproj">

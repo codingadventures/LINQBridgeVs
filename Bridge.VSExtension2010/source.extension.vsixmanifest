@@ -23,7 +23,6 @@
   <Content>
     <VsPackage>|%CurrentProject%;PkgdefProjectOutputGroup|</VsPackage>
 	<Assembly AssemblyName="|Bridge.TypeMapper;AssemblyName|">|Bridge.TypeMapper|</Assembly>
-	<Assembly AssemblyName="|Bridge.Visualizers;AssemblyName|">|Bridge.Visualizers|</Assembly>
 	<Assembly AssemblyName="|Bridge.VisualStudio;AssemblyName|">|Bridge.VisualStudio|</Assembly>
   </Content>
 </Vsix>
