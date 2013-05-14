@@ -73,9 +73,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Grapple, Version=0.0.4862.32717, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Grapple.0.1.3\lib\Grapple.dll</HintPath>
+    <Reference Include="Grapple">
+      <HintPath>..\packages\Grapple.0.1.4\lib\Grapple.dll</HintPath>
       <Ilmerge>true</Ilmerge>
       <Private>False</Private>
     </Reference>

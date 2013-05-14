@@ -27,8 +27,7 @@ namespace Bridge.InjectionBuildTask.Test
             var mapper = new MapperBuildTask()
                              {
                                  Assembly = _assemblyModel.Location,
-                                 Resources = "LINQPad\\LINQPAD.exe;LINQPAD\\debugging.linq",
-                                 VisualStudioVer = "VS2012"
+                                 VisualStudioVer = "11.0"
                              };
 
 
