@@ -21,18 +21,18 @@ namespace Bridge.Visualizers
 
         private static readonly string MyDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-        private static List<string> _logs = new List<string>();
+        private static readonly List<string> Logs = new List<string>();
 
 
-        internal static void DeployScripts(Message message)
+        internal void DeployScripts(Message message)
         {
             try
             {
-                _logs.Add(message.ToString());
-                _logs.Add("MyDocuments: " + MyDocuments);
-                _logs.Add("Resources.LINQPadQuery: " + Resources.LINQPadQuery);
+                Logs.Add(message.ToString());
+                Logs.Add("MyDocuments: " + MyDocuments);
+                Logs.Add("Resources.LINQPadQuery: " + Resources.LINQPadQuery);
                 var dstScriptPath = Path.Combine(MyDocuments, Resources.LINQPadQuery);
-                _logs.Add("dstScriptPath: " + dstScriptPath);
+                Logs.Add("dstScriptPath: " + dstScriptPath);
 
                 var dst = Path.Combine(dstScriptPath, string.Format(message.FileName, message.TypeFullName));
 
@@ -50,9 +50,9 @@ namespace Bridge.Visualizers
             }
             catch (Exception e)
             {
-                _logs.Add(e.Message);
-                _logs.Add(e.StackTrace);
-                Grapple.Bus.Instance.Add(_logs);
+                Logs.Add(e.Message);
+                Logs.Add(e.StackTrace);
+                Grapple.Bus.Instance.Add(Logs);
                 Grapple.Bus.Instance.BroadCast();
 
                 throw;
@@ -61,7 +61,6 @@ namespace Bridge.Visualizers
 
         protected override void Show(IDialogVisualizerService windowService, IVisualizerObjectProvider objectProvider)
         {
-
             var formatter = new BinaryFormatter();
             var message = (Message)formatter.Deserialize(objectProvider.GetData());
 
@@ -72,15 +71,26 @@ namespace Bridge.Visualizers
                 var startInfo = new ProcessStartInfo
                                     {
                                         WindowStyle = ProcessWindowStyle.Normal,
-                                        LoadUserProfile = true,
                                         FileName = Environment.GetEnvironmentVariable("LinqPadPath") + @"\" + Resources.LINQPadExe,
-                                        Arguments =
-                                            Path.Combine(MyDocuments, Resources.LINQPadQuery, message.FileName) + " " + Resources.LINQPadCommands,
-
+                                        Arguments = Path.Combine(MyDocuments, Resources.LINQPadQuery, message.FileName) + " " + Resources.LINQPadCommands,
+                                        UseShellExecute = true
                                     };
 
                 process.StartInfo = startInfo;
-                process.Start();
+
+                Logs.Add(startInfo.FileName);
+                Logs.Add(startInfo.Arguments);
+
+                try
+                {
+                    process.Start();
+                }
+                catch (Exception e)
+                {
+                    Logs.Add(e.Message);
+                    Logs.Add(e.StackTrace);
+                    Grapple.Bus.Instance.BroadCast();
+                }
             }
         }
     }
