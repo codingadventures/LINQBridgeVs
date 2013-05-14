@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.RegularExpressions;
 using Bridge.Grapple;
 using Bridge.Visualizers.Template;
 using Bridge.Visualizers.Utils;
@@ -19,10 +20,11 @@ namespace Bridge.Visualizers
             var scriptFileName = DateTime.Now.ToString(FileNameFormat);
             var targetType = target.GetType();
             var targetTypeFullName = TypeNameHelper.GetDisplayName(targetType, true);
-
+            var pattern = new Regex("[<>]");
+            ;
             var message = new Message
                               {
-                                  FileName = string.Format(scriptFileName, targetTypeFullName.Replace("<>", "_")),
+                                  FileName = string.Format(scriptFileName, pattern.Replace(targetTypeFullName, string.Empty)),
                                   TypeFullName = targetTypeFullName,
                                   TypeLocation = targetType.Assembly.Location,
                                   TypeNamespace = targetType.Namespace
