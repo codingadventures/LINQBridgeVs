@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Bridge.Visualizers.Template
+namespace LINQBridge.DynamicVisualizers.Template
 {
     public partial class Inspection
     {

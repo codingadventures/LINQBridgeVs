@@ -1,7 +1,8 @@
 ﻿using System;
 using System.IO;
 using Bridge.Test.AssemblyModel;
-using Bridge.Visualizers.Template;
+using LINQBridge.DynamicVisualizers;
+using LINQBridge.DynamicVisualizers.Template;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -12,7 +13,7 @@ namespace Bridge.Visualizers.Test
     {
         private Message _message = new Message
                                        {
-                                           FileName = DateTime.Now.ToString(LINQPadDebuggerVisualizerObjectSource.FileNameFormat),
+                                           FileName = DateTime.Now.ToString(DynamicDebuggerVisualizerObjectSource.FileNameFormat),
                                            TypeFullName = typeof(string).FullName,
                                            TypeNamespace = typeof(string).Namespace,
                                            TypeLocation = typeof(string).Assembly.Location
@@ -23,14 +24,14 @@ namespace Bridge.Visualizers.Test
 
             var c = new VisualizationTestClass();
 
-            var myHost = new VisualizerDevelopmentHost(c, typeof(LINQPadDebuggerVisualizer), typeof(LINQPadDebuggerVisualizerObjectSource));
+            var myHost = new VisualizerDevelopmentHost(c, typeof(DynamicDebuggerVisualizer), typeof(DynamicDebuggerVisualizerObjectSource));
             myHost.ShowVisualizer();
         }
 
         [TestMethod]
         public void DeployScriptTest()
         {
-            var cVisualizerObjectSource = new LINQPadDebuggerVisualizer();
+            var cVisualizerObjectSource = new DynamicDebuggerVisualizer();
             cVisualizerObjectSource.DeployScripts(_message);
 
             

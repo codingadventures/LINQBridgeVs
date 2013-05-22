@@ -4,7 +4,10 @@ using System.Runtime.InteropServices;
 using System.ComponentModel.Design;
 using EnvDTE;
 using EnvDTE80;
+using LINQBridge.VSExtension;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Bridge.VSExtension
 {
@@ -26,21 +29,10 @@ namespace Bridge.VSExtension
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
     // This attribute is needed to let the shell know that this package exposes some menus.
     [ProvideMenuResource("Menus.ctmenu", 1)]
+    [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)]
     [Guid(GuidList.GuidBridgeVsExtensionPkgString)]
-    public sealed class Bridge_VSExtensionPackage : Package
+    public sealed class LINQBridgePackage : Package
     {
-        /// <summary>
-        /// Default constructor of the package.
-        /// Inside this method you can place any initialization code that does not require 
-        /// any Visual Studio service because at this point the package object is created but 
-        /// not sited yet inside Visual Studio environment. The place to do all the other 
-        /// initialization is the Initialize method.
-        /// </summary>
-        public Bridge_VSExtensionPackage()
-        {
-            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering constructor for: {0}", this.ToString()));
-        }
-
 
 
         /////////////////////////////////////////////////////////////////////////////
@@ -53,11 +45,10 @@ namespace Bridge.VSExtension
         /// </summary>
         protected override void Initialize()
         {
-        //    Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this.ToString()));
             base.Initialize();
 
-            var dte = (DTE2)GetService(typeof(DTE));
-            var bridge = new BridgeExtension(dte);
+            var dte = (DTE2)GetService(typeof(SDTE));
+            var bridge = new LINQBridgeExtension(dte);
 
             //// Add our command handlers for menu (commands must exist in the .vsct file)
             var mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
@@ -71,6 +62,8 @@ namespace Bridge.VSExtension
 
             var disableCommand = new CommandID(GuidList.GuidBridgeVsExtensionCmdSet, (int)PkgCmdIdList.CmdIdDisableBridge);
             var menuItemDisable = new OleMenuCommand((s, e) => bridge.Execute(CommandAction.Disable), disableCommand);
+            menuItemDisable.BeforeQueryStatus += (s, e) => bridge.UpdateCommand(menuItemDisable, CommandAction.Disable);
+
 
             mcs.AddCommand(menuItemEnable);
             mcs.AddCommand(menuItemDisable);

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using LINQBridge.VisualStudio.Properties;
 
-using Bridge.VisualStudio.Properties;
-
-namespace Bridge.VisualStudio
+namespace LINQBridge.VisualStudio
 {
 
     public enum VisualStudioVersion

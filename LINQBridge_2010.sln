@@ -1,17 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.VisualStudio", "Bridge.VisualStudio\Bridge.VisualStudio.csproj", "{8F6409F1-33E3-4310-BE84-12C4F838C0B0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualStudio", "Bridge.VisualStudio\VisualStudio.csproj", "{8F6409F1-33E3-4310-BE84-12C4F838C0B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.BuildTasks", "Bridge.BuildTasks\Bridge.BuildTasks.csproj", "{276F3935-E0CA-450F-A55F-AED56DC2024E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildTasks", "Bridge.BuildTasks\BuildTasks.csproj", "{276F3935-E0CA-450F-A55F-AED56DC2024E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.Visualizers", "Bridge.Visualizers\Bridge.Visualizers.csproj", "{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizers", "Bridge.Visualizers\DynamicVisualizers.csproj", "{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.TypeMapper", "Bridge.TypeMapper\Bridge.TypeMapper.csproj", "{FCC8BF06-3173-4D21-A157-D1167B6407C9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeMapper", "Bridge.TypeMapper\TypeMapper.csproj", "{FCC8BF06-3173-4D21-A157-D1167B6407C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.AssemblyModel.Test", "Bridge.AssemblyModel.Test\Bridge.AssemblyModel.Test.csproj", "{8A5E73F6-2093-4669-9C09-BEAB033BE56C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyModel.Test", "Bridge.AssemblyModel.Test\AssemblyModel.Test.csproj", "{8A5E73F6-2093-4669-9C09-BEAB033BE56C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.InjectionBuildTask.Test", "Bridge.InjectionBuildTask.Test\Bridge.InjectionBuildTask.Test.csproj", "{5030F9B8-D21E-456D-8A92-F92567D11104}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InjectionBuildTask.Test", "Bridge.InjectionBuildTask.Test\InjectionBuildTask.Test.csproj", "{5030F9B8-D21E-456D-8A92-F92567D11104}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.VSExtension2010", "Bridge.VSExtension2010\Bridge.VSExtension2010.csproj", "{EF94167D-0FC9-48A7-A4BB-DD958E4A3FB5}"
 EndProject

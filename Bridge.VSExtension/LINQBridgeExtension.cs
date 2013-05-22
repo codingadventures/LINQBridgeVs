@@ -6,13 +6,13 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Forms;
 using System.Xml.Linq;
-
 using EnvDTE;
 using EnvDTE80;
 using Process = System.Diagnostics.Process;
 
-namespace Bridge.VSExtension
+namespace LINQBridge.VSExtension
 {
     [Flags]
     public enum CommandStates
@@ -43,9 +43,10 @@ namespace Bridge.VSExtension
         public bool IsEnabled { get { return _isEnabled; } }
     }
 
-    public class BridgeExtension
+    public class LINQBridgeExtension
     {
         private readonly DTE2 _application;
+
         private readonly Dictionary<string, ProjectInfo> _projects = new Dictionary<string, ProjectInfo>(StringComparer.InvariantCultureIgnoreCase);
 
         private static readonly XName Import = XName.Get("Import", "http://schemas.microsoft.com/developer/msbuild/2003");
@@ -55,14 +56,27 @@ namespace Bridge.VSExtension
             get { return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location); }
         }
 
+        private static readonly string LinqPadDestinationFolder = Path.Combine(
+            Environment.GetEnvironmentVariable("ProgramFiles"), "LINQPad4");
+
         private static readonly string Target = Path.Combine(InstallFolder, Resources.Targets);
         private static readonly string LinqPadExePath = Path.Combine(InstallFolder, Resources.LINQPad);
 
 
-        public BridgeExtension(DTE2 app)
+        private string SolutionName
+        {
+            get
+            {
+                return Path.GetFileNameWithoutExtension(_application.Solution.FullName);
+            }
+        }
+
+        public LINQBridgeExtension(DTE2 app)
         {
             _application = app;
+
             SetEnvironment();
+
 
         }
 
@@ -79,18 +93,13 @@ namespace Bridge.VSExtension
                     LoadUserProfile = true,
                     CreateNoWindow = true,
                     UseShellExecute = true,
-                    FileName = "setx",
-                    Arguments = string.Format("/M LinqPadPath \"{0}\"", linqPadPath)
+                    FileName = "copy",
+                    Arguments = string.Format("{0}\\*.* \"{1}\"", linqPadPath, LinqPadDestinationFolder)
                 };
 
                 process.StartInfo = startInfo;
                 process.Start();
             }
-            //var path = Environment.GetEnvironmentVariable("Path") ?? string.Empty;
-
-            //if (linqPadPath == null || path.IndexOf(linqPadPath, StringComparison.InvariantCultureIgnoreCase) != -1) return;
-
-            //Environment.SetEnvironmentVariable("Path", path + ";" + linqPadPath, EnvironmentVariableTarget.User);
         }
 
         private static bool IsSupported(Project proj)
@@ -146,10 +155,16 @@ namespace Bridge.VSExtension
             if (SupportedProjects == null)
                 return;
 
+
             if (action == CommandAction.Enable)
                 SupportedProjects.RemoveAll(IsBridgeEnabled);
             else
                 SupportedProjects.RemoveAll(IsBridgeDisabled);
+
+            var supportedProjectsNames = SupportedProjects
+                .Select(project => project.FullName)
+                .ToList();
+
 
             foreach (var proj in SupportedProjects.Where(proj => proj.IsDirty))
                 proj.Save();
@@ -159,8 +174,8 @@ namespace Bridge.VSExtension
             else
                 SupportedProjects.ForEach(Disable);
 
-            foreach (var proj in SupportedProjects)
-                _projects.Remove(proj.FullName);
+            supportedProjectsNames.ForEach(s => _projects.Remove(s));
+
         }
 
         public void UpdateCommand(MenuCommand cmd, CommandAction action)
@@ -170,35 +185,58 @@ namespace Bridge.VSExtension
             cmd.Enabled = (CommandStates.Enabled & states) != 0;
         }
 
-        private static void RemoveImports(XElement e)
+        private static void RemoveImports(XContainer e)
         {
-            var imports = FindImport(e, false).ToList();
+            var imports = FindImport(e);
 
             foreach (var import in imports)
                 import.Remove();
         }
 
-
-
-        private static void Enable(Project project)
+        private void ReloadProject(string projectName)
         {
-            var e = XElement.Load(project.FullName);
+            var solExp = _application.ToolWindows.SolutionExplorer.Parent; // Get the Solution Explorer Window
+            solExp.Activate(); // Activate Solution Explorer Window
+            _application.ToolWindows.SolutionExplorer.GetItem(SolutionName + @"\" + projectName).Select(vsUISelectionType.vsUISelectionTypeSelect);
+
+            _application.ExecuteCommand("Project.UnloadProject", ""); // Unload the first project
+            System.Threading.Thread.Sleep(300);
+            _application.ExecuteCommand("Project.ReloadProject", ""); // Reload 
+        }
+
+        private void Enable(Project project)
+        {
+            var projectFullName = project.FullName;
+            var projectName = project.Name;
+
+            var e = XElement.Load(projectFullName);
 
             RemoveImports(e);
 
             e.Add(new XElement(Import, new XAttribute("Project", Target)));
 
-            e.Save(project.FullName);
+            e.Save(projectFullName);
+
+            ReloadProject(projectName);
+
+            MessageBox.Show(string.Format("LINQBridge on {0} has been enabled...", projectName), "Success", MessageBoxButtons.OK);
 
         }
 
-        private static void Disable(Project project)
+        private void Disable(Project project)
         {
-            var e = XElement.Load(project.FullName);
+            var projectFullName = project.FullName;
+            var projectName = project.Name;
+
+            var e = XElement.Load(projectFullName);
 
             RemoveImports(e);
 
-            e.Save(project.FullName);
+            e.Save(projectFullName);
+
+            ReloadProject(projectName);
+
+            MessageBox.Show(string.Format("LINQBridge on {0} has been disabled...", projectName), "Success", MessageBoxButtons.OK);
 
         }
 
@@ -206,7 +244,7 @@ namespace Bridge.VSExtension
         {
             try
             {
-                return FindImport(XElement.Load(projectFile), true).Any();
+                return FindImport(XElement.Load(projectFile)).Any();
             }
             catch (FileNotFoundException)
             {
@@ -236,7 +274,7 @@ namespace Bridge.VSExtension
             return result;
         }
 
-        private CommandStates GetCommandStatus(int status, CommandAction action)
+        private static CommandStates GetCommandStatus(int status, CommandAction action)
         {
             if (status == 0)
                 return CommandStates.None;
@@ -251,7 +289,7 @@ namespace Bridge.VSExtension
 
 
 
-        static IEnumerable<XElement> FindImport(XElement root, bool strict)
+        static IEnumerable<XElement> FindImport(XContainer root)
         {
             if (root == null) throw new ArgumentNullException("root");
 
@@ -260,15 +298,14 @@ namespace Bridge.VSExtension
                              where a != null
                              select new { Element = e, Project = (string)a };
 
-            if (strict)
-                return from i in candidates
-                       where string.Equals(i.Project, Target, StringComparison.InvariantCultureIgnoreCase)
-                       select i.Element;
+            var imports = from i in candidates
+                          where i.Project.Contains(Target)
+                          select i.Element;
 
-            return from i in candidates
-                   let file = Path.GetFileName(i.Project)
-                   where string.Equals(file, Target, StringComparison.InvariantCultureIgnoreCase)
-                   select i.Element;
+
+            return imports;
+
+
         }
     }
 }

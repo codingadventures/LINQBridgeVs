@@ -7,7 +7,7 @@ using Mono.Cecil.Pdb;
 using Mono.Cecil;
 using System.Linq;
 
-namespace Bridge.TypeMapper
+namespace LINQBridge.TypeMapper
 {
     internal class VisualizerAttributeInjector
     {

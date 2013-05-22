@@ -9,7 +9,7 @@
   <Namespace>System.Dynamic</Namespace>
   <Namespace>System.Runtime.Serialization.Formatters</Namespace>
   <Namespace>System.Xml.Linq</Namespace>
-  <Namespace>Bridge.Grapple</Namespace>
+  <Namespace>LINQBridge.Grapple</Namespace>
   <Namespace><#= TypeNamespace #></Namespace>
   <Reference><#= this.GetType().Assembly.Location #></Reference>
   <# foreach(var elem in this.Assemblies){

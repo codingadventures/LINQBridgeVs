@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.Visualizers", "Bridge.Visualizers\Bridge.Visualizers.csproj", "{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizers", "Bridge.Visualizers\DynamicVisualizers.csproj", "{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.TypeMapper", "Bridge.TypeMapper\Bridge.TypeMapper.csproj", "{FCC8BF06-3173-4D21-A157-D1167B6407C9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeMapper", "Bridge.TypeMapper\TypeMapper.csproj", "{FCC8BF06-3173-4D21-A157-D1167B6407C9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{15295B1F-D517-4D5B-91C6-6682BE1E4B16}"
 	ProjectSection(SolutionItems) = preProject
@@ -13,19 +13,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{15295B
 		UnitTests.testsettings = UnitTests.testsettings
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.BuildTasks", "Bridge.BuildTasks\Bridge.BuildTasks.csproj", "{276F3935-E0CA-450F-A55F-AED56DC2024E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildTasks", "Bridge.BuildTasks\BuildTasks.csproj", "{276F3935-E0CA-450F-A55F-AED56DC2024E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.InjectionBuildTask.Test", "Bridge.InjectionBuildTask.Test\Bridge.InjectionBuildTask.Test.csproj", "{5030F9B8-D21E-456D-8A92-F92567D11104}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InjectionBuildTask.Test", "Bridge.InjectionBuildTask.Test\InjectionBuildTask.Test.csproj", "{5030F9B8-D21E-456D-8A92-F92567D11104}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.AssemblyModel.Test", "Bridge.AssemblyModel.Test\Bridge.AssemblyModel.Test.csproj", "{8A5E73F6-2093-4669-9C09-BEAB033BE56C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyModel.Test", "Bridge.AssemblyModel.Test\AssemblyModel.Test.csproj", "{8A5E73F6-2093-4669-9C09-BEAB033BE56C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.VSExtension", "Bridge.VSExtension\Bridge.VSExtension.csproj", "{1B82F962-5D04-42B6-8D18-7AA8E8FB615F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VsExtension", "Bridge.VSExtension\VsExtension.csproj", "{1B82F962-5D04-42B6-8D18-7AA8E8FB615F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{DEECC213-180D-4C4E-A44B-5785F1C0FB73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.VisualStudio", "Bridge.VisualStudio\Bridge.VisualStudio.csproj", "{8F6409F1-33E3-4310-BE84-12C4F838C0B0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualStudio", "Bridge.VisualStudio\VisualStudio.csproj", "{8F6409F1-33E3-4310-BE84-12C4F838C0B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.Visualizers.Test", "Bridge.Visualizers.Test\Bridge.Visualizers.Test.csproj", "{DDF44401-F193-46B8-BA6C-A3DE88BAED46}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visualizers.Test", "Bridge.Visualizers.Test\Visualizers.Test.csproj", "{DDF44401-F193-46B8-BA6C-A3DE88BAED46}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

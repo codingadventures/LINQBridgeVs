@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq; 
+using System.Linq;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 
-namespace Bridge.TypeMapper
+namespace LINQBridge.TypeMapper
 {
     /// <summary>
     /// Maps all the types of a given assembly to the type T of the debugger visualizer 
@@ -26,7 +25,6 @@ namespace Bridge.TypeMapper
         /// </summary>
         /// <param name="targetAssemblyToMap">The target assembly to Map with the Visualizer.</param>
         /// <param name="visualizerDescriptionName">Visualizer description.</param>
-        /// <param name="visualStudioVersion"> Visual Studio Version</param>
         public VisualizerTypeMapper(string targetAssemblyToMap, string visualizerDescriptionName)
         {
             _targetVisualizerAssembly = targetAssemblyToMap;

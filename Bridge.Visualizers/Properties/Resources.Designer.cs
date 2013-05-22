@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Bridge.Visualizers.Properties {
+namespace LINQBridge.DynamicVisualizers.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Bridge.Visualizers.Properties {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Bridge.Visualizers.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LINQBridge.DynamicVisualizers.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -88,7 +88,7 @@ namespace Bridge.Visualizers.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to LINQPad Visualizer.
+        ///   Looks up a localized string similar to LINQBridge Visualizer.
         /// </summary>
         public static string VisualizerName {
             get {

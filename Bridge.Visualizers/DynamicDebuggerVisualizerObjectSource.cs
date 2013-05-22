@@ -2,15 +2,15 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
-using Bridge.Grapple;
-using Bridge.Visualizers.Template;
 using Bridge.Visualizers.Utils;
+using LINQBridge.DynamicVisualizers.Template;
+using LINQBridge.Grapple;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 
-namespace Bridge.Visualizers
+namespace LINQBridge.DynamicVisualizers
 {
 
-    public class LINQPadDebuggerVisualizerObjectSource : VisualizerObjectSource
+    public class DynamicDebuggerVisualizerObjectSource : VisualizerObjectSource
     {
         internal const string FileNameFormat = "ddMMyy_{0}.linq";
 
@@ -21,7 +21,7 @@ namespace Bridge.Visualizers
             var targetType = target.GetType();
             var targetTypeFullName = TypeNameHelper.GetDisplayName(targetType, true);
             var pattern = new Regex("[<>]");
-            ;
+            
             var message = new Message
                               {
                                   FileName = string.Format(scriptFileName, pattern.Replace(targetTypeFullName, string.Empty)),

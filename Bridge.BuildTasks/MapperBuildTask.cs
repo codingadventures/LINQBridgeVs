@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Bridge.TypeMapper;
-using Bridge.VisualStudio;
-using Bridge.Visualizers;
+﻿using LINQBridge.DynamicVisualizers;
+using LINQBridge.TypeMapper;
+using LINQBridge.VisualStudio;
 using Microsoft.Build.Framework;
 
-namespace Bridge.BuildTasks
+namespace LINQBridge.BuildTasks
 {
     public class MapperBuildTask : ITask
     {
@@ -28,8 +24,8 @@ namespace Bridge.BuildTasks
         /// </returns>
         public bool Execute()
         {
-            var typeMapper = new VisualizerTypeMapper<LINQPadDebuggerVisualizer>(Assembly,
-                                                                                 Visualizers.Properties.Resources
+            var typeMapper = new VisualizerTypeMapper<DynamicDebuggerVisualizer>(Assembly,
+                                                                                 DynamicVisualizers.Properties.Resources
                                                                                             .VisualizerName);
 
             typeMapper.Create();

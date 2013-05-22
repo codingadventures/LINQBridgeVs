@@ -1,19 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Vsix Version="1.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
+<Vsix xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
   <Identifier Id="fa136bfd-0b1d-4721-9159-1dbefcb5c4fc">
-    <Name>Bridge.VSExtension</Name>
+    <Name>LINQBridge Extension</Name>
     <Author>Giovanni Campo</Author>
     <Version>0.1</Version>
     <Description xml:space="preserve">Enable/Disable the creation of a custom debugger visualizer and the transformation of the target project in a fully serializable library</Description>
     <Locale>1033</Locale>
     <InstalledByMsi>false</InstalledByMsi>
-    <AllUsers>true</AllUsers>
     <SupportedProducts>
       <VisualStudio Version="10.0">
         <Edition>Pro</Edition>
       </VisualStudio>
     </SupportedProducts>
     <SupportedFrameworkRuntimeEdition MinVersion="4.0" MaxVersion="4.0" />
+    <AllUsers>true</AllUsers>
   </Identifier>
   <References>
     <Reference Id="Microsoft.VisualStudio.MPF" MinVersion="10.0">
@@ -22,7 +22,7 @@
   </References>
   <Content>
     <VsPackage>|%CurrentProject%;PkgdefProjectOutputGroup|</VsPackage>
-	<Assembly AssemblyName="|Bridge.TypeMapper;AssemblyName|">|Bridge.TypeMapper|</Assembly>
-	<Assembly AssemblyName="|Bridge.VisualStudio;AssemblyName|">|Bridge.VisualStudio|</Assembly>
+    <Assembly AssemblyName="|TypeMapper;AssemblyName|">|TypeMapper|</Assembly>
+    <Assembly AssemblyName="|VisualStudio;AssemblyName|">|VisualStudio|</Assembly>
   </Content>
 </Vsix>

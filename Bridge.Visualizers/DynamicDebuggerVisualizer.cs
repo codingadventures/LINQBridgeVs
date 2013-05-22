@@ -2,45 +2,47 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using Bridge.Visualizers.Properties;
-using Bridge.Visualizers.Template;
+using LINQBridge.DynamicVisualizers.Properties;
+using LINQBridge.DynamicVisualizers.Template;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 
-
-namespace Bridge.Visualizers
+namespace LINQBridge.DynamicVisualizers
 {
     /// <summary>
     /// 
     /// </summary>
-    public class LINQPadDebuggerVisualizer : DialogDebuggerVisualizer
+    public class DynamicDebuggerVisualizer : DialogDebuggerVisualizer
     {
 
 
         private static readonly string MyDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-        private static readonly List<string> Logs = new List<string>();
-
-
+         
         internal void DeployScripts(Message message)
         {
             try
             {
-                Logs.Add(message.ToString());
-                Logs.Add("MyDocuments: " + MyDocuments);
-                Logs.Add("Resources.LINQPadQuery: " + Resources.LINQPadQuery);
+                Debug.WriteLine("Entered in DeployScript");
+                Debug.WriteLine("Message: {0}", message);
+
                 var dstScriptPath = Path.Combine(MyDocuments, Resources.LINQPadQuery);
-                Logs.Add("dstScriptPath: " + dstScriptPath);
+                Debug.WriteLine("dstScriptPath: {0}", dstScriptPath);
 
                 var dst = Path.Combine(dstScriptPath, string.Format(message.FileName, message.TypeFullName));
+                Debug.WriteLine("dst: {0}", dst);
 
 
-                if (File.Exists(dst)) return;
+                if (File.Exists(dst))
+                {
+                    Debug.WriteLine("File Already Exists");
+                    return;
+                }
 
                 var linqQuery = new Inspection(new List<string> { message.TypeLocation }, message.TypeFullName, message.TypeNamespace);
                 var linqQueryText = linqQuery.TransformText();
+
+                Debug.WriteLine("LinqQuery file generated");
+
 
                 using (var streamWriter = new StreamWriter(dst, false))
                 {
@@ -50,11 +52,8 @@ namespace Bridge.Visualizers
             }
             catch (Exception e)
             {
-                Logs.Add(e.Message);
-                Logs.Add(e.StackTrace);
-                Grapple.Bus.Instance.Add(Logs);
-                Grapple.Bus.Instance.BroadCast();
-
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.StackTrace);
                 throw;
             }
         }
@@ -65,31 +64,36 @@ namespace Bridge.Visualizers
             var message = (Message)formatter.Deserialize(objectProvider.GetData());
 
             DeployScripts(message);
+            Debug.WriteLine("LinqQuery Successfully deployed");
 
             using (var process = new Process())
             {
                 var startInfo = new ProcessStartInfo
                                     {
                                         WindowStyle = ProcessWindowStyle.Normal,
-                                        FileName = Environment.GetEnvironmentVariable("LinqPadPath") + @"\" + Resources.LINQPadExe,
-                                        Arguments = Path.Combine(MyDocuments, Resources.LINQPadQuery, message.FileName) + " " + Resources.LINQPadCommands,
-                                        UseShellExecute = true
+                                        FileName =  Resources.LINQPadExe,
+                                        WorkingDirectory = Environment.GetEnvironmentVariable("ProgramFiles") ,
+                                        Arguments = Path.Combine(MyDocuments, Resources.LINQPadQuery, message.FileName) + " " + Resources.LINQPadCommands
                                     };
+
+
 
                 process.StartInfo = startInfo;
 
-                Logs.Add(startInfo.FileName);
-                Logs.Add(startInfo.Arguments);
+                Debug.WriteLine("About to start LINQPad with these parameters: {0}, {1}", startInfo.FileName, startInfo.Arguments);
 
                 try
                 {
                     process.Start();
+                    Debug.WriteLine("LINQPad Successfully started");
+
                 }
                 catch (Exception e)
                 {
-                    Logs.Add(e.Message);
-                    Logs.Add(e.StackTrace);
-                    Grapple.Bus.Instance.BroadCast();
+                    Debug.WriteLine("Error during LINQPad execution");
+                    Debug.WriteLine(e.Message);
+
+                    throw;
                 }
             }
         }

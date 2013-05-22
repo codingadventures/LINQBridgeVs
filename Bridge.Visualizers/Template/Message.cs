@@ -1,7 +1,6 @@
 ﻿using System;
 
-
-namespace Bridge.Visualizers.Template
+namespace LINQBridge.DynamicVisualizers.Template
 {
     [Serializable]
     internal struct Message

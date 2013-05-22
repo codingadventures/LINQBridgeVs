@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace Bridge.Visualizers.Template
+namespace LINQBridge.DynamicVisualizers.Template
 {
     using System.Linq;
     using System.Text;
@@ -30,7 +30,7 @@ namespace Bridge.Visualizers.Template
         {
             this.Write("\r\n<Query Kind=\"Program\">\r\n  <Namespace>System.Dynamic</Namespace>\r\n  <Namespace>S" +
                     "ystem.Runtime.Serialization.Formatters</Namespace>\r\n  <Namespace>System.Xml.Linq" +
-                    "</Namespace>\r\n  <Namespace>Bridge.Grapple</Namespace>\r\n  <Namespace>");
+                    "</Namespace>\r\n  <Namespace>LINQBridge.Grapple</Namespace>\r\n  <Namespace>");
             
             #line 13 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\Bridge.Visualizers\Template\Inspection.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeNamespace));

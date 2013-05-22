@@ -3,7 +3,7 @@ using System.Linq;
 using Bridge.BuildTasks;
 using Bridge.Test.AssemblyModel;
 using System.Reflection;
-
+using LINQBridge.BuildTasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Bridge.InjectionBuildTask.Test
