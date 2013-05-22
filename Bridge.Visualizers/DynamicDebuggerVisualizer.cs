@@ -17,7 +17,7 @@ namespace LINQBridge.DynamicVisualizers
 
 
         private static readonly string MyDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-         
+
         internal void DeployScripts(Message message)
         {
             try
@@ -71,8 +71,8 @@ namespace LINQBridge.DynamicVisualizers
                 var startInfo = new ProcessStartInfo
                                     {
                                         WindowStyle = ProcessWindowStyle.Normal,
-                                        FileName =  Resources.LINQPadExe,
-                                        WorkingDirectory = Environment.GetEnvironmentVariable("ProgramFiles") ,
+                                        FileName = Resources.LINQPadExe,
+                                        WorkingDirectory = Environment.GetEnvironmentVariable("ProgramFiles") + @"\LINQPad4",
                                         Arguments = Path.Combine(MyDocuments, Resources.LINQPadQuery, message.FileName) + " " + Resources.LINQPadCommands
                                     };
 

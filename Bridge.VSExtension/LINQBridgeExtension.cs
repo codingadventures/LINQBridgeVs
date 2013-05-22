@@ -74,10 +74,7 @@ namespace LINQBridge.VSExtension
         public LINQBridgeExtension(DTE2 app)
         {
             _application = app;
-
             SetEnvironment();
-
-
         }
 
 
@@ -85,21 +82,18 @@ namespace LINQBridge.VSExtension
         {
             var linqPadPath = Path.GetDirectoryName(LinqPadExePath);
 
-            using (var process = new Process())
-            {
-                var startInfo = new ProcessStartInfo
-                {
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    LoadUserProfile = true,
-                    CreateNoWindow = true,
-                    UseShellExecute = true,
-                    FileName = "copy",
-                    Arguments = string.Format("{0}\\*.* \"{1}\"", linqPadPath, LinqPadDestinationFolder)
-                };
+            if (!Directory.Exists(LinqPadDestinationFolder))
+                Directory.CreateDirectory(LinqPadDestinationFolder);
 
-                process.StartInfo = startInfo;
-                process.Start();
+            foreach (var file in Directory.GetFiles(linqPadPath))
+            {
+                var destinationFileName = Path.Combine(LinqPadDestinationFolder, Path.GetFileName(file));
+                if (!File.Exists(destinationFileName))
+                    File.Copy(file, destinationFileName, false);
             }
+
+
+
         }
 
         private static bool IsSupported(Project proj)
