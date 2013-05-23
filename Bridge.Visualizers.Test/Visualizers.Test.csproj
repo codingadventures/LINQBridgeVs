@@ -54,14 +54,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="LINQPadDebuggerVisualizerObjectSourceTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LINQPadDebuggerVisualizerTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bridge.AssemblyModel.Test\AssemblyModel.Test.csproj">
+    <ProjectReference Include="..\Bridge.AssemblyModel.Test\Assembly.Model.Test.csproj">
       <Project>{8A5E73F6-2093-4669-9C09-BEAB033BE56C}</Project>
-      <Name>AssemblyModel.Test</Name>
+      <Name>Assembly.Model.Test</Name>
     </ProjectReference>
     <ProjectReference Include="..\Bridge.Visualizers\DynamicVisualizers.csproj">
       <Project>{c6798d16-89f5-4bff-8b62-2be6d4bbc192}</Project>

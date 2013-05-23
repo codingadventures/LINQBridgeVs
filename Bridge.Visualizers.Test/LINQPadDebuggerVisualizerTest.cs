@@ -9,14 +9,14 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Bridge.Visualizers.Test
 {
     [TestClass]
-    public class LINQPadDebuggerVisualizerTest
+    public class DynamicVisualizerTest
     {
         private Message _message = new Message
                                        {
                                            FileName = DateTime.Now.ToString(DynamicDebuggerVisualizerObjectSource.FileNameFormat),
-                                           TypeFullName = typeof(string).FullName,
-                                           TypeNamespace = typeof(string).Namespace,
-                                           TypeLocation = typeof(string).Assembly.Location
+                                           TypeFullName = typeof(CustomType1).FullName,
+                                           TypeNamespace = typeof(CustomType1).Namespace,
+                                           TypeLocation = typeof(CustomType1).Assembly.Location
                                        };
         [TestMethod]
         public void LINQPadDebuggerVisualizerShowTest()
@@ -32,7 +32,7 @@ namespace Bridge.Visualizers.Test
         public void DeployScriptTest()
         {
             var cVisualizerObjectSource = new DynamicDebuggerVisualizer();
-            cVisualizerObjectSource.DeployScripts(_message);
+            DynamicDebuggerVisualizer.DeployScripts(_message);
 
             
             var dstScriptPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),

@@ -18,7 +18,7 @@ namespace LINQBridge.DynamicVisualizers
 
         private static readonly string MyDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-        internal void DeployScripts(Message message)
+        internal static void DeployScripts(Message message)
         {
             try
             {

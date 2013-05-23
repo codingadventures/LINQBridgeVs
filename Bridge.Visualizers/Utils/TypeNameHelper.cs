@@ -1,13 +1,11 @@
 ﻿using System;
-
 using System.Globalization;
-
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Bridge.Visualizers.Utils
+namespace LINQBridge.DynamicVisualizers.Utils
 {
-    internal class TypeNameHelper
+    internal static class TypeNameHelper
     {
         public static string GetDisplayName(Type type, bool fullName)
         {

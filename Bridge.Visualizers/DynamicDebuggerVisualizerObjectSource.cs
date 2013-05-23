@@ -29,16 +29,16 @@ namespace LINQBridge.DynamicVisualizers
 
             var referencedAssemblies = targetType.Assembly.GetReferencedAssemblies()
                 .Where(name => !PublicExcludedKey.Contains(GetAssemblyPublickKeyToken(name)))
-                .Where(name => !name.Name.Contains("Microsoft") || !name.Name.Contains("System"));
+                .Where(name => !name.Name.Contains("Microsoft") || !name.Name.Contains("System"))
+                .Select(name => Assembly.ReflectionOnlyLoad(name.FullName).Location);
 
-            ;
             var message = new Message
                               {
                                   FileName = string.Format(scriptFileName, pattern.Replace(targetTypeFullName, string.Empty)),
                                   TypeFullName = targetTypeFullName,
-                                  TypeLocation = targetType.Assembly.CodeBase,
+                                  TypeLocation = targetType.Assembly.Location,
                                   TypeNamespace = targetType.Namespace,
-                                  ReferencedAssemblies = referencedAssemblies.Select(name => Assembly.ReflectionOnlyLoad(name.FullName).Location).ToList()
+                                  ReferencedAssemblies = referencedAssemblies.ToList()
                               };
 
             var binaryFormatter = new BinaryFormatter();

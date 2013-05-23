@@ -7,8 +7,8 @@
     <ProjectGuid>{8A5E73F6-2093-4669-9C09-BEAB033BE56C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Bridge.AssemblyModel.Test</RootNamespace>
-    <AssemblyName>Bridge.AssemblyModel.Test</AssemblyName>
+    <RootNamespace>Assembly.Model.Test</RootNamespace>
+    <AssemblyName>Assembly.Model.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -40,8 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyModels.cs" />
+    <Compile Include="Models.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Assembly.AnotherModel.Test\Assembly.AnotherModel.Test.csproj">
+      <Project>{7B0C3D12-296A-438D-B0EA-B049A0D6D3C1}</Project>
+      <Name>Assembly.AnotherModel.Test</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
