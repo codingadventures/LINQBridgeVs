@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace LINQBridge.DynamicVisualizers.Template
 {
@@ -9,6 +10,7 @@ namespace LINQBridge.DynamicVisualizers.Template
         public string TypeFullName;
         public string TypeLocation;
         public string TypeNamespace;
+        public List<string> ReferencedAssemblies;
 
         public override string ToString()
         {

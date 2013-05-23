@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -187,15 +186,37 @@ namespace LINQBridge.VSExtension
                 import.Remove();
         }
 
+        private static UIHierarchyItem FindItem(UIHierarchyItems items, string projectToSearch)
+        {
+            UIHierarchyItem retValue = null;
+
+            if (items == null || items.Count == 0) return retValue;
+
+            foreach (var uiHierarchyItem in items)
+            {
+                var item = uiHierarchyItem as UIHierarchyItem;
+                if (item.Name.Contains(projectToSearch)) return item;
+
+                retValue = FindItem(item.UIHierarchyItems, projectToSearch);
+
+            }
+
+            return retValue;
+        }
+
         private void ReloadProject(string projectName)
         {
             var solExp = _application.ToolWindows.SolutionExplorer.Parent; // Get the Solution Explorer Window
             solExp.Activate(); // Activate Solution Explorer Window
-            _application.ToolWindows.SolutionExplorer.GetItem(SolutionName + @"\" + projectName).Select(vsUISelectionType.vsUISelectionTypeSelect);
 
-            _application.ExecuteCommand("Project.UnloadProject", ""); // Unload the first project
+            var items = _application.ToolWindows.SolutionExplorer.UIHierarchyItems;
+
+            FindItem(items, projectName).Select(vsUISelectionType.vsUISelectionTypeSelect);;
+
+           
+            _application.ExecuteCommand("Project.UnloadProject"); // Unload the first project
             System.Threading.Thread.Sleep(300);
-            _application.ExecuteCommand("Project.ReloadProject", ""); // Reload 
+            _application.ExecuteCommand("Project.ReloadProject"); // Reload 
         }
 
         private void Enable(Project project)

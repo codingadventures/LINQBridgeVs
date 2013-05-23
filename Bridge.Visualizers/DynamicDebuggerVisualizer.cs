@@ -31,6 +31,8 @@ namespace LINQBridge.DynamicVisualizers
                 var dst = Path.Combine(dstScriptPath, string.Format(message.FileName, message.TypeFullName));
                 Debug.WriteLine("dst: {0}", dst);
 
+                var refAssemblies = new List<string> { message.TypeLocation };
+                refAssemblies.AddRange(message.ReferencedAssemblies);
 
                 if (File.Exists(dst))
                 {
@@ -38,7 +40,7 @@ namespace LINQBridge.DynamicVisualizers
                     return;
                 }
 
-                var linqQuery = new Inspection(new List<string> { message.TypeLocation }, message.TypeFullName, message.TypeNamespace);
+                var linqQuery = new Inspection(refAssemblies, message.TypeFullName, message.TypeNamespace);
                 var linqQueryText = linqQuery.TransformText();
 
                 Debug.WriteLine("LinqQuery file generated");
