@@ -32,6 +32,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Test\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <Choose>
     <When Condition=" '$(VisualStudioVersion)'=='11.0' ">
       <ItemGroup>
@@ -78,6 +87,7 @@
       <Ilmerge>true</Ilmerge>
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -89,6 +99,14 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Logging\Logging.csproj">
+      <Project>{7199ede0-8090-46d0-9687-54b411a3d02c}</Project>
+      <Name>Logging</Name>
+      <Ilmerge>true</Ilmerge>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <!--   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" /> -->
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

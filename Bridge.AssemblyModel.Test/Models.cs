@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Assembly.AnotherModel.Test;
+using AnotherModel.Test;
 
-namespace Bridge.Test.AssemblyModel
+
+namespace Model.Test
 {
     [Serializable]
     public class CustomType1
     {
         public string SField1;
         public int IntField2;
-        public AnotherModel AnotherModel;
+        public List<AnotherModelTest> AnotherModelList;
+
+        public CustomType1()
+        {
+            AnotherModelList = new List<AnotherModelTest> { new AnotherModelTest() };
+        }
     }
 
     public class CustomType2

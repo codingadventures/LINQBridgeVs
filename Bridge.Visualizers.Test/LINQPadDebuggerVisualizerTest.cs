@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using Bridge.Test.AssemblyModel;
 using LINQBridge.DynamicVisualizers;
 using LINQBridge.DynamicVisualizers.Template;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Model.Test;
 
-namespace Bridge.Visualizers.Test
+namespace DynamicVisualizers.Test
 {
     [TestClass]
     public class DynamicVisualizerTest
@@ -22,8 +23,8 @@ namespace Bridge.Visualizers.Test
         public void LINQPadDebuggerVisualizerShowTest()
         {
 
-            var c = new VisualizationTestClass();
-
+            var c = new List<VisualizationTestClass>();
+            c.Add(new VisualizationTestClass());
             var myHost = new VisualizerDevelopmentHost(c, typeof(DynamicDebuggerVisualizer), typeof(DynamicDebuggerVisualizerObjectSource));
             myHost.ShowVisualizer();
         }
@@ -31,8 +32,8 @@ namespace Bridge.Visualizers.Test
         [TestMethod]
         public void DeployScriptTest()
         {
-            var cVisualizerObjectSource = new DynamicDebuggerVisualizer();
-            DynamicDebuggerVisualizer.DeployScripts(_message);
+            //var cVisualizerObjectSource = new DynamicDebuggerVisualizer();
+            DynamicDebuggerVisualizer.DeployLinqScripts(_message);
 
             
             var dstScriptPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),

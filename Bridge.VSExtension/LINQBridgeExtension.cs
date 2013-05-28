@@ -192,13 +192,13 @@ namespace LINQBridge.VSExtension
 
             if (items == null || items.Count == 0) return retValue;
 
-            foreach (var uiHierarchyItem in items)
+            foreach (var item in items.OfType<UIHierarchyItem>())
             {
-                var item = uiHierarchyItem as UIHierarchyItem;
                 if (item.Name.Contains(projectToSearch)) return item;
 
                 retValue = FindItem(item.UIHierarchyItems, projectToSearch);
 
+                if (retValue != null) break;
             }
 
             return retValue;
@@ -215,7 +215,7 @@ namespace LINQBridge.VSExtension
 
            
             _application.ExecuteCommand("Project.UnloadProject"); // Unload the first project
-            System.Threading.Thread.Sleep(300);
+            System.Threading.Thread.Sleep(1000);
             _application.ExecuteCommand("Project.ReloadProject"); // Reload 
         }
 

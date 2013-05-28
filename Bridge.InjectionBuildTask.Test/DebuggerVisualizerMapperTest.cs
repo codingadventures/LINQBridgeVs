@@ -1,12 +1,10 @@
-﻿using System;
-using System.Linq;
-using Bridge.BuildTasks;
-using Bridge.Test.AssemblyModel;
+﻿using Bridge.BuildTasks;
 using System.Reflection;
 using LINQBridge.BuildTasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Model.Test;
 
-namespace Bridge.InjectionBuildTask.Test
+namespace InjectionBuildTask.Test
 {
     [TestClass]
     public class DebuggerVisualizerMapperTest

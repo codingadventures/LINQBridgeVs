@@ -10,6 +10,7 @@ namespace LINQBridge.DynamicVisualizers.Template
         public string TypeFullName;
         public string TypeLocation;
         public string TypeNamespace;
+        public string AssemblyQualifiedName;
         public List<string> ReferencedAssemblies;
 
         public override string ToString()

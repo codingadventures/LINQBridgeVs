@@ -6,8 +6,8 @@
     <ProjectGuid>{5030F9B8-D21E-456D-8A92-F92567D11104}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Bridge.InjectionBuildTask.Test</RootNamespace>
-    <AssemblyName>Bridge.InjectionBuildTask.Test</AssemblyName>
+    <RootNamespace>InjectionBuildTask.Test</RootNamespace>
+    <AssemblyName>InjectionBuildTask.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -34,6 +34,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Test\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="System" />
@@ -54,13 +63,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="DebuggerVisualizerMapperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bridge.AssemblyModel.Test\Assembly.Model.Test.csproj">
-      <Project>{8a5e73f6-2093-4669-9c09-beab033be56c}</Project>
-      <Name>Assembly.Model.Test</Name>
+    <ProjectReference Include="..\Bridge.AssemblyModel.Test\Model.Test.csproj">
+      <Project>{8A5E73F6-2093-4669-9C09-BEAB033BE56C}</Project>
+      <Name>Model.Test</Name>
     </ProjectReference>
     <ProjectReference Include="..\Bridge.BuildTasks\BuildTasks.csproj">
       <Project>{276f3935-e0ca-450f-a55f-aed56dc2024e}</Project>
