@@ -22,7 +22,7 @@ namespace LINQBridge.VSExtension {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Resources {
+    internal class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace LINQBridge.VSExtension {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LINQBridge.VSExtension.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace LINQBridge.VSExtension {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,9 +61,28 @@ namespace LINQBridge.VSExtension {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Resources\LINQBridgeLogo.png.
+        /// </summary>
+        internal static string About_Resources_LINQBridgeLogo_png {
+            get {
+                return ResourceManager.GetString("About_Resources_LINQBridgeLogo_png", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap LINQBridgeLogo {
+            get {
+                object obj = ResourceManager.GetObject("LINQBridgeLogo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to LINQPad\LINQPad.exe.
         /// </summary>
-        public static string LINQPad {
+        internal static string LINQPad {
             get {
                 return ResourceManager.GetString("LINQPad", resourceCulture);
             }
@@ -72,7 +91,7 @@ namespace LINQBridge.VSExtension {
         /// <summary>
         ///   Looks up a localized string similar to LINQPad\LINQPadConfig.config.
         /// </summary>
-        public static string LINQPadConfig {
+        internal static string LINQPadConfig {
             get {
                 return ResourceManager.GetString("LINQPadConfig", resourceCulture);
             }
@@ -81,7 +100,7 @@ namespace LINQBridge.VSExtension {
         /// <summary>
         ///   Looks up a localized string similar to LINQPad\Inspection.linq.
         /// </summary>
-        public static string Query {
+        internal static string Query {
             get {
                 return ResourceManager.GetString("Query", resourceCulture);
             }
@@ -90,7 +109,7 @@ namespace LINQBridge.VSExtension {
         /// <summary>
         ///   Looks up a localized string similar to Targets\BridgeBuildTask.targets.
         /// </summary>
-        public static string Targets {
+        internal static string Targets {
             get {
                 return ResourceManager.GetString("Targets", resourceCulture);
             }

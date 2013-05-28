@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using EnvDTE;
 using EnvDTE80;
 using LINQBridge.VSExtension;
+using LINQBridge.VSExtension.Forms;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -66,8 +67,8 @@ namespace Bridge.VSExtension
             menuItemDisable.BeforeQueryStatus += (s, e) => bridge.UpdateCommand(menuItemDisable, CommandAction.Disable);
 
             var aboutCommand = new CommandID(GuidList.GuidBridgeVsExtensionCmdSet, (int)PkgCmdIdList.CmdIdAbout);
-            var menuItemAbout = new OleMenuCommand((s, e) => MessageBox.Show("About"), aboutCommand);
-            
+            var menuItemAbout = new OleMenuCommand((s, e) => { var about = new About(); about.ShowDialog(); }, aboutCommand);
+
 
             mcs.AddCommand(menuItemEnable);
             mcs.AddCommand(menuItemDisable);

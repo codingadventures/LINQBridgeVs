@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using EnvDTE;
 using EnvDTE80;
-using Process = System.Diagnostics.Process;
+
 
 namespace LINQBridge.VSExtension
 {
