@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.ComponentModel.Design;
+using System.Windows.Forms;
 using EnvDTE;
 using EnvDTE80;
 using LINQBridge.VSExtension;
@@ -64,9 +65,13 @@ namespace Bridge.VSExtension
             var menuItemDisable = new OleMenuCommand((s, e) => bridge.Execute(CommandAction.Disable), disableCommand);
             menuItemDisable.BeforeQueryStatus += (s, e) => bridge.UpdateCommand(menuItemDisable, CommandAction.Disable);
 
+            var aboutCommand = new CommandID(GuidList.GuidBridgeVsExtensionCmdSet, (int)PkgCmdIdList.CmdIdAbout);
+            var menuItemAbout = new OleMenuCommand((s, e) => MessageBox.Show("About"), aboutCommand);
+            
 
             mcs.AddCommand(menuItemEnable);
             mcs.AddCommand(menuItemDisable);
+            mcs.AddCommand(menuItemAbout);
         }
         #endregion
     }
