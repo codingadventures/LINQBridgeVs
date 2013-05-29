@@ -61,6 +61,33 @@ namespace LINQBridge.DynamicVisualizers.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to linqbridge@gmail.com.
+        /// </summary>
+        public static string EmailAddress {
+            get {
+                return ResourceManager.GetString("EmailAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to smtp.gmail.com.
+        /// </summary>
+        public static string EmailSmtpClient {
+            get {
+                return ResourceManager.GetString("EmailSmtpClient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 587.
+        /// </summary>
+        public static string EmailSmtpPort {
+            get {
+                return ResourceManager.GetString("EmailSmtpPort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to -run.
         /// </summary>
         public static string LINQPadCommands {
