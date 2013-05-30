@@ -133,6 +133,23 @@
     <Compile Include="..\Bridge.VSExtension\GlobalSuppressions.cs">
       <Link>GlobalSuppressions.cs </Link>
     </Compile>
+	 
+	<Compile Include="..\Bridge.VSExtension\Forms\About.cs">
+      <SubType>Form</SubType>
+	   <Link>Forms\About.cs</Link>
+    </Compile>
+    <Compile Include="..\Bridge.VSExtension\Forms\About.Designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
+	     <Link>Forms\About.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\Bridge.VSExtension\Forms\Options.cs">
+      <SubType>Form</SubType>
+     <Link>Forms\Options.cs</Link>
+	</Compile>
+    <Compile Include="..\Bridge.VSExtension\Forms\Options.Designer.cs">
+      <DependentUpon>Options.cs</DependentUpon>
+	  <Link>Forms\Options.Designer.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

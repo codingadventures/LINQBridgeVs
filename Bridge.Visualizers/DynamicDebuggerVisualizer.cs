@@ -76,6 +76,8 @@ namespace LINQBridge.DynamicVisualizers
 
         protected override void Show(IDialogVisualizerService windowService, IVisualizerObjectProvider objectProvider)
         {
+            Logging.Log.Configure("LINQBridge");
+
             Logging.Log.Write("Entered in Show...");
 
             var formatter = new BinaryFormatter();
@@ -141,8 +143,8 @@ namespace LINQBridge.DynamicVisualizers
                 }
                 else
                     Logging.Log.Write("No Referenced Assemblies");
-          
-            
+
+
             }
 
             DeployLinqScripts(message);
