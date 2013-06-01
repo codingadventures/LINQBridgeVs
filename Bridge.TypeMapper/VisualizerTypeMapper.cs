@@ -46,7 +46,7 @@ namespace LINQBridge.TypeMapper
             _visualizerAttributeInjector.MapSystemType(typeof(List<>));
             _visualizerAttributeInjector.MapSystemType(typeof(IEnumerable<>));
             _visualizerAttributeInjector.MapSystemType(typeof(IOrderedEnumerable<>));
-
+        
             _visualizerAttributeInjector.MapTypesFromAssembly();
         }
 

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace LINQBridge.DynamicVisualizers.Template
 {
     [Serializable]
-    internal struct Message
+    internal class Message
     {
         public string FileName;
         public string TypeFullName;
@@ -12,6 +12,11 @@ namespace LINQBridge.DynamicVisualizers.Template
         public string TypeNamespace;
         public string AssemblyQualifiedName;
         public List<string> ReferencedAssemblies;
+
+        public Message()
+        {
+            ReferencedAssemblies = new List<string>();
+        }
 
         public override string ToString()
         {

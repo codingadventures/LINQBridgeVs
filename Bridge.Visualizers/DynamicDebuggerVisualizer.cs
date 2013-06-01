@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Abstractions;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Windows.Forms;
+  
 using LINQBridge.DynamicVisualizers.Properties;
 using LINQBridge.DynamicVisualizers.Template;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using Message = LINQBridge.DynamicVisualizers.Template.Message;
+using LINQBridge.DynamicVisualizers.Utils;
 
 namespace LINQBridge.DynamicVisualizers
 {
@@ -21,7 +23,6 @@ namespace LINQBridge.DynamicVisualizers
 
 
         private static readonly string MyDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        private const string SearchPattern = "*{0}*.dll";
 
         internal static void DeployLinqScripts(Message message)
         {
@@ -72,7 +73,10 @@ namespace LINQBridge.DynamicVisualizers
             }
         }
 
-
+        private static void Initialize()
+        {
+            AssemblyFinder.FileSystem = new FileSystem();
+        }
 
         protected override void Show(IDialogVisualizerService windowService, IVisualizerObjectProvider objectProvider)
         {
@@ -80,12 +84,13 @@ namespace LINQBridge.DynamicVisualizers
 
             Logging.Log.Write("Entered in Show...");
 
+            Initialize();
+
             var formatter = new BinaryFormatter();
             var message = (Message)formatter.Deserialize(objectProvider.GetData());
             Logging.Log.Write("Message deserialized");
 
-            var referencedAssemblies = new List<string>();
-
+             
             var type = Type.GetType(message.AssemblyQualifiedName);
             if (type != null)
             {
@@ -94,57 +99,13 @@ namespace LINQBridge.DynamicVisualizers
                     type = type.GetGenericArguments()[0];
 
                 if (type.Assembly.Location != message.TypeLocation)
-                    referencedAssemblies.Add(type.Assembly.Location);
+                    message.ReferencedAssemblies.Add(type.Assembly.Location);
 
-                var refAssembliesExceptSystem = type.Assembly.GetReferencedAssemblies()
-                                               .Where(name => !(name.Name.Contains("Microsoft") || name.Name.Contains("System") || name.Name.Contains("mscorlib")))
-                                               .Select(name => name.Name)
-                                               .ToList();
+                Logging.Log.WriteIf(!type.Assembly.Location.Equals(message.TypeLocation), "No Referenced Assemblies");
 
-                if (refAssembliesExceptSystem.Any())
-                {
-                    var typePath = Path.GetDirectoryName(type.Assembly.Location);
-                    Logging.Log.Write("typePath: {0}", typePath);
+                var referencedAssemblyPaths = type.Assembly.GetReferencedAssembliesPath();
 
-                    var rootPath = typePath;
-                    Logging.Log.Write("rootPath: {0}", rootPath);
-                    var found = false;
-                    do
-                    {
-                        if (string.IsNullOrEmpty(rootPath)) break;
-
-                        refAssembliesExceptSystem
-                            .ForEach(s =>
-                                         {
-                                             Logging.Log.Write("SearchPattern: {0}", string.Format(SearchPattern, s));
-
-                                             var files = Directory.EnumerateFiles(rootPath,
-                                                                                  string.Format(SearchPattern, s),
-                                                                                  SearchOption.AllDirectories);
-
-                                             var collection = (files as IList<string> ?? files).ToList();
-                                             Logging.Log.WriteIf(collection.Any(), "Files Found count {0}",
-                                                                 files.Count());
-
-                                             found = collection.Any();
-                                             referencedAssemblies.AddRange(collection);
-                                         });
-
-                        var parentPath = Directory.GetParent(rootPath);
-                        if (parentPath == null) break;
-
-                        rootPath = parentPath.FullName;
-                        Logging.Log.Write("New rootPath: {0}", rootPath);
-
-                    } while (!found);
-                    message.ReferencedAssemblies = referencedAssemblies.ToList();
-                    Logging.Log.Write("Referenced Assemblies");
-                    message.ReferencedAssemblies.ForEach(s => Logging.Log.Write("\t Assembly {0}", s));
-                }
-                else
-                    Logging.Log.Write("No Referenced Assemblies");
-
-
+                message.ReferencedAssemblies.AddRange(referencedAssemblyPaths);
             }
 
             DeployLinqScripts(message);

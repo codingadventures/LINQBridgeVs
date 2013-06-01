@@ -11,7 +11,6 @@ namespace LINQBridge.VSExtension.Forms
         {
             InitializeComponent();
 
-
             var assembly = Assembly.GetExecutingAssembly();
             var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
             VersionLabel.Text = fvi.ProductVersion;

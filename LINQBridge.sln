@@ -31,6 +31,24 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnotherModel.Test", "Assemb
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging", "Logging\Logging.csproj", "{7199EDE0-8090-46D0-9687-54B411A3D02C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{C83880CE-BAA2-4849-BE2C-7F2C88B295A6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5F3BDA62-8052-4C37-97A0-94354AA971B0}"
+	ProjectSection(SolutionItems) = preProject
+		System.IO.Abstractions\StrongName.pfx = System.IO.Abstractions\StrongName.pfx
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.IO.Abstractions", "System.IO.Abstractions\System.IO.Abstractions\System.IO.Abstractions.csproj", "{4D398F3A-0784-4401-93CD-46CD2FBD6B92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingHelpers", "System.IO.Abstractions\TestingHelpers\TestingHelpers.csproj", "{251BD5E5-8133-47A4-AB19-17CF0F43D6AE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{7640A07F-C12C-4803-8880-AD1A178242AB}"
+	ProjectSection(SolutionItems) = preProject
+		System.IO.Abstractions\.nuget\NuGet.Config = System.IO.Abstractions\.nuget\NuGet.Config
+		System.IO.Abstractions\.nuget\NuGet.exe = System.IO.Abstractions\.nuget\NuGet.exe
+		System.IO.Abstractions\.nuget\NuGet.targets = System.IO.Abstractions\.nuget\NuGet.targets
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -114,6 +132,22 @@ Global
 		{7199EDE0-8090-46D0-9687-54B411A3D02C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7199EDE0-8090-46D0-9687-54B411A3D02C}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{7199EDE0-8090-46D0-9687-54B411A3D02C}.Test|Any CPU.Build.0 = Test|Any CPU
+		{4D398F3A-0784-4401-93CD-46CD2FBD6B92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D398F3A-0784-4401-93CD-46CD2FBD6B92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D398F3A-0784-4401-93CD-46CD2FBD6B92}.DebugExtension|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D398F3A-0784-4401-93CD-46CD2FBD6B92}.DebugExtension|Any CPU.Build.0 = Debug|Any CPU
+		{4D398F3A-0784-4401-93CD-46CD2FBD6B92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D398F3A-0784-4401-93CD-46CD2FBD6B92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D398F3A-0784-4401-93CD-46CD2FBD6B92}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{4D398F3A-0784-4401-93CD-46CD2FBD6B92}.Test|Any CPU.Build.0 = Release|Any CPU
+		{251BD5E5-8133-47A4-AB19-17CF0F43D6AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{251BD5E5-8133-47A4-AB19-17CF0F43D6AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{251BD5E5-8133-47A4-AB19-17CF0F43D6AE}.DebugExtension|Any CPU.ActiveCfg = Debug|Any CPU
+		{251BD5E5-8133-47A4-AB19-17CF0F43D6AE}.DebugExtension|Any CPU.Build.0 = Debug|Any CPU
+		{251BD5E5-8133-47A4-AB19-17CF0F43D6AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{251BD5E5-8133-47A4-AB19-17CF0F43D6AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{251BD5E5-8133-47A4-AB19-17CF0F43D6AE}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{251BD5E5-8133-47A4-AB19-17CF0F43D6AE}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -123,5 +157,9 @@ Global
 		{5030F9B8-D21E-456D-8A92-F92567D11104} = {DEECC213-180D-4C4E-A44B-5785F1C0FB73}
 		{DDF44401-F193-46B8-BA6C-A3DE88BAED46} = {DEECC213-180D-4C4E-A44B-5785F1C0FB73}
 		{7B0C3D12-296A-438D-B0EA-B049A0D6D3C1} = {DEECC213-180D-4C4E-A44B-5785F1C0FB73}
+		{5F3BDA62-8052-4C37-97A0-94354AA971B0} = {C83880CE-BAA2-4849-BE2C-7F2C88B295A6}
+		{4D398F3A-0784-4401-93CD-46CD2FBD6B92} = {C83880CE-BAA2-4849-BE2C-7F2C88B295A6}
+		{251BD5E5-8133-47A4-AB19-17CF0F43D6AE} = {C83880CE-BAA2-4849-BE2C-7F2C88B295A6}
+		{7640A07F-C12C-4803-8880-AD1A178242AB} = {C83880CE-BAA2-4849-BE2C-7F2C88B295A6}
 	EndGlobalSection
 EndGlobal

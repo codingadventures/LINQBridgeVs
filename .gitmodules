@@ -1,0 +1,3 @@
+[submodule "System.IO.Abstractions"]
+	path = System.IO.Abstractions
+	url = https://github.com/srasch/System.IO.Abstractions

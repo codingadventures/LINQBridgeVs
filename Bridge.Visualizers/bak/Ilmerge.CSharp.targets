@@ -4,7 +4,7 @@
   <Target Name="AfterBuild"> 
 
     
-    <CreateItem Include="@(ReferencePath)" Condition="'%(CopyLocal)'=='true' and '%(ReferencePath.IlMerge)'=='true'"> 
+    <CreateItem Include="@(ReferencePath)" Condition="'%(CopyLocal)'=='false' and '%(ReferencePath.IlMerge)'=='true'"> 
 
     
       <Output TaskParameter="Include" ItemName="IlmergeAssemblies"/> 
@@ -16,9 +16,9 @@
     <Message Text="MERGING: @(IlmergeAssemblies->'%(Filename)')" Importance="High" /> 
 
     
-    <Exec Command="&quot;$(SolutionDir)\packages\ilmerge.2.13.0307\Ilmerge.exe&quot; /out:@(MainAssembly) &quot;@(IntermediateAssembly)&quot; @(IlmergeAssemblies->'&quot;%(FullPath)&quot;', ' ')" /> 
-
-    
+    <Exec 
+		Condition="'$(Configuration)|$(Platform)' != 'Test|AnyCPU'"
+		Command="&quot;$(SolutionDir)\packages\ilmerge.2.13.0307\Ilmerge.exe&quot; /out:@(MainAssembly) &quot;@(IntermediateAssembly)&quot; @(IlmergeAssemblies->'&quot;%(FullPath)&quot;', ' ')"  /> 
   </Target> 
 
     
