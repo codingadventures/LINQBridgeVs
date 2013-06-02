@@ -19,13 +19,30 @@ namespace InjectionBuildTask.Test
         }
 
         [TestMethod]
-        public void MapperBuildTaskTest()
+        public void MapperBuildTaskTest_V11()
         {
 
             var mapper = new MapperBuildTask()
                              {
                                  Assembly = _assemblyModel.Location,
                                  VisualStudioVer = "11.0"
+                             };
+
+
+            var result = mapper.Execute();
+
+            Assert.IsTrue(result, "Mapper Build Task Execute return false.");
+
+        } 
+        
+        [TestMethod]
+        public void MapperBuildTaskTest_V10()
+        {
+
+            var mapper = new MapperBuildTask()
+                             {
+                                 Assembly = _assemblyModel.Location,
+                                 VisualStudioVer = "10.0"
                              };
 
 

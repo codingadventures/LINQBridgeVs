@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace LINQBridge.DynamicVisualizers.Template
+namespace LINQBridge.DynamicCore.Template
 {
     using System.Linq;
     using System.Text;
@@ -18,7 +18,7 @@ namespace LINQBridge.DynamicVisualizers.Template
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\Bridge.Visualizers\Template\Inspection.tt"
+    #line 1 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\DynamicCore\Template\Inspection.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "11.0.0.0")]
     public partial class Inspection : InspectionBase
     {
@@ -32,21 +32,21 @@ namespace LINQBridge.DynamicVisualizers.Template
                     "ystem.Runtime.Serialization.Formatters</Namespace>\r\n  <Namespace>System.Xml.Linq" +
                     "</Namespace>\r\n  <Namespace>LINQBridge.Grapple</Namespace>\r\n  <Namespace>");
             
-            #line 13 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\Bridge.Visualizers\Template\Inspection.tt"
+            #line 13 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\DynamicCore\Template\Inspection.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeNamespace));
             
             #line default
             #line hidden
             this.Write("</Namespace>\r\n  <Reference>");
             
-            #line 14 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\Bridge.Visualizers\Template\Inspection.tt"
+            #line 14 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\DynamicCore\Template\Inspection.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.GetType().Assembly.Location));
             
             #line default
             #line hidden
             this.Write("</Reference>\r\n  ");
             
-            #line 15 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\Bridge.Visualizers\Template\Inspection.tt"
+            #line 15 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\DynamicCore\Template\Inspection.tt"
  foreach(var elem in this.Assemblies){
     if (!elem.Contains("mscorlib")) {
   
@@ -55,14 +55,14 @@ namespace LINQBridge.DynamicVisualizers.Template
             #line hidden
             this.Write("  <Reference>");
             
-            #line 18 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\Bridge.Visualizers\Template\Inspection.tt"
+            #line 18 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\DynamicCore\Template\Inspection.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(elem));
             
             #line default
             #line hidden
             this.Write("</Reference>\r\n  ");
             
-            #line 19 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\Bridge.Visualizers\Template\Inspection.tt"
+            #line 19 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\DynamicCore\Template\Inspection.tt"
 }}
             
             #line default
@@ -70,14 +70,14 @@ namespace LINQBridge.DynamicVisualizers.Template
             this.Write(" \r\n</Query>\r\n\r\n\r\nvoid Main()\r\n{\r\n     \r\n        Bus instance = Bus.Instance;\r\n   " +
                     "     var obj = instance.Get<");
             
-            #line 27 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\Bridge.Visualizers\Template\Inspection.tt"
+            #line 27 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\DynamicCore\Template\Inspection.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeToRetrieveFullName));
             
             #line default
             #line hidden
             this.Write(">();\r\n        obj.Dump(\"");
             
-            #line 28 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\Bridge.Visualizers\Template\Inspection.tt"
+            #line 28 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\DynamicCore\Template\Inspection.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeNamespace));
             
             #line default

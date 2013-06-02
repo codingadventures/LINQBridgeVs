@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace LINQBridge.DynamicVisualizers.Template
+namespace LINQBridge.DynamicCore.Template
 {
     public partial class Inspection
     {

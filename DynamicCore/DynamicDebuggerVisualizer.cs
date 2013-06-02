@@ -4,27 +4,32 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
-  
-using LINQBridge.DynamicVisualizers.Properties;
-using LINQBridge.DynamicVisualizers.Template;
-using Microsoft.VisualStudio.DebuggerVisualizers;
-using Message = LINQBridge.DynamicVisualizers.Template.Message;
-using LINQBridge.DynamicVisualizers.Utils;
+using System.Text;
+using LINQBridge.DynamicCore.Properties;
+using LINQBridge.DynamicCore.Template;
+using LINQBridge.DynamicCore.Utils;
 
-namespace LINQBridge.DynamicVisualizers
+namespace LINQBridge.DynamicCore
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public class DynamicDebuggerVisualizer : DialogDebuggerVisualizer
+    public class DynamicDebuggerVisualizer
     {
-
+        public IFileSystem FileSystem { get; private set; }
 
         private static readonly string MyDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-        internal static void DeployLinqScripts(Message message)
+        public DynamicDebuggerVisualizer()
+            : this(new FileSystem())
+        {
+
+        }
+
+        public DynamicDebuggerVisualizer(IFileSystem fileSystem)
+        {
+            FileSystem = fileSystem;
+        }
+
+        internal void DeployLinqScripts(Message message)
         {
             try
             {
@@ -34,9 +39,9 @@ namespace LINQBridge.DynamicVisualizers
                 var dstScriptPath = Path.Combine(MyDocuments, Resources.LINQPadQuery);
                 Logging.Log.Write("dstScriptPath: {0}", dstScriptPath);
 
-                if (!Directory.Exists(dstScriptPath))
+                if (!FileSystem.Directory.Exists(dstScriptPath))
                 {
-                    Directory.CreateDirectory(dstScriptPath);
+                    FileSystem.Directory.CreateDirectory(dstScriptPath);
                     Logging.Log.Write("Directory Created");
                 }
 
@@ -46,7 +51,7 @@ namespace LINQBridge.DynamicVisualizers
                 var refAssemblies = new List<string> { message.TypeLocation };
                 refAssemblies.AddRange(message.ReferencedAssemblies);
 
-                if (File.Exists(dst))
+                if (FileSystem.File.Exists(dst))
                 {
                     Logging.Log.Write("File Already Exists");
                     return;
@@ -73,24 +78,18 @@ namespace LINQBridge.DynamicVisualizers
             }
         }
 
-        private static void Initialize()
-        {
-            AssemblyFinder.FileSystem = new FileSystem();
-        }
 
-        protected override void Show(IDialogVisualizerService windowService, IVisualizerObjectProvider objectProvider)
+        public void ShowVisualizer(Stream inData)
         {
             Logging.Log.Configure("LINQBridge");
 
             Logging.Log.Write("Entered in Show...");
 
-            Initialize();
-
             var formatter = new BinaryFormatter();
-            var message = (Message)formatter.Deserialize(objectProvider.GetData());
+            var message = (Message)formatter.Deserialize(inData);
             Logging.Log.Write("Message deserialized");
 
-             
+
             var type = Type.GetType(message.AssemblyQualifiedName);
             if (type != null)
             {
@@ -114,12 +113,12 @@ namespace LINQBridge.DynamicVisualizers
             using (var process = new Process())
             {
                 var startInfo = new ProcessStartInfo
-                                    {
-                                        WindowStyle = ProcessWindowStyle.Normal,
-                                        FileName = Resources.LINQPadExe,
-                                        WorkingDirectory = Environment.GetEnvironmentVariable("ProgramFiles") + @"\LINQPad4",
-                                        Arguments = Path.Combine(MyDocuments, Resources.LINQPadQuery, message.FileName) + " " + Resources.LINQPadCommands
-                                    };
+                {
+                    WindowStyle = ProcessWindowStyle.Normal,
+                    FileName = Resources.LINQPadExe,
+                    WorkingDirectory = Environment.GetEnvironmentVariable("ProgramFiles") + @"\LINQPad4",
+                    Arguments = Path.Combine(MyDocuments, Resources.LINQPadQuery, message.FileName) + " " + Resources.LINQPadCommands
+                };
 
 
 
@@ -140,7 +139,6 @@ namespace LINQBridge.DynamicVisualizers
                 }
             }
         }
+
     }
-
-
 }

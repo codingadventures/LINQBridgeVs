@@ -17,19 +17,21 @@ namespace LINQBridge.BuildTasks
         public string Resources { private get; set; }
 
         /// <summary>
-        ///     Executes an ITask. It creates a LINQPadDebuggerVisualizer mapping all the types of a given assembly
+        ///     Executes an ITask. It creates a DynamicDebuggerVisualizer mapping all the types of a given assembly
         /// </summary>
         /// <returns>
         ///     true if the task executed successfully; otherwise, false.
         /// </returns>
         public bool Execute()
         {
-            var typeMapper = new VisualizerTypeMapper<DynamicDebuggerVisualizer>(Assembly,
-                                                                                 DynamicVisualizers.Properties.Resources
-                                                                                            .VisualizerName);
+            var targetVisualizerAssemblyName = VisualStudioOptions.GetVisualizerAssemblyName(VisualStudioVer);
+            var targetVisualizerAssemblyLocation = VisualStudioOptions.GetVisualizerAssemblyLocation(VisualStudioVer);
+
+            var installationPath = VisualStudioOptions.GetInstallationPath(VisualStudioVer);
+            var typeMapper = new VisualizerTypeMapper(targetVisualizerAssemblyLocation, Assembly, DynamicCore.Properties.Resources.VisualizerName);
 
             typeMapper.Create();
-            typeMapper.Save(VisualStudioOptions.VisualStudioPaths[VisualStudioVer]);
+            typeMapper.Save(installationPath, targetVisualizerAssemblyName);
 
             return true;
         }

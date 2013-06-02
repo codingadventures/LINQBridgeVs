@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace LINQBridge.DynamicVisualizers.Template
+namespace LINQBridge.DynamicCore.Template
 {
     [Serializable]
     internal class Message

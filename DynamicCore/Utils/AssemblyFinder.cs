@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Abstractions;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.IO.Abstractions;
 
-namespace LINQBridge.DynamicVisualizers.Utils
+namespace LINQBridge.DynamicCore.Utils
 {
     public static class AssemblyFinder
     {
