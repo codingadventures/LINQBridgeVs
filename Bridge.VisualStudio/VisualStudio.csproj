@@ -56,7 +56,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bridge.Visualizers\DynamicVisualizer.V11.csproj">
+    <ProjectReference Include="..\DynamicVisualizer.V11\DynamicVisualizer.V11.csproj">
       <Project>{c6798d16-89f5-4bff-8b62-2be6d4bbc192}</Project>
       <Name>DynamicVisualizer.V11</Name>
     </ProjectReference>

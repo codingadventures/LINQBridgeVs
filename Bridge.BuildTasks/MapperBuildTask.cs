@@ -1,4 +1,4 @@
-﻿using LINQBridge.DynamicVisualizers;
+﻿ 
 using LINQBridge.TypeMapper;
 using LINQBridge.VisualStudio;
 using Microsoft.Build.Framework;
@@ -16,6 +16,7 @@ namespace LINQBridge.BuildTasks
 
         public string Resources { private get; set; }
 
+        private const string VisualizerName = "LINQBridge Visualizer";
         /// <summary>
         ///     Executes an ITask. It creates a DynamicDebuggerVisualizer mapping all the types of a given assembly
         /// </summary>
@@ -28,7 +29,7 @@ namespace LINQBridge.BuildTasks
             var targetVisualizerAssemblyLocation = VisualStudioOptions.GetVisualizerAssemblyLocation(VisualStudioVer);
 
             var installationPath = VisualStudioOptions.GetInstallationPath(VisualStudioVer);
-            var typeMapper = new VisualizerTypeMapper(targetVisualizerAssemblyLocation, Assembly, DynamicCore.Properties.Resources.VisualizerName);
+            var typeMapper = new VisualizerTypeMapper(targetVisualizerAssemblyLocation, Assembly, VisualizerName);
 
             typeMapper.Create();
             typeMapper.Save(installationPath, targetVisualizerAssemblyName);

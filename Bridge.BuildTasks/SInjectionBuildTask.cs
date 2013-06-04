@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using Microsoft.Build.Framework;
 using SInject;
 
-namespace Bridge.BuildTasks
+namespace LINQBridge.BuildTasks
 {
     public class SInjectionBuildTask : ITask
     {

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V11", "Bridge.Visualizers\DynamicVisualizer.V11.csproj", "{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V11", "DynamicVisualizer.V11\DynamicVisualizer.V11.csproj", "{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeMapper", "Bridge.TypeMapper\TypeMapper.csproj", "{FCC8BF06-3173-4D21-A157-D1167B6407C9}"
 EndProject
@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{15295B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildTasks", "Bridge.BuildTasks\BuildTasks.csproj", "{276F3935-E0CA-450F-A55F-AED56DC2024E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildTask.Test", "Bridge.InjectionBuildTask.Test\BuildTask.Test.csproj", "{5030F9B8-D21E-456D-8A92-F92567D11104}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildTasks.Test", "Bridge.InjectionBuildTask.Test\BuildTasks.Test.csproj", "{5030F9B8-D21E-456D-8A92-F92567D11104}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model.Test", "Bridge.AssemblyModel.Test\Model.Test.csproj", "{8A5E73F6-2093-4669-9C09-BEAB033BE56C}"
 EndProject
@@ -25,7 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{DEECC213-1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualStudio", "Bridge.VisualStudio\VisualStudio.csproj", "{8F6409F1-33E3-4310-BE84-12C4F838C0B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicCore.Test", "Bridge.Visualizers.Test\DynamicCore.Test.csproj", "{DDF44401-F193-46B8-BA6C-A3DE88BAED46}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicCore.Test", "DynamicCore.Test\DynamicCore.Test.csproj", "{DDF44401-F193-46B8-BA6C-A3DE88BAED46}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnotherModel.Test", "Assembly.AnotherModel.Test\AnotherModel.Test.csproj", "{7B0C3D12-296A-438D-B0EA-B049A0D6D3C1}"
 EndProject

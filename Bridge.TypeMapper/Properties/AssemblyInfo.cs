@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("VisualizerTypeMapper")]
+[assembly: AssemblyTitle("LINQBridge.TypeMapper")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Bridge.TypeMapper")]
+[assembly: AssemblyProduct("LINQBridge.TypeMapper")]
 [assembly: AssemblyCopyright("Copyright ©  Giovanni Campo 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

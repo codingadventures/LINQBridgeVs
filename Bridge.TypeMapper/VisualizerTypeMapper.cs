@@ -49,6 +49,7 @@ namespace LINQBridge.TypeMapper
         /// Saves the specified debugger visualizer assembly to a given Path.
         /// </summary>
         /// <param name="debuggerVisualizerPath">The debugger visualizer assembly location.</param>
+        /// <param name="fileName"></param>
         private void Save(string debuggerVisualizerPath,string fileName)
         {
             var debuggerVisualizerAssemblyLocation = debuggerVisualizerPath + fileName;
@@ -73,6 +74,7 @@ namespace LINQBridge.TypeMapper
             foreach (var debuggerVisualizerPath in debuggerVisualizerPaths)
             {
                 Save(debuggerVisualizerPath,fileName);
+
             }
         }
 

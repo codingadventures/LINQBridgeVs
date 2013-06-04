@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using LINQBridge.DynamicCore.Utils;
-using LINQBridge.DynamicVisualizers.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Abstraction = System.IO.Abstractions;

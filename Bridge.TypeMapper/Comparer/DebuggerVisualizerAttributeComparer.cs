@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Mono.Cecil;
 
-namespace Bridge.TypeMapper.Comparer
+namespace LINQBridge.TypeMapper.Comparer
 {
     internal class DebuggerVisualizerAttributeComparer :
         IEqualityComparer<CustomAttribute>

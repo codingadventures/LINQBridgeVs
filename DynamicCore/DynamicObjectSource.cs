@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
 using LINQBridge.DynamicCore.Template;
-using LINQBridge.DynamicVisualizers.Utils;
+using LINQBridge.DynamicCore.Utils;
 using LINQBridge.Grapple;
 
 namespace LINQBridge.DynamicCore

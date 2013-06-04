@@ -22,7 +22,7 @@ namespace LINQBridge.DynamicCore.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Resources {
+    internal class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace LINQBridge.DynamicCore.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LINQBridge.DynamicCore.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace LINQBridge.DynamicCore.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace LINQBridge.DynamicCore.Properties {
         /// <summary>
         ///   Looks up a localized string similar to linqbridge@gmail.com.
         /// </summary>
-        public static string EmailAddress {
+        internal static string EmailAddress {
             get {
                 return ResourceManager.GetString("EmailAddress", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace LINQBridge.DynamicCore.Properties {
         /// <summary>
         ///   Looks up a localized string similar to smtp.gmail.com.
         /// </summary>
-        public static string EmailSmtpClient {
+        internal static string EmailSmtpClient {
             get {
                 return ResourceManager.GetString("EmailSmtpClient", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace LINQBridge.DynamicCore.Properties {
         /// <summary>
         ///   Looks up a localized string similar to 587.
         /// </summary>
-        public static string EmailSmtpPort {
+        internal static string EmailSmtpPort {
             get {
                 return ResourceManager.GetString("EmailSmtpPort", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace LINQBridge.DynamicCore.Properties {
         /// <summary>
         ///   Looks up a localized string similar to -run.
         /// </summary>
-        public static string LINQPadCommands {
+        internal static string LINQPadCommands {
             get {
                 return ResourceManager.GetString("LINQPadCommands", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace LINQBridge.DynamicCore.Properties {
         /// <summary>
         ///   Looks up a localized string similar to LINQPad.exe.
         /// </summary>
-        public static string LINQPadExe {
+        internal static string LINQPadExe {
             get {
                 return ResourceManager.GetString("LINQPadExe", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace LINQBridge.DynamicCore.Properties {
         /// <summary>
         ///   Looks up a localized string similar to LINQPad Queries.
         /// </summary>
-        public static string LINQPadQuery {
+        internal static string LINQPadQuery {
             get {
                 return ResourceManager.GetString("LINQPadQuery", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace LINQBridge.DynamicCore.Properties {
         /// <summary>
         ///   Looks up a localized string similar to LINQBridge Visualizer.
         /// </summary>
-        public static string VisualizerName {
+        internal static string VisualizerName {
             get {
                 return ResourceManager.GetString("VisualizerName", resourceCulture);
             }

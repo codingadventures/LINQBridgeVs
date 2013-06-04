@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace LINQBridge.DynamicVisualizers.Utils
+namespace LINQBridge.DynamicCore.Utils
 {
     internal static class TypeNameHelper
     {

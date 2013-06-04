@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Bridge.TypeMapper.Comparer;
+using LINQBridge.TypeMapper.Comparer;
 using Mono.Cecil.Rocks;
 using Mono.Cecil.Pdb;
 using Mono.Cecil;
@@ -243,6 +243,10 @@ namespace LINQBridge.TypeMapper
         {
            
             _assembly.Write(location, _writerParameters);
+           
+            var dbg1 = _assembly.MainModule.GetTypeReferences();
+            var dbg2 = _assembly.MainModule.AssemblyReferences;
+            
             if (references != null)
                 DeployReferences(references, location);
         }

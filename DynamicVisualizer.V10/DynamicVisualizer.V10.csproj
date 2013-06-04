@@ -50,6 +50,7 @@
     <ProjectReference Include="..\DynamicCore\DynamicCore.csproj">
       <Project>{B84FBD50-0B10-4C25-8430-680FC6FC3FEA}</Project>
       <Name>DynamicCore</Name>
+      <Ilmerge>True</Ilmerge>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -60,4 +61,21 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Target Name="AfterBuild" Condition=" '$(Configuration)' == 'Deploy' ">
+    <CreateItem Include="@(ReferencePath)" Condition="'%(CopyLocal)'=='true' and '%(ReferencePath.IlMerge)'=='true'">
+      <Output TaskParameter="Include" ItemName="IlmergeAssemblies"/>
+    </CreateItem>
+
+    <Message Text="MERGING: @(IlmergeAssemblies->'%(Filename)') " Importance="High" />
+
+    <Exec Condition=" '$(Configuration)' == 'Deploy' "
+      Command="&quot;$(SolutionDir)\packages\ilmerge.2.13.0307\Ilmerge.exe&quot; /out:@(MainAssembly) &quot;@(IntermediateAssembly)&quot; @(IlmergeAssemblies->'&quot;%(FullPath)&quot;', ' ')" />
+
+  </Target>
+  <Target Name="AfterResolveReferences" Condition=" '$(Configuration)' == 'Deploy' ">
+    <Message Text="Filtering out ilmerge assemblies from ReferenceCopyLocalPaths" Importance="High" />
+    <ItemGroup>
+      <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" Condition="'%(ReferenceCopyLocalPaths.IlMerge)'=='true'" />
+    </ItemGroup>
+  </Target>
 </Project>
