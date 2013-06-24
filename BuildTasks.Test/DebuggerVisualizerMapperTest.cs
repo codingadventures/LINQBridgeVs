@@ -3,7 +3,7 @@ using LINQBridge.BuildTasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model.Test;
 
-namespace InjectionBuildTask.Test
+namespace BuildTasks.Test
 {
     [TestClass]
     public class DebuggerVisualizerMapperTest
@@ -21,7 +21,7 @@ namespace InjectionBuildTask.Test
         public void MapperBuildTaskTest_V11()
         {
 
-            var mapper = new MapperBuildTask()
+            var mapper = new MapperBuildTask
                              {
                                  Assembly = _assemblyModel.Location,
                                  VisualStudioVer = "11.0"
@@ -38,7 +38,7 @@ namespace InjectionBuildTask.Test
         public void MapperBuildTaskTest_V10()
         {
 
-            var mapper = new MapperBuildTask()
+            var mapper = new MapperBuildTask
                              {
                                  Assembly = _assemblyModel.Location,
                                  VisualStudioVer = "10.0"
@@ -55,7 +55,7 @@ namespace InjectionBuildTask.Test
         public void SInjectionBuildTaskTest()
         {
 
-            var sInjectionBuildTask = new SInjectionBuildTask()
+            var sInjectionBuildTask = new SInjectionBuildTask
                                           {
                                               Assembly = _assemblyModel.Location
                                           };

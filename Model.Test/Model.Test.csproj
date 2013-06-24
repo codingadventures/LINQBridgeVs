@@ -42,7 +42,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Assembly.AnotherModel.Test\AnotherModel.Test.csproj">
+    <ProjectReference Include="..\AnotherModel.Test\AnotherModel.Test.csproj">
       <Project>{7B0C3D12-296A-438D-B0EA-B049A0D6D3C1}</Project>
       <Name>AnotherModel.Test</Name>
     </ProjectReference>

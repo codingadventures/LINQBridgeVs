@@ -65,11 +65,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bridge.AssemblyModel.Test\Model.Test.csproj">
+    <ProjectReference Include="..\Model.Test\Model.Test.csproj">
       <Project>{8A5E73F6-2093-4669-9C09-BEAB033BE56C}</Project>
       <Name>Model.Test</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Bridge.BuildTasks\BuildTasks.csproj">
+    <ProjectReference Include="..\BuildTasks\BuildTasks.csproj">
       <Project>{276f3935-e0ca-450f-a55f-aed56dc2024e}</Project>
       <Name>BuildTasks</Name>
     </ProjectReference>

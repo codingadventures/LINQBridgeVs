@@ -36,15 +36,13 @@
     <Compile Include="SInjectionBuildTask.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bridge.TypeMapper\TypeMapper.csproj">
+    <ProjectReference Include="..\TypeMapper\TypeMapper.csproj">
       <Project>{fcc8bf06-3173-4d21-a157-d1167b6407c9}</Project>
       <Name>TypeMapper</Name>
-      <Ilmerge>True</Ilmerge>
     </ProjectReference>
-    <ProjectReference Include="..\Bridge.VisualStudio\VisualStudio.csproj">
+    <ProjectReference Include="..\VisualStudio\VisualStudio.csproj">
       <Project>{8f6409f1-33e3-4310-be84-12c4f838c0b0}</Project>
       <Name>VisualStudio</Name>
-      <Ilmerge>True</Ilmerge>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -52,20 +50,16 @@
     <Reference Include="Mono.Cecil, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.dll</HintPath>
-      <Ilmerge>True</Ilmerge>
     </Reference>
     <Reference Include="Mono.Cecil.Pdb, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <Private>True</Private>
-      <Ilmerge>True</Ilmerge>
       <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil.Rocks">
-      <Ilmerge>True</Ilmerge>
       <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
     </Reference>
     <Reference Include="SInject, Version=0.1.4880.38169, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <Ilmerge>True</Ilmerge>
       <HintPath>..\packages\SInject.0.1.3\lib\net40\SInject.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -82,7 +76,7 @@
   </Target>
   <Target Name="AfterBuild">
   </Target>
-  -->
+ 
   <Target Name="AfterBuild" Condition=" '$(Configuration)' == 'Deploy' ">
     <CreateItem Include="@(ReferencePath)" Condition="'%(CopyLocal)'=='true' and '%(ReferencePath.IlMerge)'=='true'">
       <Output TaskParameter="Include" ItemName="IlmergeAssemblies" />
@@ -95,5 +89,5 @@
     <ItemGroup>
       <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" Condition="'%(ReferenceCopyLocalPaths.IlMerge)'=='true'" />
     </ItemGroup>
-  </Target>
+  </Target> -->
 </Project>

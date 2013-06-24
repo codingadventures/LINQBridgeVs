@@ -68,7 +68,7 @@
     <Compile Include="Utils\AssemblyFinderTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bridge.AssemblyModel.Test\Model.Test.csproj">
+    <ProjectReference Include="..\Model.Test\Model.Test.csproj">
       <Project>{8A5E73F6-2093-4669-9C09-BEAB033BE56C}</Project>
       <Name>Model.Test</Name>
     </ProjectReference>

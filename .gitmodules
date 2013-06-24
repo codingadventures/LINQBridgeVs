@@ -1,3 +1,9 @@
 [submodule "System.IO.Abstractions"]
 	path = System.IO.Abstractions
 	url = https://github.com/srasch/System.IO.Abstractions
+[submodule "SInject"]
+	path = SInject
+	url = https://github.com/nbasakuragi/SInject
+[submodule "Grapple"]
+	path = Grapple
+	url = https://github.com/nbasakuragi/Grapple
