@@ -19,7 +19,7 @@ namespace DynamicCore.Test
                                                     FileName = DateTime.Now.ToString(CultureInfo.InvariantCulture),
                                                     TypeFullName = typeof (CustomType1).FullName,
                                                     TypeNamespace = typeof (CustomType1).Namespace,
-                                                    TypeLocation = typeof (CustomType1).Assembly.Location
+                                                    TypeLocation = @"\Level1\Level2\Level2\"
                                                 };
 
         //[TestMethod]

@@ -13,45 +13,54 @@ namespace DynamicVisualizers.Test.Utils
     [TestClass]
     public class AssemblyFinderTests
     {
-        private const string SourcePath1 = @"\Root1\Version1\A\FakeA.dll";
-        private const string SourcePath2 = @"\Root1\Version2\B\FakeB.dll";
+        private const string SourcePath1 = @"c:\Root1\Version1\A\FakeA.dll";
+        private const string SourcePath2 = @"c:\Root1\Version1\B\FakeB.dll";
+
+        private const string StartPath = @"c:\Root1\Version1\C\Version2\Nest";
 
         private static readonly List<FileInfo> Files = new List<FileInfo>();
 
         [ClassInitialize]
         public static void Initialize(TestContext c)
         {
-        
+
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
-                {
-                    { SourcePath1,  new MockFileData(string.Empty){LastAccessTime =   DateTime.Now}},
-                    { SourcePath2,  new MockFileData(string.Empty){LastAccessTime = DateTime.Now.AddHours(1)}},
-                });
+                                                        {
+                                                            {
+                                                                SourcePath1,
+                                                                new MockFileData(string.Empty)
+                                                                    {
+                                                                        LastAccessTime =
+                                                                            DateTime.Now
+                                                                    }
+                                                            },
+                                                            {
+                                                                SourcePath2,
+                                                                new MockFileData(string.Empty)
+                                                                    {
+                                                                        LastAccessTime =
+                                                                            DateTime.Now
+                                                                                    .AddHours(1)
+                                                                    }
+                                                            },
+                                                        });
 
+           
 
-
-            //mockFileSystem.Directory.GetFiles()
-            //fileSystem.Setup(
-            //    system =>
-            //    system.EnumerateFiles(It.IsAny<DirectoryInfo>(), It.IsAny<string>(), SearchOption.AllDirectories))
-            //    .Returns(() => mockFileSystem.FileInfo);
-
-
-            AssemblyFinder.FileSystem = (Abstraction.IFileSystem) mockFileSystem;
+          
+            AssemblyFinder.FileSystem = mockFileSystem;
         }
 
         [TestMethod]
         public void Test_FindPath()
         {
             //Arrange
-            const string expectedFile = "FakeB.dll";
-
+            
             //Act
-            var actual = AssemblyFinder.FindPath("Fake.dll", SourcePath1);
-
+            var actual = AssemblyFinder.FindPath("Fake.dll", StartPath);
 
             //Assert
-            Assert.AreEqual(expectedFile, actual);
+            Assert.AreEqual(SourcePath2, actual);
         }
     }
 }

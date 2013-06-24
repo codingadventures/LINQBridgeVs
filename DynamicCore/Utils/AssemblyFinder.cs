@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace LINQBridge.DynamicCore.Utils
 {
     public static class AssemblyFinder
     {
-        private const string SearchPattern = "*{0}*.dll";
+        private const string SearchPattern = "*{0}*{1}";
 
         private static readonly Func<string, bool> IsSystemAssembly =
             name => name.Contains("Microsoft") || name.Contains("System") || name.Contains("mscorlib");
 
         public static IFileSystem FileSystem { get; set; }
 
-        public static IEnumerable<string> GetReferencedAssembliesPath(this Assembly assembly, bool includeSystemAssemblies = false)
+        public static IEnumerable<string> GetReferencedAssembliesPath(this _Assembly assembly, bool includeSystemAssemblies = false)
         {
             var retPaths = new List<string>();
 
@@ -48,12 +49,15 @@ namespace LINQBridge.DynamicCore.Utils
         internal static string FindPath(string fileToSearch, string rootPath)
         {
             if (rootPath == null) return string.Empty;
-            Logging.Log.Write("SearchPattern: {0}", string.Format(SearchPattern, fileToSearch));
 
             try
             {
+                var fileName = FileSystem.Path.GetFileNameWithoutExtension(fileToSearch);
+                var extension = FileSystem.Path.GetExtension(fileToSearch);
+                Logging.Log.Write("SearchPattern: {0}", string.Format(SearchPattern, fileToSearch, extension));
+
                 var file = FileSystem.Directory
-                    .EnumerateFiles(rootPath, string.Format(SearchPattern, fileToSearch), System.IO.SearchOption.AllDirectories)
+                    .EnumerateFiles(rootPath, string.Format(SearchPattern, fileName, extension), System.IO.SearchOption.AllDirectories)
                     .AsParallel()
                     .OrderByDescending(info => FileSystem.FileInfo.FromFileName(info).LastAccessTime)
                     .FirstOrDefault();

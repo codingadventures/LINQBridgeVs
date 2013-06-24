@@ -42,15 +42,14 @@ namespace LINQBridge.Logging
 
 
         }
-        
-        [Conditional("DEBUG")]
-        [Conditional("DEPLOY")]
+
+        [Conditional("TEST")]
         public static void Write(Exception ex)
         {
             Write(ex, null);
         }
-        [Conditional("DEBUG")]
-        [Conditional("DEPLOY")]
+
+        [Conditional("TEST")]
         public static void Write(Exception ex, string context)
         {
             try
@@ -91,8 +90,8 @@ namespace LINQBridge.Logging
         /// Writes a formatted message  
         /// </summary>
         /// <param name="msg">A composite format string (see Remarks) that contains text intermixed with zero or more format items, which correspond to objects in the <paramref name="args"/> array.</param><param name="args">An object array that contains zero or more objects to format. </param>
-        [Conditional("DEBUG")]
-        [Conditional("DEPLOY")]
+        [Conditional("TEST")]
+        //[Conditional("DEPLOY")]
         public static void Write(string msg, params object[] args)
         {
             if (string.IsNullOrEmpty(_applicationName))
