@@ -243,9 +243,6 @@ namespace LINQBridge.TypeMapper
         {
            
             _assembly.Write(location, _writerParameters);
-           
-            var dbg1 = _assembly.MainModule.GetTypeReferences();
-            var dbg2 = _assembly.MainModule.AssemblyReferences;
             
             if (references != null)
                 DeployReferences(references, location);
