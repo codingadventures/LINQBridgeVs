@@ -81,7 +81,7 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Grapple\Bridge.Grapple\Grapple.csproj">
+    <ProjectReference Include="..\Grapple\Bridge.Grapple\Grapple.csproj">
       <Project>{79c0c9ed-d22c-4855-97c1-f6bd0127a531}</Project>
       <Name>Grapple</Name>
       <Ilmerge>True</Ilmerge>
