@@ -1,7 +1,7 @@
 ![alt text][logo]
 ==========
 
-Bridge from Visual Studio 2010/2012 to LINQPad
+Bridge from Visual Studio to LINQPad
 ==============================================
 
 What's LINQBridge?
