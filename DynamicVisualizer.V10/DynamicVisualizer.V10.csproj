@@ -37,7 +37,10 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.VisualStudio.DebuggerVisualizers, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.DebuggerVisualizers, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\VS2010\Microsoft.VisualStudio.DebuggerVisualizers.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
@@ -63,14 +66,10 @@
   -->
   <Target Name="AfterBuild" Condition=" '$(Configuration)' == 'Deploy' ">
     <CreateItem Include="@(ReferencePath)" Condition="'%(CopyLocal)'=='true' and '%(ReferencePath.IlMerge)'=='true'">
-      <Output TaskParameter="Include" ItemName="IlmergeAssemblies"/>
+      <Output TaskParameter="Include" ItemName="IlmergeAssemblies" />
     </CreateItem>
-
     <Message Text="MERGING: @(IlmergeAssemblies->'%(Filename)') " Importance="High" />
-
-    <Exec Condition=" '$(Configuration)' == 'Deploy' "
-      Command="&quot;$(SolutionDir)\packages\ilmerge.2.13.0307\Ilmerge.exe&quot; /out:@(MainAssembly) &quot;@(IntermediateAssembly)&quot; @(IlmergeAssemblies->'&quot;%(FullPath)&quot;', ' ')" />
-
+    <Exec Condition=" '$(Configuration)' == 'Deploy' " Command="&quot;$(SolutionDir)\packages\ilmerge.2.13.0307\Ilmerge.exe&quot; /out:@(MainAssembly) &quot;@(IntermediateAssembly)&quot; @(IlmergeAssemblies->'&quot;%(FullPath)&quot;', ' ')" />
   </Target>
   <Target Name="AfterResolveReferences" Condition=" '$(Configuration)' == 'Deploy' ">
     <Message Text="Filtering out ilmerge assemblies from ReferenceCopyLocalPaths" Importance="High" />
