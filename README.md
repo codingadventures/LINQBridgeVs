@@ -25,7 +25,7 @@ selected projet will do the magic and that's it!
 Compile your solution, run it, set a breakpoint and hover the pointer
 on whatever object instance and you will see the magnifier glass appear. 
 
-Clicking the magnifier will export the instance to `LINQPad`. 
+Clicking the magnifier will export the instance to [LINQPad](http://www.linqpad.net). 
 
 [logo]: https://raw.github.com/nbasakuragi/LINQBridge/master/VSExtension/Resources/LINQBridgeLogo.png "LINQBridge"
 
