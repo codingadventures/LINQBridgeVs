@@ -7,8 +7,8 @@ What's LINQBridge?
 LINQBridge is a Visual Studio Extension for Visual Studio 2010 and Visual Studio 2012.
 It is a bridge between a Visual Studio debugging session and [LINQPad] (http://www.linqpad.net).
 When enabled on a selection of VB/C# projects, it creates a Custom Debugger Visualizer 
-mapping to it all the complex types and making the magnifier glass then 
-available for all of them. By clicking on the magnifier glass the types will be trasmitted over a
+mapping to all the complex types and making the magnifier glass 
+available for all of them. By clicking on the magnifier glass the types will be transmitted over a
 bus and read back by LINQPad.
 
 ## Getting Started
@@ -19,14 +19,14 @@ when a solution is loaded and a project selected. There are two options availabl
 *  Enable LINQBridge
 *  Disable LINQBridge
 
-Enable LINQBridge on a selected projet will do the magic and that's it! 
+Enabling LINQBridge on a selected project will do the magic and that's it! 
 
 Compile your solution, run it, set a breakpoint and hover the pointer
-on whatever object instance and you will see the magnifier glass appear. 
+on any object instance and the magnifier glass will appear. 
 
 Clicking the magnifier will export the instance to [LINQPad](http://www.linqpad.net). 
 
-No need to install LINQPad before hand manually as it is built in LINQBridge
+No need to manually install LINQPad beforehand as it is built into LINQBridge
 
 [logo]: https://raw.github.com/nbasakuragi/LINQBridge/master/VSExtension/Resources/LINQBridgeLogo.png "LINQBridge"
 
