@@ -11,16 +11,22 @@ namespace LINQBridge.DynamicCore.Template
         public string TypeLocation;
         public string TypeNamespace;
         public string AssemblyQualifiedName;
-        public List<string> ReferencedAssemblies;
+        public readonly List<string> ReferencedAssemblies;
 
         public Message()
         {
-            ReferencedAssemblies = new List<string>();
+            ReferencedAssemblies = new List<string>(30);
         }
 
         public override string ToString()
         {
-            return FileName + " " + TypeFullName + " " + TypeLocation + " " + TypeNamespace;
+            return "FileName: " + FileName 
+                + Environment.NewLine 
+                + "TypeFullName: " + TypeFullName 
+                + Environment.NewLine 
+                + "TypeLocation: " + TypeLocation 
+                + Environment.NewLine
+                + "TypeNamespace" + TypeNamespace;
         }
     }
 }

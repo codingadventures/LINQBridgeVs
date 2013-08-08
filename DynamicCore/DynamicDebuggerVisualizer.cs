@@ -9,6 +9,7 @@ using System.Text;
 using LINQBridge.DynamicCore.Properties;
 using LINQBridge.DynamicCore.Template;
 using LINQBridge.DynamicCore.Utils;
+using LINQBridge.Logging;
 
 namespace LINQBridge.DynamicCore
 {
@@ -33,34 +34,34 @@ namespace LINQBridge.DynamicCore
         {
             try
             {
-                Logging.Log.Write("Entered in DeployLinqScripts");
-                Logging.Log.Write("Message: {0}", message);
+                Log.Write("Entered in DeployLinqScripts");
+                // Log.Write("Message: {0}", message);
 
                 var dstScriptPath = Path.Combine(MyDocuments, Resources.LINQPadQuery);
-                Logging.Log.Write("dstScriptPath: {0}", dstScriptPath);
+                Log.Write("dstScriptPath: {0}", dstScriptPath);
 
                 if (!FileSystem.Directory.Exists(dstScriptPath))
                 {
                     FileSystem.Directory.CreateDirectory(dstScriptPath);
-                    Logging.Log.Write("Directory Created");
+                    Log.Write(string.Format("Directory Created: {0}", dstScriptPath));
                 }
 
                 var dst = Path.Combine(dstScriptPath, string.Format(message.FileName, message.TypeFullName));
-                Logging.Log.Write("dst: {0}", dst);
+                Log.Write("dst: {0}", dst);
 
                 var refAssemblies = new List<string> { message.TypeLocation };
                 refAssemblies.AddRange(message.ReferencedAssemblies);
 
                 if (FileSystem.File.Exists(dst))
                 {
-                    Logging.Log.Write("File Already Exists");
+                    Log.Write(string.Format("File Already Exists: {0}", dst));
                     return;
                 }
 
                 var linqQuery = new Inspection(refAssemblies, message.TypeFullName, message.TypeNamespace);
                 var linqQueryText = linqQuery.TransformText();
 
-                Logging.Log.Write("LinqQuery file Tranformed");
+                Log.Write("LinqQuery file Tranformed");
 
 
                 using (var streamWriter = new StreamWriter(dst, false))
@@ -68,12 +69,12 @@ namespace LINQBridge.DynamicCore
                     streamWriter.Write(linqQueryText);
                     streamWriter.Flush();
                 }
-                Logging.Log.Write("LinqQuery file Generated");
+                Log.Write("LinqQuery file Generated");
 
             }
             catch (Exception e)
             {
-                Logging.Log.Write(e, "DynamicDebuggerVisualizer.DeployLinqScripts");
+                Log.Write(e, "DynamicDebuggerVisualizer.DeployLinqScripts");
                 throw;
             }
         }
@@ -81,34 +82,46 @@ namespace LINQBridge.DynamicCore
 
         public void ShowVisualizer(Stream inData)
         {
-            Logging.Log.Configure("LINQBridge");
+            Log.Configure("LINQBridge");
 
-            Logging.Log.Write("Entered in Show...");
+            Log.Write("ShowVisualizer Started...");
 
             var formatter = new BinaryFormatter();
             var message = (Message)formatter.Deserialize(inData);
-            Logging.Log.Write("Message deserialized");
+
+            Log.Write("Message deserialized");
+            Log.Write(string.Format("Message content /n {0}", message));
 
 
             var type = Type.GetType(message.AssemblyQualifiedName);
             if (type != null)
             {
                 //TODO: add code for multiple generic arguments like: Dictionary<TK,TV>
-                while (type.IsGenericType)
-                    type = type.GetGenericArguments()[0];
+                try
+                {
+                    while (type.IsGenericType)
+                        type = type.GetGenericArguments()[0];
+                    Log.Write(type.ToString());
 
-                if (type.Assembly.Location != message.TypeLocation)
-                    message.ReferencedAssemblies.Add(type.Assembly.Location);
+                    if (type.Assembly.Location != message.TypeLocation)
+                        message.ReferencedAssemblies.Add(type.Assembly.Location);
 
-                Logging.Log.WriteIf(!type.Assembly.Location.Equals(message.TypeLocation), "No Referenced Assemblies");
+                    Log.WriteIf(!type.Assembly.Location.Equals(message.TypeLocation), "No Referenced Assemblies");
 
-                var referencedAssemblyPaths = type.Assembly.GetReferencedAssembliesPath();
+                    var referencedAssemblyPaths = type.Assembly.GetReferencedAssembliesPath();
 
-                message.ReferencedAssemblies.AddRange(referencedAssemblyPaths);
+                    message.ReferencedAssemblies.AddRange(referencedAssemblyPaths);
+                }
+                catch (Exception e)
+                {
+                    Log.Write(e, "Error While getting the Referenced Assemblies");
+
+                    throw;
+                }
             }
 
             DeployLinqScripts(message);
-            Logging.Log.Write("LinqQuery Successfully deployed");
+            Log.Write("LinqQuery Successfully deployed");
 
             using (var process = new Process())
             {
@@ -123,17 +136,17 @@ namespace LINQBridge.DynamicCore
 
 
                 process.StartInfo = startInfo;
-                Logging.Log.Write("About to start LINQPad with these parameters: {0}, {1}", startInfo.FileName, startInfo.Arguments);
+                Log.Write("About to start LINQPad with these parameters: {0}, {1}", startInfo.FileName, startInfo.Arguments);
 
                 try
                 {
                     process.Start();
-                    Logging.Log.Write("LINQPad Successfully started");
+                    Log.Write("LINQPad Successfully started");
 
                 }
                 catch (Exception e)
                 {
-                    Logging.Log.Write(e, "Error during LINQPad execution");
+                    Log.Write(e, "Error during LINQPad execution");
 
                     throw;
                 }

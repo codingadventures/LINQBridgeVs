@@ -4,6 +4,7 @@ using System.IO.Abstractions;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using LINQBridge.Logging;
 
 namespace LINQBridge.DynamicCore.Utils
 {
@@ -14,7 +15,7 @@ namespace LINQBridge.DynamicCore.Utils
         private static readonly Func<string, bool> IsSystemAssembly =
             name => name.Contains("Microsoft") || name.Contains("System") || name.Contains("mscorlib");
 
-        public static IFileSystem FileSystem { get; set; }
+        public static IFileSystem FileSystem { private get; set; }
 
         public static IEnumerable<string> GetReferencedAssembliesPath(this _Assembly assembly, bool includeSystemAssemblies = false)
         {
@@ -30,7 +31,7 @@ namespace LINQBridge.DynamicCore.Utils
 
 
             var currentAssemblyPath = FileSystem.DirectoryInfo.FromDirectoryName(assembly.Location);
-            Logging.Log.Write("currentAssemblyPath: {0}", currentAssemblyPath);
+            Log.Write("currentAssemblyPath: {0}", currentAssemblyPath);
 
             if (currentAssemblyPath == null) return Enumerable.Empty<string>();
 
@@ -39,7 +40,7 @@ namespace LINQBridge.DynamicCore.Utils
                 .ForEach(s =>
                              {
                                  retPaths.Add(FindPath(s, currentAssemblyPath.FullName));
-                                 Logging.Log.Write("Assembly Path {0}", s);
+                                 Log.Write("Assembly Path {0}", s);
                              });
 
 
@@ -54,7 +55,7 @@ namespace LINQBridge.DynamicCore.Utils
             {
                 var fileName = FileSystem.Path.GetFileNameWithoutExtension(fileToSearch);
                 var extension = FileSystem.Path.GetExtension(fileToSearch);
-                Logging.Log.Write("SearchPattern: {0}", string.Format(SearchPattern, fileToSearch, extension));
+                Log.Write("SearchPattern: {0}", string.Format(SearchPattern, fileToSearch, extension));
 
                 var file = FileSystem.Directory
                     .EnumerateFiles(rootPath, string.Format(SearchPattern, fileName, extension), System.IO.SearchOption.AllDirectories)
@@ -69,12 +70,12 @@ namespace LINQBridge.DynamicCore.Utils
                 }
 
 
-                Logging.Log.Write("File Found {0}", file);
+                Log.Write("File Found {0}", file);
                 return file;
             }
             catch (Exception e)
             {
-                Logging.Log.Write(e, "FindPath");
+                Log.Write(e, "FindPath");
                 throw;
             }
 
