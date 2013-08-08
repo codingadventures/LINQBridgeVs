@@ -26,5 +26,7 @@ on whatever object instance and you will see the magnifier glass appear.
 
 Clicking the magnifier will export the instance to [LINQPad](http://www.linqpad.net). 
 
+No need to install LINQPad before hand manually as it is built in LINQBridge
+
 [logo]: https://raw.github.com/nbasakuragi/LINQBridge/master/VSExtension/Resources/LINQBridgeLogo.png "LINQBridge"
 
