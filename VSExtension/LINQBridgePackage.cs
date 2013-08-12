@@ -1,17 +1,13 @@
-﻿using System.Diagnostics;
-using System.Globalization;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.ComponentModel.Design;
-using System.Windows.Forms;
-using EnvDTE;
+using Bridge.VSExtension;
 using EnvDTE80;
-using LINQBridge.VSExtension;
 using LINQBridge.VSExtension.Forms;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
-namespace Bridge.VSExtension
+namespace LINQBridge.VSExtension
 {
     /// <summary>
     /// This is the class that implements the package exposed by this assembly.

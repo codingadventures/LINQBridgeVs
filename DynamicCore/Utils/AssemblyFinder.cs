@@ -10,7 +10,7 @@ namespace LINQBridge.DynamicCore.Utils
 {
     public static class AssemblyFinder
     {
-        private const string SearchPattern = "*{0}*{1}";
+        private const string SearchPattern = "*{0}*.dll";
 
         private static readonly Func<string, bool> IsSystemAssembly =
             name => name.Contains("Microsoft") || name.Contains("System") || name.Contains("mscorlib");
@@ -27,20 +27,20 @@ namespace LINQBridge.DynamicCore.Utils
                                                .ToList();
 
             if (!referencedAssemblies.Any()) return retPaths;
+            Log.Write(string.Format("There are {0} referenced non system assemblies", referencedAssemblies.Count));
 
 
-
-            var currentAssemblyPath = FileSystem.DirectoryInfo.FromDirectoryName(assembly.Location);
-            Log.Write("currentAssemblyPath: {0}", currentAssemblyPath);
-
+            var currentAssemblyPath = FileSystem.Path.GetDirectoryName(assembly.Location);
             if (currentAssemblyPath == null) return Enumerable.Empty<string>();
 
+            Log.Write("currentAssemblyPath: {0}",  currentAssemblyPath);
 
+           
             referencedAssemblies
                 .ForEach(s =>
                              {
-                                 retPaths.Add(FindPath(s, currentAssemblyPath.FullName));
-                                 Log.Write("Assembly Path {0}", s);
+                                 Log.Write("Referenced Assembly {0} ", s);
+                                 retPaths.Add(FindPath(s, currentAssemblyPath));
                              });
 
 
@@ -53,12 +53,11 @@ namespace LINQBridge.DynamicCore.Utils
 
             try
             {
-                var fileName = FileSystem.Path.GetFileNameWithoutExtension(fileToSearch);
-                var extension = FileSystem.Path.GetExtension(fileToSearch);
-                Log.Write("SearchPattern: {0}", string.Format(SearchPattern, fileToSearch, extension));
+              
+                Log.Write("SearchPattern: {0}", string.Format(SearchPattern, fileToSearch));
 
                 var file = FileSystem.Directory
-                    .EnumerateFiles(rootPath, string.Format(SearchPattern, fileName, extension), System.IO.SearchOption.AllDirectories)
+                    .EnumerateFiles(rootPath, string.Format(SearchPattern, fileToSearch), System.IO.SearchOption.AllDirectories)
                     .AsParallel()
                     .OrderByDescending(info => FileSystem.FileInfo.FromFileName(info).LastAccessTime)
                     .FirstOrDefault();

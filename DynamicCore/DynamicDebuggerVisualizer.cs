@@ -15,14 +15,14 @@ namespace LINQBridge.DynamicCore
 {
     public class DynamicDebuggerVisualizer
     {
-        public IFileSystem FileSystem { get; private set; }
+        private IFileSystem FileSystem { get; set; }
 
         private static readonly string MyDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
         public DynamicDebuggerVisualizer()
             : this(new FileSystem())
         {
-
+            AssemblyFinder.FileSystem = new FileSystem();
         }
 
         public DynamicDebuggerVisualizer(IFileSystem fileSystem)
