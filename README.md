@@ -28,5 +28,14 @@ Clicking the magnifier will export the instance to [LINQPad](http://www.linqpad.
 
 No need to manually install LINQPad beforehand as it is built into LINQBridge
 
+## Known Issues
+
+***Could not load file or assembly LINQBridge.DynamicVisualizer.V11.dll or one of its dependencies.***
+
+*Solution:* Check you have access permission on the folder CurrentUser\Documents\Visual Studio 2012\Visualizers 
+for the user running the debugger (IIS_IUSRS if a WebSite). 
+
+*Platform:* Windows 8
+
 [logo]: https://raw.github.com/nbasakuragi/LINQBridge/master/VSExtension/Resources/LINQBridgeLogo.png "LINQBridge"
 
