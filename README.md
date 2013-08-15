@@ -28,6 +28,11 @@ Clicking the magnifier will export the instance to [LINQPad](http://www.linqpad.
 
 No need to manually install LINQPad beforehand as it is built into LINQBridge
 
+## Compatibility
+
+LINQBridge is compatible for Visual Studio 2012 and Visual Studio 2010. At the moment available **only for .NET Framework 4.0**
+
+
 ## Known Issues
 
 ***Could not load file or assembly LINQBridge.DynamicVisualizer.V11.dll or one of its dependencies.***
