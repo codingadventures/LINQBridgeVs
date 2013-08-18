@@ -89,14 +89,22 @@ namespace LINQBridge.VSExtension
                 {
                     if (file == null) continue;
                     var destinationFileName = Path.Combine(LinqPadDestinationFolder, Path.GetFileName(file));
-                    if (!File.Exists(destinationFileName))
-                        File.Copy(file, destinationFileName, false);
+                    var extension = Path.GetExtension(destinationFileName);
+
+                    if (extension == null || (!File.Exists(destinationFileName) || extension.Equals("config")))
+                        continue;
+
+                    File.Delete(destinationFileName);
+                    File.Move(file, destinationFileName);
                 }
         }
 
         private static bool IsSupported(Project proj)
         {
-            return proj.UniqueName.EndsWith(".csproj", StringComparison.InvariantCultureIgnoreCase);
+            return 
+                proj.UniqueName.EndsWith(".csproj", StringComparison.InvariantCultureIgnoreCase)
+                  || proj.UniqueName.EndsWith(".vbproj", StringComparison.InvariantCultureIgnoreCase)
+                ;
         }
 
         private List<Project> SupportedProjects
@@ -211,11 +219,11 @@ namespace LINQBridge.VSExtension
             var items = _application.ToolWindows.SolutionExplorer.UIHierarchyItems;
 
             var itemFound = FindItem(items, projectName);
-            
+
             itemFound.Select(vsUISelectionType.vsUISelectionTypeSelect);
 
             _application.ExecuteCommand("Project.UnloadProject"); // Unload the first project
-            System.Threading.Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(500);
             _application.ExecuteCommand("Project.ReloadProject"); // Reload 
         }
 
@@ -229,7 +237,7 @@ namespace LINQBridge.VSExtension
             RemoveImports(e);
 
             e.Add(new XElement(Import, new XAttribute("Project", Target)));
-           // ReloadProject(projectName);
+            // ReloadProject(projectName);
 
             MessageBox.Show(string.Format("LINQBridge on {0} has been enabled...", projectName), "Success", MessageBoxButtons.OK);
             e.Save(projectFullName);
@@ -245,7 +253,7 @@ namespace LINQBridge.VSExtension
             RemoveImports(e);
 
 
-          //  ReloadProject(projectName);
+            //  ReloadProject(projectName);
 
             MessageBox.Show(string.Format("LINQBridge on {0} has been disabled...", projectName), "Success", MessageBoxButtons.OK);
             e.Save(projectFullName);
