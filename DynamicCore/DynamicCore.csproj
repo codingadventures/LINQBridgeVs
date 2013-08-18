@@ -40,7 +40,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deploy|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Deploy\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;Deploy</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;DEPLOY</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using LINQBridge.Logging;
 
 
 namespace LINQBridge.TypeMapper
@@ -24,6 +25,7 @@ namespace LINQBridge.TypeMapper
         /// <param name="visualizerDescriptionName">Visualizer description.</param>
         public VisualizerTypeMapper(string sourceVisualizerAssemblyLocation, string targetAssemblyToMap, string visualizerDescriptionName)
         {
+            Log.Configure("Type Mapper");
             _visualizerAttributeInjector = new VisualizerAttributeInjector(sourceVisualizerAssemblyLocation, targetAssemblyToMap, visualizerDescriptionName);
         }
 

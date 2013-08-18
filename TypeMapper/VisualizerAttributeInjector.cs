@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using LINQBridge.Logging;
 using LINQBridge.TypeMapper.Comparer;
 using Mono.Cecil.Rocks;
 using Mono.Cecil.Pdb;
@@ -38,7 +40,7 @@ namespace LINQBridge.TypeMapper
         #region [ Constants ]
         private const string SystemType = "System.Type";
         private const string SystemDiagnosticsDebuggerVisualizerAttribute = "System.Diagnostics.DebuggerVisualizerAttribute";
-        
+
         #endregion
 
         #endregion
@@ -176,11 +178,11 @@ namespace LINQBridge.TypeMapper
         /// <summary>
         /// Maps the types from assembly.
         /// </summary>
-        public void MapTypesFromAssembly( )
+        public void MapTypesFromAssembly()
         {
 
             TypeReference systemType;
-            
+
             _assembly.MainModule.TryGetTypeReference(SystemType, out systemType);
 
             var debuggerAttributeType = _assembly.MainModule.Import(typeof(System.Diagnostics.DebuggerVisualizerAttribute));
@@ -218,7 +220,7 @@ namespace LINQBridge.TypeMapper
 
                 var visualizerObjectSource =
                     new CustomAttributeArgument(systemType, customDebuggerVisualizerObjectSource);
-                 
+
                 var targetType = new CustomAttributeArgument(systemType, _assembly.MainModule.Import(type));
                 var descriptionType = new CustomAttributeArgument(_assembly.MainModule.TypeSystem.String, _visualizerDescriptionName);
                 var targetTypeProperty = new CustomAttributeNamedArgument("Target", targetType);
@@ -241,9 +243,25 @@ namespace LINQBridge.TypeMapper
         /// <param name="references">The Assembly references</param>
         public void SaveDebuggerVisualizer(string location, IEnumerable<string> references = null)
         {
-           
-            _assembly.Write(location, _writerParameters);
-            
+            var success = false;
+            const int maxCount = 3;
+            int i = 0;
+
+            //I would have used a goto....can't forget my professor quote: "Each GOTO can be superseeded by a Repeat Until"
+            while (!success && i++ < maxCount)
+            {
+                try
+                {
+                    _assembly.Write(location, _writerParameters);
+                    success = true;
+                }
+                catch (IOException ioe)
+                {
+                    Log.Write(ioe);
+                    Thread.Sleep(125);
+                }
+            }
+
             if (references != null)
                 DeployReferences(references, location);
         }
@@ -263,7 +281,7 @@ namespace LINQBridge.TypeMapper
         /// <param name="aStream">A stream.</param>
         public void SaveDebuggerVisualizer(Stream aStream)
         {
-           
+
             _assembly.Write(aStream, _writerParameters);
         }
 

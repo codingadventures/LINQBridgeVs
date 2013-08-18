@@ -3,7 +3,7 @@ using LINQBridge.DynamicCore.Utils;
 
 namespace LINQBridge.DynamicCore.Template
 {
-    public partial class Inspection
+    public sealed partial class Inspection
     {
         private readonly string _typeNamespace;
 
