@@ -64,10 +64,15 @@
   </Choose>
   <ItemGroup>
     <Compile Include="DynamicDebuggerVisualizerTest.cs" />
+    <Compile Include="Helper\ReferencedAssemblyFinderHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\AssemblyFinderTests.cs" />
+    <Compile Include="Helper\AssemblyFinderHelperTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AnotherModel.Test\AnotherModel.Test.csproj">
+      <Project>{7B0C3D12-296A-438D-B0EA-B049A0D6D3C1}</Project>
+      <Name>AnotherModel.Test</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model.Test\Model.Test.csproj">
       <Project>{8A5E73F6-2093-4669-9C09-BEAB033BE56C}</Project>
       <Name>Model.Test</Name>

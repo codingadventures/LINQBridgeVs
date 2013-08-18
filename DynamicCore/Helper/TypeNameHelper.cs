@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -7,6 +8,28 @@ namespace LINQBridge.DynamicCore.Utils
 {
     internal static class TypeNameHelper
     {
+
+        private static readonly List<string> SystemNamespaces = new List<string>()
+                                                                    {
+                                                                        "System.Collections.Generic.",
+                                                                        "System.Collections.",
+                                                                        "System.Data.Common.",
+                                                                        "System.Data.Linq.",
+                                                                        "System.Data.",
+                                                                        "System.ComponentModel.",
+                                                                        "System.Configuration.",
+                                                                        "System.Diagnostics.",
+                                                                        "System.Linq.Expression.",
+                                                                        "System.Linq.",
+                                                                        "System.",
+
+                                                                    };
+        public static string RemoveSystemNamespaces(string input)
+        {
+            SystemNamespaces.ForEach(s => input = input.IndexOf(s, StringComparison.Ordinal) >= 0 ? input.Replace(s, string.Empty) : input);
+
+            return input;
+        }
         public static string GetDisplayName(Type type, bool fullName)
         {
             if (type == null)
@@ -68,7 +91,7 @@ namespace LINQBridge.DynamicCore.Utils
                         sb.Append(", ");
                     }
 
-                    sb.Append(GetDisplayName(_generics[this._index++], _fullName));
+                    sb.Append(GetDisplayName(_generics[_index++], _fullName));
                 }
 
                 sb.Append(">");

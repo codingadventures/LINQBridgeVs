@@ -17,8 +17,8 @@ namespace DynamicCore.Test
         private readonly Message _message = new Message
                                                 {
                                                     FileName = DateTime.Now.ToString(CultureInfo.InvariantCulture),
-                                                    TypeFullName = typeof (CustomType1).FullName,
-                                                    TypeNamespace = typeof (CustomType1).Namespace,
+                                                    TypeFullName = typeof(CustomType1).FullName,
+                                                    TypeNamespace = typeof(CustomType1).Namespace,
                                                     TypeLocation = @"\Level1\Level2\Level2\"
                                                 };
 
@@ -31,9 +31,10 @@ namespace DynamicCore.Test
         //    var myHost = new VisualizerDevelopmentHost(c, typeof(DynamicDebuggerVisualizer), typeof(DynamicDebuggerVisualizerObjectSource));
         //    myHost.ShowVisualizer();
         //}
-        private IFileSystem _fileSystem;
+        private static IFileSystem _fileSystem;
+
         [ClassInitialize]
-        public void Init(TestContext ctx)
+        public static void Init(TestContext ctx)
         {
             _fileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
             {
@@ -44,14 +45,14 @@ namespace DynamicCore.Test
 
         }
 
-    [TestMethod]
+        [TestMethod]
         public void DeployScriptTest()
         {
-            
-           var cVisualizerObjectSource = new DynamicDebuggerVisualizer(_fileSystem);
-           cVisualizerObjectSource.DeployLinqScripts(_message);
 
-            
+            var cVisualizerObjectSource = new DynamicDebuggerVisualizer(_fileSystem);
+            cVisualizerObjectSource.DeployLinqScripts(_message);
+
+
             var dstScriptPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                                              "LINQPad Queries");
 

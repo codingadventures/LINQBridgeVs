@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using LINQBridge.DynamicCore.Utils;
+using LINQBridge.DynamicCore.Helper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-using Abstraction = System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 
-
-namespace DynamicVisualizers.Test.Utils
+namespace DynamicCore.Test.Helper
 {
     [TestClass]
-    public class AssemblyFinderTests
+    public class AssemblyFinderHelperTests
     {
         private const string SourcePath1 = @"c:\Root1\Version1\A\FakeA.dll";
         private const string SourcePath2 = @"c:\Root1\Version1\B\FakeB.dll";
@@ -48,7 +45,7 @@ namespace DynamicVisualizers.Test.Utils
            
 
           
-            AssemblyFinder.FileSystem = mockFileSystem;
+            AssemblyFinderHelper.FileSystem = mockFileSystem;
         }
 
         [TestMethod]
@@ -57,7 +54,7 @@ namespace DynamicVisualizers.Test.Utils
             //Arrange
             
             //Act
-            var actual = AssemblyFinder.FindPath("Fake.dll", StartPath);
+            var actual = AssemblyFinderHelper.FindPath("Fake", StartPath);
 
             //Assert
             Assert.AreEqual(SourcePath2, actual);

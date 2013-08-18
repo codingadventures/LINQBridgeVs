@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using LINQBridge.Logging;
 
-namespace LINQBridge.DynamicCore.Utils
+namespace LINQBridge.DynamicCore.Helper
 {
-    public static class AssemblyFinder
+    public static class AssemblyFinderHelper
     {
         private const string SearchPattern = "*{0}*.dll";
 
@@ -55,7 +54,7 @@ namespace LINQBridge.DynamicCore.Utils
             {
               
                 Log.Write("SearchPattern: {0}", string.Format(SearchPattern, fileToSearch));
-
+                
                 var file = FileSystem.Directory
                     .EnumerateFiles(rootPath, string.Format(SearchPattern, fileToSearch), System.IO.SearchOption.AllDirectories)
                     .AsParallel()

@@ -17,7 +17,7 @@ namespace LINQBridge.Logging
         private static readonly string LocalApplicationData =
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
-        private static readonly MailAddress MailAddressFrom = new MailAddress("NoReply@log.com", "No Reply Log");
+        private static readonly MailAddress MailAddressFrom = new MailAddress("linqbridge@gmail.com", "No Reply Log");
         private static string _logGzipFileName;
 
 
@@ -25,6 +25,7 @@ namespace LINQBridge.Logging
         private static string _logTxtFilePath;
         private static SmtpClient _smtpClient;
 
+        [Conditional("DEPLOY")]
         public static void Configure(string applicationName, SmtpClient smtpClient = null)
         {
             if (string.IsNullOrEmpty(applicationName))
@@ -43,13 +44,13 @@ namespace LINQBridge.Logging
 
         }
 
-        [Conditional("Deploy")]
+        [Conditional("DEPLOY")]
         public static void Write(Exception ex)
         {
             Write(ex, null);
         }
 
-        [Conditional("Deploy")]
+        [Conditional("DEPLOY")]
         public static void Write(Exception ex, string context)
         {
             try
@@ -90,8 +91,8 @@ namespace LINQBridge.Logging
         /// Writes a formatted message  
         /// </summary>
         /// <param name="msg">A composite format string (see Remarks) that contains text intermixed with zero or more format items, which correspond to objects in the <paramref name="args"/> array.</param><param name="args">An object array that contains zero or more objects to format. </param>
-        [Conditional("Deploy")]
-        //[Conditional("DEPLOY")]
+
+        [Conditional("DEPLOY")]
         public static void Write(string msg, params object[] args)
         {
             if (string.IsNullOrEmpty(_applicationName))
@@ -133,7 +134,7 @@ namespace LINQBridge.Logging
             }
         }
 
-        [Conditional("DEBUG")]
+        //   [Conditional("DEBUG")]
         [Conditional("DEPLOY")]
         public static void WriteIf(bool condition, string msg, params object[] args)
         {

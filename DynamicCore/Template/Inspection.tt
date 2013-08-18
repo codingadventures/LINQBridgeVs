@@ -25,6 +25,6 @@ void Main()
      
         Bus instance = Bus.Instance;
         var obj = instance.Get<<#=TypeToRetrieveFullName#>>();
-        obj.Dump("<#=TypeNamespace#>");
+        obj.Dump("<#=TypeToRetrieveFullName#>");
         
 }

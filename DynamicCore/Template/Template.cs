@@ -1,19 +1,20 @@
 ﻿using System.Collections.Generic;
+using LINQBridge.DynamicCore.Utils;
 
 namespace LINQBridge.DynamicCore.Template
 {
     public partial class Inspection
     {
-        public readonly string TypeNamespace;
+        private readonly string _typeNamespace;
 
-        public readonly List<string> Assemblies;
-        public readonly string TypeToRetrieveFullName;
+        private readonly List<string> _assemblies;
+        private readonly string _typeToRetrieveFullName;
 
         public Inspection(List<string> assemblies, string typeToRetrieveFullName, string typeNamespace)
         {
-            TypeNamespace = typeNamespace;
-            Assemblies = assemblies;
-            TypeToRetrieveFullName = typeToRetrieveFullName;
+            _typeNamespace = typeNamespace;
+            _assemblies = assemblies;
+            _typeToRetrieveFullName = TypeNameHelper.RemoveSystemNamespaces(typeToRetrieveFullName);
         }
     }
 }

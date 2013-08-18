@@ -106,7 +106,7 @@ namespace LINQBridge.DynamicCore.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to LINQPad Queries.
+        ///   Looks up a localized string similar to LINQPad Queries\\LINQBridge.
         /// </summary>
         internal static string LINQPadQuery {
             get {

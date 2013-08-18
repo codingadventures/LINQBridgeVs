@@ -32,6 +32,12 @@ namespace Model.Test
         public List<int?> Prop1 { get; set; }
     }
 
+    public class CustomType4 : Dictionary<string, AnotherModelTest>
+    {
+        
+
+    }
+
     [Serializable]
     public class VisualizationTestClass
     {

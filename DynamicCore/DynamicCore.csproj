@@ -67,8 +67,9 @@
     </Compile>
     <Compile Include="Template\Message.cs" />
     <Compile Include="Template\Template.cs" />
-    <Compile Include="Utils\AssemblyFinder.cs" />
-    <Compile Include="Utils\TypeNameHelper.cs" />
+    <Compile Include="Helper\AssemblyFinderHelper.cs" />
+    <Compile Include="Helper\ReferencedAssemblyFinderHelper.cs" />
+    <Compile Include="Helper\TypeNameHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,15 +1,13 @@
-﻿using System;
+﻿using LINQBridge.DynamicCore.Helper;
+using LINQBridge.DynamicCore.Properties;
+using LINQBridge.DynamicCore.Template;
+using LINQBridge.Logging;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Abstractions;
-using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using LINQBridge.DynamicCore.Properties;
-using LINQBridge.DynamicCore.Template;
-using LINQBridge.DynamicCore.Utils;
-using LINQBridge.Logging;
 
 namespace LINQBridge.DynamicCore
 {
@@ -22,12 +20,13 @@ namespace LINQBridge.DynamicCore
         public DynamicDebuggerVisualizer()
             : this(new FileSystem())
         {
-            AssemblyFinder.FileSystem = new FileSystem();
         }
 
         public DynamicDebuggerVisualizer(IFileSystem fileSystem)
         {
             FileSystem = fileSystem;
+            AssemblyFinderHelper.FileSystem = FileSystem;
+
         }
 
         internal void DeployLinqScripts(Message message)
@@ -64,10 +63,12 @@ namespace LINQBridge.DynamicCore
                 Log.Write("LinqQuery file Tranformed");
 
 
-                using (var streamWriter = new StreamWriter(dst, false))
+                using (var memoryStream = FileSystem.File.OpenWrite(dst))
+                using (var streamWriter = new StreamWriter(memoryStream))
                 {
                     streamWriter.Write(linqQueryText);
                     streamWriter.Flush();
+                    memoryStream.Flush();
                 }
                 Log.Write("LinqQuery file Generated");
 
@@ -92,33 +93,10 @@ namespace LINQBridge.DynamicCore
             Log.Write("Message deserialized");
             Log.Write(string.Format("Message content /n {0}", message));
 
-
             var type = Type.GetType(message.AssemblyQualifiedName);
-            if (type != null)
-            {
-                //TODO: add code for multiple generic arguments like: Dictionary<TK,TV>
-                try
-                {
-                    while (type.IsGenericType)
-                        type = type.GetGenericArguments()[0];
-                    Log.Write(type.ToString());
+            var referencedAssemblies = type.GetReferencedAssemblies(message.TypeLocation);
 
-                    if (type.Assembly.Location != message.TypeLocation)
-                        message.ReferencedAssemblies.Add(type.Assembly.Location);
-
-                    Log.WriteIf(!type.Assembly.Location.Equals(message.TypeLocation), "No Referenced Assemblies");
-
-                    var referencedAssemblyPaths = type.Assembly.GetReferencedAssembliesPath();
-
-                    message.ReferencedAssemblies.AddRange(referencedAssemblyPaths);
-                }
-                catch (Exception e)
-                {
-                    Log.Write(e, "Error While getting the Referenced Assemblies");
-
-                    throw;
-                }
-            }
+            message.ReferencedAssemblies.AddRange(referencedAssemblies);
 
             DeployLinqScripts(message);
             Log.Write("LinqQuery Successfully deployed");

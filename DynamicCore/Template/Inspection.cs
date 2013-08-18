@@ -20,20 +20,20 @@ namespace LINQBridge.DynamicCore.Template
     
     #line 1 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\DynamicCore\Template\Inspection.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "11.0.0.0")]
-    public partial class Inspection : InspectionBase
+    public sealed partial class Inspection : InspectionBase
     {
 #line hidden
         /// <summary>
         /// Create the template output
         /// </summary>
-        public virtual string TransformText()
+        public string TransformText()
         {
             this.Write("\r\n<Query Kind=\"Program\">\r\n  <Namespace>System.Dynamic</Namespace>\r\n  <Namespace>S" +
                     "ystem.Runtime.Serialization.Formatters</Namespace>\r\n  <Namespace>System.Xml.Linq" +
                     "</Namespace>\r\n  <Namespace>LINQBridge.Grapple</Namespace>\r\n  <Namespace>");
             
             #line 13 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\DynamicCore\Template\Inspection.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TypeNamespace));
+            this.Write(this.ToStringHelper.ToStringWithCulture(_typeNamespace));
             
             #line default
             #line hidden
@@ -47,7 +47,7 @@ namespace LINQBridge.DynamicCore.Template
             this.Write("</Reference>\r\n  ");
             
             #line 15 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\DynamicCore\Template\Inspection.tt"
- foreach(var elem in this.Assemblies){
+ foreach(var elem in this._assemblies){
     if (!elem.Contains("mscorlib")) {
   
             
@@ -71,14 +71,14 @@ namespace LINQBridge.DynamicCore.Template
                     "     var obj = instance.Get<");
             
             #line 27 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\DynamicCore\Template\Inspection.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TypeToRetrieveFullName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(_typeToRetrieveFullName));
             
             #line default
             #line hidden
             this.Write(">();\r\n        obj.Dump(\"");
             
             #line 28 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\DynamicCore\Template\Inspection.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TypeNamespace));
+            this.Write(this.ToStringHelper.ToStringWithCulture(_typeToRetrieveFullName));
             
             #line default
             #line hidden
