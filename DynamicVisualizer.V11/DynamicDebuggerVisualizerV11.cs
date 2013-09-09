@@ -23,7 +23,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-
+using System.Windows.Forms;
 using LINQBridge.DynamicCore;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 
@@ -37,9 +37,11 @@ namespace LINQBridge.DynamicVisualizer.V11
         protected override void Show(IDialogVisualizerService windowService, IVisualizerObjectProvider objectProvider)
         {
             var dynamicDebuggerVisualizer = new DynamicDebuggerVisualizer();
-
             var dataStream = objectProvider.GetData();
-            dynamicDebuggerVisualizer.ShowVisualizer(dataStream);
+
+            var formToShow = dynamicDebuggerVisualizer.ShowVisualizer(dataStream);
+
+            windowService.ShowDialog(formToShow);
         }
     }
 

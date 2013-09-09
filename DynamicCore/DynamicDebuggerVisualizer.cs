@@ -23,6 +23,11 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Windows.Forms;
+using LINQBridge.DynamicCore.Forms;
 using LINQBridge.DynamicCore.Helper;
 using LINQBridge.DynamicCore.Properties;
 using LINQBridge.DynamicCore.Template;
@@ -33,6 +38,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Abstractions;
 using System.Runtime.Serialization.Formatters.Binary;
+using Message = LINQBridge.DynamicCore.Template.Message;
 
 namespace LINQBridge.DynamicCore
 {
@@ -41,6 +47,10 @@ namespace LINQBridge.DynamicCore
         private IFileSystem FileSystem { get; set; }
 
         private static readonly string MyDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+        private const UInt32 WmKeydown = 0x0100;
+        private const int VkF5 = 0x74;
+        private const int SwShownormal = 1;
 
         public DynamicDebuggerVisualizer()
             : this(new FileSystem())
@@ -106,7 +116,7 @@ namespace LINQBridge.DynamicCore
         }
 
 
-        public void ShowVisualizer(Stream inData)
+        public Form ShowVisualizer(Stream inData)
         {
             Log.Configure("LINQBridge");
 
@@ -126,35 +136,78 @@ namespace LINQBridge.DynamicCore
             DeployLinqScripts(message);
             Log.Write("LinqQuery Successfully deployed");
 
-            using (var process = new Process())
+            var linqQueryfileName = Path.Combine(MyDocuments, Resources.LINQPadQuery, message.FileName);
+
+            var startInfo = new ProcessStartInfo
             {
-                var startInfo = new ProcessStartInfo
+                WindowStyle = ProcessWindowStyle.Normal,
+                FileName = Resources.LINQPadExe,
+                WorkingDirectory = Environment.GetEnvironmentVariable("ProgramFiles") + @"\LINQPad4",
+                Arguments = linqQueryfileName + " " + Resources.LINQPadCommands
+            };
+
+
+            Log.Write("About to start LINQPad with these parameters: {0}, {1}", startInfo.FileName, startInfo.Arguments);
+
+            try
+            {
+
+                var linqPadProcess = Process.Start(startInfo);
+
+                Thread.Sleep(125);
+
+                if (linqPadProcess.HasExited)
+                    linqPadProcess = Process.GetProcessesByName("LINQPad").FirstOrDefault();
+                else
+                    linqPadProcess.WaitForInputIdle();
+                
+
+                var index = 0;
+                if (linqPadProcess != null)
                 {
-                    WindowStyle = ProcessWindowStyle.Normal,
-                    FileName = Resources.LINQPadExe,
-                    WorkingDirectory = Environment.GetEnvironmentVariable("ProgramFiles") + @"\LINQPad4",
-                    Arguments = Path.Combine(MyDocuments, Resources.LINQPadQuery, message.FileName) + " " + Resources.LINQPadCommands
-                };
+                    while (linqPadProcess.MainWindowHandle == IntPtr.Zero)
+                    {
+                        // Discard cached information about the process
+                        // because MainWindowHandle might be cached.
+                        Log.Write("Waiting MainWindowHandle... - Iteration: {0}", ++index);
+                        linqPadProcess.Refresh();
+                        Thread.Sleep(10);
+                    }
 
+                    Thread.Sleep(100);
+                    ShowWindowAsync(linqPadProcess.MainWindowHandle, SwShownormal);
+                    Log.Write("LINQPad ShowWindowAsync {0}", linqPadProcess.MainWindowHandle);
 
+                    SetForegroundWindow(linqPadProcess.MainWindowHandle);
+                    Log.Write("LINQPad SetForegroundWindow {0}", linqPadProcess.MainWindowHandle);
+                    Thread.Sleep(125);
+                    PostMessage(linqPadProcess.MainWindowHandle, WmKeydown, VkF5, 0);
+                    Log.Write("LINQPad PostMessage {0}", VkF5);
 
-                process.StartInfo = startInfo;
-                Log.Write("About to start LINQPad with these parameters: {0}, {1}", startInfo.FileName, startInfo.Arguments);
-
-                try
-                {
-                    process.Start();
                     Log.Write("LINQPad Successfully started");
 
+                    linqPadProcess.Dispose();
                 }
-                catch (Exception e)
-                {
-                    Log.Write(e, "Error during LINQPad execution");
+                else
+                    Log.Write("LINQPad Process is null");
 
-                    throw;
-                }
             }
+            catch (Exception e)
+            {
+                Log.Write(e, "Error during LINQPad execution");
+                throw;
+            }
+             
+            return new TemporaryForm();
         }
 
+        [DllImport("user32.dll")]
+        private static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
+
+        [DllImport("user32")]
+        private static extern bool SetForegroundWindow(IntPtr hwnd);
+
+        [DllImport("user32.dll")]
+        static extern bool PostMessage(IntPtr hWnd, UInt32 Msg, int wParam, int lParam);
     }
 }

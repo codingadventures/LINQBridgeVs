@@ -65,19 +65,12 @@ namespace LINQBridge.Logging
             _logTxtFilePath = Path.Combine(_logsDir, logTxtFileName);
 
             _smtpClient = smtpClient;
-
-
-
         }
 
-        [Conditional("DEPLOY")]
-        public static void Write(Exception ex)
-        {
-            Write(ex, null);
-        }
+
 
         [Conditional("DEPLOY")]
-        public static void Write(Exception ex, string context)
+        public static void Write(Exception ex, string context = null)
         {
             try
             {
@@ -106,11 +99,44 @@ namespace LINQBridge.Logging
                     text = context + " - \r\n" + text;
                 }
 
-                Write(text);
+                InternalWrite(text);
             }
             catch
             {
             }
+        }
+
+        private static void InternalWrite(string msg, params object[] args)
+        {
+
+            if (!Directory.Exists(_logsDir))
+            {
+                try
+                {
+                    var sec = new DirectorySecurity();
+                    // Using this instead of the "Everyone" string means we work on non-English systems.
+                    var everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+                    sec.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
+                    Directory.CreateDirectory(_logsDir, sec);
+                }
+                catch
+                {
+                    return;
+                }
+            }
+
+            if (args != null && args.Length > 0)
+                msg = string.Format(CultureInfo.InvariantCulture, msg, args);
+
+
+            File.AppendAllText(_logTxtFilePath, string.Concat(new[]
+                {
+                     
+                    DateTime.Now.ToString("o"),
+                    " ",
+                    msg.Trim(),
+                    "\r\n\r\n"
+                }));
         }
 
         /// <summary>
@@ -126,47 +152,20 @@ namespace LINQBridge.Logging
 
             try
             {
-                if (!Directory.Exists(_logsDir))
-                {
-                    try
-                    {
-                        var sec = new DirectorySecurity();
-                        // Using this instead of the "Everyone" string means we work on non-English systems.
-                        var everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
-                        sec.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
-                        Directory.CreateDirectory(_logsDir, sec);
-                    }
-                    catch
-                    {
-                        return;
-                    }
-                }
-
-                if (args != null && args.Length > 0)
-                    msg = string.Format(CultureInfo.InvariantCulture, msg, args);
-
-
-                File.AppendAllText(_logTxtFilePath, string.Concat(new[]
-                {
-                     
-                    DateTime.Now.ToString("o"),
-                    " ",
-                    msg.Trim(),
-                    "\r\n\r\n"
-                }));
+                InternalWrite(msg, args);
             }
             catch
             {
             }
         }
 
-        //   [Conditional("DEBUG")]
+
         [Conditional("DEPLOY")]
         public static void WriteIf(bool condition, string msg, params object[] args)
         {
             if (!condition) return;
 
-            Write(msg, args);
+            InternalWrite(msg, args);
         }
 
         public static bool SendLogFileAsEmail(string emailTo)
