@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
+using System.Xml;
 using System.Xml.Linq;
+using System.Xml.XPath;
 using EnvDTE;
-using EnvDTE80;
+using Microsoft.Build.Evaluation;
+using Microsoft.Win32;
+using Project = EnvDTE.Project;
 
 
 namespace LINQBridge.VSExtension
@@ -27,87 +30,84 @@ namespace LINQBridge.VSExtension
         Disable
     }
 
-    internal struct ProjectInfo
-    {
-        readonly bool _isEnabled;
-        readonly WeakReference _project;
-
-        public ProjectInfo(Project project, bool isEnabled)
-        {
-            _project = new WeakReference(project);
-            _isEnabled = isEnabled;
-        }
-
-        public Project Project { get { return _project.Target as Project; } }
-        public bool IsEnabled { get { return _isEnabled; } }
-    }
-
     public class LINQBridgeExtension
     {
-        private readonly DTE2 _application;
-
-        private readonly Dictionary<string, ProjectInfo> _projects = new Dictionary<string, ProjectInfo>(StringComparer.InvariantCultureIgnoreCase);
-
-        private static readonly XName Import = XName.Get("Import", "http://schemas.microsoft.com/developer/msbuild/2003");
-
-        private static string InstallFolder
-        {
-            get { return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location); }
-        }
-
-        private static readonly string LinqPadDestinationFolder = Path.Combine(
-            Environment.GetEnvironmentVariable("ProgramFiles"), "LINQPad4");
-
-        private static readonly string Target = Path.Combine(InstallFolder, Resources.Targets);
-        private static readonly string LinqPadExePath = Path.Combine(InstallFolder, Resources.LINQPad);
+        #region [ Private Properties ]
+        private readonly DTE _application;
 
 
-        private string SolutionName
+        public static bool IsEnvironmentConfigured
         {
             get
             {
-                return Path.GetFileNameWithoutExtension(_application.Solution.FullName);
+                using (var key = Registry.CurrentUser.OpenSubKey(Resources.ConfigurationRegistryKey))
+                {
+                    return key != null && Convert.ToBoolean(key.GetValue("IsLINQBridgeConfigured"));
+                }
+            }
+            private set
+            {
+                using (var key = Registry.CurrentUser.CreateSubKey(Resources.ConfigurationRegistryKey))
+                {
+                    if (key != null)
+                        key.SetValue("IsLINQBridgeConfigured", value);
+                }
             }
         }
+        #endregion
 
-        public LINQBridgeExtension(DTE2 app)
+        public LINQBridgeExtension(DTE app)
         {
             _application = app;
-            SetEnvironment();
+
+            if (!IsEnvironmentConfigured)
+                SetEnvironment();
         }
 
 
         private static void SetEnvironment()
         {
-            var linqPadPath = Path.GetDirectoryName(LinqPadExePath);
 
-            if (!Directory.Exists(LinqPadDestinationFolder))
-                Directory.CreateDirectory(LinqPadDestinationFolder);
+            //Set in the registry the installer location
+            using (var key = Registry.CurrentUser.CreateSubKey(Resources.InstallFolderRegistryKey))
+            {
+                if (key != null) key.SetValue("InstallFolderPath", Locations.InstallFolder);
+            }
 
-            if (linqPadPath != null)
-                foreach (var file in Directory.GetFiles(linqPadPath))
-                {
-                    if (file == null) continue;
-                    var destinationFileName = Path.Combine(LinqPadDestinationFolder, Path.GetFileName(file));
-                    var extension = Path.GetExtension(destinationFileName);
+            var linqPadPath = Path.GetDirectoryName(Locations.LinqPadExeFileNamePath);
 
-                    if (extension == null || (!File.Exists(destinationFileName) || extension.Equals("config")))
-                        continue;
+            if (!Directory.Exists(Locations.LinqPadDestinationFolder))
+                Directory.CreateDirectory(Locations.LinqPadDestinationFolder);
 
-                    File.Delete(destinationFileName);
-                    File.Move(file, destinationFileName);
-                }
+
+            //Copy the BridgeBuildTask.targets to the default .NET 4.0v framework location
+            File.Copy(Locations.LinqBridgeTargetFileNamePath, Path.Combine(Locations.DotNetFrameworkPath, Locations.LinqBridgeTargetFileName), true);
+            File.Copy(Locations.LinqBridgeTargetFileNamePath, Path.Combine(Locations.DotNetFramework64Path, Locations.LinqBridgeTargetFileName), true);
+
+            //Install LINQPad in the machine
+            if (linqPadPath == null) return;
+
+            foreach (var file in Directory.GetFiles(linqPadPath))
+            {
+                if (file == null) continue;
+                var destinationFileName = Path.Combine(Locations.LinqPadDestinationFolder, Path.GetFileName(file));
+                if (File.Exists(destinationFileName))
+                    continue;
+                File.Move(file, destinationFileName);
+            }
+
+            IsEnvironmentConfigured = true;
+
+
         }
 
-        private static bool IsSupported(Project proj)
+        private static bool IsSupported(string uniqueName)
         {
-            return 
-                proj.UniqueName.EndsWith(".csproj", StringComparison.InvariantCultureIgnoreCase)
-                  || proj.UniqueName.EndsWith(".vbproj", StringComparison.InvariantCultureIgnoreCase)
-                ;
+            return
+                uniqueName.EndsWith(".csproj", StringComparison.InvariantCultureIgnoreCase) || uniqueName.EndsWith(".vbproj", StringComparison.InvariantCultureIgnoreCase);
         }
 
-        private List<Project> SupportedProjects
+        private Project SelectedProject
         {
             get
             {
@@ -115,66 +115,79 @@ namespace LINQBridge.VSExtension
                 if (items == null)
                     return null;
 
-                var result = items.OfType<Project>().ToList();
-                if (!result.Any() || !result.All(IsSupported))
+                var project = items.OfType<Project>().FirstOrDefault();
+                if (project == null || !IsSupported(project.UniqueName))
                     return null;
 
-                return result;
+                return project;
             }
         }
 
-        private bool IsBridgeEnabled(Project project)
+        private string SelectedAssemblyName
         {
-
-            try
+            get
             {
-                var fullName = project.FullName;
+                return SelectedProject.Properties.Cast<Property>().First(property => property.Name == "AssemblyName").Value.ToString();
             }
-            catch (NotImplementedException)
+        }
+      
+        private static bool IsBridgeEnabled(string assemblyName)
+        {
+            using (var key = Registry.CurrentUser.OpenSubKey(Resources.EnabledProjectsRegistryKey))
             {
-                return false;
+                if (key == null) return false;
+                var value = key.GetValue(assemblyName);
+                return value != null && Convert.ToBoolean(value);
             }
-
-            ProjectInfo result;
-            if (_projects.TryGetValue(project.FullName, out result) && result.Project == project)
-                return result.IsEnabled;
-
-            _projects[project.FullName] = result = new ProjectInfo(project, GetStatus(project.FullName));
-
-            return result.IsEnabled;
         }
 
-        private bool IsBridgeDisabled(Project project)
+        private static bool IsBridgeDisabled(string assemblyName)
         {
-            return !IsBridgeEnabled(project);
+            return !IsBridgeEnabled(assemblyName);
         }
 
         public void Execute(CommandAction action)
         {
 
-            if (SupportedProjects == null)
+            if (SelectedProject == null)
                 return;
 
+            var findProjectReferences = FindAllDependencies(SelectedProject.FullName);
+            switch (action)
+            {
+                case CommandAction.Enable:
+                    Enable(SelectedAssemblyName);
+                    MessageBox.Show(string.Format("LINQBridge on {0} has been Enabled...", SelectedAssemblyName), "Success", MessageBoxButtons.OK);
+                    
+                    if (findProjectReferences.Where(IsBridgeDisabled).Any())
+                    {
+                        var result =
+                            MessageBox.Show(
+                                "Few Project Dependencies have been found. Do you want to LINQBridge them? (Recommended)");
 
-            if (action == CommandAction.Enable)
-                SupportedProjects.RemoveAll(IsBridgeEnabled);
-            else
-                SupportedProjects.RemoveAll(IsBridgeDisabled);
+                        if (result == DialogResult.OK)
+                            findProjectReferences.ToList().ForEach(Enable);
+                    }
+                    break;
+                case CommandAction.Disable:
+                    Disable(SelectedAssemblyName);
+                    MessageBox.Show(string.Format("LINQBridge on {0} has been Disabled...", SelectedAssemblyName), "Success", MessageBoxButtons.OK);
 
-            var supportedProjectsNames = SupportedProjects
-                .Select(project => project.FullName)
-                .ToList();
+                    if (findProjectReferences.Where(IsBridgeEnabled).Any())
+                    {
+                        var result =
+                            MessageBox.Show(
+                                "Few Project Dependencies have been found. Do you want to Un-LINQBridge them? (Recommended)");
+
+                        if (result == DialogResult.OK)
+                            findProjectReferences.ToList().ForEach(Disable);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("action");
+            }
 
 
-            foreach (var proj in SupportedProjects.Where(proj => proj.IsDirty))
-                proj.Save();
-
-            if (action == CommandAction.Enable)
-                SupportedProjects.ForEach(Enable);
-            else
-                SupportedProjects.ForEach(Disable);
-
-            supportedProjectsNames.ForEach(s => _projects.Remove(s));
 
         }
 
@@ -185,90 +198,23 @@ namespace LINQBridge.VSExtension
             cmd.Enabled = (CommandStates.Enabled & states) != 0;
         }
 
-        private static void RemoveImports(XContainer e)
+        private static void Enable(string assemblyName)
         {
-            var imports = FindImport(e);
-
-            foreach (var import in imports)
-                import.Remove();
-        }
-
-        private static UIHierarchyItem FindItem(UIHierarchyItems items, string projectToSearch)
-        {
-            UIHierarchyItem retValue = null;
-
-            if (items == null || items.Count == 0) return retValue;
-
-            foreach (var item in items.OfType<UIHierarchyItem>())
+            using (var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(Resources.EnabledProjectsRegistryKey, true))
             {
-                if (item.Name.Contains(projectToSearch)) return item;
-
-                retValue = FindItem(item.UIHierarchyItems, projectToSearch);
-
-                if (retValue != null) break;
+                if (key != null)
+                    key.SetValue(assemblyName, true);
             }
 
-            return retValue;
         }
 
-        private void ReloadProject(string projectName)
+        private static void Disable(string assemblyName)
         {
-            var solExp = _application.ToolWindows.SolutionExplorer.Parent; // Get the Solution Explorer Window
-            solExp.Activate(); // Activate Solution Explorer Window
-
-            var items = _application.ToolWindows.SolutionExplorer.UIHierarchyItems;
-
-            var itemFound = FindItem(items, projectName);
-
-            itemFound.Select(vsUISelectionType.vsUISelectionTypeSelect);
-
-            _application.ExecuteCommand("Project.UnloadProject"); // Unload the first project
-            System.Threading.Thread.Sleep(500);
-            _application.ExecuteCommand("Project.ReloadProject"); // Reload 
-        }
-
-        private void Enable(Project project)
-        {
-            var projectFullName = project.FullName;
-            var projectName = project.Name;
-
-            var e = XElement.Load(projectFullName);
-
-            RemoveImports(e);
-
-            e.Add(new XElement(Import, new XAttribute("Project", Target)));
-            // ReloadProject(projectName);
-
-            MessageBox.Show(string.Format("LINQBridge on {0} has been enabled...", projectName), "Success", MessageBoxButtons.OK);
-            e.Save(projectFullName);
-        }
-
-        private void Disable(Project project)
-        {
-            var projectFullName = project.FullName;
-            var projectName = project.Name;
-
-            var e = XElement.Load(projectFullName);
-
-            RemoveImports(e);
-
-
-            //  ReloadProject(projectName);
-
-            MessageBox.Show(string.Format("LINQBridge on {0} has been disabled...", projectName), "Success", MessageBoxButtons.OK);
-            e.Save(projectFullName);
-        }
-
-        private static bool GetStatus(string projectFile)
-        {
-            try
+            using (var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(Resources.EnabledProjectsRegistryKey, true))
             {
-                return FindImport(XElement.Load(projectFile)).Any();
+                if (key != null) key.SetValue(assemblyName, false);
             }
-            catch (FileNotFoundException)
-            {
-                return false;
-            }
+
         }
 
         private CommandStates GetStatus(CommandAction action)
@@ -280,14 +226,13 @@ namespace LINQBridge.VSExtension
         {
             var result = 0;
 
-            var projects = SupportedProjects;
-            if (projects == null)
+            if (SelectedProject == null)
                 return result;
 
-            if (projects.Any(IsBridgeDisabled))
+            if (IsBridgeDisabled(SelectedAssemblyName))
                 result |= 1;
 
-            if (projects.Any(IsBridgeEnabled))
+            if (IsBridgeEnabled(SelectedAssemblyName))
                 result |= 2;
 
             return result;
@@ -306,25 +251,22 @@ namespace LINQBridge.VSExtension
             return CommandStates.None;
         }
 
-
-
-        static IEnumerable<XElement> FindImport(XContainer root)
+        private static IEnumerable<string> FindAllDependencies(string fullProjectName)
         {
-            if (root == null) throw new ArgumentNullException("root");
+            var loadedProject = ProjectCollection.GlobalProjectCollection.LoadedProjects.FirstOrDefault(p => p.FullPath.Equals(fullProjectName))
+                                ??
+                                new Microsoft.Build.Evaluation.Project(fullProjectName);
 
-            var candidates = from e in root.Elements(Import)
-                             let a = e.Attribute("Project")
-                             where a != null
-                             select new { Element = e, Project = (string)a };
+            var references = loadedProject.Items.Where(p => p.ItemType.Equals("ProjectReference"))
+                .Where(p => !p.EvaluatedInclude.Contains("Microsoft") && !p.EvaluatedInclude.Contains("System"));
 
-            var imports = from i in candidates
-                          where i.Project.Contains(Target)
-                          select i.Element;
+            var namespaceManager = new XmlNamespaceManager(new NameTable());
+            namespaceManager.AddNamespace("aw", "http://schemas.microsoft.com/developer/msbuild/2003");
 
 
-            return imports;
-
+            return references.Select(e => XDocument.Load(Path.Combine(loadedProject.DirectoryPath, e.Xml.Include)).XPathSelectElement("/aw:Project/aw:PropertyGroup/aw:AssemblyName", namespaceManager).Value);
 
         }
+
     }
 }

@@ -65,12 +65,23 @@ namespace LINQBridge.TypeMapper
         /// </summary>
         public void Create()
         {
-            _visualizerAttributeInjector.MapSystemType(typeof(Dictionary<,>));
-            _visualizerAttributeInjector.MapSystemType(typeof(List<>));
-            _visualizerAttributeInjector.MapSystemType(typeof(IEnumerable<>));
-            _visualizerAttributeInjector.MapSystemType(typeof(IOrderedEnumerable<>));
 
-            _visualizerAttributeInjector.MapTypesFromAssembly();
+            //Map all the possible System.Linq types
+            var systemLinqTypes = typeof (IOrderedEnumerable<>).Assembly
+                .GetTypes()
+                .Where(
+                    t =>
+                        t != null && t.IsClass && !string.IsNullOrEmpty(t.Namespace) && !t.FullName.Contains("Debug") &&
+                        !t.FullName.Contains("Attribute")
+                        && t.Namespace.Equals("System.Linq"));
+
+            systemLinqTypes.ToList().ForEach(_visualizerAttributeInjector.MapSystemType);
+            //_visualizerAttributeInjector.MapSystemType(typeof(Dictionary<,>));
+            //_visualizerAttributeInjector.MapSystemType(typeof(List<>));
+            //_visualizerAttributeInjector.MapSystemType(typeof(IEnumerable<>));
+            //_visualizerAttributeInjector.MapSystemType(typeof(IOrderedEnumerable<>));
+
+            //  _visualizerAttributeInjector.MapTypesFromAssembly();
         }
 
         /// <summary>

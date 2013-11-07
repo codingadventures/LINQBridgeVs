@@ -1,9 +1,30 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <UsingTask TaskName="SInjectionBuildTask" AssemblyFile="../LINQBridge.BuildTasks.dll" />
-  <UsingTask TaskName="MapperBuildTask" AssemblyFile="../LINQBridge.BuildTasks.dll" />
+  <PropertyGroup>
+    <BuildDependsOn>
+      $(BuildDependsOn);
+      LINQBridgeAfterBuild
+    </BuildDependsOn>
+  </PropertyGroup>
+  
+  <!--
+    ============================================================
+                                        LINQBridgeAfterBuild
 
-  <Target Name="AfterBuild" DependsOnTargets="CoreCompile">
+    This is the ultimate step performed by the build
+    ============================================================
+    -->
+  <Target Name="LINQBridgeAfterBuild" />
+
+  <PropertyGroup>
+    <IsProjectEnabled>$([MSBuild]::GetRegistryValueFromView('HKEY_CURRENT_USER\Software\LINQBridge\EnabledProjects', '$(AssemblyName)', 'False', RegistryView.Registry64, RegistryView.Registry32))</IsProjectEnabled>
+    <InstallFolderPath>$([MSBuild]::GetRegistryValueFromView('HKEY_CURRENT_USER\Software\LINQBridge', 'InstallFolderPath', 'False', RegistryView.Registry64, RegistryView.Registry32))</InstallFolderPath>
+  </PropertyGroup>
+
+  <UsingTask TaskName="SInjectionBuildTask" AssemblyFile="$(InstallFolderPath)\LINQBridge.BuildTasks.dll" />
+  <UsingTask TaskName="MapperBuildTask" AssemblyFile="$(InstallFolderPath)\LINQBridge.BuildTasks.dll" />
+
+  <Target Name="LINQBridgeAfterBuild" DependsOnTargets="CoreCompile" Condition="'$(IsProjectEnabled)' == 'True'">
     <SInjectionBuildTask Assembly="@(MainAssembly->'%(FullPath)')"   />
     <MapperBuildTask Assembly="@(MainAssembly->'%(FullPath)')"   VisualStudioVer="$(VisualStudioVersion)"   />
   </Target>

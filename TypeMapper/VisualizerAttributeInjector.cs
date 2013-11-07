@@ -271,9 +271,9 @@ namespace LINQBridge.TypeMapper
         {
             var success = false;
             const int maxCount = 3;
-            int i = 0;
+            var i = 0;
 
-            //I would have used a goto....can't forget my professor quote: "Each GOTO can be superseeded by a Repeat Until"
+            //I would have used a goto....can't forget my professor's quote: "Each GOTO can be superseeded by a Repeat Until...God bless Pascal!"
             while (!success && i++ < maxCount)
             {
                 try

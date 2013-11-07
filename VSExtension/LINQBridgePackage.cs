@@ -1,7 +1,13 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Collections;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.ComponentModel.Design;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.XPath;
 using Bridge.VSExtension;
-using EnvDTE80;
+using EnvDTE;
 using LINQBridge.VSExtension.Forms;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
@@ -27,15 +33,35 @@ namespace LINQBridge.VSExtension
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
     // This attribute is needed to let the shell know that this package exposes some menus.
     [ProvideMenuResource("Menus.ctmenu", 1)]
-   
     [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)]
+    [ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string)]
     [Guid(GuidList.GuidBridgeVsExtensionPkgString)]
     public sealed class LINQBridgePackage : Package
+    //  , IVsShellPropertyEvents
+    // , IVsSolutionEvents
+    // , IDisposable
     {
 
+        private DTEEvents _dteEvents;
+        private DTE _dte;
+        private const string VisualStudioProcessName = "devenv";
+        //  private static Icon solutionIcon;
+        //  private uint propChangeCookie;
+        //  private IVsSolution solution;
+        //  private uint solutionEventsCookie;
 
-        /////////////////////////////////////////////////////////////////////////////
-        // Overridden Package Implementation
+        //  public event Action AfterSolutionLoaded;
+        //  public event Action BeforeSolutionClosed;
+
+        private static readonly XDocument MicrosoftCommonTargetDocument
+            = XDocument.Load(Locations.MicrosoftCommonTargetFileNamePath);
+
+        public LINQBridgePackage()
+        {
+
+            //      solutionIcon = new Icon(@"C:\Users\John\Desktop\Bridge.ico");
+        }
+
         #region Package Members
 
         /// <summary>
@@ -46,8 +72,22 @@ namespace LINQBridge.VSExtension
         {
             base.Initialize();
 
-            var dte = (DTE2)GetService(typeof(SDTE));
-            var bridge = new LINQBridgeExtension(dte);
+            _dte = (DTE)GetService(typeof(SDTE));
+            _dteEvents = _dte.Events.DTEEvents;
+
+            _dteEvents.OnStartupComplete += OnStartupComplete;
+            _dteEvents.OnBeginShutdown += OnBeginShutdown;
+
+            // watch for VSSPROPID property changes
+            //  var vsShell = (IVsShell)GetService(typeof(SVsShell));
+            //  vsShell.AdviseShellPropertyChanges(this, out propChangeCookie);
+            //solution = GetGlobalService(typeof(SVsSolution)) as IVsSolution;
+            //if (solution != null)
+            //{
+            //    solution.AdviseSolutionEvents(this, out solutionEventsCookie);
+            //}
+
+            var bridge = new LINQBridgeExtension(_dte);
 
             //// Add our command handlers for menu (commands must exist in the .vsct file)
             var mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
@@ -59,7 +99,8 @@ namespace LINQBridge.VSExtension
             menuItemEnable.BeforeQueryStatus += (s, e) => bridge.UpdateCommand(menuItemEnable, CommandAction.Enable);
 
 
-            var disableCommand = new CommandID(GuidList.GuidBridgeVsExtensionCmdSet, (int)PkgCmdIdList.CmdIdDisableBridge);
+            var disableCommand = new CommandID(GuidList.GuidBridgeVsExtensionCmdSet,
+                (int)PkgCmdIdList.CmdIdDisableBridge);
             var menuItemDisable = new OleMenuCommand((s, e) => bridge.Execute(CommandAction.Disable), disableCommand);
             menuItemDisable.BeforeQueryStatus += (s, e) => bridge.UpdateCommand(menuItemDisable, CommandAction.Disable);
 
@@ -71,6 +112,188 @@ namespace LINQBridge.VSExtension
             mcs.AddCommand(menuItemDisable);
             mcs.AddCommand(menuItemAbout);
         }
+
+        private void OnBeginShutdown()
+        {
+            _dteEvents.OnBeginShutdown -= OnBeginShutdown;
+            _dteEvents = null;
+            //Check if there's only one instance of VS running. if it's so then remove from Microsoft.Common.Target 
+            //Any reference of LINQBridge
+            if (System.Diagnostics.Process.GetProcessesByName(VisualStudioProcessName).Length > 1) return;
+
+            DisableLinqBridge();
+
+        }
+
+        private void OnStartupComplete()
+        {
+            _dteEvents.OnStartupComplete -= OnStartupComplete;
+            _dteEvents = null;
+            if (!LINQBridgeExtension.IsEnvironmentConfigured)
+                SetPermissions();  //Set the rights to access 
+
+            EnableLinqBridge();
+        }
+
+        private static void DisableLinqBridge()
+        {
+            var linqBridgeTargetImportNode = GetTargetImportNode();
+
+            if (linqBridgeTargetImportNode == null) return;
+
+            linqBridgeTargetImportNode.Remove();
+
+            MicrosoftCommonTargetDocument.Save(Locations.MicrosoftCommonTargetFileNamePath);
+            MicrosoftCommonTargetDocument.Save(Locations.MicrosoftCommonTarget64FileNamePath);
+        }
+
+
+        private static void EnableLinqBridge()
+        {
+
+            var import = XName.Get("Import", "http://schemas.microsoft.com/developer/msbuild/2003");
+
+            if (MicrosoftCommonTargetDocument.Root == null || GetTargetImportNode() != null) return;
+
+// ReSharper disable once AssignNullToNotNullAttribute
+            var linqBridgeTarget = new XElement(import, new XAttribute("Project", Path.GetFileName(Resources.Targets)));
+
+            MicrosoftCommonTargetDocument.Root.Add(linqBridgeTarget);
+
+
+            MicrosoftCommonTargetDocument.Save(Locations.MicrosoftCommonTargetFileNamePath);
+            MicrosoftCommonTargetDocument.Save(Locations.MicrosoftCommonTarget64FileNamePath);
+        }
+
+
+        private static XElement GetTargetImportNode()
+        {
+            var namespaceManager = new XmlNamespaceManager(new NameTable());
+            namespaceManager.AddNamespace("aw", "http://schemas.microsoft.com/developer/msbuild/2003");
+
+            var importProjectNode =
+                (IEnumerable)
+                    MicrosoftCommonTargetDocument.XPathEvaluate("/aw:Project/aw:Import[@Project='BridgeBuildTask.targets']",
+                        namespaceManager);
+
+
+            var linqBridgeTargetImportNode = importProjectNode.Cast<XElement>().FirstOrDefault();
+
+            return linqBridgeTargetImportNode;
+        }
+
+        private static void SetPermissions()
+        {
+            var process = System.Diagnostics.Process.Start("icacls", Locations.IcaclsArguments);
+            var processX64 = System.Diagnostics.Process.Start("icacls", Locations.IcaclsArgumentsX64);
+
+
+            if (process != null)
+                process.WaitForExit();
+
+            if (processX64 != null)
+                processX64.WaitForExit();
+
+        }
         #endregion
+
+        //public int OnShellPropertyChange(int propid, object var)
+        //{
+        //    if (propid != (int)__VSSPROPID4.VSSPROPID_ShellInitialized || Convert.ToBoolean(var) != true)
+        //        return VSConstants.S_OK;
+
+        //    //var solution = GetService(typeof(SVsSolution)) as IVsSolution;
+
+        //    IVsHierarchy solHierarchy = null;
+
+        //    if (solution != null)
+        //        solution.GetProjectOfUniqueName("CustomType1", out solHierarchy);
+        //    //    // set VSHPROPID_IconHandle for Solution Node
+        //    //  //  var solHierarchy = (IVsHierarchy)GetService(typeof(SVsSolution));
+
+        //    if (solHierarchy == null) return VSConstants.S_OK;
+
+        //    var hr = solHierarchy.SetProperty((uint)VSConstants.VSITEMID.Root, (int)__VSHPROPID.VSHPROPID_IconHandle, solutionIcon.Handle);
+
+        //    //    // stop listening for shell property changes
+        //    //  var vsShell = (IVsShell)GetService(typeof(SVsShell));
+        //    // hr = vsShell.UnadviseShellPropertyChanges(propChangeCookie);
+        //    //   propChangeCookie = 0;
+        //    return VSConstants.S_OK;
+        //}
+
+        //#region IVsSolutionEvents Members
+
+        //int IVsSolutionEvents.OnAfterCloseSolution(object pUnkReserved)
+        //{
+        //    return VSConstants.S_OK;
+        //}
+
+        //int IVsSolutionEvents.OnAfterLoadProject(IVsHierarchy pStubHierarchy, IVsHierarchy pRealHierarchy)
+        //{
+
+
+        //    return VSConstants.S_OK;
+        //}
+
+        //int IVsSolutionEvents.OnAfterOpenProject(IVsHierarchy pHierarchy, int fAdded)
+        //{
+        //    object icon;
+
+        //    IVsHierarchy solHierarchy = null;
+
+        //    if (solution != null)
+        //        solution.GetProjectOfUniqueName(@"C:\Users\John\Documents\Visual Studio 2012\Projects\CompileTest1\CompileTest1\CompileTest1.Ciao.csproj", out solHierarchy);
+
+
+        //    var hr = pHierarchy.SetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_IconHandle, solutionIcon.Handle);
+        //    // stop listening for shell property changes
+        //    //var vsShell = (IVsShell)GetService(typeof(SVsShell));
+        //    //hr = vsShell.UnadviseShellPropertyChanges(propChangeCookie);
+        //    //   propChangeCookie = 0;
+
+        //    return VSConstants.S_OK;
+        //}
+
+        //int IVsSolutionEvents.OnAfterOpenSolution(object pUnkReserved, int fNewSolution)
+        //{
+        //    //  AfterSolutionLoaded();
+        //    return VSConstants.S_OK;
+        //}
+
+        //int IVsSolutionEvents.OnBeforeCloseProject(IVsHierarchy pHierarchy, int fRemoved)
+        //{
+        //    return VSConstants.S_OK;
+        //}
+
+        //int IVsSolutionEvents.OnBeforeCloseSolution(object pUnkReserved)
+        //{
+        //    //  BeforeSolutionClosed();
+        //    return VSConstants.S_OK;
+        //}
+
+        //int IVsSolutionEvents.OnBeforeUnloadProject(IVsHierarchy pRealHierarchy, IVsHierarchy pStubHierarchy)
+        //{
+        //    return VSConstants.S_OK;
+        //}
+
+        //int IVsSolutionEvents.OnQueryCloseProject(IVsHierarchy pHierarchy, int fRemoving, ref int pfCancel)
+        //{
+        //    return VSConstants.S_OK;
+        //}
+
+        //int IVsSolutionEvents.OnQueryCloseSolution(object pUnkReserved, ref int pfCancel)
+        //{
+        //    return VSConstants.S_OK;
+        //}
+
+        //int IVsSolutionEvents.OnQueryUnloadProject(IVsHierarchy pRealHierarchy, ref int pfCancel)
+        //{
+        //    return VSConstants.S_OK;
+        //}
+
+        //#endregion
+
+
     }
 }

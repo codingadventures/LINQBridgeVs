@@ -136,4 +136,13 @@
   <data name="LINQBridgeLogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\LINQBridgeLogo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="EnabledProjectsRegistryKey" xml:space="preserve">
+    <value>Software\LINQBridge\EnabledProjects</value>
+  </data>
+  <data name="InstallFolderRegistryKey" xml:space="preserve">
+    <value>Software\LINQBridge</value>
+  </data>
+  <data name="ConfigurationRegistryKey" xml:space="preserve">
+    <value>Software\LINQBridge\Configurations</value>
+  </data>
 </root>
