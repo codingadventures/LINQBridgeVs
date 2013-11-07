@@ -77,9 +77,10 @@ namespace LINQBridge.VisualStudio
 
         private static void CheckVersion(string vsInputVersion)
         {
+            if (vsInputVersion == null) throw new ArgumentNullException("vsInputVersion");
+
             if (!VisualStudioPaths.ContainsKey(vsInputVersion))
                 throw new ArgumentException("visualStudioVersion", "This Version of visual studio is not yet supported.");
-
         }
 
         public static string GetVisualizerAssemblyName(string visualStudioVersion)
@@ -96,7 +97,7 @@ namespace LINQBridge.VisualStudio
             return VisualStudioPaths[visualStudioVersion].AssemblyLocation;
         }
 
-        public static List<string> GetInstallationPath(string visualStudioVersion)
+        public static IEnumerable<string> GetInstallationPath(string visualStudioVersion)
         {
             CheckVersion(visualStudioVersion);
 
