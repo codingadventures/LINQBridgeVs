@@ -32,8 +32,8 @@ namespace LINQBridge.DynamicVisualizer.V10
 {
     public static class Settings
     {
-        public static string AssemblyName = typeof(Settings).Assembly.ManifestModule.Name;
-        public static string AssemblyLocation = typeof (Settings).Assembly.Location;
+        public static readonly string AssemblyName = typeof(Settings).Assembly.ManifestModule.Name;
+        public static readonly string AssemblyLocation = typeof (Settings).Assembly.Location;
     }
 
     public class DynamicDebuggerVisualizerObjectSourceV10 : VisualizerObjectSource

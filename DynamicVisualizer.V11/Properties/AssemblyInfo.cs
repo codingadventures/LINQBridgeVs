@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 
@@ -7,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("LINQBridge Visualizer")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("LINQBridge Visualizer")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Giovanni Campo")]
 [assembly: AssemblyProduct("LINQBridge Visualizer")]

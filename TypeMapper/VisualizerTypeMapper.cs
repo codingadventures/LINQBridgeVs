@@ -23,7 +23,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -33,38 +33,63 @@ using LINQBridge.Logging;
 namespace LINQBridge.TypeMapper
 {
     /// <summary>
-    /// Maps all the types of a given assembly to the type T of the debugger visualizer 
+    /// Maps all the types of a given assembly to the type T of the debugger visualizer.
+    /// It can map all the Basic DotNet Framework types like: System.Linq.*, System.*, System.Collection.Generic.*
     /// </summary>
-
     public class VisualizerTypeMapper
     {
- 
-         
+        private const string DotNetFrameworkVisualizerName = "DotNetDynamicVisualizerType.V{0}.dll";
+
         private readonly VisualizerAttributeInjector _visualizerAttributeInjector;
 
-         
+
         /// <summary>
         /// Initializes a new instance of the <see cref="VisualizerTypeMapper"/> class.
         /// </summary>
         /// <param name="sourceVisualizerAssemblyLocation"></param>
-        /// <param name="targetAssemblyToMap">The target assembly to Map with the Visualizer.</param>
-        /// <param name="visualizerDescriptionName">Visualizer description.</param>
-        public VisualizerTypeMapper(string sourceVisualizerAssemblyLocation, string targetAssemblyToMap, string visualizerDescriptionName)
+        public VisualizerTypeMapper(string sourceVisualizerAssemblyLocation)
         {
             Log.Configure("Type Mapper");
-            _visualizerAttributeInjector = new VisualizerAttributeInjector(sourceVisualizerAssemblyLocation, targetAssemblyToMap, visualizerDescriptionName);
+            _visualizerAttributeInjector = new VisualizerAttributeInjector(sourceVisualizerAssemblyLocation);
         }
 
-        private static bool IsAlreadyDeployed(string location)
+        private static bool IsAlreadyDeployed(string assemblyLocation)
         {
-            return File.Exists(location);
+            return File.Exists(assemblyLocation);
         }
+
 
         /// <summary>
-        /// Creates the specified types to exclude.
+        /// Maps the dot net framework types. If the file already exists for a given vs version it won't be
+        /// regenerated.
         /// </summary>
-        public void Create()
+        /// <param name="targetVisualizerInstallationPath">The target visualizer installation path.</param>
+        /// <param name="vsVersion">The vs version.</param>
+        /// <param name="sourceVisualizerAssemblyLocation">The source visualizer assembly location.</param>
+        /// <returns></returns>
+        public static void MapDotNetFrameworkTypes(IEnumerable<string> targetVisualizerInstallationPath, string vsVersion, string sourceVisualizerAssemblyLocation)
         {
+            if (targetVisualizerInstallationPath == null)
+                throw new ArgumentException(@"Installation Path/s cannot be null", "targetVisualizerInstallationPath");
+
+            if (string.IsNullOrEmpty(vsVersion))
+                throw new ArgumentException(@"Visual Studio Version cannot be null", "vsVersion");
+
+            if (string.IsNullOrEmpty(sourceVisualizerAssemblyLocation))
+                throw new ArgumentException(@"Visualizer Assembly Location cannot be null",
+                    "sourceVisualizerAssemblyLocation");
+
+
+            var visualizerFileName = string.Format(DotNetFrameworkVisualizerName, vsVersion);
+
+            var visualizerInstallationPath = targetVisualizerInstallationPath as IList<string> ?? targetVisualizerInstallationPath.ToList();
+           
+            var dotNetFrameworkVisualizerLocation = Path.Combine(visualizerInstallationPath.First(),
+                visualizerFileName);
+
+            if (IsAlreadyDeployed(dotNetFrameworkVisualizerLocation)) return;
+
+            var visualizerInjector = new VisualizerAttributeInjector(sourceVisualizerAssemblyLocation);
 
             //Map all the possible System.Linq types
             var systemLinqTypes = typeof (IOrderedEnumerable<>).Assembly
@@ -75,30 +100,40 @@ namespace LINQBridge.TypeMapper
                         !t.FullName.Contains("Attribute")
                         && t.Namespace.Equals("System.Linq"));
 
-            systemLinqTypes.ToList().ForEach(_visualizerAttributeInjector.MapSystemType);
-            //_visualizerAttributeInjector.MapSystemType(typeof(Dictionary<,>));
-            //_visualizerAttributeInjector.MapSystemType(typeof(List<>));
-            //_visualizerAttributeInjector.MapSystemType(typeof(IEnumerable<>));
-            //_visualizerAttributeInjector.MapSystemType(typeof(IOrderedEnumerable<>));
+            systemLinqTypes.ToList().ForEach(visualizerInjector.MapType);
 
-            //  _visualizerAttributeInjector.MapTypesFromAssembly();
+            visualizerInstallationPath.ForEach(debuggerVisualizerPath =>
+            {
+                var location = Path.Combine(debuggerVisualizerPath, visualizerFileName);
+                visualizerInjector.SaveDebuggerVisualizer(location);
+            });
         }
+
+        /// <summary>
+        /// Maps the assembly.
+        /// </summary>
+        /// <param name="targetAssemblyToMap">The target assembly to map.</param>
+        public void MapAssembly(string targetAssemblyToMap)
+        {
+            _visualizerAttributeInjector.MapTypesFromAssembly(targetAssemblyToMap);
+        }
+
 
         /// <summary>
         /// Saves the specified debugger visualizer assembly to a given Path.
         /// </summary>
         /// <param name="debuggerVisualizerPath">The debugger visualizer assembly location.</param>
         /// <param name="fileName"></param>
-        private void Save(string debuggerVisualizerPath,string fileName)
+        private void Save(string debuggerVisualizerPath, string fileName)
         {
             var debuggerVisualizerAssemblyLocation = debuggerVisualizerPath + fileName;
 
             if (!Directory.Exists(debuggerVisualizerPath))
                 Directory.CreateDirectory(debuggerVisualizerPath);
 
-            if (IsAlreadyDeployed(debuggerVisualizerAssemblyLocation))
-                //Get all the custom attributes that map other type and import them into the current visualizer
-                _visualizerAttributeInjector.SyncronizeMappedTypes(debuggerVisualizerAssemblyLocation);
+            //if (IsAlreadyDeployed(debuggerVisualizerAssemblyLocation))
+            //    //Get all the custom attributes that map other type and import them into the current visualizer
+            //    _visualizerAttributeInjector.SyncronizeMappedTypes(debuggerVisualizerAssemblyLocation);
 
             _visualizerAttributeInjector.SaveDebuggerVisualizer(debuggerVisualizerAssemblyLocation);
         }
@@ -110,11 +145,7 @@ namespace LINQBridge.TypeMapper
         /// <param name="fileName"></param>
         public void Save(IEnumerable<string> debuggerVisualizerPaths, string fileName)
         {
-            foreach (var debuggerVisualizerPath in debuggerVisualizerPaths)
-            {
-                Save(debuggerVisualizerPath,fileName);
-
-            }
+            debuggerVisualizerPaths.ForEach(debuggerVisualizerPath => Save(debuggerVisualizerPath, fileName));
         }
 
     }

@@ -153,34 +153,36 @@ namespace LINQBridge.VSExtension
                 return;
 
             var findProjectReferences = FindAllDependencies(SelectedProject.FullName);
+            var projectReferences = findProjectReferences as IList<string> ?? findProjectReferences.ToList();
+
             switch (action)
             {
                 case CommandAction.Enable:
                     Enable(SelectedAssemblyName);
                     MessageBox.Show(string.Format("LINQBridge on {0} has been Enabled...", SelectedAssemblyName), "Success", MessageBoxButtons.OK);
                     
-                    if (findProjectReferences.Where(IsBridgeDisabled).Any())
+                    if (projectReferences.Where(IsBridgeDisabled).Any())
                     {
                         var result =
                             MessageBox.Show(
                                 "Few Project Dependencies have been found. Do you want to LINQBridge them? (Recommended)");
 
                         if (result == DialogResult.OK)
-                            findProjectReferences.ToList().ForEach(Enable);
+                            projectReferences.ToList().ForEach(Enable);
                     }
                     break;
                 case CommandAction.Disable:
                     Disable(SelectedAssemblyName);
                     MessageBox.Show(string.Format("LINQBridge on {0} has been Disabled...", SelectedAssemblyName), "Success", MessageBoxButtons.OK);
 
-                    if (findProjectReferences.Where(IsBridgeEnabled).Any())
+                    if (projectReferences.Where(IsBridgeEnabled).Any())
                     {
                         var result =
                             MessageBox.Show(
                                 "Few Project Dependencies have been found. Do you want to Un-LINQBridge them? (Recommended)");
 
                         if (result == DialogResult.OK)
-                            findProjectReferences.ToList().ForEach(Disable);
+                            projectReferences.ToList().ForEach(Disable);
                     }
                     break;
                 default:
@@ -200,7 +202,7 @@ namespace LINQBridge.VSExtension
 
         private static void Enable(string assemblyName)
         {
-            using (var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(Resources.EnabledProjectsRegistryKey, true))
+            using (var key = Registry.CurrentUser.OpenSubKey(Resources.EnabledProjectsRegistryKey, true))
             {
                 if (key != null)
                     key.SetValue(assemblyName, true);

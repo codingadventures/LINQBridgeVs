@@ -36,6 +36,10 @@
     <Compile Include="SInjectionBuildTask.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Logging\Logging.csproj">
+      <Project>{7199EDE0-8090-46D0-9687-54B411A3D02C}</Project>
+      <Name>Logging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TypeMapper\TypeMapper.csproj">
       <Project>{fcc8bf06-3173-4d21-a157-d1167b6407c9}</Project>
       <Name>TypeMapper</Name>

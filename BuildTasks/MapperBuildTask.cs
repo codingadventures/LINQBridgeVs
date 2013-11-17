@@ -22,7 +22,10 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
- 
+
+using System;
+using System.Linq;
+using LINQBridge.Logging;
 using LINQBridge.TypeMapper;
 using LINQBridge.VisualStudio;
 using Microsoft.Build.Framework;
@@ -31,16 +34,6 @@ namespace LINQBridge.BuildTasks
 {
     public class MapperBuildTask : ITask
     {
-        [Required]
-        public string Assembly { private get; set; }
-
-        [Required]
-        public string VisualStudioVer { private get; set; }
-
-
-        public string Resources { private get; set; }
-
-        private const string VisualizerName = "LINQBridge Visualizer";
         /// <summary>
         ///     Executes an ITask. It creates a DynamicDebuggerVisualizer mapping all the types of a given assembly
         /// </summary>
@@ -49,19 +42,52 @@ namespace LINQBridge.BuildTasks
         /// </returns>
         public bool Execute()
         {
-            var targetVisualizerAssemblyName = VisualStudioOptions.GetVisualizerAssemblyName(VisualStudioVer);
-            var targetVisualizerAssemblyLocation = VisualStudioOptions.GetVisualizerAssemblyLocation(VisualStudioVer);
+            try
+            {
+                var installationPaths = VisualStudioOptions.GetInstallationPath(VisualStudioVer).ToList();
 
-            var installationPath = VisualStudioOptions.GetInstallationPath(VisualStudioVer);
-            var typeMapper = new VisualizerTypeMapper(targetVisualizerAssemblyLocation, Assembly, VisualizerName);
+                var visualizerAssemblyLocation = VisualStudioOptions.GetVisualizerAssemblyLocation(VisualStudioVer);
+              
+                VisualizerTypeMapper.MapDotNetFrameworkTypes(installationPaths, VisualStudioVer,
+                    visualizerAssemblyLocation);
 
-            typeMapper.Create();
-            typeMapper.Save(installationPath, targetVisualizerAssemblyName);
+                var typeMapper = new VisualizerTypeMapper(visualizerAssemblyLocation);
+                
+                typeMapper.MapAssembly(Assembly);
 
-            return true;
+                typeMapper.Save(installationPaths, GetTargetVisualizerAssemblyName);
+                 
+
+                return true;
+            }
+            catch (System.Exception e)
+            { 
+                Log.Write(e);
+                Console.WriteLine("Error Executing MSBuild Task MapperBuildTask " +  e.Message);
+                return false;
+            }
+        }
+
+        #region [ Properties ]
+
+        [Required]
+        public string Assembly { private get; set; }
+
+        [Required]
+        public string VisualStudioVer { private get; set; }
+
+        private string GetTargetVisualizerAssemblyName
+        {
+            get
+            {
+                return System.IO.Path.GetFileNameWithoutExtension(Assembly) + ".Visualizer." + VisualStudioVer + ".dll";
+            }
         }
 
         public IBuildEngine BuildEngine { get; set; }
+
         public ITaskHost HostObject { get; set; }
+
+        #endregion
     }
 }
