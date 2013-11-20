@@ -24,6 +24,7 @@
 #endregion
 
 using System;
+using System.Diagnostics;
 using System.Linq;
 using LINQBridge.Logging;
 using LINQBridge.TypeMapper;
@@ -44,26 +45,27 @@ namespace LINQBridge.BuildTasks
         {
             try
             {
+                  
                 var installationPaths = VisualStudioOptions.GetInstallationPath(VisualStudioVer).ToList();
 
                 var visualizerAssemblyLocation = VisualStudioOptions.GetVisualizerAssemblyLocation(VisualStudioVer);
-              
+
                 VisualizerTypeMapper.MapDotNetFrameworkTypes(installationPaths, VisualStudioVer,
                     visualizerAssemblyLocation);
 
                 var typeMapper = new VisualizerTypeMapper(visualizerAssemblyLocation);
-                
+
                 typeMapper.MapAssembly(Assembly);
 
-                typeMapper.Save(installationPaths, GetTargetVisualizerAssemblyName);
-                 
+                typeMapper.Save(installationPaths, VisualizerAssemblyName);
+
 
                 return true;
             }
-            catch (System.Exception e)
-            { 
+            catch (Exception e)
+            {
                 Log.Write(e);
-                Console.WriteLine("Error Executing MSBuild Task MapperBuildTask " +  e.Message);
+                Console.WriteLine(@"Error Executing MSBuild Task MapperBuildTask " + e.Message);
                 return false;
             }
         }
@@ -76,14 +78,13 @@ namespace LINQBridge.BuildTasks
         [Required]
         public string VisualStudioVer { private get; set; }
 
-        private string GetTargetVisualizerAssemblyName
+        private string VisualizerAssemblyName
         {
             get
             {
-                return System.IO.Path.GetFileNameWithoutExtension(Assembly) + ".Visualizer." + VisualStudioVer + ".dll";
+                return VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(VisualStudioVer, Assembly);
             }
         }
-
         public IBuildEngine BuildEngine { get; set; }
 
         public ITaskHost HostObject { get; set; }

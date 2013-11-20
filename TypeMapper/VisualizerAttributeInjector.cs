@@ -127,13 +127,13 @@ namespace LINQBridge.TypeMapper
             switch (typeReference.Scope.MetadataScopeType)
             {
                 case MetadataScopeType.AssemblyNameReference:
-                    scope = typeReference.FullName + ", " + typeReference.Scope;
+                    scope = FixCecilTypeReference(typeReference.FullName) + ", " + typeReference.Scope;
                     break;
                 case MetadataScopeType.ModuleReference:
                     break;
                 case MetadataScopeType.ModuleDefinition:
                     var moduleDefinition = typeReference.Scope as ModuleDefinition;
-                    if (moduleDefinition != null) scope = typeReference.FullName + ", " + moduleDefinition.Assembly.ToString();
+                    if (moduleDefinition != null) scope = FixCecilTypeReference(typeReference.FullName) + ", " + moduleDefinition.Assembly.ToString();
                     break;
                 default:
                     throw new Exception(string.Format("Assembly Scope Null. Check assembly {0}", typeReference.FullName));
@@ -247,6 +247,18 @@ namespace LINQBridge.TypeMapper
             readerParameters.ReadSymbols = true;
 
             return readerParameters;
+        }
+
+        /// <summary>
+        /// Fixes the cecil type reference. Importing a private nested class like 
+        /// System.Linq.Enumerable+WhereListIterator`1 into Mono.Cecil changes the symbol
+        /// that refers to a private class to a slash '/'
+        /// This helper method change it back to a plus
+        /// </summary>
+        /// <param name="fullName">The full name.</param>
+        private static string FixCecilTypeReference(string fullName)
+        {
+            return fullName.Replace('/', '+');
         }
 
         public void Dispose()

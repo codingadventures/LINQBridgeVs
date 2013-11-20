@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace LINQBridge.TypeMapper
 {
     public static class EnumerableExtension
     {
+        [DebuggerStepThrough]
         public static void ForEach<T>(this IEnumerable<T> @t, Action<T> action) where T : class
         {
             foreach (var element in @t)

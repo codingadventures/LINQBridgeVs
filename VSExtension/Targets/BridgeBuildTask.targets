@@ -6,15 +6,21 @@
       LINQBridgeAfterBuild
     </BuildDependsOn>
   </PropertyGroup>
-  
+
+  <PropertyGroup>
+    <BuildDependsOn>
+      $(CleanDependsOn);
+      LINQBridgeAfterClean
+    </BuildDependsOn>
+  </PropertyGroup>
+
   <!--
     ============================================================
-                                        LINQBridgeAfterBuild
+                                        LINQBridgeAfterBuild, LINQBridgeAfterClean
 
     This is the ultimate step performed by the build
     ============================================================
     -->
-  <Target Name="LINQBridgeAfterBuild" />
 
   <PropertyGroup>
     <IsProjectEnabled>$([MSBuild]::GetRegistryValueFromView('HKEY_CURRENT_USER\Software\LINQBridge\EnabledProjects', '$(AssemblyName)', 'False', RegistryView.Registry64, RegistryView.Registry32))</IsProjectEnabled>
@@ -23,9 +29,14 @@
 
   <UsingTask TaskName="SInjectionBuildTask" AssemblyFile="$(InstallFolderPath)\LINQBridge.BuildTasks.dll" />
   <UsingTask TaskName="MapperBuildTask" AssemblyFile="$(InstallFolderPath)\LINQBridge.BuildTasks.dll" />
+  <UsingTask TaskName="CleanBuildTask" AssemblyFile="$(InstallFolderPath)\LINQBridge.BuildTasks.dll" />
 
   <Target Name="LINQBridgeAfterBuild" DependsOnTargets="CoreCompile" Condition="'$(IsProjectEnabled)' == 'True'">
     <SInjectionBuildTask Assembly="@(MainAssembly->'%(FullPath)')"   />
     <MapperBuildTask Assembly="@(MainAssembly->'%(FullPath)')"   VisualStudioVer="$(VisualStudioVersion)"   />
+  </Target>
+
+  <Target Name="LINQBridgeAfterClean" DependsOnTargets="CoreClean" Condition="'$(IsProjectEnabled)' == 'True'">
+    <CleanBuildTask Assembly="@(MainAssembly->'%(FullPath)')"   VisualStudioVer="$(VisualStudioVersion)"/>
   </Target>
 </Project>

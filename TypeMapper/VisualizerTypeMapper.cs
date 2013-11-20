@@ -25,6 +25,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using LINQBridge.Logging;
@@ -67,7 +68,8 @@ namespace LINQBridge.TypeMapper
         /// <param name="vsVersion">The vs version.</param>
         /// <param name="sourceVisualizerAssemblyLocation">The source visualizer assembly location.</param>
         /// <returns></returns>
-        public static void MapDotNetFrameworkTypes(IEnumerable<string> targetVisualizerInstallationPath, string vsVersion, string sourceVisualizerAssemblyLocation)
+        public static void MapDotNetFrameworkTypes(IEnumerable<string> targetVisualizerInstallationPath,
+            string vsVersion, string sourceVisualizerAssemblyLocation)
         {
             if (targetVisualizerInstallationPath == null)
                 throw new ArgumentException(@"Installation Path/s cannot be null", "targetVisualizerInstallationPath");
@@ -82,8 +84,9 @@ namespace LINQBridge.TypeMapper
 
             var visualizerFileName = string.Format(DotNetFrameworkVisualizerName, vsVersion);
 
-            var visualizerInstallationPath = targetVisualizerInstallationPath as IList<string> ?? targetVisualizerInstallationPath.ToList();
-           
+            var visualizerInstallationPath = targetVisualizerInstallationPath as IList<string> ??
+                                             targetVisualizerInstallationPath.ToList();
+
             var dotNetFrameworkVisualizerLocation = Path.Combine(visualizerInstallationPath.First(),
                 visualizerFileName);
 
@@ -91,16 +94,34 @@ namespace LINQBridge.TypeMapper
 
             var visualizerInjector = new VisualizerAttributeInjector(sourceVisualizerAssemblyLocation);
 
-            //Map all the possible System.Linq types
+            //Map all the possible System  types
             var systemLinqTypes = typeof (IOrderedEnumerable<>).Assembly
                 .GetTypes()
-                .Where(
-                    t =>
-                        t != null && t.IsClass && !string.IsNullOrEmpty(t.Namespace) && !t.FullName.Contains("Debug") &&
-                        !t.FullName.Contains("Attribute")
-                        && t.Namespace.Equals("System.Linq"));
+                .Where(type => type != null
+                               && (
+                                   (type.IsClass && type.IsSerializable)
+                                   ||
+                                   type.IsInterface
+                                   )
+                               && !string.IsNullOrEmpty(type.Namespace)
+                               && type.IsPublic);
 
-            systemLinqTypes.ToList().ForEach(visualizerInjector.MapType);
+
+            var systemGenericsTypes = typeof (IList<>).Assembly
+                .GetTypes()
+                .Where(type => type != null
+                               && (
+                                   (type.IsClass && type.IsSerializable)
+                                   ||
+                                   type.IsInterface
+                                   )
+                               && !string.IsNullOrEmpty(type.Namespace)
+                               && type.IsPublic);
+
+            systemLinqTypes.ForEach(visualizerInjector.MapType);
+            systemGenericsTypes.ForEach(visualizerInjector.MapType);
+            var whereListIterator =  typeof (IOrderedEnumerable<>).Assembly.GetType("System.Linq.Enumerable+WhereListIterator`1");
+            visualizerInjector.MapType(whereListIterator);
 
             visualizerInstallationPath.ForEach(debuggerVisualizerPath =>
             {

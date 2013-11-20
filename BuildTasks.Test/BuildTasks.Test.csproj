@@ -61,8 +61,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="DebuggerVisualizerMapperTest.cs" />
+    <Compile Include="SInjectionBuildTaskTest.cs" />
+    <Compile Include="MapperBuildTaskTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CleanBuildTaskTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model.Test\Model.Test.csproj">

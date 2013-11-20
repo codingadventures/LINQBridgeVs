@@ -31,9 +31,11 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CleanBuildTask.cs" />
     <Compile Include="MapperBuildTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SInjectionBuildTask.cs" />
+    <Compile Include="VisualizerAssemblyNameFormat.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Logging\Logging.csproj">

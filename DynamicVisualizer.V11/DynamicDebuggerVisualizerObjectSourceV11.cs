@@ -32,7 +32,7 @@ namespace LINQBridge.DynamicVisualizer.V11
 {
     public static class Settings
     {
-        public static readonly string AssemblyName = typeof(Settings).Assembly.ManifestModule.Name;
+      //  public static readonly string AssemblyName = typeof(Settings).Assembly.ManifestModule.Name;
 
         public static readonly string AssemblyLocation = typeof(Settings).Assembly.Location;
     }

@@ -1,0 +1,34 @@
+﻿using System;
+using System.Reflection;
+using LINQBridge.BuildTasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Model.Test;
+
+namespace BuildTasks.Test
+{
+    [TestClass]
+    public class CleanBuildTaskTest
+    {
+        private static Assembly _assemblyModel;
+
+        [ClassInitialize]
+        public static void Init(TestContext context)
+        {
+            _assemblyModel = typeof(CustomType1).Assembly;
+
+        }
+
+        [TestMethod]
+        public void Clean_BuildTask_Test_Should_Succeed()
+        {
+
+            var cleanBuildTask = new CleanBuildTask
+            {
+                Assembly = _assemblyModel.Location,
+                VisualStudioVer = "11.0"
+            };
+
+            cleanBuildTask.Execute();
+        }
+    }
+}

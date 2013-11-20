@@ -160,15 +160,15 @@ namespace LINQBridge.DynamicCore
                     linqPadProcess = Process.GetProcessesByName("LINQPad").FirstOrDefault();
                 else
                     linqPadProcess.WaitForInputIdle();
-                
 
-                var index = 0;
+
                 if (linqPadProcess != null)
                 {
                     while (linqPadProcess.MainWindowHandle == IntPtr.Zero)
                     {
                         // Discard cached information about the process
                         // because MainWindowHandle might be cached.
+                        int index;
                         Log.Write("Waiting MainWindowHandle... - Iteration: {0}", ++index);
                         linqPadProcess.Refresh();
                         Thread.Sleep(10);
@@ -208,6 +208,6 @@ namespace LINQBridge.DynamicCore
         private static extern bool SetForegroundWindow(IntPtr hwnd);
 
         [DllImport("user32.dll")]
-        static extern bool PostMessage(IntPtr hWnd, UInt32 Msg, int wParam, int lParam);
+        static extern bool PostMessage(IntPtr hWnd, UInt32 msg, int wParam, int lParam);
     }
 }
