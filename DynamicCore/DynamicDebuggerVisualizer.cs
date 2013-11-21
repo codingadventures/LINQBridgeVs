@@ -168,7 +168,7 @@ namespace LINQBridge.DynamicCore
                     {
                         // Discard cached information about the process
                         // because MainWindowHandle might be cached.
-                        int index;
+                        var index = 0;
                         Log.Write("Waiting MainWindowHandle... - Iteration: {0}", ++index);
                         linqPadProcess.Refresh();
                         Thread.Sleep(10);

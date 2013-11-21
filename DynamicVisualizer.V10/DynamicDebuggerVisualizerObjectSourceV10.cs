@@ -30,17 +30,14 @@ using System.IO;
 
 namespace LINQBridge.DynamicVisualizer.V10
 {
-    public static class Settings
-    {
-      //  public static readonly string AssemblyName = typeof(Settings).Assembly.ManifestModule.Name;
-        public static readonly string AssemblyLocation = typeof (Settings).Assembly.Location;
-    }
-
-    public class DynamicDebuggerVisualizerObjectSourceV10 : VisualizerObjectSource
+    public class DynamicDebuggerVisualizerObjectSourceV10 : VisualizerObjectSource, ISettings
     {
         public override void GetData(object target, Stream outgoingData)
         {
             DynamicObjectSource.BroadCastData(target, outgoingData);
         }
+
+        public string AssemblyLocation { get { return GetType().Assembly.Location; } }
+
     }
 }
