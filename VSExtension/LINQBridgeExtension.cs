@@ -9,6 +9,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using EnvDTE;
+using LINQBridge.Logging;
 using Microsoft.Build.Evaluation;
 using Microsoft.Win32;
 using Project = EnvDTE.Project;
@@ -58,10 +59,14 @@ namespace LINQBridge.VSExtension
 
         public LINQBridgeExtension(DTE app)
         {
+            Log.Configure("LINQBridgeVs");
             _application = app;
+            Log.Write("Configuring LINQBridgeExtension");
 
-            if (!IsEnvironmentConfigured)
-                SetEnvironment();
+            if (IsEnvironmentConfigured) return;
+
+            Log.Write("Setting the Environment");
+            SetEnvironment();
         }
 
 
@@ -71,22 +76,33 @@ namespace LINQBridge.VSExtension
             //Set in the registry the installer location
             using (var key = Registry.CurrentUser.CreateSubKey(Resources.InstallFolderRegistryKey))
             {
-                if (key != null) key.SetValue("InstallFolderPath", Locations.InstallFolder);
+                if (key != null)
+                {
+                    Log.Write("Setting InstallFolderPath to ", Locations.InstallFolder);
+                    key.SetValue("InstallFolderPath", Locations.InstallFolder);
+                }
             }
 
             var linqPadPath = Path.GetDirectoryName(Locations.LinqPadExeFileNamePath);
 
             if (!Directory.Exists(Locations.LinqPadDestinationFolder))
+            {
+                Log.Write("Creating LinqPad directory ", Locations.LinqPadDestinationFolder);
                 Directory.CreateDirectory(Locations.LinqPadDestinationFolder);
+            }
 
 
             //Copy the BridgeBuildTask.targets to the default .NET 4.0v framework location
-            File.Copy(Locations.LinqBridgeTargetFileNamePath, Path.Combine(Locations.DotNetFrameworkPath, Locations.LinqBridgeTargetFileName), true);
-            File.Copy(Locations.LinqBridgeTargetFileNamePath, Path.Combine(Locations.DotNetFramework64Path, Locations.LinqBridgeTargetFileName), true);
+            File.Copy(Locations.LinqBridgeTargetFileNamePath, Path.Combine(Locations.DotNet40FrameworkPath, Locations.LinqBridgeTargetFileName), true);
+            File.Copy(Locations.LinqBridgeTargetFileNamePath, Path.Combine(Locations.DotNet40Framework64Path, Locations.LinqBridgeTargetFileName), true);
+            Log.Write("LinqBridge Targets copied to ", Locations.DotNet40FrameworkPath, Locations.DotNet40Framework64Path);
+
+
 
             //Install LINQPad in the machine
             if (linqPadPath == null) return;
 
+            Log.Write("Installing LINQPad in the machine");
             foreach (var file in Directory.GetFiles(linqPadPath))
             {
                 if (file == null) continue;
@@ -95,7 +111,7 @@ namespace LINQBridge.VSExtension
                     continue;
                 File.Move(file, destinationFileName);
             }
-
+            Log.Write("Setting IsEnvironmentConfigured to True");
             IsEnvironmentConfigured = true;
 
 
@@ -130,10 +146,10 @@ namespace LINQBridge.VSExtension
                 return SelectedProject.Properties.Cast<Property>().First(property => property.Name == "AssemblyName").Value.ToString();
             }
         }
-      
+
         private static bool IsBridgeEnabled(string assemblyName)
         {
-            using (var key = Registry.CurrentUser.OpenSubKey(Resources.EnabledProjectsRegistryKey))
+            using (var key = Registry.CurrentUser.OpenSubKey(Resources.EnabledProjectsRegistryKey, true))
             {
                 if (key == null) return false;
                 var value = key.GetValue(assemblyName);
@@ -160,12 +176,12 @@ namespace LINQBridge.VSExtension
                 case CommandAction.Enable:
                     Enable(SelectedAssemblyName);
                     MessageBox.Show(string.Format("LINQBridge on {0} has been Enabled...", SelectedAssemblyName), "Success", MessageBoxButtons.OK);
-                    
+
                     if (projectReferences.Where(IsBridgeDisabled).Any())
                     {
                         var result =
                             MessageBox.Show(
-                                "Few Project Dependencies have been found. Do you want to LINQBridge them? (Recommended)");
+                                "Few Project Dependencies have been found. Do you want to LINQBridge them? (Recommended)", "Enable project dependencies...", MessageBoxButtons.OKCancel);
 
                         if (result == DialogResult.OK)
                             projectReferences.ToList().ForEach(Enable);
@@ -179,7 +195,7 @@ namespace LINQBridge.VSExtension
                     {
                         var result =
                             MessageBox.Show(
-                                "Few Project Dependencies have been found. Do you want to Un-LINQBridge them? (Recommended)");
+                                "Few Project Dependencies have been found. Do you want to Un-LINQBridge them? (Recommended)","Disable project dependencies...", MessageBoxButtons.OKCancel);
 
                         if (result == DialogResult.OK)
                             projectReferences.ToList().ForEach(Disable);
@@ -202,7 +218,7 @@ namespace LINQBridge.VSExtension
 
         private static void Enable(string assemblyName)
         {
-            using (var key = Registry.CurrentUser.OpenSubKey(Resources.EnabledProjectsRegistryKey, true))
+            using (var key = Registry.CurrentUser.CreateSubKey(Resources.EnabledProjectsRegistryKey))
             {
                 if (key != null)
                     key.SetValue(assemblyName, true);
@@ -212,7 +228,7 @@ namespace LINQBridge.VSExtension
 
         private static void Disable(string assemblyName)
         {
-            using (var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(Resources.EnabledProjectsRegistryKey, true))
+            using (var key = Registry.CurrentUser.OpenSubKey(Resources.EnabledProjectsRegistryKey, true))
             {
                 if (key != null) key.SetValue(assemblyName, false);
             }
@@ -253,6 +269,12 @@ namespace LINQBridge.VSExtension
             return CommandStates.None;
         }
 
+        /// <summary>
+        /// Finds all project dependencies. This methods returns all the dependencies of 
+        /// the project LINQbridgeVs is going to be activated on
+        /// </summary>
+        /// <param name="fullProjectName">Full name of the project.</param>
+        /// <returns></returns>
         private static IEnumerable<string> FindAllDependencies(string fullProjectName)
         {
             var loadedProject = ProjectCollection.GlobalProjectCollection.LoadedProjects.FirstOrDefault(p => p.FullPath.Equals(fullProjectName))

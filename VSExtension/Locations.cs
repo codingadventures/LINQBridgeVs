@@ -19,18 +19,18 @@ namespace LINQBridge.VSExtension
 
         public static readonly string LinqPadExeFileNamePath = Path.Combine(InstallFolder, Resources.LINQPad);
 
-        public static readonly string DotNetFrameworkPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows),
+        public static readonly string DotNet40FrameworkPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows),
                 @"Microsoft.NET\Framework\v4.0.30319");
 
-        public static readonly string DotNetFramework64Path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows),
+        public static readonly string DotNet40Framework64Path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows),
                        @"Microsoft.NET\Framework64\v4.0.30319");
 
-        public static readonly string MicrosoftCommonTargetFileNamePath = Path.Combine(DotNetFrameworkPath, "Microsoft.Common.targets");
+        public static readonly string MicrosoftCommonTargetFileNamePath = Path.Combine(DotNet40FrameworkPath, "Microsoft.Common.targets");
 
-        public static readonly string MicrosoftCommonTarget64FileNamePath = Path.Combine(DotNetFramework64Path, "Microsoft.Common.targets");
+        public static readonly string MicrosoftCommonTarget64FileNamePath = Path.Combine(DotNet40Framework64Path, "Microsoft.Common.targets");
 
-        public static readonly string IcaclsArguments = String.Format("{0} /grant Everyone:F", Path.Combine(DotNetFrameworkPath, LinqBridgeTargetFileName));
+        public static readonly string IcaclsArguments = String.Format("{0} /grant Everyone:F", Path.Combine(DotNet40FrameworkPath, LinqBridgeTargetFileName));
 
-        public static readonly string IcaclsArgumentsX64 = String.Format("{0} /grant Everyone:F", Path.Combine(DotNetFramework64Path, LinqBridgeTargetFileName));
+        public static readonly string IcaclsArgumentsX64 = String.Format("{0} /grant Everyone:F", Path.Combine(DotNet40Framework64Path, LinqBridgeTargetFileName));
     }
 }

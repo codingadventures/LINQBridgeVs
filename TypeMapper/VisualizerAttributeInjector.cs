@@ -36,6 +36,9 @@ using System.Linq;
 
 namespace LINQBridge.TypeMapper
 {
+    /// <summary>
+    /// This class injects the DebuggerVisualizerAttribute into a given assembly
+    /// </summary>
     internal class VisualizerAttributeInjector : IDisposable
     {
         #region [ Private Properties ]
@@ -127,13 +130,13 @@ namespace LINQBridge.TypeMapper
             switch (typeReference.Scope.MetadataScopeType)
             {
                 case MetadataScopeType.AssemblyNameReference:
-                    scope = FixCecilTypeReference(typeReference.FullName) + ", " + typeReference.Scope;
+                    scope = FromCILToTypeName(typeReference.FullName) + ", " + typeReference.Scope;
                     break;
                 case MetadataScopeType.ModuleReference:
                     break;
                 case MetadataScopeType.ModuleDefinition:
                     var moduleDefinition = typeReference.Scope as ModuleDefinition;
-                    if (moduleDefinition != null) scope = FixCecilTypeReference(typeReference.FullName) + ", " + moduleDefinition.Assembly.ToString();
+                    if (moduleDefinition != null) scope = FromCILToTypeName(typeReference.FullName) + ", " + moduleDefinition.Assembly.ToString();
                     break;
                 default:
                     throw new Exception(string.Format("Assembly Scope Null. Check assembly {0}", typeReference.FullName));
@@ -256,7 +259,7 @@ namespace LINQBridge.TypeMapper
         /// This helper method change it back to a plus
         /// </summary>
         /// <param name="fullName">The full name.</param>
-        private static string FixCecilTypeReference(string fullName)
+        private static string FromCILToTypeName(string fullName)
         {
             return fullName.Replace('/', '+');
         }

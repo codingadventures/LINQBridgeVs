@@ -7,12 +7,12 @@
     </BuildDependsOn>
   </PropertyGroup>
 
-  <PropertyGroup>
+  <!--<PropertyGroup>
     <BuildDependsOn>
       $(CleanDependsOn);
       LINQBridgeAfterClean
     </BuildDependsOn>
-  </PropertyGroup>
+  </PropertyGroup>-->
 
   <!--
     ============================================================
@@ -36,7 +36,7 @@
     <MapperBuildTask Assembly="@(MainAssembly->'%(FullPath)')"   VisualStudioVer="$(VisualStudioVersion)"   />
   </Target>
 
-  <Target Name="LINQBridgeAfterClean" DependsOnTargets="CoreClean" Condition="'$(IsProjectEnabled)' == 'True'">
+  <!--<Target Name="LINQBridgeAfterClean" DependsOnTargets="CoreClean" Condition="'$(IsProjectEnabled)' == 'True'">
     <CleanBuildTask Assembly="@(MainAssembly->'%(FullPath)')"   VisualStudioVer="$(VisualStudioVersion)"/>
-  </Target>
+  </Target>-->
 </Project>

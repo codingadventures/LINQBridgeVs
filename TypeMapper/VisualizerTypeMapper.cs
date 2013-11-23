@@ -102,27 +102,38 @@ namespace LINQBridge.TypeMapper
                                    (type.IsClass && type.IsSerializable)
                                    ||
                                    type.IsInterface
-                                   )
-                               && !string.IsNullOrEmpty(type.Namespace)
-                               && type.IsPublic);
+                                   ||
+                                   type.Name.Contains("Iterator")
+                                  )
+                               && !(type.Name.Contains("Func") || type.Name.Contains("Action"))
+                               && !string.IsNullOrEmpty(type.Namespace));
 
-
-            var systemGenericsTypes = typeof (IList<>).Assembly
+            //Map all the possible list types
+            var systemGenericsTypes = typeof(IList<>).Assembly
                 .GetTypes()
                 .Where(type => type != null
                                && (
                                    (type.IsClass && type.IsSerializable)
                                    ||
                                    type.IsInterface
-                                   )
+                                  )
                                && !string.IsNullOrEmpty(type.Namespace)
-                               && type.IsPublic);
+                               && type.IsPublic)
+                .Where(type =>
+                    !type.Name.Contains("ValueType")
+                    && !type.Name.Contains("IFormattable")
+                    && !type.Name.Contains("IComparable")
+                    && !type.Name.Contains("IConvertible")
+                    && !type.Name.Contains("IEquatable")
+                    && !type.Name.Contains("Object")
+                    && !type.Name.Contains("ICloneable")
+                    && !type.Name.Contains("String")
+                    && !type.Name.Contains("IDisposable"));
+
 
             systemLinqTypes.ForEach(visualizerInjector.MapType);
             systemGenericsTypes.ForEach(visualizerInjector.MapType);
-            var whereListIterator =  typeof (IOrderedEnumerable<>).Assembly.GetType("System.Linq.Enumerable+WhereListIterator`1");
-            visualizerInjector.MapType(whereListIterator);
-
+         
             visualizerInstallationPath.ForEach(debuggerVisualizerPath =>
             {
                 var location = Path.Combine(debuggerVisualizerPath, visualizerFileName);

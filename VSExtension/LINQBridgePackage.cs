@@ -8,6 +8,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using Bridge.VSExtension;
 using EnvDTE;
+using LINQBridge.Logging;
 using LINQBridge.VSExtension.Forms;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
@@ -55,12 +56,7 @@ namespace LINQBridge.VSExtension
 
         private static readonly XDocument MicrosoftCommonTargetDocument
             = XDocument.Load(Locations.MicrosoftCommonTargetFileNamePath);
-
-        public LINQBridgePackage()
-        {
-
-            //      solutionIcon = new Icon(@"C:\Users\John\Desktop\Bridge.ico");
-        }
+ 
 
         #region Package Members
 
@@ -115,12 +111,15 @@ namespace LINQBridge.VSExtension
 
         private void OnBeginShutdown()
         {
+            Log.Write("OnBeginShutdown");
+
             _dteEvents.OnBeginShutdown -= OnBeginShutdown;
             _dteEvents = null;
             //Check if there's only one instance of VS running. if it's so then remove from Microsoft.Common.Target 
             //Any reference of LINQBridge
             if (System.Diagnostics.Process.GetProcessesByName(VisualStudioProcessName).Length > 1) return;
 
+            Log.Write("Disabling LINQBridgeVS. Only one VS instance opened");
             DisableLinqBridge();
 
         }
@@ -186,7 +185,7 @@ namespace LINQBridge.VSExtension
         {
             var process = System.Diagnostics.Process.Start("icacls", Locations.IcaclsArguments);
             var processX64 = System.Diagnostics.Process.Start("icacls", Locations.IcaclsArgumentsX64);
-
+            Log.Write("Setting Permission to ", Locations.IcaclsArguments, Locations.IcaclsArgumentsX64);
 
             if (process != null)
                 process.WaitForExit();

@@ -30,14 +30,11 @@ using System.IO;
 
 namespace LINQBridge.DynamicVisualizer.V10
 {
-    public class DynamicDebuggerVisualizerObjectSourceV10 : VisualizerObjectSource, ISettings
+    public class DynamicDebuggerVisualizerObjectSourceV10 : VisualizerObjectSource
     {
         public override void GetData(object target, Stream outgoingData)
         {
             DynamicObjectSource.BroadCastData(target, outgoingData);
         }
-
-        public string AssemblyLocation { get { return GetType().Assembly.Location; } }
-
     }
 }

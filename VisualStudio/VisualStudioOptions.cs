@@ -52,27 +52,25 @@ namespace LINQBridge.VisualStudio
         static VisualStudioOptions()
         {
             VisualStudioPaths = new Dictionary<string, Settings>
-                                    {
-                                        {
-                                            "10.0", new Settings
-                                            {
-                                                            InstallationPaths =
-                                                                new List<string>{Vs2010Path1, Vs2010Path2},
+            {
+                {
+                    "10.0", new Settings
+                    {
+                        InstallationPaths =
+                            new List<string> {Vs2010Path1, Vs2010Path2},
 
-                                                           // AssemblyName = DynamicVisualizer.V10.Settings.AssemblyName,
-                                                            AssemblyLocation = DynamicVisualizer.V10.Settings.AssemblyLocation
-                                                        }
-                                        },
-                                        { 
-                                             "11.0", new Settings
-                                             {
-                                                            InstallationPaths =
-                                                              new List<string>{Vs2012Path1},
-                                                         //   AssemblyName = DynamicVisualizer.V11.Settings.AssemblyName,
-                                                            AssemblyLocation = DynamicVisualizer.V11.Settings.AssemblyLocation 
-                                                        }
-                                        }                             
-                                    };
+                        AssemblyLocation = DynamicVisualizer.V10.Settings.AssemblyLocation
+                    }
+                },
+                {
+                    "11.0", new Settings
+                    {
+                        InstallationPaths =
+                            new List<string> {Vs2012Path1},
+                        AssemblyLocation = DynamicVisualizer.V11.Settings.AssemblyLocation
+                    }
+                }
+            };
         }
 
         private static void CheckVersion(string vsInputVersion)
@@ -83,15 +81,6 @@ namespace LINQBridge.VisualStudio
                 throw new ArgumentException("This Version of visual studio is not yet supported.", "vsInputVersion");
         }
 
-        /*
-                public static string GetVisualizerAssemblyName(string visualStudioVersion)
-                {
-                    CheckVersion(visualStudioVersion);
-            
-                    return VisualStudioPaths[visualStudioVersion].AssemblyName;
-                }
-        */
-
         public static string GetVisualizerAssemblyLocation(string visualStudioVersion)
         {
             CheckVersion(visualStudioVersion);
@@ -100,12 +89,10 @@ namespace LINQBridge.VisualStudio
         }
 
         public static IEnumerable<string> GetInstallationPath(string visualStudioVersion)
-        {   
+        {
             CheckVersion(visualStudioVersion);
 
             return VisualStudioPaths[visualStudioVersion].InstallationPaths;
         }
-
-
     }
 }
