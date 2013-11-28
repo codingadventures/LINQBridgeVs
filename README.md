@@ -42,5 +42,5 @@ for the user running the debugger (IIS_IUSRS if a WebSite).
 
 *Platform:* Windows 8
 
-[logo]: https://raw.github.com/nbasakuragi/LINQBridge/master/VSExtension/Resources/LINQBridgeLogo.png "LINQBridge"
+[logo]: https://raw.github.com/nbasakuragi/LINQBridgeVs/master/Src/LINQBridgeVs/VSExtension/Resources/LINQBridgeLogo.png "LINQBridge"
 
