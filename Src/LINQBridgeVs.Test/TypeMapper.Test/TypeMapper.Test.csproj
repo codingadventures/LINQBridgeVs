@@ -76,11 +76,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DynamicVisualizer.V11\DynamicVisualizer.V11.csproj">
+    <ProjectReference Include="..\..\LINQBridgeVs\DynamicVisualizer.V11\DynamicVisualizer.V11.csproj">
       <Project>{c6798d16-89f5-4bff-8b62-2be6d4bbc192}</Project>
       <Name>DynamicVisualizer.V11</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TypeMapper\TypeMapper.csproj">
+    <ProjectReference Include="..\..\LINQBridgeVs\TypeMapper\TypeMapper.csproj">
       <Project>{fcc8bf06-3173-4d21-a157-d1167b6407c9}</Project>
       <Name>TypeMapper</Name>
     </ProjectReference>

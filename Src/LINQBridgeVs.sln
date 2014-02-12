@@ -5,19 +5,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V11", "LI
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeMapper", "LINQBridgeVs\TypeMapper\TypeMapper.csproj", "{FCC8BF06-3173-4D21-A157-D1167B6407C9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{15295B1F-D517-4D5B-91C6-6682BE1E4B16}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-		UnitTests.testsettings = UnitTests.testsettings
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildTasks", "LINQBridgeVs\BuildTasks\BuildTasks.csproj", "{276F3935-E0CA-450F-A55F-AED56DC2024E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildTasks.Test", "BuildTasks.Test\BuildTasks.Test.csproj", "{5030F9B8-D21E-456D-8A92-F92567D11104}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildTasks.Test", "LINQBridgeVs.Test\BuildTasks.Test\BuildTasks.Test.csproj", "{5030F9B8-D21E-456D-8A92-F92567D11104}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model.Test", "Model.Test\Model.Test.csproj", "{8A5E73F6-2093-4669-9C09-BEAB033BE56C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model.Test", "LINQBridgeVs.Test\Model.Test\Model.Test.csproj", "{8A5E73F6-2093-4669-9C09-BEAB033BE56C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VsExtension", "LINQBridgeVs\VSExtension\VsExtension.csproj", "{1B82F962-5D04-42B6-8D18-7AA8E8FB615F}"
 EndProject
@@ -25,18 +17,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{DEECC213-1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualStudio", "LINQBridgeVs\VisualStudio\VisualStudio.csproj", "{8F6409F1-33E3-4310-BE84-12C4F838C0B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicCore.Test", "DynamicCore.Test\DynamicCore.Test.csproj", "{DDF44401-F193-46B8-BA6C-A3DE88BAED46}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicCore.Test", "LINQBridgeVs.Test\DynamicCore.Test\DynamicCore.Test.csproj", "{DDF44401-F193-46B8-BA6C-A3DE88BAED46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnotherModel.Test", "AnotherModel.Test\AnotherModel.Test.csproj", "{7B0C3D12-296A-438D-B0EA-B049A0D6D3C1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnotherModel.Test", "LINQBridgeVs.Test\AnotherModel.Test\AnotherModel.Test.csproj", "{7B0C3D12-296A-438D-B0EA-B049A0D6D3C1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging", "LINQBridgeVs\Logging\Logging.csproj", "{7199EDE0-8090-46D0-9687-54B411A3D02C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{C83880CE-BAA2-4849-BE2C-7F2C88B295A6}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5F3BDA62-8052-4C37-97A0-94354AA971B0}"
-	ProjectSection(SolutionItems) = preProject
-		System.IO.Abstractions\StrongName.pfx = System.IO.Abstractions\StrongName.pfx
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.IO.Abstractions", "System.IO.Abstractions\System.IO.Abstractions\System.IO.Abstractions.csproj", "{4D398F3A-0784-4401-93CD-46CD2FBD6B92}"
 EndProject
@@ -48,7 +35,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V10", "LI
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V9", "LINQBridgeVs\DynamicVisualizer.V9\DynamicVisualizer.V9.csproj", "{2B1DFD92-4C9E-487E-BE1A-E3080FBF8922}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeMapper.Test", "TypeMapper.Test\TypeMapper.Test.csproj", "{08ADAF10-E655-4560-BF9C-9287E60247B5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeMapper.Test", "LINQBridgeVs.Test\TypeMapper.Test\TypeMapper.Test.csproj", "{08ADAF10-E655-4560-BF9C-9287E60247B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

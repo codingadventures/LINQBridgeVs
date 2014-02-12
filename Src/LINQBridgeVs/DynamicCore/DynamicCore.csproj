@@ -47,6 +47,10 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Grapple">
+      <HintPath>..\..\packages\Grapple.0.1.5.2\lib\Grapple.dll</HintPath>
+	  <Ilmerge>True</Ilmerge>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -88,17 +92,12 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Grapple\Bridge.Grapple\Grapple.csproj">
-      <Project>{79c0c9ed-d22c-4855-97c1-f6bd0127a531}</Project>
-      <Name>Grapple</Name>
-      <Ilmerge>True</Ilmerge>
-    </ProjectReference>
     <ProjectReference Include="..\Logging\Logging.csproj">
       <Project>{7199ede0-8090-46d0-9687-54b411a3d02c}</Project>
       <Name>Logging</Name>
       <Ilmerge>True</Ilmerge>
     </ProjectReference>
-    <ProjectReference Include="..\System.IO.Abstractions\System.IO.Abstractions\System.IO.Abstractions.csproj">
+    <ProjectReference Include="..\..\System.IO.Abstractions\System.IO.Abstractions\System.IO.Abstractions.csproj">
       <Project>{4d398f3a-0784-4401-93cd-46cd2fbd6b92}</Project>
       <Name>System.IO.Abstractions</Name>
       <Ilmerge>True</Ilmerge>

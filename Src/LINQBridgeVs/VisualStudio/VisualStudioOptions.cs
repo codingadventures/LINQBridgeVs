@@ -26,7 +26,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using LINQBridge.VisualStudio.Properties;
 
 namespace LINQBridge.VisualStudio

@@ -77,11 +77,11 @@
       <Project>{8A5E73F6-2093-4669-9C09-BEAB033BE56C}</Project>
       <Name>Model.Test</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DynamicCore\DynamicCore.csproj">
+    <ProjectReference Include="..\..\LINQBridgeVs\DynamicCore\DynamicCore.csproj">
       <Project>{b84fbd50-0b10-4c25-8430-680fc6fc3fea}</Project>
       <Name>DynamicCore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\System.IO.Abstractions\System.IO.Abstractions\System.IO.Abstractions.csproj">
+    <ProjectReference Include="..\..\System.IO.Abstractions\System.IO.Abstractions\System.IO.Abstractions.csproj">
       <Project>{4d398f3a-0784-4401-93cd-46cd2fbd6b92}</Project>
       <Name>System.IO.Abstractions</Name>
     </ProjectReference>
