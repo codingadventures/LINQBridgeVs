@@ -85,7 +85,7 @@
       <Project>{4d398f3a-0784-4401-93cd-46cd2fbd6b92}</Project>
       <Name>System.IO.Abstractions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\System.IO.Abstractions\TestingHelpers\TestingHelpers.csproj">
+    <ProjectReference Include="..\..\System.IO.Abstractions\TestingHelpers\TestingHelpers.csproj">
       <Project>{251bd5e5-8133-47a4-ab19-17cf0f43d6ae}</Project>
       <Name>TestingHelpers</Name>
     </ProjectReference>

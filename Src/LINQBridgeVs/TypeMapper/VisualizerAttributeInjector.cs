@@ -199,12 +199,14 @@ namespace LINQBridge.TypeMapper
             var success = false;
             const int maxCount = 3;
             var i = 0;
+            var fileName = Path.GetFileNameWithoutExtension(debuggerVisualizerDst);
 
             //I would have used a goto....can't forget my professor's quote: "Each GOTO can be superseeded by a Repeat Until...God bless Pascal!"
             while (!success && i++ < maxCount)
             {
                 try
                 {
+                    _debuggerVisualizerAssembly.Name.Name = fileName;
                     _debuggerVisualizerAssembly.Write(debuggerVisualizerDst, _writerParameters);
                     success = true;
                 }
