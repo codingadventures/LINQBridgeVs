@@ -12,6 +12,7 @@ using EnvDTE;
 using LINQBridge.Logging;
 using Microsoft.Build.Evaluation;
 using Microsoft.Win32;
+using Process = System.Diagnostics.Process;
 using Project = EnvDTE.Project;
 
 
@@ -97,6 +98,7 @@ namespace LINQBridge.VSExtension
             File.Copy(Locations.LinqBridgeTargetFileNamePath, Path.Combine(Locations.DotNet40Framework64Path, Locations.LinqBridgeTargetFileName), true);
             Log.Write("LinqBridge Targets copied to {0} - {1}", Locations.DotNet40FrameworkPath, Locations.DotNet40Framework64Path);
 
+            SetPermissions();
 
 
             //Install LINQPad in the machine
@@ -111,6 +113,8 @@ namespace LINQBridge.VSExtension
                     continue;
                 File.Move(file, destinationFileName);
             }
+
+
             Log.Write("Setting IsEnvironmentConfigured to True");
             IsEnvironmentConfigured = true;
 
@@ -195,7 +199,7 @@ namespace LINQBridge.VSExtension
                     {
                         var result =
                             MessageBox.Show(
-                                "Few Project Dependencies have been found. Do you want to Un-LINQBridge them? (Recommended)","Disable project dependencies...", MessageBoxButtons.OKCancel);
+                                "Few Project Dependencies have been found. Do you want to Un-LINQBridge them? (Recommended)", "Disable project dependencies...", MessageBoxButtons.OKCancel);
 
                         if (result == DialogResult.OK)
                             projectReferences.ToList().ForEach(Disable);
@@ -289,6 +293,33 @@ namespace LINQBridge.VSExtension
 
 
             return references.Select(e => XDocument.Load(Path.Combine(loadedProject.DirectoryPath, e.Xml.Include)).XPathSelectElement("/aw:Project/aw:PropertyGroup/aw:AssemblyName", namespaceManager).Value);
+
+        }
+
+        private static void SetPermissions()
+        {
+            Log.Write("SetPermission Starts");
+            var process = Process.Start("icacls", Locations.IcaclsArguments);
+            var processX64 = Process.Start("icacls", Locations.IcaclsArgumentsX64);
+            var processCommonTarget = Process.Start("icacls", Locations.IcaclsArgumentsCommonTarget);
+            var processX64CommonTarget = Process.Start("icacls", Locations.IcaclsArgumentsX64CommonTarget);
+
+            Log.Write("Setting Permission to {0} and {1} ", Locations.IcaclsArguments, Locations.IcaclsArgumentsX64);
+            Log.Write("Setting Permission to {0} and {1} ", Locations.IcaclsArgumentsCommonTarget, Locations.IcaclsArgumentsX64CommonTarget);
+
+            if (process != null)
+                process.WaitForExit();
+
+            if (processCommonTarget != null)
+                processCommonTarget.WaitForExit();
+
+            if (processX64 != null)
+                processX64.WaitForExit();
+
+            if (processX64CommonTarget != null)
+                processX64CommonTarget.WaitForExit();
+
+            Log.Write("SetPermission Done");
 
         }
 

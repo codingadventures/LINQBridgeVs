@@ -143,11 +143,11 @@ namespace LINQBridge.VSExtension
 
                 _dteEvents.OnStartupComplete -= OnStartupComplete;
                 _dteEvents = null;
-
-                if (!LINQBridgeExtension.IsEnvironmentConfigured)
-                    SetPermissions();  //Set the rights to access 
-
+                 
                 EnableLinqBridge();
+
+                Log.Write("OnStartupComplete End");
+
             }
             catch (Exception e)
             {
@@ -202,19 +202,7 @@ namespace LINQBridge.VSExtension
             return linqBridgeTargetImportNode;
         }
 
-        private static void SetPermissions()
-        {
-            var process = System.Diagnostics.Process.Start("icacls", Locations.IcaclsArguments);
-            var processX64 = System.Diagnostics.Process.Start("icacls", Locations.IcaclsArgumentsX64);
-            Log.Write("Setting Permission to ", Locations.IcaclsArguments, Locations.IcaclsArgumentsX64);
-
-            if (process != null)
-                process.WaitForExit();
-
-            if (processX64 != null)
-                processX64.WaitForExit();
-
-        }
+       
         #endregion
 
         //public int OnShellPropertyChange(int propid, object var)
