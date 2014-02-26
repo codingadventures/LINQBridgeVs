@@ -78,7 +78,7 @@ namespace LINQBridge.VSExtension
             {
                 if (key != null)
                 {
-                    Log.Write("Setting InstallFolderPath to ", Locations.InstallFolder);
+                    Log.Write("Setting InstallFolderPath to {0}", Locations.InstallFolder);
                     key.SetValue("InstallFolderPath", Locations.InstallFolder);
                 }
             }
@@ -87,7 +87,7 @@ namespace LINQBridge.VSExtension
 
             if (!Directory.Exists(Locations.LinqPadDestinationFolder))
             {
-                Log.Write("Creating LinqPad directory ", Locations.LinqPadDestinationFolder);
+                Log.Write("Creating LinqPad directory {0}", Locations.LinqPadDestinationFolder);
                 Directory.CreateDirectory(Locations.LinqPadDestinationFolder);
             }
 
@@ -95,7 +95,7 @@ namespace LINQBridge.VSExtension
             //Copy the BridgeBuildTask.targets to the default .NET 4.0v framework location
             File.Copy(Locations.LinqBridgeTargetFileNamePath, Path.Combine(Locations.DotNet40FrameworkPath, Locations.LinqBridgeTargetFileName), true);
             File.Copy(Locations.LinqBridgeTargetFileNamePath, Path.Combine(Locations.DotNet40Framework64Path, Locations.LinqBridgeTargetFileName), true);
-            Log.Write("LinqBridge Targets copied to ", Locations.DotNet40FrameworkPath, Locations.DotNet40Framework64Path);
+            Log.Write("LinqBridge Targets copied to {0} - {1}", Locations.DotNet40FrameworkPath, Locations.DotNet40Framework64Path);
 
 
 

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -13,6 +14,8 @@ using LINQBridge.VSExtension.Forms;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Debugger = System.Diagnostics.Debugger;
+using Process = System.Diagnostics.Process;
 
 namespace LINQBridge.VSExtension
 {
@@ -111,27 +114,45 @@ namespace LINQBridge.VSExtension
 
         private void OnBeginShutdown()
         {
-            Log.Write("OnBeginShutdown");
+            try
+            {
+                Log.Write("OnBeginShutdown");
 
-            _dteEvents.OnBeginShutdown -= OnBeginShutdown;
-            _dteEvents = null;
-            //Check if there's only one instance of VS running. if it's so then remove from Microsoft.Common.Target 
-            //Any reference of LINQBridge
-            if (System.Diagnostics.Process.GetProcessesByName(VisualStudioProcessName).Length > 1) return;
+                _dteEvents.OnBeginShutdown -= OnBeginShutdown;
+                _dteEvents = null;
+                //Check if there's only one instance of VS running. if it's so then remove from Microsoft.Common.Target 
+                //Any reference of LINQBridge
+                if (Process.GetProcessesByName(VisualStudioProcessName).Length > 1) return;
 
-            Log.Write("Disabling LINQBridgeVS. Only one VS instance opened");
-            DisableLinqBridge();
+                Log.Write("Disabling LINQBridgeVS. Only one VS instance opened");
+                DisableLinqBridge();
+            }
+            catch (Exception e)
+            {
+                Log.Write(e, "OnBeginShutdown Error...");
+
+            }
 
         }
 
         private void OnStartupComplete()
         {
-            _dteEvents.OnStartupComplete -= OnStartupComplete;
-            _dteEvents = null;
-            if (!LINQBridgeExtension.IsEnvironmentConfigured)
-                SetPermissions();  //Set the rights to access 
+            try
+            {
+                Log.Write("OnStartupComplete");
 
-            EnableLinqBridge();
+                _dteEvents.OnStartupComplete -= OnStartupComplete;
+                _dteEvents = null;
+
+                if (!LINQBridgeExtension.IsEnvironmentConfigured)
+                    SetPermissions();  //Set the rights to access 
+
+                EnableLinqBridge();
+            }
+            catch (Exception e)
+            {
+                Log.Write(e,"OnStartupComplete Error...");
+            }
         }
 
         private static void DisableLinqBridge()
