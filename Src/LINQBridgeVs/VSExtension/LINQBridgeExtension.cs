@@ -196,29 +196,31 @@ namespace LINQBridge.VSExtension
                 return;
 
             var allProjectReferences = Crawler.FindProjectDependencies(SelectedProject.FullName);
-            var projectReferences = allProjectReferences.Where(project => project.DependencyType == DependencyType.ProjectReference);
-            var assemblyReferences = allProjectReferences.Where(project => project.DependencyType == DependencyType.AssemblyReference);
+            var foundProjects = allProjectReferences as IList<Dependency.Project> ?? allProjectReferences.ToList();
+            var projectReferences = foundProjects.Where(project => project.DependencyType == DependencyType.ProjectReference);
+           // var assemblyReferences = allProjectReferences.Where(project => project.DependencyType == DependencyType.AssemblyReference);
 
+            var references = projectReferences as IList<Dependency.Project> ?? projectReferences.ToList();
             switch (action)
             {
                 case CommandAction.Enable:
                     EnableProject(SelectedAssemblyName);
                     MessageBox.Show(string.Format("LINQBridge on {0} has been Enabled...", SelectedAssemblyName), "Success", MessageBoxButtons.OK);
 
-                    if (projectReferences.Any(project => IsBridgeDisabled(project.AssemblyName)))
+                    if (references.Any(project => IsBridgeDisabled(project.AssemblyName)))
                     {
-                        var projectDependencies = new ProjectDependencies(() => projectReferences.ForEach(project => EnableProject(project.AssemblyName)));
-                        projectDependencies.ShowDependencies(allProjectReferences);
+                        var projectDependencies = new ProjectDependencies(() => references.ForEach(project => EnableProject(project.AssemblyName)));
+                        projectDependencies.ShowDependencies(projectReferences);
                     }
                     break;
                 case CommandAction.Disable:
                     DisableProject(SelectedAssemblyName);
                     MessageBox.Show(string.Format("LINQBridge on {0} has been Disabled...", SelectedAssemblyName), "Success", MessageBoxButtons.OK);
 
-                    if (projectReferences.Any(project => IsBridgeEnabled(project.AssemblyName)))
+                    if (references.Any(project => IsBridgeEnabled(project.AssemblyName)))
                     {
-                        var projectDependencies = new ProjectDependencies(() => projectReferences.ForEach(project => DisableProject(project.AssemblyName)));
-                        projectDependencies.ShowDependencies(allProjectReferences);
+                        var projectDependencies = new ProjectDependencies(() => references.ForEach(project => DisableProject(project.AssemblyName)));
+                        projectDependencies.ShowDependencies(projectReferences);
                     }
                     break;
                 default:
