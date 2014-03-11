@@ -1,16 +1,39 @@
-﻿using System;
+﻿#region License
+// Copyright (c) 2013 Giovanni Campo
+//
+// Permission is hereby granted, free of charge, to any person
+// obtaining a copy of this software and associated documentation
+// files (the "Software"), to deal in the Software without
+// restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the
+// Software is furnished to do so, subject to the following
+// conditions:
+//
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+// WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+// OTHER DEALINGS IN THE SOFTWARE.
+#endregion
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.XPath;
 using EnvDTE;
 using LINQBridge.Logging;
-using Microsoft.Build.Evaluation;
+using LINQBridge.VSExtension.Dependency;
+using LINQBridge.VSExtension.Extension;
+using LINQBridge.VSExtension.Forms;
 using Microsoft.Win32;
 using Process = System.Diagnostics.Process;
 using Project = EnvDTE.Project;
@@ -172,37 +195,30 @@ namespace LINQBridge.VSExtension
             if (SelectedProject == null)
                 return;
 
-            var findProjectReferences = FindAllDependencies(SelectedProject.FullName);
-            var projectReferences = findProjectReferences as IList<string> ?? findProjectReferences.ToList();
+            var allProjectReferences = Crawler.FindProjectDependencies(SelectedProject.FullName);
+            var projectReferences = allProjectReferences.Where(project => project.DependencyType == DependencyType.ProjectReference);
+            var assemblyReferences = allProjectReferences.Where(project => project.DependencyType == DependencyType.AssemblyReference);
 
             switch (action)
             {
                 case CommandAction.Enable:
-                    Enable(SelectedAssemblyName);
+                    EnableProject(SelectedAssemblyName);
                     MessageBox.Show(string.Format("LINQBridge on {0} has been Enabled...", SelectedAssemblyName), "Success", MessageBoxButtons.OK);
 
-                    if (projectReferences.Where(IsBridgeDisabled).Any())
+                    if (projectReferences.Any(project => IsBridgeDisabled(project.AssemblyName)))
                     {
-                        var result =
-                            MessageBox.Show(
-                                "Few Project Dependencies have been found. Do you want to LINQBridge them? (Recommended)", "Enable project dependencies...", MessageBoxButtons.OKCancel);
-
-                        if (result == DialogResult.OK)
-                            projectReferences.ToList().ForEach(Enable);
+                        var projectDependencies = new ProjectDependencies(() => projectReferences.ForEach(project => EnableProject(project.AssemblyName)));
+                        projectDependencies.ShowDependencies(allProjectReferences);
                     }
                     break;
                 case CommandAction.Disable:
-                    Disable(SelectedAssemblyName);
+                    DisableProject(SelectedAssemblyName);
                     MessageBox.Show(string.Format("LINQBridge on {0} has been Disabled...", SelectedAssemblyName), "Success", MessageBoxButtons.OK);
 
-                    if (projectReferences.Where(IsBridgeEnabled).Any())
+                    if (projectReferences.Any(project => IsBridgeEnabled(project.AssemblyName)))
                     {
-                        var result =
-                            MessageBox.Show(
-                                "Few Project Dependencies have been found. Do you want to Un-LINQBridge them? (Recommended)", "Disable project dependencies...", MessageBoxButtons.OKCancel);
-
-                        if (result == DialogResult.OK)
-                            projectReferences.ToList().ForEach(Disable);
+                        var projectDependencies = new ProjectDependencies(() => projectReferences.ForEach(project => DisableProject(project.AssemblyName)));
+                        projectDependencies.ShowDependencies(allProjectReferences);
                     }
                     break;
                 default:
@@ -220,17 +236,16 @@ namespace LINQBridge.VSExtension
             cmd.Enabled = (CommandStates.Enabled & states) != 0;
         }
 
-        private static void Enable(string assemblyName)
+        private static void EnableProject(string assemblyName)
         {
             using (var key = Registry.CurrentUser.CreateSubKey(Resources.EnabledProjectsRegistryKey))
             {
                 if (key != null)
                     key.SetValue(assemblyName, true);
             }
-
         }
 
-        private static void Disable(string assemblyName)
+        private static void DisableProject(string assemblyName)
         {
             using (var key = Registry.CurrentUser.OpenSubKey(Resources.EnabledProjectsRegistryKey, true))
             {
@@ -271,29 +286,6 @@ namespace LINQBridge.VSExtension
                 return CommandStates.Enabled | CommandStates.Visible;
 
             return CommandStates.None;
-        }
-
-        /// <summary>
-        /// Finds all project dependencies. This methods returns all the dependencies of 
-        /// the project LINQbridgeVs is going to be activated on
-        /// </summary>
-        /// <param name="fullProjectName">Full name of the project.</param>
-        /// <returns></returns>
-        private static IEnumerable<string> FindAllDependencies(string fullProjectName)
-        {
-            var loadedProject = ProjectCollection.GlobalProjectCollection.LoadedProjects.FirstOrDefault(p => p.FullPath.Equals(fullProjectName))
-                                ??
-                                new Microsoft.Build.Evaluation.Project(fullProjectName);
-
-            var references = loadedProject.Items.Where(p => p.ItemType.Equals("ProjectReference"))
-                .Where(p => !p.EvaluatedInclude.Contains("Microsoft") && !p.EvaluatedInclude.Contains("System"));
-
-            var namespaceManager = new XmlNamespaceManager(new NameTable());
-            namespaceManager.AddNamespace("aw", "http://schemas.microsoft.com/developer/msbuild/2003");
-
-
-            return references.Select(e => XDocument.Load(Path.Combine(loadedProject.DirectoryPath, e.Xml.Include)).XPathSelectElement("/aw:Project/aw:PropertyGroup/aw:AssemblyName", namespaceManager).Value);
-
         }
 
         private static void SetPermissions()

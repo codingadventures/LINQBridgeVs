@@ -68,6 +68,7 @@
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.11.0" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -132,11 +133,20 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dependency\Crawler.cs" />
+    <Compile Include="Dependency\Project.cs" />
+    <Compile Include="Extension\Enumerable.cs" />
     <Compile Include="Forms\About.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ProjectDependencies.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProjectDependencies.Designer.cs">
+      <DependentUpon>ProjectDependencies.cs</DependentUpon>
     </Compile>
     <Compile Include="LINQBridgeExtension.cs" />
     <Compile Include="Guids.cs" />
@@ -154,6 +164,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Forms\About.resx">
       <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProjectDependencies.resx">
+      <DependentUpon>ProjectDependencies.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
