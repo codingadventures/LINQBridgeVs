@@ -86,11 +86,11 @@ namespace LINQBridge.DynamicCore
                 var refAssemblies = new List<string> { message.TypeLocation };
                 refAssemblies.AddRange(message.ReferencedAssemblies);
 
-                if (FileSystem.File.Exists(dst))
-                {
-                    Log.Write(string.Format("File Already Exists: {0}", dst));
-                    return;
-                }
+                //if (FileSystem.File.Exists(dst))
+                //{
+                //    Log.Write(string.Format("File Already Exists: {0}", dst));
+                //    return;
+                //}
 
                 var linqQuery = new Inspection(refAssemblies, message.TypeFullName, message.TypeNamespace);
                 var linqQueryText = linqQuery.TransformText();
@@ -118,7 +118,7 @@ namespace LINQBridge.DynamicCore
 
         public Form ShowVisualizer(Stream inData)
         {
-            Log.Configure("LINQBridge");
+            Log.Configure("LINQBridgeVs");
 
             Log.Write("ShowVisualizer Started...");
 

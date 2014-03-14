@@ -35,6 +35,7 @@ namespace LINQBridge.DynamicCore.Helper
     public static class AssemblyFinderHelper
     {
         private const string SearchPattern = "*{0}*.dll";
+        private const string BaseRootPathForWeb = "Temporary ASP.NET Files";
 
         private static readonly Func<string, bool> IsSystemAssembly =
             name => name.Contains("Microsoft") || name.Contains("System") || name.Contains("mscorlib");
@@ -57,13 +58,13 @@ namespace LINQBridge.DynamicCore.Helper
             var currentAssemblyPath = FileSystem.Path.GetDirectoryName(assembly.Location);
             if (currentAssemblyPath == null) return Enumerable.Empty<string>();
 
-            Log.Write("currentAssemblyPath: {0}",  currentAssemblyPath);
+            Log.Write("currentAssemblyPath: {0}", currentAssemblyPath);
 
-           
+
             referencedAssemblies
                 .ForEach(s =>
                              {
-                                 Log.Write("Referenced Assembly {0} ", s);
+                                 Log.Write("Assembly {0} Located in {1} References Assembly {2} ", assembly.GetName().Name, assembly.Location, s);
                                  retPaths.Add(FindPath(s, currentAssemblyPath));
                              });
 
@@ -74,12 +75,14 @@ namespace LINQBridge.DynamicCore.Helper
         internal static string FindPath(string fileToSearch, string rootPath)
         {
             if (rootPath == null) return string.Empty;
+            if (rootPath.EndsWith(BaseRootPathForWeb)) return string.Empty;
+
 
             try
             {
-              
-                Log.Write("SearchPattern: {0}", string.Format(SearchPattern, fileToSearch));
-                
+
+                Log.Write("SearchPattern: {0} in folder {1}", string.Format(SearchPattern, fileToSearch), rootPath);
+
                 var file = FileSystem.Directory
                     .EnumerateFiles(rootPath, string.Format(SearchPattern, fileToSearch), System.IO.SearchOption.AllDirectories)
                     .AsParallel()

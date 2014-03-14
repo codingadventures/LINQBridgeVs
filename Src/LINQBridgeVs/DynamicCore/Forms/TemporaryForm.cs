@@ -18,9 +18,24 @@ namespace LINQBridge.DynamicCore.Forms
             BackColor = Color.FromArgb(1, 0, 0);
             WindowState = FormWindowState.Maximized;
             Opacity = 0.01;
+            TopMost = true;
+            Width = Screen.PrimaryScreen.WorkingArea.Width;
+            Height = Screen.PrimaryScreen.WorkingArea.Height;
             ResumeLayout(false);
         }
 
+        protected override void OnClick(System.EventArgs e)
+        {
+            base.OnClick(e);
+            Invalidate();
+            Close();
+        }
+
+        protected override void OnLoad(System.EventArgs e)
+        {
+            base.OnLoad(e);
+         
+        }
 
         protected override void OnMouseClick(MouseEventArgs e)
         {
