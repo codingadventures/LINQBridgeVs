@@ -62,11 +62,8 @@ namespace LINQBridge.VSExtension.Dependency
                         ? XDocument.Load(Path.Combine(loadedProject.DirectoryPath, proj.Xml.Include))
                             .XPathSelectElement("/aw:Project/aw:PropertyGroup/aw:AssemblyName", namespaceManager)
                             .Value
-                        : string.Empty,
-                    ReferencePath =
-                        proj.ItemType.Equals("Reference")
-                            ? proj.DirectMetadata.First(p => p.Name.Equals("HintPath")).EvaluatedValue
-                            : string.Empty
+                        : string.Empty
+                   
                 };
         }
     }

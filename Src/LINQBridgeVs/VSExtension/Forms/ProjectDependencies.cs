@@ -23,7 +23,7 @@ namespace LINQBridge.VSExtension.Forms
 
         internal void ShowDependencies(IEnumerable<Dependency.Project> foundProjects)
         {
-            ProjectsDataGridView.DataSource = foundProjects;
+            ProjectsDataGridView.DataSource = foundProjects.ToList();
             ShowDialog();
         }
 

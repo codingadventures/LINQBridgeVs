@@ -39,21 +39,12 @@ namespace LINQBridge.VSExtension.Dependency
     {
         public DependencyType DependencyType { get; set; }
 
-        public string ReferencePath { get; set; }
-
+       
         public string AssemblyName { get; set; }
 
         public override string ToString()
         {
-            switch (DependencyType)
-            {
-                case DependencyType.ProjectReference:
-                    return string.Format("{0} {1}", DependencyType, AssemblyName);
-                case DependencyType.AssemblyReference:
-                    return string.Format("{0} {1}", DependencyType, ReferencePath);
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            return string.Format("{0} {1}", DependencyType, AssemblyName);
         }
     }
 }

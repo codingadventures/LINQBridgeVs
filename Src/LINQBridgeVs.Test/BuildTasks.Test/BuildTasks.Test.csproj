@@ -67,13 +67,17 @@
     <Compile Include="CleanBuildTaskTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Model.Test\Model.Test.csproj">
-      <Project>{8A5E73F6-2093-4669-9C09-BEAB033BE56C}</Project>
-      <Name>Model.Test</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\LINQBridgeVs\BuildTasks\BuildTasks.csproj">
       <Project>{276f3935-e0ca-450f-a55f-aed56dc2024e}</Project>
       <Name>BuildTasks</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AnotherModel.Test\AnotherModel.Test.csproj">
+      <Project>{7b0c3d12-296a-438d-b0ea-b049a0d6d3c1}</Project>
+      <Name>AnotherModel.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Model.Test\Model.Test.csproj">
+      <Project>{8a5e73f6-2093-4669-9c09-beab033be56c}</Project>
+      <Name>Model.Test</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
