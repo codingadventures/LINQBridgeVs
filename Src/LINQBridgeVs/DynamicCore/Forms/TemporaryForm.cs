@@ -14,7 +14,8 @@ namespace LINQBridge.DynamicCore.Forms
             Name = "TemporaryForm";
             ShowIcon = false;
             ShowInTaskbar = false;
-            StartPosition = FormStartPosition.CenterScreen;
+            Location = Cursor.Position;
+            StartPosition = FormStartPosition.CenterParent;
             BackColor = Color.FromArgb(1, 0, 0);
             WindowState = FormWindowState.Maximized;
             Opacity = 0.01;
@@ -31,11 +32,7 @@ namespace LINQBridge.DynamicCore.Forms
             Close();
         }
 
-        protected override void OnLoad(System.EventArgs e)
-        {
-            base.OnLoad(e);
-         
-        }
+       
 
         protected override void OnMouseClick(MouseEventArgs e)
         {

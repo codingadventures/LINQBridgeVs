@@ -26,9 +26,9 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
+using Grapple;
 using LINQBridge.DynamicCore.Helper;
-using LINQBridge.DynamicCore.Template;
-using LINQBridge.Grapple;
+using Message = LINQBridge.DynamicCore.Template.Message;
 
 namespace LINQBridge.DynamicCore
 {
@@ -50,6 +50,7 @@ namespace LINQBridge.DynamicCore
             var message = new Message
             {
                 FileName = string.Format(FileNameFormat, TypeNameHelper.RemoveSystemNamespaces(fileName)),
+                TypeName = targetType.Name,
                 TypeFullName = targetTypeFullName,
                 TypeLocation = targetType.Assembly.Location,
                 TypeNamespace = targetType.Namespace,
@@ -60,11 +61,11 @@ namespace LINQBridge.DynamicCore
             binaryFormatter.Serialize(outgoingData, message);
 
 
-            var busChannel = Bus.Instance;
-            busChannel.Add(target);
-            busChannel.BroadCast();
+            var truck = new Truck("LINQBridgeVsTruck");
+            truck.LoadCargo(target);
+            var res = truck.DeliverTo(fileName);
         }
 
-       
+
     }
 }

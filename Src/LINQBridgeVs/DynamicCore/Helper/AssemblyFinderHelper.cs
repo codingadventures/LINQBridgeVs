@@ -84,7 +84,7 @@ namespace LINQBridge.DynamicCore.Helper
                 Log.Write("SearchPattern: {0} in folder {1}", string.Format(SearchPattern, fileToSearch), rootPath);
 
                 var file = FileSystem.Directory
-                    .EnumerateFiles(rootPath, string.Format(SearchPattern, fileToSearch), System.IO.SearchOption.AllDirectories)
+                    .EnumerateFiles(rootPath, string.Format(SearchPattern, fileToSearch), System.IO.SearchOption.TopDirectoryOnly)
                     .AsParallel()
                     .OrderByDescending(info => FileSystem.FileInfo.FromFileName(info).LastAccessTime)
                     .FirstOrDefault();

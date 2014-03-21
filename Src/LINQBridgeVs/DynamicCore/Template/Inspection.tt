@@ -9,10 +9,10 @@
   <Namespace>System.Dynamic</Namespace>
   <Namespace>System.Runtime.Serialization.Formatters</Namespace>
   <Namespace>System.Xml.Linq</Namespace>
-  <Namespace>LINQBridge.Grapple</Namespace>
-  <Namespace><#= TypeNamespace #></Namespace>
+  <Namespace>Grapple</Namespace>
+  <Namespace><#= _typeNamespace #></Namespace>
   <Reference><#= this.GetType().Assembly.Location #></Reference>
-  <# foreach(var elem in this.Assemblies){
+  <# foreach(var elem in this._assemblies){
     if (!elem.Contains("mscorlib")) {
   #>
   <Reference><#=elem#></Reference>
@@ -23,8 +23,8 @@
 void Main()
 {
      
-        Bus instance = Bus.Instance;
-        var obj = instance.Get<<#=TypeToRetrieveFullName#>>();
-        obj.Dump("<#=TypeToRetrieveFullName#>");
-        
+        Truck truck = new Truck("LINQBridgeVsTruck");
+		truck.WaitDelivery("<#= _typeToRetrieveFullName#> ").Wait();
+        var <#= Char.ToLower(this._typeName[0]) + this._typeName.Substring(1) #> = truck.UnStuffCargo<<#=_typeToRetrieveFullName#>>();
+        <#= Char.ToLower(this._typeName[0]) + this._typeName.Substring(1) #>.Dump("<#=_typeToRetrieveFullName#>", 2);
 }

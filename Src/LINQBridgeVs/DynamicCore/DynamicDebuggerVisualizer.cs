@@ -92,7 +92,7 @@ namespace LINQBridge.DynamicCore
                 //    return;
                 //}
 
-                var linqQuery = new Inspection(refAssemblies, message.TypeFullName, message.TypeNamespace);
+                var linqQuery = new Inspection(refAssemblies, message.TypeFullName, message.TypeNamespace, message.TypeName);
                 var linqQueryText = linqQuery.TransformText();
 
                 Log.Write("LinqQuery file Tranformed");
@@ -197,7 +197,7 @@ namespace LINQBridge.DynamicCore
                 Log.Write(e, "Error during LINQPad execution");
                 throw;
             }
-             
+
             return new TemporaryForm();
         }
 

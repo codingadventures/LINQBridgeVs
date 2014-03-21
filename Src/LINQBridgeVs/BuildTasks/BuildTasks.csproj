@@ -69,9 +69,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
     </Reference>
-    <Reference Include="SInject, Version=0.1.5183.2036, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="SInject, Version=0.1.5193.24079, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\SInject.0.1.5.1\lib\net40\SInject.dll</HintPath>
+      <HintPath>..\..\packages\SInject.0.1.6\lib\net40\SInject.dll</HintPath>
+    </Reference>
+    <Reference Include="SInject.Logging">
+      <HintPath>..\..\packages\SInject.0.1.6\lib\net40\SInject.Logging.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

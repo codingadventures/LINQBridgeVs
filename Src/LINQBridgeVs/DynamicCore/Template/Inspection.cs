@@ -9,18 +9,15 @@
 // ------------------------------------------------------------------------------
 namespace LINQBridge.DynamicCore.Template
 {
-    using System.Linq;
-    using System.Text;
-    using System.Collections.Generic;
     using System;
-    
+
     /// <summary>
     /// Class to produce the template output
     /// </summary>
-    
-    #line 1 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\DynamicCore\Template\Inspection.tt"
+
+#line 1 "C:\Users\giovanni.campo\Documents\GitHub\LINQBridgeVs\Src\LINQBridgeVs\DynamicCore\Template\Inspection.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "11.0.0.0")]
-    public sealed partial class Inspection : InspectionBase
+    public partial class Inspection : InspectionBase
     {
 #line hidden
         /// <summary>
@@ -30,65 +27,89 @@ namespace LINQBridge.DynamicCore.Template
         {
             this.Write("\r\n<Query Kind=\"Program\">\r\n  <Namespace>System.Dynamic</Namespace>\r\n  <Namespace>S" +
                     "ystem.Runtime.Serialization.Formatters</Namespace>\r\n  <Namespace>System.Xml.Linq" +
-                    "</Namespace>\r\n  <Namespace>LINQBridge.Grapple</Namespace>\r\n  <Namespace>");
-            
-            #line 13 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\DynamicCore\Template\Inspection.tt"
+                    "</Namespace>\r\n  <Namespace>Grapple</Namespace>\r\n  <Namespace>");
+
+#line 13 "C:\Users\giovanni.campo\Documents\GitHub\LINQBridgeVs\Src\LINQBridgeVs\DynamicCore\Template\Inspection.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_typeNamespace));
-            
-            #line default
-            #line hidden
+
+#line default
+#line hidden
             this.Write("</Namespace>\r\n  <Reference>");
-            
-            #line 14 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\DynamicCore\Template\Inspection.tt"
+
+#line 14 "C:\Users\giovanni.campo\Documents\GitHub\LINQBridgeVs\Src\LINQBridgeVs\DynamicCore\Template\Inspection.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.GetType().Assembly.Location));
-            
-            #line default
-            #line hidden
+
+#line default
+#line hidden
             this.Write("</Reference>\r\n  ");
-            
-            #line 15 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\DynamicCore\Template\Inspection.tt"
- foreach(var elem in this._assemblies){
-    if (!elem.Contains("mscorlib")) {
-  
-            
-            #line default
-            #line hidden
-            this.Write("  <Reference>");
-            
-            #line 18 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\DynamicCore\Template\Inspection.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(elem));
-            
-            #line default
-            #line hidden
-            this.Write("</Reference>\r\n  ");
-            
-            #line 19 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\DynamicCore\Template\Inspection.tt"
-}}
-            
-            #line default
-            #line hidden
-            this.Write(" \r\n</Query>\r\n\r\n\r\nvoid Main()\r\n{\r\n     \r\n        Bus instance = Bus.Instance;\r\n   " +
-                    "     var obj = instance.Get<");
-            
-            #line 27 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\DynamicCore\Template\Inspection.tt"
+
+#line 15 "C:\Users\giovanni.campo\Documents\GitHub\LINQBridgeVs\Src\LINQBridgeVs\DynamicCore\Template\Inspection.tt"
+            foreach (var elem in this._assemblies)
+            {
+                if (!elem.Contains("mscorlib"))
+                {
+
+
+#line default
+#line hidden
+                    this.Write("  <Reference>");
+
+#line 18 "C:\Users\giovanni.campo\Documents\GitHub\LINQBridgeVs\Src\LINQBridgeVs\DynamicCore\Template\Inspection.tt"
+                    this.Write(this.ToStringHelper.ToStringWithCulture(elem));
+
+#line default
+#line hidden
+                    this.Write("</Reference>\r\n  ");
+
+#line 19 "C:\Users\giovanni.campo\Documents\GitHub\LINQBridgeVs\Src\LINQBridgeVs\DynamicCore\Template\Inspection.tt"
+                }
+            }
+
+#line default
+#line hidden
+            this.Write(" \r\n</Query>\r\n\r\n\r\nvoid Main()\r\n{\r\n     \r\n        Truck truck = new Truck(\"LINQBrid" +
+                    "geVsTruck\");\r\n\t\ttruck.WaitDelivery(\"");
+
+#line 27 "C:\Users\giovanni.campo\Documents\GitHub\LINQBridgeVs\Src\LINQBridgeVs\DynamicCore\Template\Inspection.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_typeToRetrieveFullName));
-            
-            #line default
-            #line hidden
-            this.Write(">();\r\n        obj.Dump(\"");
-            
-            #line 28 "C:\Users\John\Documents\Visual Studio 2012\Projects\Bridge\DynamicCore\Template\Inspection.tt"
+
+#line default
+#line hidden
+            this.Write(" \").Wait();\r\n        var ");
+
+#line 28 "C:\Users\giovanni.campo\Documents\GitHub\LINQBridgeVs\Src\LINQBridgeVs\DynamicCore\Template\Inspection.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Char.ToLower(this._typeName[0]) + this._typeName.Substring(1)));
+
+#line default
+#line hidden
+            this.Write(" = truck.UnStuffCargo<");
+
+#line 28 "C:\Users\giovanni.campo\Documents\GitHub\LINQBridgeVs\Src\LINQBridgeVs\DynamicCore\Template\Inspection.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_typeToRetrieveFullName));
-            
-            #line default
-            #line hidden
-            this.Write("\");\r\n        \r\n}");
+
+#line default
+#line hidden
+            this.Write(">();\r\n        ");
+
+#line 29 "C:\Users\giovanni.campo\Documents\GitHub\LINQBridgeVs\Src\LINQBridgeVs\DynamicCore\Template\Inspection.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Char.ToLower(this._typeName[0]) + this._typeName.Substring(1)));
+
+#line default
+#line hidden
+            this.Write(".Dump(\"");
+
+#line 29 "C:\Users\giovanni.campo\Documents\GitHub\LINQBridgeVs\Src\LINQBridgeVs\DynamicCore\Template\Inspection.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(_typeToRetrieveFullName));
+
+#line default
+#line hidden
+            this.Write("\", 2);\r\n}");
             return this.GenerationEnvironment.ToString();
         }
     }
-    
-    #line default
-    #line hidden
+
+#line default
+#line hidden
     #region Base class
     /// <summary>
     /// Base class for this transformation
@@ -188,7 +209,7 @@ namespace LINQBridge.DynamicCore.Template
             }
             // If we're starting off, or if the previous text ended with a newline,
             // we have to append the current indent first.
-            if (((this.GenerationEnvironment.Length == 0) 
+            if (((this.GenerationEnvironment.Length == 0)
                         || this.endsWithNewline))
             {
                 this.GenerationEnvironment.Append(this.currentIndentField);
@@ -306,7 +327,7 @@ namespace LINQBridge.DynamicCore.Template
         /// </summary>
         public class ToStringInstanceHelper
         {
-            private System.IFormatProvider formatProviderField  = global::System.Globalization.CultureInfo.InvariantCulture;
+            private System.IFormatProvider formatProviderField = global::System.Globalization.CultureInfo.InvariantCulture;
             /// <summary>
             /// Gets or sets format provider to be used by ToStringWithCulture method.
             /// </summary>
@@ -314,13 +335,13 @@ namespace LINQBridge.DynamicCore.Template
             {
                 get
                 {
-                    return this.formatProviderField ;
+                    return this.formatProviderField;
                 }
                 set
                 {
                     if ((value != null))
                     {
-                        this.formatProviderField  = value;
+                        this.formatProviderField = value;
                     }
                 }
             }

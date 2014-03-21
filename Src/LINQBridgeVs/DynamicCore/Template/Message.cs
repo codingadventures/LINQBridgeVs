@@ -32,6 +32,7 @@ namespace LINQBridge.DynamicCore.Template
     internal class Message
     {
         public string FileName;
+        public string TypeName;
         public string TypeFullName;
         public string TypeLocation;
         public string TypeNamespace;
@@ -51,7 +52,8 @@ namespace LINQBridge.DynamicCore.Template
                 + Environment.NewLine 
                 + "TypeLocation: " + TypeLocation 
                 + Environment.NewLine
-                + "TypeNamespace" + TypeNamespace;
+                + "TypeNamespace: " + TypeNamespace 
+                + Environment.NewLine;
         }
     }
 }

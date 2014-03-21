@@ -23,7 +23,6 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System.Windows.Forms;
 using LINQBridge.DynamicCore;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 
