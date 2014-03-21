@@ -40,17 +40,22 @@ namespace LINQBridge.DynamicCore
         {
             var targetType = target.GetType();
             var targetTypeFullName = TypeNameHelper.GetDisplayName(targetType, true);
+            var targetTypeName = TypeNameHelper.GetDisplayName(targetType, false);
             var pattern1 = new Regex("[<]");
             var pattern2 = new Regex("[>]");
 
             var fileName = pattern1.Replace(targetTypeFullName, "(");
-
             fileName = pattern2.Replace(fileName, ")");
+
+            var typeName = pattern1.Replace(targetTypeName, string.Empty);
+            typeName = pattern2.Replace(typeName, string.Empty);
+
+            fileName = TypeNameHelper.RemoveSystemNamespaces(fileName);
 
             var message = new Message
             {
-                FileName = string.Format(FileNameFormat, TypeNameHelper.RemoveSystemNamespaces(fileName)),
-                TypeName = targetType.Name,
+                FileName = string.Format(FileNameFormat, fileName),
+                TypeName = typeName,
                 TypeFullName = targetTypeFullName,
                 TypeLocation = targetType.Assembly.Location,
                 TypeNamespace = targetType.Namespace,
