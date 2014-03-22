@@ -111,14 +111,13 @@ namespace LINQBridgeVs.Extension
 
 
         private static void SetEnvironment()
-        {
-             
-            var linqPadPath = Path.GetDirectoryName(Locations.LinqPadExeFileNamePath);
-
+        { 
             if (!Directory.Exists(Locations.LinqPadDestinationFolder))
             {
                 Log.Write("Creating LinqPad directory {0}", Locations.LinqPadDestinationFolder);
-                Directory.CreateDirectory(Locations.LinqPadDestinationFolder);
+                MessageBox.Show("Please Install LINQPad in order to Use LINQBridgeVs and then Restart Visual Studio");
+                Process.Start("http://www.linqpad.net");
+                return;
             }
 
 
@@ -128,21 +127,6 @@ namespace LINQBridgeVs.Extension
             Log.Write("LinqBridge Targets copied to {0} - {1}", Locations.DotNet40FrameworkPath, Locations.DotNet40Framework64Path);
 
             SetPermissions();
-
-
-            //Install LINQPad in the machine
-            if (linqPadPath == null) return;
-
-            Log.Write("Installing LINQPad in the machine");
-            foreach (var file in Directory.GetFiles(linqPadPath))
-            {
-                if (file == null) continue;
-                var destinationFileName = Path.Combine(Locations.LinqPadDestinationFolder, Path.GetFileName(file));
-                if (File.Exists(destinationFileName))
-                    continue;
-                File.Move(file, destinationFileName);
-            }
-
 
             Log.Write("Setting IsEnvironmentConfigured to True");
             IsEnvironmentConfigured = true;

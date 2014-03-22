@@ -105,7 +105,8 @@
             // VersionLabel
             // 
             this.VersionLabel.AutoSize = true;
-            this.VersionLabel.Location = new System.Drawing.Point(138, 300);
+            this.VersionLabel.Font = new System.Drawing.Font("Courier New", 9.75F);
+            this.VersionLabel.Location = new System.Drawing.Point(161, 300);
             this.VersionLabel.Name = "VersionLabel";
             this.VersionLabel.Size = new System.Drawing.Size(0, 16);
             this.VersionLabel.TabIndex = 6;
