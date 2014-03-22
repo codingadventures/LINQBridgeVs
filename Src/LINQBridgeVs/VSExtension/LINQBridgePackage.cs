@@ -33,6 +33,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using EnvDTE;
+using EnvDTE80;
 using LINQBridge.Logging;
 using LINQBridgeVs.Extension.Forms;
 using Microsoft.VisualStudio;
@@ -72,6 +73,9 @@ namespace LINQBridgeVs.Extension
         private DTEEvents _dteEvents;
         private DTE _dte;
         private const string VisualStudioProcessName = "devenv";
+        private DTE2 _mApplicationObject = null;
+        DTEEvents _mPackageDteEvents = null;
+
         //  private static Icon solutionIcon;
         //  private uint propChangeCookie;
         //  private IVsSolution solution;
@@ -82,7 +86,20 @@ namespace LINQBridgeVs.Extension
 
         private static readonly XDocument MicrosoftCommonTargetDocument
             = XDocument.Load(Locations.MicrosoftCommonTargetFileNamePath);
- 
+
+        public DTE2 ApplicationObject
+        {
+            get
+            {
+                if (_mApplicationObject == null)
+                {
+                    // Get an instance of the currently running Visual Studio IDE
+                    DTE dte = (DTE)GetService(typeof(DTE));
+                    _mApplicationObject = dte as DTE2;
+                }
+                return _mApplicationObject;
+            }
+        }
 
         #region Package Members
 
@@ -98,8 +115,10 @@ namespace LINQBridgeVs.Extension
             _dteEvents = _dte.Events.DTEEvents;
 
             _dteEvents.OnStartupComplete += OnStartupComplete;
-            _dteEvents.OnBeginShutdown += OnBeginShutdown;
+           
 
+            _mPackageDteEvents =  ApplicationObject.Events.DTEEvents;
+            _mPackageDteEvents.OnBeginShutdown += HandleVisualStudioShutDown;
             // watch for VSSPROPID property changes
             //  var vsShell = (IVsShell)GetService(typeof(SVsShell));
             //  vsShell.AdviseShellPropertyChanges(this, out propChangeCookie);
@@ -135,20 +154,23 @@ namespace LINQBridgeVs.Extension
             mcs.AddCommand(menuItemAbout);
         }
 
-        private void OnBeginShutdown()
+        private void HandleVisualStudioShutDown()
         {
             try
             {
                 Log.Write("OnBeginShutdown");
 
-                _dteEvents.OnBeginShutdown -= OnBeginShutdown;
+                _mPackageDteEvents.OnBeginShutdown -= HandleVisualStudioShutDown;
                 _dteEvents = null;
+                _mPackageDteEvents = null;
                 //Check if there's only one instance of VS running. if it's so then remove from Microsoft.Common.Target 
                 //Any reference of LINQBridge
                 if (Process.GetProcessesByName(VisualStudioProcessName).Length > 1) return;
 
                 Log.Write("Disabling LINQBridgeVS. Only one VS instance opened");
                 DisableLinqBridge();
+
+                LINQBridgeVsExtension.IsEnvironmentConfigured = false;
             }
             catch (Exception e)
             {
@@ -188,6 +210,8 @@ namespace LINQBridgeVs.Extension
 
             MicrosoftCommonTargetDocument.Save(Locations.MicrosoftCommonTargetFileNamePath);
             MicrosoftCommonTargetDocument.Save(Locations.MicrosoftCommonTarget64FileNamePath);
+
+
         }
 
 

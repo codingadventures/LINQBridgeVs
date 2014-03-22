@@ -67,15 +67,15 @@ namespace LINQBridgeVs.Extension
             {
                 using (var key = Registry.CurrentUser.OpenSubKey(Resources.ConfigurationRegistryKey))
                 {
-                    return key != null && Convert.ToBoolean(key.GetValue("IsLINQBridgeConfigured"));
+                    return key != null && Convert.ToBoolean(key.GetValue("IsLINQBridgeVsConfigured"));
                 }
             }
-            private set
+            set
             {
                 using (var key = Registry.CurrentUser.CreateSubKey(Resources.ConfigurationRegistryKey))
                 {
                     if (key != null)
-                        key.SetValue("IsLINQBridgeConfigured", value);
+                        key.SetValue("IsLINQBridgeVsConfigured", value);
                 }
             }
         }
@@ -85,7 +85,7 @@ namespace LINQBridgeVs.Extension
         {
             Log.Configure("LINQBridgeVs");
             _application = app;
-            Log.Write("Configuring LINQBridgeExtension");
+            Log.Write("Configuring LINQBridgeVs Extension");
 
             //Always check if installation folder has changed
             SetInstallationFolder();
@@ -101,17 +101,20 @@ namespace LINQBridgeVs.Extension
             //Set in the registry the installer location if it is has changed
             using (var key = Registry.CurrentUser.CreateSubKey(Resources.InstallFolderRegistryKey))
             {
-                if (key != null && !key.GetValue("InstallFolderPath").Equals(Locations.InstallFolder))
-                {
-                    Log.Write("Setting InstallFolderPath to {0}", Locations.InstallFolder);
-                    key.SetValue("InstallFolderPath", Locations.InstallFolder);
-                }
+                if (key == null) return;
+                
+                var value = key.GetValue("InstallFolderPath");
+
+                if (value != null && value.Equals(Locations.InstallFolder)) return;
+                
+                Log.Write("Setting InstallFolderPath to {0}", Locations.InstallFolder);
+                key.SetValue("InstallFolderPath", Locations.InstallFolder);
             }
         }
 
 
         private static void SetEnvironment()
-        { 
+        {
             if (!Directory.Exists(Locations.LinqPadDestinationFolder))
             {
                 Log.Write("Creating LinqPad directory {0}", Locations.LinqPadDestinationFolder);
@@ -186,11 +189,11 @@ namespace LINQBridgeVs.Extension
                 return;
 
             var allProjectReferences = Crawler.FindProjectDependencies(SelectedProject.FullName);
-            var foundProjects = allProjectReferences as IList<LINQBridgeVs.Extension.Dependency.Project> ?? allProjectReferences.ToList();
+            var foundProjects = allProjectReferences as IList<Dependency.Project> ?? allProjectReferences.ToList();
             var projectReferences = foundProjects.Where(project => project.DependencyType == DependencyType.ProjectReference);
             // var assemblyReferences = allProjectReferences.Where(project => project.DependencyType == DependencyType.AssemblyReference);
 
-            var references = projectReferences as IList<LINQBridgeVs.Extension.Dependency.Project> ?? projectReferences.ToList();
+            var references = projectReferences as IList<Dependency.Project> ?? projectReferences.ToList();
             switch (action)
             {
                 case CommandAction.Enable:

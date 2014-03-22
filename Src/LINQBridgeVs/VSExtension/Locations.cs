@@ -42,8 +42,6 @@ namespace LINQBridgeVs.Extension
         public static readonly string LinqBridgeTargetFileNamePath = Path.Combine(InstallFolder, Resources.Targets);
         public static readonly string LinqBridgeTargetFileName = Path.GetFileName(Resources.Targets);
 
-        public static readonly string LinqPadExeFileNamePath = Path.Combine(InstallFolder, Resources.LINQPad);
-
         public static readonly string DotNet40FrameworkPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows),
                 @"Microsoft.NET\Framework\v4.0.30319");
 

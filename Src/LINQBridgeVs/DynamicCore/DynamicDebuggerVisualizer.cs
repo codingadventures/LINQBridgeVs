@@ -95,7 +95,7 @@ namespace LINQBridge.DynamicCore
                 var linqQuery = new Inspection(refAssemblies, message.TypeFullName, message.TypeNamespace, message.TypeName);
                 var linqQueryText = linqQuery.TransformText();
 
-                Log.Write("LinqQuery file Tranformed");
+                Log.Write("LinqQuery file Transformed");
 
 
                 using (var memoryStream = FileSystem.File.OpenWrite(dst))

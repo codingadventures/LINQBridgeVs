@@ -48,7 +48,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Grapple">
-      <HintPath>..\..\packages\Grapple.0.2.1\lib\Grapple.dll</HintPath>
+      <HintPath>..\..\packages\Grapple.0.2.4\lib\Grapple.dll</HintPath>
 	  <Ilmerge>True</Ilmerge>
     </Reference>
     <Reference Include="System" />

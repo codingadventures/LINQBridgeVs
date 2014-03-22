@@ -44,6 +44,7 @@ namespace LINQBridge.DynamicCore.Helper
 
         public static IEnumerable<string> GetReferencedAssembliesPath(this _Assembly assembly, bool includeSystemAssemblies = false)
         {
+            Log.Write("GetReferencedAssembliesPath Started - Parameters assembly: {0}, includeSystemAssemblies: {1}", assembly.ToString(), includeSystemAssemblies);
             var retPaths = new List<string>();
 
             var referencedAssemblies = assembly.GetReferencedAssemblies()

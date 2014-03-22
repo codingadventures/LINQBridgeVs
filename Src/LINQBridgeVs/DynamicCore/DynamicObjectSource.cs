@@ -23,11 +23,14 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
+using System.Collections;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
 using Grapple;
 using LINQBridge.DynamicCore.Helper;
+using LINQBridge.Logging;
 using Message = LINQBridge.DynamicCore.Template.Message;
 
 namespace LINQBridge.DynamicCore
@@ -38,7 +41,8 @@ namespace LINQBridge.DynamicCore
 
         public static void BroadCastData(object target, Stream outgoingData)
         {
-            var targetType = target.GetType();
+            Log.Configure("DynamicObjectSource");
+            var targetType = GetInterfaceTypeIfIsIterator(target);
             var targetTypeFullName = TypeNameHelper.GetDisplayName(targetType, true);
             var targetTypeName = TypeNameHelper.GetDisplayName(targetType, false);
             var pattern1 = new Regex("[<]");
@@ -65,12 +69,29 @@ namespace LINQBridge.DynamicCore
             var binaryFormatter = new BinaryFormatter();
             binaryFormatter.Serialize(outgoingData, message);
 
+            Log.Write("BroadCastData to LINQBridgeVsTruck");
 
             var truck = new Truck("LINQBridgeVsTruck");
             truck.LoadCargo(target);
-            var res = truck.DeliverTo(fileName);
+            var res = truck.DeliverTo(typeName);
         }
 
+        private static  Type GetInterfaceTypeIfIsIterator(object o)
+        {
+            Log.Write("GetInterfaceTypeIfIsIterator Started");
+            var @type = o.GetType();
 
+            if (@type.IsNestedPrivate && @type.Name.Contains("Iterator") &&
+                @type.FullName.Contains("System.Linq.Enumerable") && o is IEnumerable)
+            {
+                if (@type.BaseType != null)
+                {
+                    Log.Write("Iterator type, LINQ Query found {0}", @type.BaseType.ToString());
+                    return @type.BaseType.GetInterface("IEnumerable`1");
+                }
+            }
+
+            return @type;
+        }
     }
 }

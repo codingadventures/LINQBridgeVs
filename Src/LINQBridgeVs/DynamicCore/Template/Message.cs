@@ -48,7 +48,9 @@ namespace LINQBridge.DynamicCore.Template
         {
             return "FileName: " + FileName 
                 + Environment.NewLine 
-                + "TypeFullName: " + TypeFullName 
+                + "TypeFullName: " + TypeFullName  
+                + Environment.NewLine 
+                + "TypeName: " + TypeName 
                 + Environment.NewLine 
                 + "TypeLocation: " + TypeLocation 
                 + Environment.NewLine

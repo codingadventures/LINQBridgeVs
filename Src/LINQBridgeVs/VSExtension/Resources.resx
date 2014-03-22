@@ -117,15 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="LINQPad" xml:space="preserve">
-    <value>LINQPad\LINQPad.exe</value>
-  </data>
-  <data name="LINQPadConfig" xml:space="preserve">
-    <value>LINQPad\LINQPadConfig.config</value>
-  </data>
-  <data name="Query" xml:space="preserve">
-    <value>LINQPad\Inspection.linq</value>
-  </data>
   <data name="Targets" xml:space="preserve">
     <value>Targets\BridgeBuildTask.targets</value>
   </data>
@@ -137,12 +128,12 @@
     <value>Resources\LINQBridgeLogo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="EnabledProjectsRegistryKey" xml:space="preserve">
-    <value>Software\LINQBridge\EnabledProjects</value>
+    <value>Software\LINQBridgeVs\EnabledProjects</value>
   </data>
   <data name="InstallFolderRegistryKey" xml:space="preserve">
-    <value>Software\LINQBridge</value>
+    <value>Software\LINQBridgeVs</value>
   </data>
   <data name="ConfigurationRegistryKey" xml:space="preserve">
-    <value>Software\LINQBridge\Configurations</value>
+    <value>Software\LINQBridgeVs\Configurations</value>
   </data>
 </root>

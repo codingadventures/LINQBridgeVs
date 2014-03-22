@@ -70,7 +70,7 @@ namespace LINQBridgeVs.Extension {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Software\LINQBridge\Configurations.
+        ///   Looks up a localized string similar to Software\LINQBridgeVs\Configurations.
         /// </summary>
         internal static string ConfigurationRegistryKey {
             get {
@@ -79,7 +79,7 @@ namespace LINQBridgeVs.Extension {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Software\LINQBridge\EnabledProjects.
+        ///   Looks up a localized string similar to Software\LINQBridgeVs\EnabledProjects.
         /// </summary>
         internal static string EnabledProjectsRegistryKey {
             get {
@@ -88,7 +88,7 @@ namespace LINQBridgeVs.Extension {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Software\LINQBridge.
+        ///   Looks up a localized string similar to Software\LINQBridgeVs.
         /// </summary>
         internal static string InstallFolderRegistryKey {
             get {
@@ -103,33 +103,6 @@ namespace LINQBridgeVs.Extension {
             get {
                 object obj = ResourceManager.GetObject("LINQBridgeLogo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to LINQPad\LINQPad.exe.
-        /// </summary>
-        internal static string LINQPad {
-            get {
-                return ResourceManager.GetString("LINQPad", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to LINQPad\LINQPadConfig.config.
-        /// </summary>
-        internal static string LINQPadConfig {
-            get {
-                return ResourceManager.GetString("LINQPadConfig", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to LINQPad\Inspection.linq.
-        /// </summary>
-        internal static string Query {
-            get {
-                return ResourceManager.GetString("Query", resourceCulture);
             }
         }
         
