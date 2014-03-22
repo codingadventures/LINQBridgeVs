@@ -33,8 +33,8 @@ using System.Text;
 using System.Windows.Forms;
 using EnvDTE;
 using LINQBridge.Logging;
-using LINQBridge.VSExtension.Forms;
 using LINQBridgeVs.Extension.Dependency;
+using LINQBridgeVs.Extension.Forms;
 using Microsoft.Win32;
 using Process = System.Diagnostics.Process;
 using Project = EnvDTE.Project;
@@ -87,26 +87,32 @@ namespace LINQBridgeVs.Extension
             _application = app;
             Log.Write("Configuring LINQBridgeExtension");
 
+            //Always check if installation folder has changed
+            SetInstallationFolder();
+
             if (IsEnvironmentConfigured) return;
 
             Log.Write("Setting the Environment");
             SetEnvironment();
         }
 
-
-        private static void SetEnvironment()
+        private static void SetInstallationFolder()
         {
-
-            //Set in the registry the installer location
+            //Set in the registry the installer location if it is has changed
             using (var key = Registry.CurrentUser.CreateSubKey(Resources.InstallFolderRegistryKey))
             {
-                if (key != null)
+                if (key != null && !key.GetValue("InstallFolderPath").Equals(Locations.InstallFolder))
                 {
                     Log.Write("Setting InstallFolderPath to {0}", Locations.InstallFolder);
                     key.SetValue("InstallFolderPath", Locations.InstallFolder);
                 }
             }
+        }
 
+
+        private static void SetEnvironment()
+        {
+             
             var linqPadPath = Path.GetDirectoryName(Locations.LinqPadExeFileNamePath);
 
             if (!Directory.Exists(Locations.LinqPadDestinationFolder))

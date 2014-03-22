@@ -30,7 +30,7 @@ using System.Windows.Forms;
 using LINQBridgeVs.Extension.Dependency;
 using LINQBridgeVs.Extension.Extension;
 
-namespace LINQBridge.VSExtension.Forms
+namespace LINQBridgeVs.Extension.Forms
 {
     internal partial class ProjectDependencies : Form
     {

@@ -42,7 +42,7 @@
             // 
             // CloseButton
             // 
-            this.CloseButton.Location = new System.Drawing.Point(288, 288);
+            this.CloseButton.Location = new System.Drawing.Point(332, 288);
             this.CloseButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.CloseButton.Name = "CloseButton";
             this.CloseButton.Size = new System.Drawing.Size(87, 28);
@@ -55,7 +55,7 @@
             // 
             this.GitHubLinkLabel.AutoSize = true;
             this.GitHubLinkLabel.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GitHubLinkLabel.Location = new System.Drawing.Point(138, 277);
+            this.GitHubLinkLabel.Location = new System.Drawing.Point(154, 277);
             this.GitHubLinkLabel.Name = "GitHubLinkLabel";
             this.GitHubLinkLabel.Size = new System.Drawing.Size(120, 16);
             this.GitHubLinkLabel.TabIndex = 1;
@@ -86,7 +86,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(138, 254);
+            this.label3.Location = new System.Drawing.Point(154, 254);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(120, 16);
             this.label3.TabIndex = 4;
@@ -115,7 +115,7 @@
             this.LogoPictureBox.Location = new System.Drawing.Point(-1, -1);
             this.LogoPictureBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.LogoPictureBox.Name = "LogoPictureBox";
-            this.LogoPictureBox.Size = new System.Drawing.Size(391, 207);
+            this.LogoPictureBox.Size = new System.Drawing.Size(431, 207);
             this.LogoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.LogoPictureBox.TabIndex = 7;
             this.LogoPictureBox.TabStop = false;
@@ -124,7 +124,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(391, 329);
+            this.ClientSize = new System.Drawing.Size(431, 329);
             this.Controls.Add(this.LogoPictureBox);
             this.Controls.Add(this.VersionLabel);
             this.Controls.Add(this.label4);

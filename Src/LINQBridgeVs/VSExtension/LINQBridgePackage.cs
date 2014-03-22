@@ -34,7 +34,6 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using EnvDTE;
 using LINQBridge.Logging;
-using LINQBridge.VSExtension;
 using LINQBridgeVs.Extension.Forms;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
