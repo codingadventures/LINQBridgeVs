@@ -22,6 +22,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -32,15 +33,13 @@ using System.Text;
 using System.Windows.Forms;
 using EnvDTE;
 using LINQBridge.Logging;
-using LINQBridge.VSExtension.Dependency;
-using LINQBridge.VSExtension.Extension;
 using LINQBridge.VSExtension.Forms;
+using LINQBridgeVs.Extension.Dependency;
 using Microsoft.Win32;
 using Process = System.Diagnostics.Process;
 using Project = EnvDTE.Project;
 
-
-namespace LINQBridge.VSExtension
+namespace LINQBridgeVs.Extension
 {
     [Flags]
     public enum CommandStates
@@ -56,7 +55,7 @@ namespace LINQBridge.VSExtension
         Disable
     }
 
-    public class LINQBridgeExtension
+    public class LINQBridgeVsExtension
     {
         #region [ Private Properties ]
         private readonly DTE _application;
@@ -82,7 +81,7 @@ namespace LINQBridge.VSExtension
         }
         #endregion
 
-        public LINQBridgeExtension(DTE app)
+        public LINQBridgeVsExtension(DTE app)
         {
             Log.Configure("LINQBridgeVs");
             _application = app;
@@ -197,32 +196,43 @@ namespace LINQBridge.VSExtension
                 return;
 
             var allProjectReferences = Crawler.FindProjectDependencies(SelectedProject.FullName);
-            var foundProjects = allProjectReferences as IList<Dependency.Project> ?? allProjectReferences.ToList();
+            var foundProjects = allProjectReferences as IList<LINQBridgeVs.Extension.Dependency.Project> ?? allProjectReferences.ToList();
             var projectReferences = foundProjects.Where(project => project.DependencyType == DependencyType.ProjectReference);
             // var assemblyReferences = allProjectReferences.Where(project => project.DependencyType == DependencyType.AssemblyReference);
 
-            var references = projectReferences as IList<Dependency.Project> ?? projectReferences.ToList();
+            var references = projectReferences as IList<LINQBridgeVs.Extension.Dependency.Project> ?? projectReferences.ToList();
             switch (action)
             {
                 case CommandAction.Enable:
+                    const string enableMessage = "Following project dependencies have been found...LINQBridge them? (Recommended)";
                     EnableProject(SelectedAssemblyName);
-                    MessageBox.Show(string.Format("LINQBridge on {0} has been Enabled...", SelectedAssemblyName), "Success", MessageBoxButtons.OK);
+                    var enabledDependencies = new List<string>();
+                    enabledDependencies.Insert(0, SelectedAssemblyName);
 
                     if (references.Any(project => IsBridgeDisabled(project.AssemblyName)))
                     {
-                        var projectDependencies = new ProjectDependencies(() => references.ForEach(project => EnableProject(project.AssemblyName)));
-                        projectDependencies.ShowDependencies(projectReferences);
+                        var projectDependencies = new ProjectDependencies(references, enableMessage);
+                        enabledDependencies.AddRange(projectDependencies.ShowDependencies(EnableProject).ToList());
                     }
+
+                    MessageBox.Show(string.Format("LINQBridge on {0} has been Enabled...", string.Join(", ", enabledDependencies)), "Success", MessageBoxButtons.OK);
+
                     break;
                 case CommandAction.Disable:
+                    const string disableMessage = "Following project dependencies have been found...Un-LINQBridge them? (Recommended)";
+
                     DisableProject(SelectedAssemblyName);
-                    MessageBox.Show(string.Format("LINQBridge on {0} has been Disabled...", SelectedAssemblyName), "Success", MessageBoxButtons.OK);
+                    var disableDependencies = new List<string>();
+                    disableDependencies.Insert(0, SelectedAssemblyName);
 
                     if (references.Any(project => IsBridgeEnabled(project.AssemblyName)))
                     {
-                        var projectDependencies = new ProjectDependencies(() => references.ForEach(project => DisableProject(project.AssemblyName)));
-                        projectDependencies.ShowDependencies(projectReferences);
+                        var projectDependencies = new ProjectDependencies(references, disableMessage);
+                        disableDependencies.AddRange(projectDependencies.ShowDependencies(DisableProject));
                     }
+
+                    MessageBox.Show(string.Format("LINQBridge on {0} has been Disabled...", string.Join(", ", disableDependencies)), "Success", MessageBoxButtons.OK);
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("action");
@@ -335,9 +345,9 @@ namespace LINQBridge.VSExtension
 
             if (process.ExitCode != 0)
                 processOutputs.AppendLine(process.StandardOutput.ReadToEnd());
-            if (process.ExitCode != 0 )
+            if (process.ExitCode != 0)
                 processOutputs.AppendLine(processCommonTarget.StandardOutput.ReadToEnd());
-            if (process.ExitCode != 0 )
+            if (process.ExitCode != 0)
                 processOutputs.AppendLine(processX64.StandardOutput.ReadToEnd());
             if (process.ExitCode != 0)
                 processOutputs.AppendLine(processX64CommonTarget.StandardOutput.ReadToEnd());

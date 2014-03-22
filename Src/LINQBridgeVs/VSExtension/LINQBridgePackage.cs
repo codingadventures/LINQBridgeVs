@@ -25,23 +25,23 @@
 
 using System;
 using System.Collections;
+using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.ComponentModel.Design;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Bridge.VSExtension;
 using EnvDTE;
 using LINQBridge.Logging;
-using LINQBridge.VSExtension.Forms;
+using LINQBridge.VSExtension;
+using LINQBridgeVs.Extension.Forms;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Process = System.Diagnostics.Process;
 
-namespace LINQBridge.VSExtension
+namespace LINQBridgeVs.Extension
 {
     /// <summary>
     /// This is the class that implements the package exposed by this assembly.
@@ -64,7 +64,7 @@ namespace LINQBridge.VSExtension
     [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)]
     [ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string)]
     [Guid(GuidList.GuidBridgeVsExtensionPkgString)]
-    public sealed class LINQBridgePackage : Package
+    public sealed class LINQBridgeVsPackage : Package
     //  , IVsShellPropertyEvents
     // , IVsSolutionEvents
     // , IDisposable
@@ -110,7 +110,7 @@ namespace LINQBridge.VSExtension
             //    solution.AdviseSolutionEvents(this, out solutionEventsCookie);
             //}
 
-            var bridge = new LINQBridgeExtension(_dte);
+            var bridge = new LINQBridgeVsExtension(_dte);
 
             //// Add our command handlers for menu (commands must exist in the .vsct file)
             var mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;

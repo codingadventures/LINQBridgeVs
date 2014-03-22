@@ -1,7 +1,7 @@
 ﻿// PkgCmdID.cs
 // MUST match PkgCmdID.h
 
-namespace LINQBridge.VSExtension
+namespace LINQBridgeVs.Extension
 {
     internal static class PkgCmdIdList
     {

@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Bridge.VSExtension
+namespace LINQBridgeVs.Extension
 {
     static class GuidList
     {

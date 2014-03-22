@@ -31,7 +31,8 @@
             this.ProjectsDataGridView = new System.Windows.Forms.DataGridView();
             this.OkButton = new System.Windows.Forms.Button();
             this.CancelButton = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.MessageLabel = new System.Windows.Forms.Label();
+            this.SelectedProject = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.ProjectsDataGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -46,6 +47,8 @@
             this.ProjectsDataGridView.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.ProjectsDataGridView.CausesValidation = false;
             this.ProjectsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ProjectsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.SelectedProject});
             this.ProjectsDataGridView.Location = new System.Drawing.Point(12, 57);
             this.ProjectsDataGridView.MultiSelect = false;
             this.ProjectsDataGridView.Name = "ProjectsDataGridView";
@@ -73,14 +76,19 @@
             this.CancelButton.UseVisualStyleBackColor = true;
             this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
-            // label1
+            // MessageLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 20);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(417, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Following project dependencies have been found...LINQBridge them? (Recommended)";
+            this.MessageLabel.AutoSize = true;
+            this.MessageLabel.Location = new System.Drawing.Point(12, 20);
+            this.MessageLabel.Name = "MessageLabel";
+            this.MessageLabel.Size = new System.Drawing.Size(0, 13);
+            this.MessageLabel.TabIndex = 3;
+            // 
+            // SelectedProject
+            // 
+            this.SelectedProject.HeaderText = "";
+            this.SelectedProject.Name = "SelectedProject";
+            this.SelectedProject.ReadOnly = true;
             // 
             // ProjectDependencies
             // 
@@ -88,7 +96,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CausesValidation = false;
             this.ClientSize = new System.Drawing.Size(739, 428);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.MessageLabel);
             this.Controls.Add(this.CancelButton);
             this.Controls.Add(this.OkButton);
             this.Controls.Add(this.ProjectsDataGridView);
@@ -109,6 +117,7 @@
         private System.Windows.Forms.DataGridView ProjectsDataGridView;
         private System.Windows.Forms.Button OkButton;
         private System.Windows.Forms.Button CancelButton;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label MessageLabel;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn SelectedProject;
     }
 }

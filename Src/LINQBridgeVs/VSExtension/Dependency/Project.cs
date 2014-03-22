@@ -25,7 +25,7 @@
 
 using System;
 
-namespace LINQBridge.VSExtension.Dependency
+namespace LINQBridgeVs.Extension.Dependency
 {
     [Serializable]
     internal enum DependencyType

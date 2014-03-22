@@ -26,7 +26,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace LINQBridge.VSExtension.Extension
+namespace LINQBridgeVs.Extension.Extension
 {
     internal static class EnumerableExtension
     {
