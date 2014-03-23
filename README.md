@@ -1,10 +1,10 @@
 ![alt text][logo]
 ==========
  
-What's LINQBridge?
+What's LINQBridgeVs?
 -----------------
 
-LINQBridge is a Visual Studio Extension for Visual Studio 2010 and Visual Studio 2012.
+LINQBridgeVs is a Visual Studio Extension for Visual Studio 2010 and Visual Studio 2012.
 It is a bridge between a Visual Studio debugging session and [LINQPad] (http://www.linqpad.net).
 When enabled on a selection of VB/C# projects, it creates a Custom Debugger Visualizer 
 mapping to all the complex types and making the magnifier glass 
@@ -13,7 +13,7 @@ bus and read back by LINQPad.
 
 ## Getting Started
 
-Once the LINQBridge Extension is installed a new menu will be available in the Visual Studio Menu Bar, only visible
+Once the LINQBridgeVs Extension is installed a new menu will be available in the Visual Studio Menu Bar, only visible
 when a solution is loaded and a project selected. There are two options available:
 
 *  Enable LINQBridge
@@ -30,7 +30,7 @@ No need to manually install LINQPad beforehand as it is built into LINQBridge
 
 ## Compatibility
 
-LINQBridge is compatible for Visual Studio 2012 and Visual Studio 2010. At the moment available **only for .NET Framework 4.0**
+LINQBridgeVs is compatible for Visual Studio 2012 and Visual Studio 2010. At the moment available **only for .NET Framework 4.0**
 
 
 ## Known Issues
