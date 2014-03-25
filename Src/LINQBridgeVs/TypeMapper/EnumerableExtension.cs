@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace LINQBridge.TypeMapper
+namespace LINQBridgeVs.TypeMapper
 {
     public static class EnumerableExtension
     {

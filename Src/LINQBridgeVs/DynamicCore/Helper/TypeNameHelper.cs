@@ -29,7 +29,7 @@ using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace LINQBridge.DynamicCore.Helper
+namespace LINQBridgeVs.DynamicCore.Helper
 {
     internal static class TypeNameHelper
     {

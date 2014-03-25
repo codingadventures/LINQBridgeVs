@@ -2,8 +2,8 @@
 using System.Globalization;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
-using LINQBridge.DynamicCore;
-using LINQBridge.DynamicCore.Template;
+using LINQBridgeVs.DynamicCore;
+using LINQBridgeVs.DynamicCore.Template;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model.Test;
 using System;

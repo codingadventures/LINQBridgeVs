@@ -23,12 +23,11 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-
 using System;
 using System.Collections.Generic;
-using LINQBridge.VisualStudio.Properties;
+using LINQBridgeVs.VisualStudio.Properties;
 
-namespace LINQBridge.VisualStudio
+namespace LINQBridgeVs.VisualStudio
 {
     internal struct Settings
     {
@@ -44,6 +43,7 @@ namespace LINQBridge.VisualStudio
         private static readonly string Vs2010Path1 = MyDocuments + Resources.VS2010Path1;
         private static readonly string Vs2010Path2 = MyDocuments + Resources.VS2010Path2;
         private static readonly string Vs2012Path1 = MyDocuments + Resources.VS2012Path1;
+        private static readonly string Vs2013Path1 = MyDocuments + Resources.VS2013Path1;
 
 
         private static readonly Dictionary<string, Settings> VisualStudioPaths;
@@ -58,7 +58,7 @@ namespace LINQBridge.VisualStudio
                         InstallationPaths =
                             new List<string> {Vs2010Path1, Vs2010Path2},
 
-                        AssemblyLocation = DynamicVisualizer.V10.Settings.AssemblyLocation
+                        AssemblyLocation = LINQBridge.DynamicVisualizer.V10.Settings.AssemblyLocation
                     }
                 },
                 {
@@ -67,6 +67,14 @@ namespace LINQBridge.VisualStudio
                         InstallationPaths =
                             new List<string> {Vs2012Path1},
                         AssemblyLocation = DynamicVisualizer.V11.Settings.AssemblyLocation
+                    }
+                },
+                {
+                    "12.0", new Settings
+                    {
+                        InstallationPaths =
+                            new List<string> {Vs2013Path1},
+                        AssemblyLocation = DynamicVisualizer.V12.Settings.AssemblyLocation
                     }
                 }
             };

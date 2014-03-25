@@ -7,8 +7,8 @@
     <ProjectGuid>{B84FBD50-0B10-4C25-8430-680FC6FC3FEA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LINQBridge.DynamicCore</RootNamespace>
-    <AssemblyName>LINQBridge.DynamicCore</AssemblyName>
+    <RootNamespace>LINQBridgeVs.DynamicCore</RootNamespace>
+    <AssemblyName>LINQBridgeVs.DynamicCore</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -49,7 +49,7 @@
   <ItemGroup>
     <Reference Include="Grapple">
       <HintPath>..\..\packages\Grapple.0.2.4\lib\Grapple.dll</HintPath>
-	  <Ilmerge>True</Ilmerge>
+      <Ilmerge>True</Ilmerge>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

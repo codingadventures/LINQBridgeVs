@@ -26,7 +26,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace LINQBridge.DynamicCore.Template
+namespace LINQBridgeVs.DynamicCore.Template
 {
     [Serializable]
     internal class Message

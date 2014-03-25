@@ -28,9 +28,9 @@ using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Runtime.InteropServices;
-using LINQBridge.Logging;
+using LINQBridgeVs.Logging;
 
-namespace LINQBridge.DynamicCore.Helper
+namespace LINQBridgeVs.DynamicCore.Helper
 {
     public static class AssemblyFinderHelper
     {

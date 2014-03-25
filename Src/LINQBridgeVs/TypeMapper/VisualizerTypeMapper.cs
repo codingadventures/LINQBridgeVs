@@ -25,13 +25,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using LINQBridge.Logging;
+using LINQBridgeVs.Logging;
 
-
-namespace LINQBridge.TypeMapper
+namespace LINQBridgeVs.TypeMapper
 {
     /// <summary>
     /// Maps all the types of a given assembly to the type T of the debugger visualizer.

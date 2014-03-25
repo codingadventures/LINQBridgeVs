@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using LINQBridge.DynamicVisualizer.V11;
-using LINQBridge.TypeMapper;
+using LINQBridgeVs.DynamicVisualizer.V11;
+using LINQBridgeVs.TypeMapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mono.Cecil;
 

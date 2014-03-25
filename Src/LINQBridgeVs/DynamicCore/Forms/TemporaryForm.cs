@@ -23,11 +23,10 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace LINQBridge.DynamicCore.Forms
+namespace LINQBridgeVs.DynamicCore.Forms
 {
     internal class TemporaryForm : Form
     {

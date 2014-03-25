@@ -23,24 +23,24 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Windows.Forms;
-using LINQBridge.DynamicCore.Forms;
-using LINQBridge.DynamicCore.Helper;
-using LINQBridge.DynamicCore.Properties;
-using LINQBridge.DynamicCore.Template;
-using LINQBridge.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Abstractions;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
-using Message = LINQBridge.DynamicCore.Template.Message;
+using System.Threading;
+using System.Windows.Forms;
+using LINQBridgeVs.DynamicCore.Forms;
+using LINQBridgeVs.DynamicCore.Helper;
+using LINQBridgeVs.DynamicCore.Properties;
+using LINQBridgeVs.DynamicCore.Template;
+using LINQBridgeVs.Logging;
+using Message = LINQBridgeVs.DynamicCore.Template.Message;
 
-namespace LINQBridge.DynamicCore
+namespace LINQBridgeVs.DynamicCore
 {
     public class DynamicDebuggerVisualizer
     {

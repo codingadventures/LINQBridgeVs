@@ -1,6 +1,5 @@
-﻿using System;
-using System.Reflection;
-using LINQBridge.BuildTasks;
+﻿using System.Reflection;
+using LINQBridgeVs.BuildTasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model.Test;
 

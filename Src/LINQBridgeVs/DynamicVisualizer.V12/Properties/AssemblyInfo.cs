@@ -1,16 +1,15 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DynamicVisualizer.V9")]
-[assembly: AssemblyDescription("LINQBridge Visualizer")]
+[assembly: AssemblyTitle("LINQBridgeVs Visualizer")]
+[assembly: AssemblyDescription("LINQBridgeVs Visualizer")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("DynamicVisualizer.V9")]
-[assembly: AssemblyCopyright("Copyright © Giovanni  2013")]
+[assembly: AssemblyCompany("Giovanni Campo")]
+[assembly: AssemblyProduct("LINQBridgeVs Visualizer")]
+[assembly: AssemblyCopyright("Copyright © Giovanni Campo 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("053f245a-6638-4080-9b70-424d1850c315")]
+[assembly: Guid("f2414a2b-98a7-4d4c-a031-1701ea4a506b")]
 
 // Version information for an assembly consists of the following four values:
 //

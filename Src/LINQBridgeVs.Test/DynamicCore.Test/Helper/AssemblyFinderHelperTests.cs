@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using LINQBridge.DynamicCore.Helper;
+using LINQBridgeVs.DynamicCore.Helper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO.Abstractions.TestingHelpers;
 

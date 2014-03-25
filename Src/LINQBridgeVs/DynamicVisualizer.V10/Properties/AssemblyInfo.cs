@@ -1,15 +1,14 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("LINQBridge.DynamicVisualizer.V10")]
-[assembly: AssemblyDescription("LINQBridge Visualizer")]
+[assembly: AssemblyTitle("LINQBridgeVs.DynamicVisualizer.V10")]
+[assembly: AssemblyDescription("LINQBridgeVs Visualizer")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("LINQBridge.DynamicVisualizer.V10")]
+[assembly: AssemblyProduct("LINQBridgeVs.DynamicVisualizer.V10")]
 [assembly: AssemblyCopyright("Copyright © Giovanni Campo 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

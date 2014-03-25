@@ -8,8 +8,8 @@
     <ProjectGuid>{FCC8BF06-3173-4D21-A157-D1167B6407C9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LINQBridge.TypeMapper</RootNamespace>
-    <AssemblyName>LINQBridge.TypeMapper</AssemblyName>
+    <RootNamespace>LINQBridgeVs.TypeMapper</RootNamespace>
+    <AssemblyName>LINQBridgeVs.TypeMapper</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>

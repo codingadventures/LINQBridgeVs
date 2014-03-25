@@ -27,9 +27,9 @@ using System.IO;
 using LINQBridgeVs.DynamicCore;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 
-namespace LINQBridgeVs.DynamicVisualizer.V11
+namespace LINQBridgeVs.DynamicVisualizer.V12
 {  
-    public class DynamicDebuggerVisualizerObjectSourceV11 : VisualizerObjectSource 
+    public class DynamicDebuggerVisualizerObjectSourceV12 : VisualizerObjectSource 
     {
         public override void GetData(object target, Stream outgoingData)
         {

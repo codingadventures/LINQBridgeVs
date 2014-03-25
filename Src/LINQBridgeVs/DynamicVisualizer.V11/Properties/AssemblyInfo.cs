@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("LINQBridge Visualizer")]
-[assembly: AssemblyDescription("LINQBridge Visualizer")]
+[assembly: AssemblyTitle("LINQBridgeVs Visualizer")]
+[assembly: AssemblyDescription("LINQBridgeVs Visualizer")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Giovanni Campo")]
-[assembly: AssemblyProduct("LINQBridge Visualizer")]
+[assembly: AssemblyProduct("LINQBridgeVs Visualizer")]
 [assembly: AssemblyCopyright("Copyright © Giovanni Campo 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

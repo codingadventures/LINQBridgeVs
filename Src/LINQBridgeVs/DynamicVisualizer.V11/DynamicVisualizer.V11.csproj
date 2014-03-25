@@ -8,8 +8,8 @@
     <ProjectGuid>{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LINQBridge.DynamicVisualizer.V11</RootNamespace>
-    <AssemblyName>LINQBridge.DynamicVisualizer.V11</AssemblyName>
+    <RootNamespace>LINQBridgeVs.DynamicVisualizer.V11</RootNamespace>
+    <AssemblyName>LINQBridgeVs.DynamicVisualizer.V11</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>

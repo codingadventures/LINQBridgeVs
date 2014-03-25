@@ -29,11 +29,11 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
 using Grapple;
-using LINQBridge.DynamicCore.Helper;
-using LINQBridge.Logging;
-using Message = LINQBridge.DynamicCore.Template.Message;
+using LINQBridgeVs.DynamicCore.Helper;
+using LINQBridgeVs.DynamicCore.Template;
+using LINQBridgeVs.Logging;
 
-namespace LINQBridge.DynamicCore
+namespace LINQBridgeVs.DynamicCore
 {
     public static class DynamicObjectSource
     {

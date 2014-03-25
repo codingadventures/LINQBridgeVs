@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildTasks.Test", "LINQBrid
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model.Test", "LINQBridgeVs.Test\Model.Test\Model.Test.csproj", "{8A5E73F6-2093-4669-9C09-BEAB033BE56C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VsExtension", "LINQBridgeVs\VSExtension\VsExtension.csproj", "{1B82F962-5D04-42B6-8D18-7AA8E8FB615F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINQBridgeVs", "LINQBridgeVs\VSExtension\LINQBridgeVs.csproj", "{1B82F962-5D04-42B6-8D18-7AA8E8FB615F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{DEECC213-180D-4C4E-A44B-5785F1C0FB73}"
 EndProject
@@ -41,6 +41,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{129AFA
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V12", "LINQBridgeVs\DynamicVisualizer.V12\DynamicVisualizer.V12.csproj", "{835064F0-3C4F-4646-B17A-632C192CCE3B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -162,6 +164,14 @@ Global
 		{08ADAF10-E655-4560-BF9C-9287E60247B5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{08ADAF10-E655-4560-BF9C-9287E60247B5}.Test|Any CPU.ActiveCfg = Release|Any CPU
 		{08ADAF10-E655-4560-BF9C-9287E60247B5}.Test|Any CPU.Build.0 = Release|Any CPU
+		{835064F0-3C4F-4646-B17A-632C192CCE3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{835064F0-3C4F-4646-B17A-632C192CCE3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{835064F0-3C4F-4646-B17A-632C192CCE3B}.Deploy|Any CPU.ActiveCfg = Deploy|Any CPU
+		{835064F0-3C4F-4646-B17A-632C192CCE3B}.Deploy|Any CPU.Build.0 = Deploy|Any CPU
+		{835064F0-3C4F-4646-B17A-632C192CCE3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{835064F0-3C4F-4646-B17A-632C192CCE3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{835064F0-3C4F-4646-B17A-632C192CCE3B}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{835064F0-3C4F-4646-B17A-632C192CCE3B}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

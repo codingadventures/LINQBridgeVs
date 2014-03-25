@@ -23,12 +23,11 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-
-using LINQBridge.DynamicCore;
-using Microsoft.VisualStudio.DebuggerVisualizers;
 using System.IO;
+using LINQBridgeVs.DynamicCore;
+using Microsoft.VisualStudio.DebuggerVisualizers;
 
-namespace LINQBridge.DynamicVisualizer.V10
+namespace LINQBridgeVs.DynamicVisualizer.V10
 {
     public class DynamicDebuggerVisualizerObjectSourceV10 : VisualizerObjectSource
     {

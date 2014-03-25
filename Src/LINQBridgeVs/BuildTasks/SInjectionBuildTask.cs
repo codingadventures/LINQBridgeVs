@@ -24,21 +24,26 @@
 #endregion
 
 using System;
+using System.IO;
 using Microsoft.Build.Framework;
 using SInject;
 
-namespace LINQBridge.BuildTasks
+namespace LINQBridgeVs.BuildTasks
 {
     public class SInjectionBuildTask : ITask
     {
         [Required]
         public string Assembly { get; set; }
 
+        [Required]
+        public string Snk { get; set; }
+
         public bool Execute()
         {
             try
             {
-                var sInjection = new SInjection(Assembly, PatchMode.Debug);
+                var snkCertificate = File.Exists(Snk) ? Snk : null;
+                var sInjection = new SInjection(Assembly, mode: PatchMode.Debug, snkCertificatePath: snkCertificate);
                 sInjection.Patch(SerializationTypes.BinarySerialization);
             }
             catch (Exception e)

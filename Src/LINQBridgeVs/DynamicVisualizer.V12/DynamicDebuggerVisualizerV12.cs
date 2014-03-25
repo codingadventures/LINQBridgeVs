@@ -23,17 +23,26 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System.IO;
 using LINQBridgeVs.DynamicCore;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 
-namespace LINQBridgeVs.DynamicVisualizer.V11
-{  
-    public class DynamicDebuggerVisualizerObjectSourceV11 : VisualizerObjectSource 
+namespace LINQBridgeVs.DynamicVisualizer.V12
+{
+    /// <summary>
+    /// 
+    /// </summary>
+    public class DynamicDebuggerVisualizerV12 : DialogDebuggerVisualizer
     {
-        public override void GetData(object target, Stream outgoingData)
+        protected override void Show(IDialogVisualizerService windowService, IVisualizerObjectProvider objectProvider)
         {
-            DynamicObjectSource.BroadCastData(target, outgoingData);
+            var dynamicDebuggerVisualizer = new DynamicDebuggerVisualizer();
+            var dataStream = objectProvider.GetData();
+
+            var formToShow = dynamicDebuggerVisualizer.ShowVisualizer(dataStream);
+
+            windowService.ShowDialog(formToShow);
         }
     }
+
+
 }

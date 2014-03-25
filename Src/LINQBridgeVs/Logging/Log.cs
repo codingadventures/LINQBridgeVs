@@ -23,18 +23,16 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-
 using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
-using System.Net;
 using System.Net.Mail;
 using System.Security.AccessControl;
 using System.Security.Principal;
 
-namespace LINQBridge.Logging
+namespace LINQBridgeVs.Logging
 {
     public static class Log
     {

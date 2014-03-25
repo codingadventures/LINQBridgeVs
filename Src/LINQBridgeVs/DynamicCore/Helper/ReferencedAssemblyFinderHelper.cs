@@ -25,9 +25,9 @@
 
 using System;
 using System.Collections.Generic;
-using LINQBridge.Logging;
+using LINQBridgeVs.Logging;
 
-namespace LINQBridge.DynamicCore.Helper
+namespace LINQBridgeVs.DynamicCore.Helper
 {
     internal static class ReferencedAssemblyFinderHelper
     {

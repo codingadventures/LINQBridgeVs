@@ -30,7 +30,6 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Microsoft.Build.Evaluation;
-using Project = LINQBridgeVs.Extension.Dependency.Project;
 
 namespace LINQBridgeVs.Extension.Dependency
 {

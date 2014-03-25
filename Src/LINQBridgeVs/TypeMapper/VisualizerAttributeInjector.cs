@@ -27,14 +27,14 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
-using LINQBridge.Logging;
-using Mono.Cecil.Rocks;
-using Mono.Cecil.Pdb;
-using Mono.Cecil;
 using System.Linq;
+using System.Threading;
+using LINQBridgeVs.Logging;
+using Mono.Cecil;
+using Mono.Cecil.Pdb;
+using Mono.Cecil.Rocks;
 
-namespace LINQBridge.TypeMapper
+namespace LINQBridgeVs.TypeMapper
 {
     /// <summary>
     /// This class injects the DebuggerVisualizerAttribute into a given assembly

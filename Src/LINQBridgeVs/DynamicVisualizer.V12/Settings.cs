@@ -1,4 +1,4 @@
-﻿namespace LINQBridgeVs.DynamicVisualizer.V11
+﻿namespace LINQBridgeVs.DynamicVisualizer.V12
 {
     public class Settings
     {

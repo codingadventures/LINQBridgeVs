@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using LINQBridge.BuildTasks;
+﻿using System.Reflection;
+using LINQBridgeVs.BuildTasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model.Test;
 

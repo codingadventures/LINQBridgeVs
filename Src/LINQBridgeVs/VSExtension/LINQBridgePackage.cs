@@ -34,8 +34,8 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using EnvDTE;
 using EnvDTE80;
-using LINQBridge.Logging;
 using LINQBridgeVs.Extension.Forms;
+using LINQBridgeVs.Logging;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -73,9 +73,22 @@ namespace LINQBridgeVs.Extension
         private DTEEvents _dteEvents;
         private DTE _dte;
         private const string VisualStudioProcessName = "devenv";
-        private DTE2 _mApplicationObject = null;
-        DTEEvents _mPackageDteEvents = null;
+        private DTE2 _mApplicationObject;
 
+        DTEEvents _mPackageDteEvents;
+
+        private string _vsVersion;
+        private string VsVersion
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(_vsVersion)) return _vsVersion;
+
+                _vsVersion = ((DTE)ServiceProvider.GlobalProvider.GetService(typeof(EnvDTE.DTE).GUID)).Version;
+                
+                return _vsVersion;
+            }
+        }
         //  private static Icon solutionIcon;
         //  private uint propChangeCookie;
         //  private IVsSolution solution;
@@ -91,12 +104,10 @@ namespace LINQBridgeVs.Extension
         {
             get
             {
-                if (_mApplicationObject == null)
-                {
-                    // Get an instance of the currently running Visual Studio IDE
-                    DTE dte = (DTE)GetService(typeof(DTE));
-                    _mApplicationObject = dte as DTE2;
-                }
+                if (_mApplicationObject != null) return _mApplicationObject;
+                // Get an instance of the currently running Visual Studio IDE
+                var dte = (DTE)GetService(typeof(DTE));
+                _mApplicationObject = dte as DTE2;
                 return _mApplicationObject;
             }
         }
@@ -113,7 +124,7 @@ namespace LINQBridgeVs.Extension
 
             _dte = (DTE)GetService(typeof(SDTE));
             _dteEvents = _dte.Events.DTEEvents;
-          
+
             _dteEvents.OnStartupComplete += OnStartupComplete;
 
 

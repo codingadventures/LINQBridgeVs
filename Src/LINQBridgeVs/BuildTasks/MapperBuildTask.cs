@@ -24,14 +24,13 @@
 #endregion
 
 using System;
-using System.Diagnostics;
 using System.Linq;
-using LINQBridge.Logging;
-using LINQBridge.TypeMapper;
-using LINQBridge.VisualStudio;
+using LINQBridgeVs.Logging;
+using LINQBridgeVs.TypeMapper;
+using LINQBridgeVs.VisualStudio;
 using Microsoft.Build.Framework;
 
-namespace LINQBridge.BuildTasks
+namespace LINQBridgeVs.BuildTasks
 {
     public class MapperBuildTask : ITask
     {

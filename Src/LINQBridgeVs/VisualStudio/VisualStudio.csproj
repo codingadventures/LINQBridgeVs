@@ -7,8 +7,8 @@
     <ProjectGuid>{8F6409F1-33E3-4310-BE84-12C4F838C0B0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LINQBridge.VisualStudio</RootNamespace>
-    <AssemblyName>LINQBridge.VisualStudio</AssemblyName>
+    <RootNamespace>LINQBridgeVs.VisualStudio</RootNamespace>
+    <AssemblyName>LINQBridgeVs.VisualStudio</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -57,6 +57,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DynamicVisualizer.V12\DynamicVisualizer.V12.csproj">
+      <Project>{835064f0-3c4f-4646-b17a-632c192cce3b}</Project>
+      <Name>DynamicVisualizer.V12</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DynamicVisualizer.V11\DynamicVisualizer.V11.csproj">
       <Project>{c6798d16-89f5-4bff-8b62-2be6d4bbc192}</Project>
       <Name>DynamicVisualizer.V11</Name>

@@ -27,12 +27,12 @@
     <InstallFolderPath>$([MSBuild]::GetRegistryValueFromView('HKEY_CURRENT_USER\Software\LINQBridgeVs', 'InstallFolderPath', 'False', RegistryView.Registry64, RegistryView.Registry32))</InstallFolderPath>
   </PropertyGroup>
 
-  <UsingTask TaskName="SInjectionBuildTask" AssemblyFile="$([MSBuild]::Unescape('$(InstallFolderPath)'))\LINQBridge.BuildTasks.dll" />
-  <UsingTask TaskName="MapperBuildTask" AssemblyFile="$([MSBuild]::Unescape('$(InstallFolderPath)'))\LINQBridge.BuildTasks.dll" />
-  <UsingTask TaskName="CleanBuildTask" AssemblyFile="$([MSBuild]::Unescape('$(InstallFolderPath)'))\LINQBridge.BuildTasks.dll" />
+  <UsingTask TaskName="SInjectionBuildTask" AssemblyFile="$([MSBuild]::Unescape('$(InstallFolderPath)'))\LINQBridgeVs.BuildTasks.dll" />
+  <UsingTask TaskName="MapperBuildTask" AssemblyFile="$([MSBuild]::Unescape('$(InstallFolderPath)'))\LINQBridgeVs.BuildTasks.dll" />
+  <UsingTask TaskName="CleanBuildTask" AssemblyFile="$([MSBuild]::Unescape('$(InstallFolderPath)'))\LINQBridgeVs.BuildTasks.dll" />
 
   <Target Name="LINQBridgeAfterBuild" DependsOnTargets="CoreCompile" Condition="'$(IsProjectEnabled)' == 'True'">
-    <SInjectionBuildTask Assembly="@(MainAssembly->'%(FullPath)')"   />
+    <SInjectionBuildTask Assembly="@(MainAssembly->'%(FullPath)')" Snk="$(MSBuildProjectDirectory)\$(AssemblyOriginatorKeyFile)"  />
     <MapperBuildTask Assembly="@(MainAssembly->'%(FullPath)')"   VisualStudioVer="$(VisualStudioVersion)"   />
   </Target>
 

@@ -2,7 +2,7 @@
 using System.Linq;
 using Mono.Cecil;
 
-namespace LINQBridge.TypeMapper.Comparer
+namespace LINQBridgeVs.TypeMapper.Comparer
 {
     internal class DebuggerVisualizerAttributeComparer :
         IEqualityComparer<CustomAttribute>

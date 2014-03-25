@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
-using System.Linq;
-using System.Text;
 using AnotherModel.Test;
+using LINQBridgeVs.DynamicCore.Helper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model.Test;
-using LINQBridge.DynamicCore.Helper;
 
 namespace DynamicCore.Test.Helper
 {

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("LINQBridge.BuildTasks")]
+[assembly: AssemblyTitle("LINQBridgeVs.BuildTasks")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("LINQBridge.BuildTasks")]
+[assembly: AssemblyCompany("Giovanni Campo")]
+[assembly: AssemblyProduct("LINQBridgeVs.BuildTasks")]
 [assembly: AssemblyCopyright("Copyright Giovanni Campo ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
