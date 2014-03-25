@@ -113,11 +113,11 @@ namespace LINQBridgeVs.Extension
 
             _dte = (DTE)GetService(typeof(SDTE));
             _dteEvents = _dte.Events.DTEEvents;
-
+          
             _dteEvents.OnStartupComplete += OnStartupComplete;
-           
 
-            _mPackageDteEvents =  ApplicationObject.Events.DTEEvents;
+
+            _mPackageDteEvents = ApplicationObject.Events.DTEEvents;
             _mPackageDteEvents.OnBeginShutdown += HandleVisualStudioShutDown;
             // watch for VSSPROPID property changes
             //  var vsShell = (IVsShell)GetService(typeof(SVsShell));
@@ -188,7 +188,7 @@ namespace LINQBridgeVs.Extension
 
                 _dteEvents.OnStartupComplete -= OnStartupComplete;
                 _dteEvents = null;
-                 
+
                 EnableLinqBridge();
 
                 Log.Write("OnStartupComplete End");
@@ -196,7 +196,7 @@ namespace LINQBridgeVs.Extension
             }
             catch (Exception e)
             {
-                Log.Write(e,"OnStartupComplete Error...");
+                Log.Write(e, "OnStartupComplete Error...");
             }
         }
 
@@ -209,7 +209,9 @@ namespace LINQBridgeVs.Extension
             linqBridgeTargetImportNode.Remove();
 
             MicrosoftCommonTargetDocument.Save(Locations.MicrosoftCommonTargetFileNamePath);
-            MicrosoftCommonTargetDocument.Save(Locations.MicrosoftCommonTarget64FileNamePath);
+
+            if (Environment.Is64BitOperatingSystem)
+                MicrosoftCommonTargetDocument.Save(Locations.MicrosoftCommonTarget64FileNamePath);
 
 
         }
@@ -222,14 +224,16 @@ namespace LINQBridgeVs.Extension
 
             if (MicrosoftCommonTargetDocument.Root == null || GetTargetImportNode() != null) return;
 
-// ReSharper disable once AssignNullToNotNullAttribute
+            // ReSharper disable once AssignNullToNotNullAttribute
             var linqBridgeTarget = new XElement(import, new XAttribute("Project", Path.GetFileName(Resources.Targets)));
 
             MicrosoftCommonTargetDocument.Root.Add(linqBridgeTarget);
 
 
             MicrosoftCommonTargetDocument.Save(Locations.MicrosoftCommonTargetFileNamePath);
-            MicrosoftCommonTargetDocument.Save(Locations.MicrosoftCommonTarget64FileNamePath);
+
+            if (Environment.Is64BitOperatingSystem)
+                MicrosoftCommonTargetDocument.Save(Locations.MicrosoftCommonTarget64FileNamePath);
         }
 
 
@@ -249,7 +253,7 @@ namespace LINQBridgeVs.Extension
             return linqBridgeTargetImportNode;
         }
 
-       
+
         #endregion
 
         //public int OnShellPropertyChange(int propid, object var)

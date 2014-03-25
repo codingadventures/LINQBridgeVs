@@ -27,6 +27,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -79,6 +80,25 @@ namespace LINQBridgeVs.Extension
                 }
             }
         }
+
+        public static bool ArePermissionsSet
+        {
+            get
+            {
+                using (var key = Registry.CurrentUser.OpenSubKey(Resources.ConfigurationRegistryKey))
+                {
+                    return key != null && Convert.ToBoolean(key.GetValue("ArePermissionsSet"));
+                }
+            }
+            private set
+            {
+                using (var key = Registry.CurrentUser.CreateSubKey(Resources.ConfigurationRegistryKey))
+                {
+                    if (key != null)
+                        key.SetValue("ArePermissionsSet", value);
+                }
+            }
+        }
         #endregion
 
         public LINQBridgeVsExtension(DTE app)
@@ -102,11 +122,11 @@ namespace LINQBridgeVs.Extension
             using (var key = Registry.CurrentUser.CreateSubKey(Resources.InstallFolderRegistryKey))
             {
                 if (key == null) return;
-                
+
                 var value = key.GetValue("InstallFolderPath");
 
                 if (value != null && value.Equals(Locations.InstallFolder)) return;
-                
+
                 Log.Write("Setting InstallFolderPath to {0}", Locations.InstallFolder);
                 key.SetValue("InstallFolderPath", Locations.InstallFolder);
             }
@@ -126,9 +146,14 @@ namespace LINQBridgeVs.Extension
 
             //Copy the BridgeBuildTask.targets to the default .NET 4.0v framework location
             File.Copy(Locations.LinqBridgeTargetFileNamePath, Path.Combine(Locations.DotNet40FrameworkPath, Locations.LinqBridgeTargetFileName), true);
-            File.Copy(Locations.LinqBridgeTargetFileNamePath, Path.Combine(Locations.DotNet40Framework64Path, Locations.LinqBridgeTargetFileName), true);
-            Log.Write("LinqBridge Targets copied to {0} - {1}", Locations.DotNet40FrameworkPath, Locations.DotNet40Framework64Path);
+            Log.Write("LinqBridge Targets copied to {0} ", Locations.DotNet40FrameworkPath);
 
+            if (Environment.Is64BitOperatingSystem)
+            {
+                File.Copy(Locations.LinqBridgeTargetFileNamePath,
+                    Path.Combine(Locations.DotNet40Framework64Path, Locations.LinqBridgeTargetFileName), true);
+                Log.Write("LinqBridge Targets copied to {0} ", Locations.DotNet40Framework64Path);
+            }
             SetPermissions();
 
             Log.Write("Setting IsEnvironmentConfigured to True");
@@ -296,62 +321,77 @@ namespace LINQBridgeVs.Extension
 
         private static void SetPermissions()
         {
+            if (ArePermissionsSet) return;
+
             Log.Write("SetPermission Starts");
             var processOutputs = new StringBuilder();
 
             var process = new Process
             {
-                StartInfo = { UseShellExecute = false, RedirectStandardError = true, RedirectStandardInput = true, RedirectStandardOutput = true, FileName = "icacls.exe", Arguments = Locations.IcaclsArguments }
+                StartInfo = { UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden, RedirectStandardError = true, RedirectStandardInput = true, RedirectStandardOutput = true, FileName = "icacls.exe", Arguments = Locations.IcaclsArguments }
             };
             var processX64 = new Process
             {
-                StartInfo = { UseShellExecute = false, RedirectStandardError = true, FileName = "icacls.exe", Arguments = Locations.IcaclsArgumentsX64, LoadUserProfile = true }
+                StartInfo = { UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden, RedirectStandardError = true, FileName = "icacls.exe", Arguments = Locations.IcaclsArgumentsX64, LoadUserProfile = true }
             };
             var processCommonTarget = new Process
             {
-                StartInfo = { UseShellExecute = false, RedirectStandardError = true, RedirectStandardInput = true, RedirectStandardOutput = true, FileName = "icacls.exe", Arguments = Locations.IcaclsArgumentsCommonTarget, LoadUserProfile = true }
+                StartInfo = { UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden, RedirectStandardError = true, RedirectStandardInput = true, RedirectStandardOutput = true, FileName = "icacls.exe", Arguments = Locations.IcaclsArgumentsCommonTarget, LoadUserProfile = true }
             };
             var processX64CommonTarget = new Process
             {
-                StartInfo = { UseShellExecute = false, RedirectStandardError = true, RedirectStandardInput = true, RedirectStandardOutput = true, FileName = "icacls.exe", Arguments = Locations.IcaclsArgumentsX64CommonTarget, LoadUserProfile = true }
+                StartInfo = { UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden, RedirectStandardError = true, RedirectStandardInput = true, RedirectStandardOutput = true, FileName = "icacls.exe", Arguments = Locations.IcaclsArgumentsX64CommonTarget, LoadUserProfile = true }
             };
 
             var takeownProcess = Process.Start("takeown", String.Format("/f {0}", Locations.MicrosoftCommonTargetFileNamePath));
-            var takeownProcessx64 = Process.Start("takeown", String.Format("/f {0}", Locations.MicrosoftCommonTarget64FileNamePath));
-
             if (takeownProcess != null) takeownProcess.WaitForExit();
-            if (takeownProcessx64 != null) takeownProcessx64.WaitForExit();
 
+            if (Environment.Is64BitOperatingSystem)
+            {
+                var takeownProcessx64 = Process.Start("takeown",
+                    String.Format("/f {0}", Locations.MicrosoftCommonTarget64FileNamePath));
+
+                if (takeownProcessx64 != null) takeownProcessx64.WaitForExit();
+            }
             process.Start();
             processCommonTarget.Start();
-            processX64.Start();
-            processX64CommonTarget.Start();
 
+            if (Environment.Is64BitOperatingSystem)
+            {
+                processX64.Start();
+                processX64CommonTarget.Start();
+                Log.Write("Setting Permission to {0} and {1} ", Locations.IcaclsArguments, Locations.IcaclsArgumentsX64);
+                Log.Write("Setting Permission to {0} and {1} ", Locations.IcaclsArgumentsCommonTarget, Locations.IcaclsArgumentsX64CommonTarget);
 
-            Log.Write("Setting Permission to {0} and {1} ", Locations.IcaclsArguments, Locations.IcaclsArgumentsX64);
-            Log.Write("Setting Permission to {0} and {1} ", Locations.IcaclsArgumentsCommonTarget, Locations.IcaclsArgumentsX64CommonTarget);
+            }
+
 
             process.WaitForExit();
             processCommonTarget.WaitForExit();
-            processX64.WaitForExit();
-            processX64CommonTarget.WaitForExit();
+            if (Environment.Is64BitOperatingSystem)
+            {
+                processX64.WaitForExit();
+                processX64CommonTarget.WaitForExit();
+            }
 
             if (process.ExitCode != 0)
                 processOutputs.AppendLine(process.StandardOutput.ReadToEnd());
             if (process.ExitCode != 0)
                 processOutputs.AppendLine(processCommonTarget.StandardOutput.ReadToEnd());
-            if (process.ExitCode != 0)
-                processOutputs.AppendLine(processX64.StandardOutput.ReadToEnd());
-            if (process.ExitCode != 0)
-                processOutputs.AppendLine(processX64CommonTarget.StandardOutput.ReadToEnd());
-
+            if (Environment.Is64BitOperatingSystem)
+            {
+                if (process.ExitCode != 0)
+                    processOutputs.AppendLine(processX64.StandardOutput.ReadToEnd());
+                if (process.ExitCode != 0)
+                    processOutputs.AppendLine(processX64CommonTarget.StandardOutput.ReadToEnd());
+            }
 
 
             Log.Write(processOutputs.ToString());
 
 
             Log.Write("SetPermission Done");
-
+            ArePermissionsSet = true;
         }
 
     }
