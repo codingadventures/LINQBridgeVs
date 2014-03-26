@@ -34,6 +34,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using EnvDTE;
 using EnvDTE80;
+using LINQBridgeVs.Extension.Configuration;
 using LINQBridgeVs.Extension.Forms;
 using LINQBridgeVs.Logging;
 using Microsoft.VisualStudio;
@@ -181,7 +182,7 @@ namespace LINQBridgeVs.Extension
                 Log.Write("Disabling LINQBridgeVS. Only one VS instance opened");
                 DisableLinqBridge();
 
-                LINQBridgeVsExtension.IsEnvironmentConfigured = false;
+                PackageConfigurator.IsEnvironmentConfigured = false;
             }
             catch (Exception e)
             {

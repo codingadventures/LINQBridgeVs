@@ -9,6 +9,9 @@
 //------------------------------------------------------------------------------
 
 namespace LINQBridgeVs.Extension {
+    using System;
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -67,7 +70,7 @@ namespace LINQBridgeVs.Extension {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Software\LINQBridgeVs\Configurations.
+        ///   Looks up a localized string similar to Software\LINQBridgeVs\{0}\Configurations.
         /// </summary>
         internal static string ConfigurationRegistryKey {
             get {
@@ -76,20 +79,11 @@ namespace LINQBridgeVs.Extension {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Software\LINQBridgeVs\EnabledProjects.
+        ///   Looks up a localized string similar to Software\LINQBridgeVs\{0}\EnabledProjects.
         /// </summary>
         internal static string EnabledProjectsRegistryKey {
             get {
                 return ResourceManager.GetString("EnabledProjectsRegistryKey", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Software\LINQBridgeVs.
-        /// </summary>
-        internal static string InstallFolderRegistryKey {
-            get {
-                return ResourceManager.GetString("InstallFolderRegistryKey", resourceCulture);
             }
         }
         
@@ -100,6 +94,15 @@ namespace LINQBridgeVs.Extension {
             get {
                 object obj = ResourceManager.GetObject("LINQBridgeLogo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Software\LINQBridgeVs\{0}.
+        /// </summary>
+        internal static string ProductRegistryKey {
+            get {
+                return ResourceManager.GetString("ProductRegistryKey", resourceCulture);
             }
         }
         

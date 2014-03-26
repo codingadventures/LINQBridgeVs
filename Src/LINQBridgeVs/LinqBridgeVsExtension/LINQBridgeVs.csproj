@@ -101,6 +101,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\PackageConfigurator.cs" />
     <Compile Include="Dependency\Crawler.cs" />
     <Compile Include="Dependency\Project.cs" />
     <Compile Include="Extension\Enumerable.cs" />
