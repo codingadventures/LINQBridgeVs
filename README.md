@@ -4,7 +4,7 @@
 What's LINQBridgeVs?
 -----------------
 
-LINQBridgeVs is a Visual Studio Extension for Visual Studio 2010 and Visual Studio 2012.
+LINQBridgeVs is a Visual Studio Extension compatible with Visual Studio 2010/2012/2013.
 It is a bridge between a Visual Studio debugging session and [LINQPad] (http://www.linqpad.net).
 When enabled on a selection of VB/C# projects, it creates a Custom Debugger Visualizer 
 mapping to all the complex types and making the magnifier glass 
