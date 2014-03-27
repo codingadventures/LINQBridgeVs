@@ -30,7 +30,7 @@ No need to manually install LINQPad beforehand as it is built into LINQBridge
 
 ## Compatibility
 
-LINQBridgeVs is compatible for Visual Studio 2012 and Visual Studio 2010. At the moment available **only for .NET Framework 4.0**
+LINQBridgeVs is compatible for Visual Studio 2010/2012/2013. At the moment available **only for .NET Framework 4.0 onwards**
 
 
 ## Known Issues
