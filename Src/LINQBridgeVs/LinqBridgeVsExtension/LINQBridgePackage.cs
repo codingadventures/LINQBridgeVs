@@ -78,18 +78,8 @@ namespace LINQBridgeVs.Extension
 
         DTEEvents _mPackageDteEvents;
 
-        private string _vsVersion;
-        private string VsVersion
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(_vsVersion)) return _vsVersion;
-
-                _vsVersion = ((DTE)ServiceProvider.GlobalProvider.GetService(typeof(EnvDTE.DTE).GUID)).Version;
-                
-                return _vsVersion;
-            }
-        }
+       
+    
         //  private static Icon solutionIcon;
         //  private uint propChangeCookie;
         //  private IVsSolution solution;

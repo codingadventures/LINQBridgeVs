@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using LINQBridgeVs.Logging;
@@ -11,6 +12,37 @@ namespace LINQBridgeVs.Extension.Configuration
     internal static class PackageConfigurator
     {
         private static string _vsVersion;
+        private static readonly string CurrentAssemblyVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
+        private static readonly bool IsFramework45Installed = File.Exists(Locations.DotNet45FrameworkPath);
+
+        private static string LINQBridgeVsExtensionVersion
+        {
+            get
+            {
+                using (var key = Registry.CurrentUser.OpenSubKey(GetRegistryKeyWithVersion(Resources.ProductVersion)))
+                {
+                    if (key == null) return string.Empty;
+                    
+                    var value = key.GetValue("LINQBridgeVsVersion");
+
+                    if (value != null)
+                        return value.ToString();
+                }
+            
+
+                return string.Empty;
+            }
+
+            set
+            {
+                using (var key = Registry.CurrentUser.CreateSubKey(GetRegistryKeyWithVersion(Resources.ProductVersion)))
+                {
+                    if (key != null)
+                        key.SetValue("LINQBridgeVsVersion", value);
+                }
+            }
+        }
+
         public static bool IsEnvironmentConfigured
         {
             get
@@ -51,9 +83,16 @@ namespace LINQBridgeVs.Extension.Configuration
 
         public static void Configure(string vsVersion)
         {
-
             _vsVersion = vsVersion;
             Log.Write("Configuring LINQBridgeVs Extension");
+
+            if (LINQBridgeVsExtensionVersion != CurrentAssemblyVersion)
+            {
+                Log.Write("New LINQBridgeVs Extensions. Previous Version {0}. Current Version {1}", LINQBridgeVsExtensionVersion, CurrentAssemblyVersion);
+                ArePermissionsSet
+                    = IsEnvironmentConfigured = false;
+                LINQBridgeVsExtensionVersion = CurrentAssemblyVersion;
+            }
 
             //Always check if installation folder has changed
             SetInstallationFolder();
@@ -63,6 +102,8 @@ namespace LINQBridgeVs.Extension.Configuration
             Log.Write("Setting the Environment");
             SetEnvironment();
         }
+
+
 
         private static void SetEnvironment()
         {
@@ -84,6 +125,13 @@ namespace LINQBridgeVs.Extension.Configuration
                 File.Copy(Locations.LinqBridgeTargetFileNamePath,
                     Path.Combine(Locations.DotNet40Framework64Path, Locations.LinqBridgeTargetFileName), true);
                 Log.Write("LinqBridge Targets copied to {0} ", Locations.DotNet40Framework64Path);
+            }
+
+            if (IsFramework45Installed)
+            {
+                File.Copy(Locations.LinqBridgeTargetFileNamePath,
+                  Path.Combine(Locations.DotNet45FrameworkPath, Locations.LinqBridgeTargetFileName), true);
+                Log.Write("LinqBridge Targets copied to {0} ", Locations.DotNet45FrameworkPath);
             }
             SetPermissions();
 
@@ -116,19 +164,24 @@ namespace LINQBridgeVs.Extension.Configuration
             Log.Write("SetPermission Starts");
             var processOutputs = new StringBuilder();
 
-            var process = new Process
+            var icaclsProcess = new Process
             {
                 StartInfo = { UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden, RedirectStandardError = true, RedirectStandardInput = true, RedirectStandardOutput = true, FileName = "icacls.exe", Arguments = Locations.IcaclsArguments }
             };
-            var processX64 = new Process
+
+            var icaclsProcess45 = new Process
+            {
+                StartInfo = { UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden, RedirectStandardError = true, RedirectStandardInput = true, RedirectStandardOutput = true, FileName = "icacls.exe", Arguments = Locations.IcaclsArguments45 }
+            };
+            var icaclsProcessX64 = new Process
             {
                 StartInfo = { UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden, RedirectStandardError = true, FileName = "icacls.exe", Arguments = Locations.IcaclsArgumentsX64, LoadUserProfile = true }
             };
-            var processCommonTarget = new Process
+            var icaclsProcessCommonTarget = new Process
             {
                 StartInfo = { UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden, RedirectStandardError = true, RedirectStandardInput = true, RedirectStandardOutput = true, FileName = "icacls.exe", Arguments = Locations.IcaclsArgumentsCommonTarget, LoadUserProfile = true }
             };
-            var processX64CommonTarget = new Process
+            var icaclsProcessX64CommonTarget = new Process
             {
                 StartInfo = { UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden, RedirectStandardError = true, RedirectStandardInput = true, RedirectStandardOutput = true, FileName = "icacls.exe", Arguments = Locations.IcaclsArgumentsX64CommonTarget, LoadUserProfile = true }
             };
@@ -143,37 +196,48 @@ namespace LINQBridgeVs.Extension.Configuration
 
                 if (takeownProcessx64 != null) takeownProcessx64.WaitForExit();
             }
-            process.Start();
-            processCommonTarget.Start();
+            icaclsProcess.Start();
+
+            if (IsFramework45Installed)
+                icaclsProcess45.Start();
+
+            icaclsProcessCommonTarget.Start();
 
             if (Environment.Is64BitOperatingSystem)
             {
-                processX64.Start();
-                processX64CommonTarget.Start();
+                icaclsProcessX64.Start();
+                icaclsProcessX64CommonTarget.Start();
                 Log.Write("Setting Permission to {0} and {1} ", Locations.IcaclsArguments, Locations.IcaclsArgumentsX64);
                 Log.Write("Setting Permission to {0} and {1} ", Locations.IcaclsArgumentsCommonTarget, Locations.IcaclsArgumentsX64CommonTarget);
 
             }
 
+            if (IsFramework45Installed)
+                icaclsProcess45.WaitForExit();
 
-            process.WaitForExit();
-            processCommonTarget.WaitForExit();
+            icaclsProcess.WaitForExit();
+            icaclsProcessCommonTarget.WaitForExit();
             if (Environment.Is64BitOperatingSystem)
             {
-                processX64.WaitForExit();
-                processX64CommonTarget.WaitForExit();
+                icaclsProcessX64.WaitForExit();
+                icaclsProcessX64CommonTarget.WaitForExit();
             }
 
-            if (process.ExitCode != 0)
-                processOutputs.AppendLine(process.StandardOutput.ReadToEnd());
-            if (process.ExitCode != 0)
-                processOutputs.AppendLine(processCommonTarget.StandardOutput.ReadToEnd());
+            if (icaclsProcess.ExitCode != 0)
+                processOutputs.AppendLine(icaclsProcess.StandardOutput.ReadToEnd());
+            if (icaclsProcess.ExitCode != 0)
+                processOutputs.AppendLine(icaclsProcessCommonTarget.StandardOutput.ReadToEnd());
+
+            if (IsFramework45Installed && icaclsProcess.ExitCode != 0)
+                processOutputs.AppendLine(icaclsProcess45.StandardOutput.ReadToEnd());
+
+
             if (Environment.Is64BitOperatingSystem)
             {
-                if (process.ExitCode != 0)
-                    processOutputs.AppendLine(processX64.StandardOutput.ReadToEnd());
-                if (process.ExitCode != 0)
-                    processOutputs.AppendLine(processX64CommonTarget.StandardOutput.ReadToEnd());
+                if (icaclsProcess.ExitCode != 0)
+                    processOutputs.AppendLine(icaclsProcessX64.StandardOutput.ReadToEnd());
+                if (icaclsProcess.ExitCode != 0)
+                    processOutputs.AppendLine(icaclsProcessX64CommonTarget.StandardOutput.ReadToEnd());
             }
 
 
@@ -186,6 +250,7 @@ namespace LINQBridgeVs.Extension.Configuration
 
         private static string GetRegistryKeyWithVersion(string key)
         {
+
             return String.Format(key, _vsVersion);
         }
 

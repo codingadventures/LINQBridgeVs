@@ -34,7 +34,7 @@ namespace LINQBridgeVs.DynamicCore.Helper
     internal static class TypeNameHelper
     {
 
-        private static readonly List<string> SystemNamespaces = new List<string>()
+        private static readonly List<string> SystemNamespaces = new List<string>
                                                                     {
                                                                         "System.Collections.Generic.",
                                                                         "System.Collections.",

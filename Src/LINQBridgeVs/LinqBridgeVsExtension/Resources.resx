@@ -136,4 +136,7 @@
   <data name="ConfigurationRegistryKey" xml:space="preserve">
     <value>Software\LINQBridgeVs\{0}\Configurations</value>
   </data>
+  <data name="ProductVersion" xml:space="preserve">
+    <value>Software\LINQBridgeVs\{0}</value>
+  </data>
 </root>

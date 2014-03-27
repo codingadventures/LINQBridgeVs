@@ -4,20 +4,32 @@
     <Name>LINQBridgeVs Extension</Name>
     <Author>Giovanni Campo</Author>
     <Version>1.3</Version>
-    <Description xml:space="preserve">Enable/Disable the creation of a custom debugger visualizer and the transformation of the target project in a fully serializable library</Description>
+    <Description xml:space="preserve">Bridge between a Visual Studio debugging session and LINQPad (http://www.linqpad.net). When enabled on a selection of VB/C# projects, it creates a Custom Debugger Visualizer 
+mapping to all the complex types and making the magnifier glass available for all of them.</Description>
     <Locale>1033</Locale>
     <Icon>Resources\LINQBridge.ico</Icon>
+    <GettingStartedGuide>https://github.com/nbasakuragi/LINQBridgeVs</GettingStartedGuide>
     <License>LICENSE.txt</License>
     <InstalledByMsi>false</InstalledByMsi>
+    <PreviewImage>Resources\LINQBridgeLogo.png</PreviewImage>
     <SupportedProducts>
       <VisualStudio Version="10.0">
         <Edition>Pro</Edition>
+        <Edition>Premium</Edition>
+        <Edition>Ultimate</Edition>
+
       </VisualStudio>
       <VisualStudio Version="11.0">
         <Edition>Pro</Edition>
+        <Edition>Premium</Edition>
+        <Edition>Ultimate</Edition>
+     
       </VisualStudio>
       <VisualStudio Version="12.0">
         <Edition>Pro</Edition>
+        <Edition>Premium</Edition>
+        <Edition>Ultimate</Edition>
+
       </VisualStudio>
     </SupportedProducts>
     <SupportedFrameworkRuntimeEdition MinVersion="4.0" MaxVersion="4.5" />

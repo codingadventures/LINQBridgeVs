@@ -27,18 +27,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using EnvDTE;
 using LINQBridgeVs.Extension.Configuration;
 using LINQBridgeVs.Extension.Dependency;
 using LINQBridgeVs.Extension.Forms;
 using LINQBridgeVs.Logging;
-using Microsoft.Win32;
-using Process = System.Diagnostics.Process;
 using Project = EnvDTE.Project;
 
 namespace LINQBridgeVs.Extension

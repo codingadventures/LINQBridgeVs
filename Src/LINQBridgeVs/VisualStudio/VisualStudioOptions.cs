@@ -58,7 +58,7 @@ namespace LINQBridgeVs.VisualStudio
                         InstallationPaths =
                             new List<string> {Vs2010Path1, Vs2010Path2},
 
-                        AssemblyLocation = LINQBridge.DynamicVisualizer.V10.Settings.AssemblyLocation
+                        AssemblyLocation = DynamicVisualizer.V10.Settings.AssemblyLocation
                     }
                 },
                 {

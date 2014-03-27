@@ -44,7 +44,6 @@ namespace LINQBridgeVs.BuildTasks
         {
             try
             {
-                  
                 var installationPaths = VisualStudioOptions.GetInstallationPath(VisualStudioVer).ToList();
 
                 var visualizerAssemblyLocation = VisualStudioOptions.GetVisualizerAssemblyLocation(VisualStudioVer);
