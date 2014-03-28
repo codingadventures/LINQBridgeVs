@@ -55,12 +55,12 @@ namespace LINQBridgeVs.Extension
 
         public static readonly string MicrosoftCommonTarget45FileNamePath = Path.Combine(DotNet45FrameworkPath, "Microsoft.Common.targets");
 
-        public static readonly string MicrosoftCommonTarget64FileNamePath = Path.Combine(DotNet40Framework64Path, "Microsoft.Common.targets");
+        public static readonly string MicrosoftCommonTargetX64FileNamePath = Path.Combine(DotNet40Framework64Path, "Microsoft.Common.targets");
 
         public static readonly string IcaclsArguments45 = String.Format("\"{0}\" /grant Everyone:F", DotNet45FrameworkPath);
 
         public static readonly string IcaclsArgumentsCommonTarget = String.Format("{0} /grant Everyone:F", MicrosoftCommonTargetFileNamePath);
         public static readonly string IcaclsArguments45CommonTarget = String.Format("\"{0}\" /grant Everyone:F", MicrosoftCommonTarget45FileNamePath);
-        public static readonly string IcaclsArgumentsX64CommonTarget = String.Format("{0} /grant Everyone:F", MicrosoftCommonTarget64FileNamePath);
+        public static readonly string IcaclsArgumentsX64CommonTarget = String.Format("{0} /grant Everyone:F", MicrosoftCommonTargetX64FileNamePath);
     }
 }

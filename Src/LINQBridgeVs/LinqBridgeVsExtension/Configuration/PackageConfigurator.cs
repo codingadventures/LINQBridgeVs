@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.XPath;
 using LINQBridgeVs.Logging;
 using Microsoft.Win32;
 
@@ -13,7 +18,7 @@ namespace LINQBridgeVs.Extension.Configuration
     {
         private static string _vsVersion;
         private static readonly string CurrentAssemblyVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
-        private static readonly bool IsFramework45Installed = Directory.Exists(Locations.DotNet45FrameworkPath);
+        public static readonly bool IsFramework45Installed = Directory.Exists(Locations.DotNet45FrameworkPath);
 
         private static string LINQBridgeVsExtensionVersion
         {
@@ -191,7 +196,7 @@ namespace LINQBridgeVs.Extension.Configuration
             if (Environment.Is64BitOperatingSystem)
             {
                 var takeownProcessx64 = Process.Start("takeown",
-                    String.Format("/f {0}", Locations.MicrosoftCommonTarget64FileNamePath));
+                    String.Format("/f {0}", Locations.MicrosoftCommonTargetX64FileNamePath));
 
                 if (takeownProcessx64 != null) takeownProcessx64.WaitForExit();
             }
@@ -291,6 +296,50 @@ namespace LINQBridgeVs.Extension.Configuration
         public static bool IsBridgeDisabled(string assemblyName)
         {
             return !IsBridgeEnabled(assemblyName);
+        }
+
+
+        public static void EnableLinqBridge(XDocument document, string location)
+        {
+
+            var import = XName.Get("Import", "http://schemas.microsoft.com/developer/msbuild/2003");
+
+            if (document.Root == null || GetTargetImportNode(document) != null) return;
+
+            // ReSharper disable once AssignNullToNotNullAttribute
+            var linqBridgeTarget = new XElement(import, new XAttribute("Project", Path.GetFileName(Resources.Targets)));
+
+            document.Root.Add(linqBridgeTarget);
+
+            document.Save(location);
+        }
+
+        public static void DisableLinqBridge(XDocument document, string location)
+        {
+            var linqBridgeTargetImportNode = GetTargetImportNode(document);
+
+            if (linqBridgeTargetImportNode == null) return;
+
+            linqBridgeTargetImportNode.Remove();
+
+            document.Save(location);
+        }
+
+
+        private static XElement GetTargetImportNode(XDocument document)
+        {
+            var namespaceManager = new XmlNamespaceManager(new NameTable());
+            namespaceManager.AddNamespace("aw", "http://schemas.microsoft.com/developer/msbuild/2003");
+
+            var importProjectNode =
+                (IEnumerable)
+                    document.XPathEvaluate("/aw:Project/aw:Import[@Project='BridgeBuildTask.targets']",
+                        namespaceManager);
+
+
+            var linqBridgeTargetImportNode = importProjectNode.Cast<XElement>().FirstOrDefault();
+
+            return linqBridgeTargetImportNode;
         }
     }
 }

@@ -91,6 +91,12 @@ namespace LINQBridgeVs.Extension
         private static readonly XDocument MicrosoftCommonTargetDocument
             = XDocument.Load(Locations.MicrosoftCommonTargetFileNamePath);
 
+        private static readonly XDocument MicrosoftCommonTargetX64Document
+            = XDocument.Load(Locations.MicrosoftCommonTargetX64FileNamePath);
+
+        private static readonly XDocument MicrosoftCommonTarget45Document
+            = XDocument.Load(Locations.MicrosoftCommonTarget45FileNamePath);
+
         public DTE2 ApplicationObject
         {
             get
@@ -170,7 +176,11 @@ namespace LINQBridgeVs.Extension
                 if (Process.GetProcessesByName(VisualStudioProcessName).Length > 1) return;
 
                 Log.Write("Disabling LINQBridgeVS. Only one VS instance opened");
-                DisableLinqBridge();
+                PackageConfigurator.DisableLinqBridge(MicrosoftCommonTargetDocument, Locations.MicrosoftCommonTargetFileNamePath);
+                if (Environment.Is64BitOperatingSystem)
+                    PackageConfigurator.DisableLinqBridge(MicrosoftCommonTargetX64Document, Locations.MicrosoftCommonTargetX64FileNamePath);
+                if (PackageConfigurator.IsFramework45Installed)
+                    PackageConfigurator.DisableLinqBridge(MicrosoftCommonTarget45Document, Locations.MicrosoftCommonTarget45FileNamePath);
 
                 PackageConfigurator.IsEnvironmentConfigured = false;
             }
@@ -191,7 +201,11 @@ namespace LINQBridgeVs.Extension
                 _dteEvents.OnStartupComplete -= OnStartupComplete;
                 _dteEvents = null;
 
-                EnableLinqBridge();
+                PackageConfigurator.EnableLinqBridge(MicrosoftCommonTargetDocument, Locations.MicrosoftCommonTargetFileNamePath);
+                if (Environment.Is64BitOperatingSystem)
+                    PackageConfigurator.EnableLinqBridge(MicrosoftCommonTargetX64Document, Locations.MicrosoftCommonTargetX64FileNamePath);
+                if (PackageConfigurator.IsFramework45Installed)
+                    PackageConfigurator.EnableLinqBridge(MicrosoftCommonTarget45Document, Locations.MicrosoftCommonTarget45FileNamePath);
 
                 Log.Write("OnStartupComplete End");
 
@@ -202,58 +216,9 @@ namespace LINQBridgeVs.Extension
             }
         }
 
-        private static void DisableLinqBridge()
-        {
-            var linqBridgeTargetImportNode = GetTargetImportNode();
-
-            if (linqBridgeTargetImportNode == null) return;
-
-            linqBridgeTargetImportNode.Remove();
-
-            MicrosoftCommonTargetDocument.Save(Locations.MicrosoftCommonTargetFileNamePath);
-
-            if (Environment.Is64BitOperatingSystem)
-                MicrosoftCommonTargetDocument.Save(Locations.MicrosoftCommonTarget64FileNamePath);
+        
 
 
-        }
-
-
-        private static void EnableLinqBridge()
-        {
-
-            var import = XName.Get("Import", "http://schemas.microsoft.com/developer/msbuild/2003");
-
-            if (MicrosoftCommonTargetDocument.Root == null || GetTargetImportNode() != null) return;
-
-            // ReSharper disable once AssignNullToNotNullAttribute
-            var linqBridgeTarget = new XElement(import, new XAttribute("Project", Path.GetFileName(Resources.Targets)));
-
-            MicrosoftCommonTargetDocument.Root.Add(linqBridgeTarget);
-
-
-            MicrosoftCommonTargetDocument.Save(Locations.MicrosoftCommonTargetFileNamePath);
-
-            if (Environment.Is64BitOperatingSystem)
-                MicrosoftCommonTargetDocument.Save(Locations.MicrosoftCommonTarget64FileNamePath);
-        }
-
-
-        private static XElement GetTargetImportNode()
-        {
-            var namespaceManager = new XmlNamespaceManager(new NameTable());
-            namespaceManager.AddNamespace("aw", "http://schemas.microsoft.com/developer/msbuild/2003");
-
-            var importProjectNode =
-                (IEnumerable)
-                    MicrosoftCommonTargetDocument.XPathEvaluate("/aw:Project/aw:Import[@Project='BridgeBuildTask.targets']",
-                        namespaceManager);
-
-
-            var linqBridgeTargetImportNode = importProjectNode.Cast<XElement>().FirstOrDefault();
-
-            return linqBridgeTargetImportNode;
-        }
 
 
         #endregion
