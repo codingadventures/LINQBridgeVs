@@ -24,9 +24,11 @@ Enabling LINQBridge on a selected project will do the magic and that's it!
 Compile your solution, run it, set a breakpoint and hover the pointer
 on any object instance and the magnifier glass will appear. 
 
+No need to mark any of your classes as Serialized.
+
 Clicking the magnifier will export the instance to [LINQPad](http://www.linqpad.net). 
 
-No need to manually install LINQPad beforehand as it is built into LINQBridge
+[LINQPad] (http://www.linqpad.net) it is to be installed beforehand.
 
 ## Compatibility
 
