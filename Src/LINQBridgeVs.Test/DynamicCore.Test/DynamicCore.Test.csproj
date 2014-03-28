@@ -67,6 +67,7 @@
     <Compile Include="Helper\ReferencedAssemblyFinderHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helper\AssemblyFinderHelperTests.cs" />
+    <Compile Include="DynamicObjectSourceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AnotherModel.Test\AnotherModel.Test.csproj">

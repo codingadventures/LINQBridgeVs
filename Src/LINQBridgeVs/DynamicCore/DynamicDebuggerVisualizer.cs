@@ -154,7 +154,7 @@ namespace LINQBridgeVs.DynamicCore
 
                 var linqPadProcess = Process.Start(startInfo);
 
-                Thread.Sleep(125);
+                Thread.Sleep(100);
 
                 if (linqPadProcess.HasExited)
                     linqPadProcess = Process.GetProcessesByName("LINQPad").FirstOrDefault();
@@ -180,7 +180,7 @@ namespace LINQBridgeVs.DynamicCore
 
                     SetForegroundWindow(linqPadProcess.MainWindowHandle);
                     Log.Write("LINQPad SetForegroundWindow {0}", linqPadProcess.MainWindowHandle);
-                    Thread.Sleep(125);
+                    Thread.Sleep(100);
                     PostMessage(linqPadProcess.MainWindowHandle, WmKeydown, VkF5, 0);
                     Log.Write("LINQPad PostMessage {0}", VkF5);
 
