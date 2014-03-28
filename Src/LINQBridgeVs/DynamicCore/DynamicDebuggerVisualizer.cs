@@ -85,20 +85,14 @@ namespace LINQBridgeVs.DynamicCore
 
                 var refAssemblies = new List<string> { message.TypeLocation };
                 refAssemblies.AddRange(message.ReferencedAssemblies);
-
-                //if (FileSystem.File.Exists(dst))
-                //{
-                //    Log.Write(string.Format("File Already Exists: {0}", dst));
-                //    return;
-                //}
-
+ 
                 var linqQuery = new Inspection(refAssemblies, message.TypeFullName, message.TypeNamespace, message.TypeName);
                 var linqQueryText = linqQuery.TransformText();
 
                 Log.Write("LinqQuery file Transformed");
 
 
-                using (var memoryStream = FileSystem.File.OpenWrite(dst))
+                using (var memoryStream = FileSystem.File.Open(dst, FileMode.Create))
                 using (var streamWriter = new StreamWriter(memoryStream))
                 {
                     streamWriter.Write(linqQueryText);
@@ -181,6 +175,7 @@ namespace LINQBridgeVs.DynamicCore
                     SetForegroundWindow(linqPadProcess.MainWindowHandle);
                     Log.Write("LINQPad SetForegroundWindow {0}", linqPadProcess.MainWindowHandle);
                     Thread.Sleep(100);
+                    PostMessage(linqPadProcess.MainWindowHandle, WmKeydown, VkF5, 0);
                     PostMessage(linqPadProcess.MainWindowHandle, WmKeydown, VkF5, 0);
                     Log.Write("LINQPad PostMessage {0}", VkF5);
 
