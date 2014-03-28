@@ -13,7 +13,7 @@ namespace LINQBridgeVs.Extension.Configuration
     {
         private static string _vsVersion;
         private static readonly string CurrentAssemblyVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
-        private static readonly bool IsFramework45Installed = File.Exists(Locations.DotNet45FrameworkPath);
+        private static readonly bool IsFramework45Installed = Directory.Exists(Locations.DotNet45FrameworkPath);
 
         private static string LINQBridgeVsExtensionVersion
         {
@@ -22,13 +22,13 @@ namespace LINQBridgeVs.Extension.Configuration
                 using (var key = Registry.CurrentUser.OpenSubKey(GetRegistryKeyWithVersion(Resources.ProductVersion)))
                 {
                     if (key == null) return string.Empty;
-                    
+
                     var value = key.GetValue("LINQBridgeVsVersion");
 
                     if (value != null)
                         return value.ToString();
                 }
-            
+
 
                 return string.Empty;
             }
@@ -115,6 +115,8 @@ namespace LINQBridgeVs.Extension.Configuration
                 return;
             }
 
+            SetPermissions();
+
 
             //Copy the BridgeBuildTask.targets to the default .NET 4.0v framework location
             File.Copy(Locations.LinqBridgeTargetFileNamePath, Path.Combine(Locations.DotNet40FrameworkPath, Locations.LinqBridgeTargetFileName), true);
@@ -133,7 +135,6 @@ namespace LINQBridgeVs.Extension.Configuration
                   Path.Combine(Locations.DotNet45FrameworkPath, Locations.LinqBridgeTargetFileName), true);
                 Log.Write("LinqBridge Targets copied to {0} ", Locations.DotNet45FrameworkPath);
             }
-            SetPermissions();
 
             Log.Write("Setting IsEnvironmentConfigured to True");
             IsEnvironmentConfigured = true;
@@ -164,19 +165,11 @@ namespace LINQBridgeVs.Extension.Configuration
             Log.Write("SetPermission Starts");
             var processOutputs = new StringBuilder();
 
-            var icaclsProcess = new Process
+            var icaclsProcess45Folder = new Process
             {
-                StartInfo = { UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden, RedirectStandardError = true, RedirectStandardInput = true, RedirectStandardOutput = true, FileName = "icacls.exe", Arguments = Locations.IcaclsArguments }
+                StartInfo = { UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden, RedirectStandardError = true, RedirectStandardInput = true, RedirectStandardOutput = true, FileName = "icacls.exe", Arguments = Locations.IcaclsArguments45, LoadUserProfile = true }
             };
 
-            var icaclsProcess45 = new Process
-            {
-                StartInfo = { UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden, RedirectStandardError = true, RedirectStandardInput = true, RedirectStandardOutput = true, FileName = "icacls.exe", Arguments = Locations.IcaclsArguments45 }
-            };
-            var icaclsProcessX64 = new Process
-            {
-                StartInfo = { UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden, RedirectStandardError = true, FileName = "icacls.exe", Arguments = Locations.IcaclsArgumentsX64, LoadUserProfile = true }
-            };
             var icaclsProcessCommonTarget = new Process
             {
                 StartInfo = { UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden, RedirectStandardError = true, RedirectStandardInput = true, RedirectStandardOutput = true, FileName = "icacls.exe", Arguments = Locations.IcaclsArgumentsCommonTarget, LoadUserProfile = true }
@@ -186,6 +179,12 @@ namespace LINQBridgeVs.Extension.Configuration
                 StartInfo = { UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden, RedirectStandardError = true, RedirectStandardInput = true, RedirectStandardOutput = true, FileName = "icacls.exe", Arguments = Locations.IcaclsArgumentsX64CommonTarget, LoadUserProfile = true }
             };
 
+            var icaclsProcess45CommonTarget = new Process
+            {
+                StartInfo = { UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden, RedirectStandardError = true, RedirectStandardInput = true, RedirectStandardOutput = true, FileName = "icacls.exe", Arguments = Locations.IcaclsArguments45CommonTarget, LoadUserProfile = true }
+            };
+
+            #region [ Take Own ]
             var takeownProcess = Process.Start("takeown", String.Format("/f {0}", Locations.MicrosoftCommonTargetFileNamePath));
             if (takeownProcess != null) takeownProcess.WaitForExit();
 
@@ -196,47 +195,54 @@ namespace LINQBridgeVs.Extension.Configuration
 
                 if (takeownProcessx64 != null) takeownProcessx64.WaitForExit();
             }
-            icaclsProcess.Start();
+            if (IsFramework45Installed)
+            {
+                var takeownProcess45 = Process.Start("takeown",
+                 String.Format("/f \"{0}\"", Locations.DotNet45FrameworkPath));
+
+                if (takeownProcess45 != null) takeownProcess45.WaitForExit();
+            }
+            #endregion
+
 
             if (IsFramework45Installed)
-                icaclsProcess45.Start();
+            {
+                icaclsProcess45Folder.Start();
+                icaclsProcess45CommonTarget.Start();
+            }
 
             icaclsProcessCommonTarget.Start();
 
             if (Environment.Is64BitOperatingSystem)
             {
-                icaclsProcessX64.Start();
                 icaclsProcessX64CommonTarget.Start();
-                Log.Write("Setting Permission to {0} and {1} ", Locations.IcaclsArguments, Locations.IcaclsArgumentsX64);
                 Log.Write("Setting Permission to {0} and {1} ", Locations.IcaclsArgumentsCommonTarget, Locations.IcaclsArgumentsX64CommonTarget);
-
             }
 
             if (IsFramework45Installed)
-                icaclsProcess45.WaitForExit();
-
-            icaclsProcess.WaitForExit();
-            icaclsProcessCommonTarget.WaitForExit();
-            if (Environment.Is64BitOperatingSystem)
             {
-                icaclsProcessX64.WaitForExit();
-                icaclsProcessX64CommonTarget.WaitForExit();
+                icaclsProcess45Folder.WaitForExit();
+                icaclsProcess45CommonTarget.WaitForExit();
             }
 
-            if (icaclsProcess.ExitCode != 0)
-                processOutputs.AppendLine(icaclsProcess.StandardOutput.ReadToEnd());
-            if (icaclsProcess.ExitCode != 0)
+            icaclsProcessCommonTarget.WaitForExit();
+
+            if (Environment.Is64BitOperatingSystem)
+                icaclsProcessX64CommonTarget.WaitForExit();
+
+            if (icaclsProcessCommonTarget.ExitCode != 0)
                 processOutputs.AppendLine(icaclsProcessCommonTarget.StandardOutput.ReadToEnd());
 
-            if (IsFramework45Installed && icaclsProcess.ExitCode != 0)
-                processOutputs.AppendLine(icaclsProcess45.StandardOutput.ReadToEnd());
+            if (IsFramework45Installed && icaclsProcess45CommonTarget.ExitCode != 0)
+                processOutputs.AppendLine(icaclsProcess45CommonTarget.StandardOutput.ReadToEnd());
+
+            if (IsFramework45Installed && icaclsProcess45Folder.ExitCode != 0)
+                processOutputs.AppendLine(icaclsProcess45Folder.StandardOutput.ReadToEnd());
 
 
             if (Environment.Is64BitOperatingSystem)
             {
-                if (icaclsProcess.ExitCode != 0)
-                    processOutputs.AppendLine(icaclsProcessX64.StandardOutput.ReadToEnd());
-                if (icaclsProcess.ExitCode != 0)
+                if (icaclsProcessX64CommonTarget.ExitCode != 0)
                     processOutputs.AppendLine(icaclsProcessX64CommonTarget.StandardOutput.ReadToEnd());
             }
 
