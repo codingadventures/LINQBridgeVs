@@ -116,21 +116,28 @@ namespace LINQBridgeVs.Extension.Configuration
             _vsVersion = vsVersion;
             Log.Write("Configuring LINQBridgeVs Extension");
 
-            if (LINQBridgeVsExtensionVersion != CurrentAssemblyVersion)
+            try
             {
-                Log.Write("New LINQBridgeVs Extensions. Previous Version {0}. Current Version {1}", LINQBridgeVsExtensionVersion, CurrentAssemblyVersion);
-                ArePermissionsSet
-                    = IsEnvironmentConfigured = false;
-                LINQBridgeVsExtensionVersion = CurrentAssemblyVersion;
+                if (LINQBridgeVsExtensionVersion != CurrentAssemblyVersion)
+                {
+                    Log.Write("New LINQBridgeVs Extensions. Previous Version {0}. Current Version {1}", LINQBridgeVsExtensionVersion, CurrentAssemblyVersion);
+                    ArePermissionsSet
+                        = IsEnvironmentConfigured = false;
+                    LINQBridgeVsExtensionVersion = CurrentAssemblyVersion;
+                }
+
+                //Always check if installation folder has changed
+                SetInstallationFolder();
+
+                if (IsEnvironmentConfigured) return;
+
+                Log.Write("Setting the Environment");
+                SetEnvironment();
             }
-
-            //Always check if installation folder has changed
-            SetInstallationFolder();
-
-            if (IsEnvironmentConfigured) return;
-
-            Log.Write("Setting the Environment");
-            SetEnvironment();
+            catch (Exception e)
+            {
+                Log.Write(e, "Error Configuring LINQBridgeVs");
+            }
         }
 
 

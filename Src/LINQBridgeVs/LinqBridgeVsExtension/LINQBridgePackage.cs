@@ -24,14 +24,9 @@
 #endregion
 
 using System;
-using System.Collections;
 using System.ComponentModel.Design;
-using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Xml;
 using System.Xml.Linq;
-using System.Xml.XPath;
 using EnvDTE;
 using EnvDTE80;
 using LINQBridgeVs.Extension.Configuration;
@@ -66,9 +61,6 @@ namespace LINQBridgeVs.Extension
     [ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string)]
     [Guid(GuidList.GuidBridgeVsExtensionPkgString)]
     public sealed class LINQBridgeVsPackage : Package
-    //  , IVsShellPropertyEvents
-    // , IVsSolutionEvents
-    // , IDisposable
     {
 
         private DTEEvents _dteEvents;
@@ -77,25 +69,6 @@ namespace LINQBridgeVs.Extension
         private DTE2 _mApplicationObject;
 
         DTEEvents _mPackageDteEvents;
-
-       
-    
-        //  private static Icon solutionIcon;
-        //  private uint propChangeCookie;
-        //  private IVsSolution solution;
-        //  private uint solutionEventsCookie;
-
-        //  public event Action AfterSolutionLoaded;
-        //  public event Action BeforeSolutionClosed;
-
-        private static readonly XDocument MicrosoftCommonTargetDocument
-            = XDocument.Load(Locations.MicrosoftCommonTargetFileNamePath);
-
-        private static readonly XDocument MicrosoftCommonTargetX64Document
-            = XDocument.Load(Locations.MicrosoftCommonTargetX64FileNamePath);
-
-        private static readonly XDocument MicrosoftCommonTarget45Document
-            = XDocument.Load(Locations.MicrosoftCommonTarget45FileNamePath);
 
         public DTE2 ApplicationObject
         {
@@ -109,6 +82,38 @@ namespace LINQBridgeVs.Extension
             }
         }
 
+        private XDocument _microsoftCommonTargetDocument;
+        public XDocument MicrosoftCommonTargetDocument
+        {
+            get
+            {
+                _microsoftCommonTargetDocument = _microsoftCommonTargetDocument ?? XDocument.Load(Locations.MicrosoftCommonTargetFileNamePath);
+                return _microsoftCommonTargetDocument;
+            }
+
+        }
+
+        private XDocument _microsoftCommonTargetX64Document;
+        public XDocument MicrosoftCommonTargetX64Document
+        {
+            get
+            {
+                _microsoftCommonTargetX64Document = _microsoftCommonTargetX64Document ?? XDocument.Load(Locations.MicrosoftCommonTargetX64FileNamePath);
+                return _microsoftCommonTargetX64Document;
+            }
+
+        }
+
+        private XDocument _microsoftCommonTarget45Document;
+        public XDocument MicrosoftCommonTarget45Document
+        {
+            get
+            {
+                _microsoftCommonTarget45Document = _microsoftCommonTarget45Document ?? XDocument.Load(Locations.MicrosoftCommonTarget45FileNamePath);
+                return _microsoftCommonTargetX64Document;
+            }
+
+        }
         #region Package Members
 
         /// <summary>
@@ -127,14 +132,7 @@ namespace LINQBridgeVs.Extension
 
             _mPackageDteEvents = ApplicationObject.Events.DTEEvents;
             _mPackageDteEvents.OnBeginShutdown += HandleVisualStudioShutDown;
-            // watch for VSSPROPID property changes
-            //  var vsShell = (IVsShell)GetService(typeof(SVsShell));
-            //  vsShell.AdviseShellPropertyChanges(this, out propChangeCookie);
-            //solution = GetGlobalService(typeof(SVsSolution)) as IVsSolution;
-            //if (solution != null)
-            //{
-            //    solution.AdviseSolutionEvents(this, out solutionEventsCookie);
-            //}
+
 
             var bridge = new LINQBridgeVsExtension(_dte);
 
@@ -172,15 +170,25 @@ namespace LINQBridgeVs.Extension
                 _dteEvents = null;
                 _mPackageDteEvents = null;
                 //Check if there's only one instance of VS running. if it's so then remove from Microsoft.Common.Target 
-                //Any reference of LINQBridge
+                //Any reference of LINQBridgeVs
                 if (Process.GetProcessesByName(VisualStudioProcessName).Length > 1) return;
 
                 Log.Write("Disabling LINQBridgeVS. Only one VS instance opened");
+              
                 PackageConfigurator.DisableLinqBridge(MicrosoftCommonTargetDocument, Locations.MicrosoftCommonTargetFileNamePath);
+                Log.Write("LINQBridgeVS Disabled for x86 Operating System");
+
                 if (Environment.Is64BitOperatingSystem)
+                { 
                     PackageConfigurator.DisableLinqBridge(MicrosoftCommonTargetX64Document, Locations.MicrosoftCommonTargetX64FileNamePath);
+                    Log.Write("LINQBridgeVS Disabled for x64 Operating System");
+
+                }
                 if (PackageConfigurator.IsFramework45Installed)
+                {
                     PackageConfigurator.DisableLinqBridge(MicrosoftCommonTarget45Document, Locations.MicrosoftCommonTarget45FileNamePath);
+                    Log.Write("LINQBridgeVS Disabled for framework 4.5");
+                }
 
                 PackageConfigurator.IsEnvironmentConfigured = false;
             }
@@ -202,10 +210,20 @@ namespace LINQBridgeVs.Extension
                 _dteEvents = null;
 
                 PackageConfigurator.EnableLinqBridge(MicrosoftCommonTargetDocument, Locations.MicrosoftCommonTargetFileNamePath);
+                Log.Write("LINQBridgeVS Enabled for x86 Operating System");
+
                 if (Environment.Is64BitOperatingSystem)
+                {
                     PackageConfigurator.EnableLinqBridge(MicrosoftCommonTargetX64Document, Locations.MicrosoftCommonTargetX64FileNamePath);
+                    Log.Write("LINQBridgeVS Enabled for x64 Operating System");
+                
+                }
                 if (PackageConfigurator.IsFramework45Installed)
+                {
                     PackageConfigurator.EnableLinqBridge(MicrosoftCommonTarget45Document, Locations.MicrosoftCommonTarget45FileNamePath);
+                    Log.Write("LINQBridgeVS Enabled for framework 4.5");
+                
+                }
 
                 Log.Write("OnStartupComplete End");
 
@@ -216,110 +234,11 @@ namespace LINQBridgeVs.Extension
             }
         }
 
-        
+
 
 
 
 
         #endregion
-
-        //public int OnShellPropertyChange(int propid, object var)
-        //{
-        //    if (propid != (int)__VSSPROPID4.VSSPROPID_ShellInitialized || Convert.ToBoolean(var) != true)
-        //        return VSConstants.S_OK;
-
-        //    //var solution = GetService(typeof(SVsSolution)) as IVsSolution;
-
-        //    IVsHierarchy solHierarchy = null;
-
-        //    if (solution != null)
-        //        solution.GetProjectOfUniqueName("CustomType1", out solHierarchy);
-        //    //    // set VSHPROPID_IconHandle for Solution Node
-        //    //  //  var solHierarchy = (IVsHierarchy)GetService(typeof(SVsSolution));
-
-        //    if (solHierarchy == null) return VSConstants.S_OK;
-
-        //    var hr = solHierarchy.SetProperty((uint)VSConstants.VSITEMID.Root, (int)__VSHPROPID.VSHPROPID_IconHandle, solutionIcon.Handle);
-
-        //    //    // stop listening for shell property changes
-        //    //  var vsShell = (IVsShell)GetService(typeof(SVsShell));
-        //    // hr = vsShell.UnadviseShellPropertyChanges(propChangeCookie);
-        //    //   propChangeCookie = 0;
-        //    return VSConstants.S_OK;
-        //}
-
-        //#region IVsSolutionEvents Members
-
-        //int IVsSolutionEvents.OnAfterCloseSolution(object pUnkReserved)
-        //{
-        //    return VSConstants.S_OK;
-        //}
-
-        //int IVsSolutionEvents.OnAfterLoadProject(IVsHierarchy pStubHierarchy, IVsHierarchy pRealHierarchy)
-        //{
-
-
-        //    return VSConstants.S_OK;
-        //}
-
-        //int IVsSolutionEvents.OnAfterOpenProject(IVsHierarchy pHierarchy, int fAdded)
-        //{
-        //    object icon;
-
-        //    IVsHierarchy solHierarchy = null;
-
-        //    if (solution != null)
-        //        solution.GetProjectOfUniqueName(@"C:\Users\John\Documents\Visual Studio 2012\Projects\CompileTest1\CompileTest1\CompileTest1.Ciao.csproj", out solHierarchy);
-
-
-        //    var hr = pHierarchy.SetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_IconHandle, solutionIcon.Handle);
-        //    // stop listening for shell property changes
-        //    //var vsShell = (IVsShell)GetService(typeof(SVsShell));
-        //    //hr = vsShell.UnadviseShellPropertyChanges(propChangeCookie);
-        //    //   propChangeCookie = 0;
-
-        //    return VSConstants.S_OK;
-        //}
-
-        //int IVsSolutionEvents.OnAfterOpenSolution(object pUnkReserved, int fNewSolution)
-        //{
-        //    //  AfterSolutionLoaded();
-        //    return VSConstants.S_OK;
-        //}
-
-        //int IVsSolutionEvents.OnBeforeCloseProject(IVsHierarchy pHierarchy, int fRemoved)
-        //{
-        //    return VSConstants.S_OK;
-        //}
-
-        //int IVsSolutionEvents.OnBeforeCloseSolution(object pUnkReserved)
-        //{
-        //    //  BeforeSolutionClosed();
-        //    return VSConstants.S_OK;
-        //}
-
-        //int IVsSolutionEvents.OnBeforeUnloadProject(IVsHierarchy pRealHierarchy, IVsHierarchy pStubHierarchy)
-        //{
-        //    return VSConstants.S_OK;
-        //}
-
-        //int IVsSolutionEvents.OnQueryCloseProject(IVsHierarchy pHierarchy, int fRemoving, ref int pfCancel)
-        //{
-        //    return VSConstants.S_OK;
-        //}
-
-        //int IVsSolutionEvents.OnQueryCloseSolution(object pUnkReserved, ref int pfCancel)
-        //{
-        //    return VSConstants.S_OK;
-        //}
-
-        //int IVsSolutionEvents.OnQueryUnloadProject(IVsHierarchy pRealHierarchy, ref int pfCancel)
-        //{
-        //    return VSConstants.S_OK;
-        //}
-
-        //#endregion
-
-
     }
 }
