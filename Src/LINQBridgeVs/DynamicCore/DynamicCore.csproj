@@ -48,7 +48,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Grapple">
-      <HintPath>..\..\packages\Grapple.0.2.4\lib\Grapple.dll</HintPath>
+      <HintPath>..\..\packages\Grapple.0.3\lib\Grapple.dll</HintPath>
+      <Ilmerge>True</Ilmerge>
+    </Reference>
+    <Reference Include="Grapple.Logging">
+      <HintPath>..\..\packages\Grapple.0.3\lib\Grapple.Logging.dll</HintPath>
+      <Ilmerge>True</Ilmerge>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\packages\Newtonsoft.Json.6.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Ilmerge>True</Ilmerge>
     </Reference>
     <Reference Include="System" />

@@ -36,6 +36,7 @@ namespace LINQBridgeVs.DynamicCore.Helper
     {
         private const string SearchPattern = "*{0}*.dll";
         private const string BaseRootPathForWeb = "Temporary ASP.NET Files";
+        private const int MaxDepth = 4;
 
         private static readonly Func<string, bool> IsSystemAssembly =
             name => name.Contains("Microsoft") || name.Contains("System") || name.Contains("mscorlib");
@@ -73,19 +74,19 @@ namespace LINQBridgeVs.DynamicCore.Helper
             return retPaths.Where(s => !string.IsNullOrEmpty(s));
         }
 
-        internal static string FindPath(string fileToSearch, string rootPath)
+        internal static string FindPath(string fileToSearch, string rootPath, int depth = 0)
         {
             if (rootPath == null) return string.Empty;
             if (rootPath.EndsWith(BaseRootPathForWeb)) return string.Empty;
-
+            if (depth >= MaxDepth) return rootPath;
 
             try
             {
 
                 Log.Write("SearchPattern: {0} in folder {1}", string.Format(SearchPattern, fileToSearch), rootPath);
-
+                depth++;
                 var file = FileSystem.Directory
-                    .EnumerateFiles(rootPath, string.Format(SearchPattern, fileToSearch), System.IO.SearchOption.TopDirectoryOnly)
+                    .EnumerateFiles(rootPath, string.Format(SearchPattern, fileToSearch), System.IO.SearchOption.AllDirectories)
                     .AsParallel()
                     .OrderByDescending(info => FileSystem.FileInfo.FromFileName(info).LastAccessTime)
                     .FirstOrDefault();
@@ -93,7 +94,7 @@ namespace LINQBridgeVs.DynamicCore.Helper
                 if (file == null)
                 {
                     var parent = FileSystem.DirectoryInfo.FromDirectoryName(rootPath).Parent;
-                    return parent != null ? FindPath(fileToSearch, parent.FullName) : string.Empty;
+                    return parent != null ? FindPath(fileToSearch, parent.FullName, depth) : string.Empty;
                 }
 
 

@@ -59,5 +59,17 @@ namespace DynamicCore.Test.Helper
             //Assert
             Assert.AreEqual(SourcePath2, actual);
         }
+        
+        [TestMethod]
+        public void TestFindPathShouldExitAfterFourIterations()
+        {
+            //Arrange
+            
+            //Act
+            var actual = AssemblyFinderHelper.FindPath("Nothing", StartPath);
+
+            //Assert
+            Assert.AreEqual(@"c:\Root1\", actual);
+        }
     }
 }
