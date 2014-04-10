@@ -42,6 +42,7 @@ namespace LINQBridgeVs.BuildTasks
         /// </returns>
         public bool Execute()
         {
+            Log.Configure("MapperBuildTask");
             try
             {
                 var installationPaths = VisualStudioOptions.GetInstallationPath(VisualStudioVer).ToList();
@@ -57,15 +58,15 @@ namespace LINQBridgeVs.BuildTasks
 
                 typeMapper.Save(installationPaths, VisualizerAssemblyName);
 
-
-                return true;
             }
             catch (Exception e)
             {
-                Log.Write(e);
-                Console.WriteLine(@"Error Executing MSBuild Task MapperBuildTask " + e.Message);
-                return false;
+                Log.Write(e, @"Error Executing MSBuild Task MapperBuildTask ");
             }
+
+
+
+            return true;
         }
 
         #region [ Properties ]

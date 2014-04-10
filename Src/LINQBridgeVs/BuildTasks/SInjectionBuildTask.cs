@@ -25,6 +25,7 @@
 
 using System;
 using System.IO;
+using LINQBridgeVs.Logging;
 using Microsoft.Build.Framework;
 using SInject;
 
@@ -40,6 +41,8 @@ namespace LINQBridgeVs.BuildTasks
 
         public bool Execute()
         {
+            Log.Configure("SinjectionBuildTask");
+
             try
             {
                 var snkCertificate = File.Exists(Snk) ? Snk : null;
@@ -48,8 +51,7 @@ namespace LINQBridgeVs.BuildTasks
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                return false;
+                Log.Write(e, @"Error Executing MSBuild Task SInjectionBuildTask ");
             }
 
             return true;
