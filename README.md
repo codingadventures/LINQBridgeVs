@@ -30,6 +30,9 @@ Clicking the magnifier will export the instance to [LINQPad](http://www.linqpad.
 
 [LINQPad] (http://www.linqpad.net) it is to be installed beforehand.
 
+##Acknowledgements
+<a href="http://www.jetbrains.com/resharper/features/code_refactoring.html" alt="The best C# & VB.NET refactoring plugin for Visual Studio" title="The best C# & VB.NET refactoring plugin for Visual Studio">![alt text][resharper]</a>
+
 ## Compatibility
 
 LINQBridgeVs is compatible for Visual Studio 2010/2012/2013. At the moment available **only for .NET Framework 4.0 onwards**
@@ -45,4 +48,6 @@ for the user running the debugger (IIS_IUSRS if a WebSite).
 *Platform:* Windows 8
 
 [logo]: https://raw.github.com/nbasakuragi/LINQBridgeVs/master/Src/LINQBridgeVs/LinqBridgeVsExtension/Resources/LINQBridgeLogo.png "LINQBridge"
+
+[resharper]: https://raw.github.com/nbasakuragi/LINQBridgeVs/master/Src/LINQBridgeVs/LinqBridgeVsExtension/Resources/resharperLogo.png "Resharper"
 
