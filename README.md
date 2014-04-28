@@ -31,6 +31,9 @@ Clicking the magnifier will export the instance to [LINQPad](http://www.linqpad.
 [LINQPad] (http://www.linqpad.net) it is to be installed beforehand.
 
 ##Acknowledgements
+
+Special thanks to JetBrains who has been supporting this project with its products.
+
 <a href="http://www.jetbrains.com/resharper/features/code_refactoring.html" alt="The best C# & VB.NET refactoring plugin for Visual Studio" title="The best C# & VB.NET refactoring plugin for Visual Studio">![alt text][resharper]</a>
 
 ## Compatibility
