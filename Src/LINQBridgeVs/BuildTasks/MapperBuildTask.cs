@@ -42,10 +42,10 @@ namespace LINQBridgeVs.BuildTasks
         /// </returns>
         public bool Execute()
         {
-           
+
             try
             {
-                Log.Configure("MapperBuildTask");
+                Log.Configure("LINQBridgeVs", "MapperBuildTask");
 
                 var installationPaths = VisualStudioOptions.GetInstallationPath(VisualStudioVer).ToList();
 

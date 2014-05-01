@@ -62,7 +62,7 @@ namespace LINQBridgeVs.Extension
 
         public LINQBridgeVsExtension(DTE app)
         {
-            Log.Configure("LINQBridgeVs");
+            Log.Configure("LINQBridgeVs", "LINQBridgeVsExtension");
 
             _application = app;
             PackageConfigurator.Configure(_application.Version);

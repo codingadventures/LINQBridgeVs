@@ -38,6 +38,7 @@ namespace LINQBridgeVs.Logging
     {
 
         private static string _applicationName;
+        private static string _moduleName;
         private static readonly string LocalApplicationData =
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
@@ -50,16 +51,19 @@ namespace LINQBridgeVs.Logging
         private static SmtpClient _smtpClient;
 
         [Conditional("DEPLOY")]
-        public static void Configure(string applicationName, SmtpClient smtpClient = null)
+        public static void Configure(string applicationName, string moduleName, SmtpClient smtpClient = null)
         {
             if (string.IsNullOrEmpty(applicationName))
                 throw new ArgumentNullException("applicationName", "Name of the application must not be null!");
 
             _applicationName = applicationName;
-            var logTxtFileName = string.Concat(_applicationName, ".txt");
+            _moduleName = moduleName;
+
+            var logTxtFileName = string.Concat(moduleName, ".txt");
 
             _logGzipFileName = string.Concat(_applicationName, ".gz");
             _logsDir = Path.Combine(LocalApplicationData, _applicationName);
+                 
             _logTxtFilePath = Path.Combine(_logsDir, logTxtFileName);
 
             _smtpClient = smtpClient;

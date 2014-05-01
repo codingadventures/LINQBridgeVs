@@ -41,11 +41,10 @@ namespace LINQBridgeVs.BuildTasks
 
         public bool Execute()
         {
-            Log.Configure("SinjectionBuildTask");
+            Log.Configure("LINQBridgeVs","SinjectionBuildTask");
 
             try
             {
-                Log.Configure("SInjectionBuildTask");
                 var snkCertificate = File.Exists(Snk) ? Snk : null;
                 var sInjection = new SInjection(Assembly, mode: PatchMode.Debug, snkCertificatePath: snkCertificate);
                 sInjection.Patch(SerializationTypes.BinarySerialization);

@@ -5,7 +5,7 @@
     <BuildDependsOn>
       $(BuildDependsOn);
       LINQBridgeAfterBuild;
-	  Information
+	    Information
     </BuildDependsOn>
   </PropertyGroup>
    
@@ -13,12 +13,12 @@
   <UsingTask TaskName="MapperBuildTask" AssemblyFile="$([MSBuild]::Unescape('$(InstallFolderPath)'))\LINQBridgeVs.BuildTasks.dll" />
   <UsingTask TaskName="CleanBuildTask" AssemblyFile="$([MSBuild]::Unescape('$(InstallFolderPath)'))\LINQBridgeVs.BuildTasks.dll" />
 
-  <Target Name="LINQBridgeAfterBuild" DependsOnTargets="CoreCompile" Condition="'$(IsProjectEnabled)' == 'True'">
+  <Target Name="LINQBridgeAfterBuild" DependsOnTargets="CoreCompile" Condition="'$(IsProjectEnabled)' == 'True' AND '$(IsExtensionEnabled)' == 'True'">
     <SInjectionBuildTask Assembly="@(MainAssembly->'%(FullPath)')" Snk="$(MSBuildProjectDirectory)\$(AssemblyOriginatorKeyFile)"  />
     <MapperBuildTask Assembly="@(MainAssembly->'%(FullPath)')"   VisualStudioVer="$(VisualStudioVersion)"   />
   </Target>
   
-  <Target Name="Information" Condition="'$(IsProjectEnabled)' == 'True'">
+  <Target Name="Information" Condition="'$(IsProjectEnabled)' == 'True' AND '$(IsExtensionEnabled)' == 'True'">
 	<Message Text="Assembly Name: $(VisualStudioVersion)" Importance="high" />
 	<Message Text="Visual Studio Version: $(VisualStudioVersion)" Importance="high" />
 	<Message Text="Product Base Registry Path: $(ProductBaseRegistryPath)" Importance="high" />

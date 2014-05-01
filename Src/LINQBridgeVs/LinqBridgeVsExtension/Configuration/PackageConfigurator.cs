@@ -29,6 +29,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
@@ -111,6 +113,25 @@ namespace LINQBridgeVs.Extension.Configuration
             }
         }
 
+        public static bool IsLinqBridgeEnabled
+        {
+            get
+            {
+                using (var key = Registry.CurrentUser.OpenSubKey(GetRegistryKeyWithVersion(Resources.ProductVersion)))
+                {
+                    return key != null && Convert.ToBoolean(key.GetValue("IsLinqBridgeEnabled"));
+                }
+            }
+            set
+            {
+                using (var key = Registry.CurrentUser.CreateSubKey(GetRegistryKeyWithVersion(Resources.ProductVersion)))
+                {
+                    if (key != null)
+                        key.SetValue("IsLinqBridgeEnabled", value);
+                }
+            }
+        }
+
         public static void Configure(string vsVersion)
         {
             _vsVersion = vsVersion;
@@ -141,8 +162,6 @@ namespace LINQBridgeVs.Extension.Configuration
 
                 Log.Write("Setting the Environment");
 
-                SetPermissions();
-
                 SetEnvironment();
             }
             catch (Exception e)
@@ -151,33 +170,35 @@ namespace LINQBridgeVs.Extension.Configuration
             }
         }
 
-
-
         private static void SetEnvironment()
-        { 
-
-            //Copy the BridgeBuildTask.targets to the default .NET 4.0v framework location
-            File.Copy(Locations.LinqBridgeTargetFileNamePath, Path.Combine(Locations.DotNet40FrameworkPath, Locations.LinqBridgeTargetFileName), true);
-            Log.Write("LinqBridge Targets copied to {0} ", Locations.DotNet40FrameworkPath);
-
-            if (Environment.Is64BitOperatingSystem)
+        {
+            if (!Directory.Exists(Locations.MsBuildPath))
             {
-                File.Copy(Locations.LinqBridgeTargetFileNamePath,
-                    Path.Combine(Locations.DotNet40Framework64Path, Locations.LinqBridgeTargetFileName), true);
-                Log.Write("LinqBridge Targets copied to {0} ", Locations.DotNet40Framework64Path);
+                try
+                {
+                    var sec = new DirectorySecurity();
+                    // Using this instead of the "Everyone" string means we work on non-English systems.
+                    var everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+                    sec.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
+                    Directory.CreateDirectory(Locations.MsBuildPath, sec);
+                }
+                catch (Exception exception)
+                {
+                    Log.Write(exception);
+                    Log.Write("Error creating MSBuild Path folder in {0}", Locations.MsBuildPath);
+                    throw;
+                }
             }
 
-            if (IsFramework45Installed)
-            {
-                File.Copy(Locations.LinqBridgeTargetFileNamePath,
-                  Path.Combine(Locations.DotNet45FrameworkPath, Locations.LinqBridgeTargetFileName), true);
-                Log.Write("LinqBridge Targets copied to {0} ", Locations.DotNet45FrameworkPath);
-            }
+            //Copy the CustomAfter and CustomBefore to the default MSbuild v4.0 location
+            File.Copy(Locations.CustomAfterTargetFileNamePath, Path.Combine(Locations.MsBuildPath, Locations.CustomAfterTargetFileName), true);
+            Log.Write("CustomAfterTargetFileName Targets copied to {0} ", Path.Combine(Locations.MsBuildPath, Locations.CustomAfterTargetFileName));
+
+            File.Copy(Locations.CustomBeforeTargetFileNamePath, Path.Combine(Locations.MsBuildPath, Locations.CustomBeforeTargetFileName), true);
+            Log.Write("CustomBeforeTargetFileName Targets copied to {0} ", Path.Combine(Locations.MsBuildPath, Locations.CustomBeforeTargetFileName));
 
             Log.Write("Setting IsEnvironmentConfigured to True");
             IsEnvironmentConfigured = true;
-
-
         }
 
         private static void SetInstallationFolder()
@@ -194,108 +215,6 @@ namespace LINQBridgeVs.Extension.Configuration
                 Log.Write("Setting InstallFolderPath to {0}", Locations.InstallFolder);
                 key.SetValue("InstallFolderPath", Locations.InstallFolder);
             }
-        }
-
-        private static void SetPermissions()
-        {
-            if (ArePermissionsSet)
-            {
-                Log.Write("Permissions Are already Set");
-                return;
-            }
-
-            Log.Write("SetPermission Starts");
-            var processOutputs = new StringBuilder();
-
-            var icaclsProcess45Folder = new Process
-            {
-                StartInfo = { UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden, RedirectStandardError = true, RedirectStandardInput = true, RedirectStandardOutput = true, FileName = "icacls.exe", Arguments = Locations.IcaclsArguments45, LoadUserProfile = true }
-            };
-
-            var icaclsProcessCommonTarget = new Process
-            {
-                StartInfo = { UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden, RedirectStandardError = true, RedirectStandardInput = true, RedirectStandardOutput = true, FileName = "icacls.exe", Arguments = Locations.IcaclsArgumentsCommonTarget, LoadUserProfile = true }
-            };
-            var icaclsProcessX64CommonTarget = new Process
-            {
-                StartInfo = { UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden, RedirectStandardError = true, RedirectStandardInput = true, RedirectStandardOutput = true, FileName = "icacls.exe", Arguments = Locations.IcaclsArgumentsX64CommonTarget, LoadUserProfile = true }
-            };
-
-            var icaclsProcess45CommonTarget = new Process
-            {
-                StartInfo = { UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden, RedirectStandardError = true, RedirectStandardInput = true, RedirectStandardOutput = true, FileName = "icacls.exe", Arguments = Locations.IcaclsArguments45CommonTarget, LoadUserProfile = true }
-            };
-
-            #region [ Take Own ]
-            var takeownProcess = Process.Start("takeown", String.Format("/f {0}", Locations.MicrosoftCommonTargetFileNamePath));
-            if (takeownProcess != null) takeownProcess.WaitForExit();
-
-            if (Environment.Is64BitOperatingSystem)
-            {
-                var takeownProcessx64 = Process.Start("takeown",
-                    String.Format("/f {0}", Locations.MicrosoftCommonTargetX64FileNamePath));
-
-                if (takeownProcessx64 != null) takeownProcessx64.WaitForExit();
-            }
-
-
-            if (IsFramework45Installed)
-            {
-                var takeownProcess45 = Process.Start("takeown",
-                 String.Format("/f \"{0}\"", Locations.DotNet45FrameworkPath));
-
-                if (takeownProcess45 != null) takeownProcess45.WaitForExit();
-            }
-            #endregion
-
-
-            if (IsFramework45Installed)
-            {
-                icaclsProcess45Folder.Start();
-                icaclsProcess45CommonTarget.Start();
-            }
-
-            icaclsProcessCommonTarget.Start();
-
-            if (Environment.Is64BitOperatingSystem)
-            {
-                icaclsProcessX64CommonTarget.Start();
-                Log.Write("Setting Permission to {0} and {1} ", Locations.IcaclsArgumentsCommonTarget, Locations.IcaclsArgumentsX64CommonTarget);
-            }
-
-            if (IsFramework45Installed)
-            {
-                icaclsProcess45Folder.WaitForExit();
-                icaclsProcess45CommonTarget.WaitForExit();
-            }
-
-            icaclsProcessCommonTarget.WaitForExit();
-
-            if (Environment.Is64BitOperatingSystem)
-                icaclsProcessX64CommonTarget.WaitForExit();
-
-            if (icaclsProcessCommonTarget.ExitCode != 0)
-                processOutputs.AppendLine(icaclsProcessCommonTarget.StandardOutput.ReadToEnd());
-
-            if (IsFramework45Installed && icaclsProcess45CommonTarget.ExitCode != 0)
-                processOutputs.AppendLine(icaclsProcess45CommonTarget.StandardOutput.ReadToEnd());
-
-            if (IsFramework45Installed && icaclsProcess45Folder.ExitCode != 0)
-                processOutputs.AppendLine(icaclsProcess45Folder.StandardOutput.ReadToEnd());
-
-
-            if (Environment.Is64BitOperatingSystem)
-            {
-                if (icaclsProcessX64CommonTarget.ExitCode != 0)
-                    processOutputs.AppendLine(icaclsProcessX64CommonTarget.StandardOutput.ReadToEnd());
-            }
-
-
-            Log.Write(processOutputs.ToString());
-
-
-            Log.Write("SetPermission Done");
-            ArePermissionsSet = true;
         }
 
         private static string GetRegistryKeyWithVersion(string key)
@@ -319,7 +238,6 @@ namespace LINQBridgeVs.Extension.Configuration
             {
                 if (key != null) key.SetValue(assemblyName, false);
             }
-
         }
 
         public static bool IsBridgeEnabled(string assemblyName)
@@ -338,22 +256,8 @@ namespace LINQBridgeVs.Extension.Configuration
         }
 
 
-        public static void EnableLinqBridge(XDocument document, string location)
-        {
-
-            var import = XName.Get("Import", "http://schemas.microsoft.com/developer/msbuild/2003");
-
-            if (document.Root == null || GetTargetImportNode(document) != null) return;
-
-            // ReSharper disable once AssignNullToNotNullAttribute
-            var linqBridgeTarget = new XElement(import, new XAttribute("Project", Path.GetFileName(Resources.Targets)));
-
-            document.Root.Add(linqBridgeTarget);
-
-            document.Save(location);
-        }
-
-        public static void DisableLinqBridge(XDocument document, string location)
+        [Obsolete("Keep them for Backward compatibility. Microsoft.Common.targets should not be modifie anymore")]
+        public static void RemoveBridgeBuildTargetFromMicrosoftCommon(XDocument document, string location)
         {
             var linqBridgeTargetImportNode = GetTargetImportNode(document);
 
@@ -364,7 +268,7 @@ namespace LINQBridgeVs.Extension.Configuration
             document.Save(location);
         }
 
-
+        [Obsolete("Keep them for Backward compatibility. Microsoft.Common.targets should not be modifie anymore")]
         private static XElement GetTargetImportNode(XDocument document)
         {
             var namespaceManager = new XmlNamespaceManager(new NameTable());

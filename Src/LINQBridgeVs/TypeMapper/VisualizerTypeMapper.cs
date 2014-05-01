@@ -48,7 +48,7 @@ namespace LINQBridgeVs.TypeMapper
         /// <param name="sourceVisualizerAssemblyLocation"></param>
         public VisualizerTypeMapper(string sourceVisualizerAssemblyLocation)
         {
-            Log.Configure("Type Mapper");
+            Log.Configure("LINQBridgeVs", "Type Mapper");
             _visualizerAttributeInjector = new VisualizerAttributeInjector(sourceVisualizerAssemblyLocation);
         }
 
@@ -93,7 +93,7 @@ namespace LINQBridgeVs.TypeMapper
             var visualizerInjector = new VisualizerAttributeInjector(sourceVisualizerAssemblyLocation);
 
             //Map all the possible System  types
-            var systemLinqTypes = typeof (IOrderedEnumerable<>).Assembly
+            var systemLinqTypes = typeof(IOrderedEnumerable<>).Assembly
                 .GetTypes()
                 .Where(type => type != null
                                && (
@@ -131,7 +131,7 @@ namespace LINQBridgeVs.TypeMapper
 
             systemLinqTypes.ForEach(visualizerInjector.MapType);
             systemGenericsTypes.ForEach(visualizerInjector.MapType);
-         
+
             visualizerInstallationPath.ForEach(debuggerVisualizerPath =>
             {
                 var location = Path.Combine(debuggerVisualizerPath, visualizerFileName);

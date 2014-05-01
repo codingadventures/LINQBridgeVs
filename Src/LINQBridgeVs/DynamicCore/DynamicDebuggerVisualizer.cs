@@ -85,7 +85,7 @@ namespace LINQBridgeVs.DynamicCore
 
                 var refAssemblies = new List<string> { message.TypeLocation };
                 refAssemblies.AddRange(message.ReferencedAssemblies);
- 
+
                 var linqQuery = new Inspection(refAssemblies, message.TypeFullName, message.TypeNamespace, message.TypeName);
                 var linqQueryText = linqQuery.TransformText();
 
@@ -112,7 +112,7 @@ namespace LINQBridgeVs.DynamicCore
 
         public Form ShowVisualizer(Stream inData)
         {
-            Log.Configure("LINQBridgeVs");
+            Log.Configure("LINQBridgeVs", "DynamicCore");
 
             Log.Write("ShowVisualizer Started...");
 

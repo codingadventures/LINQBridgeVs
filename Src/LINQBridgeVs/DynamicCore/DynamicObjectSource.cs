@@ -41,7 +41,7 @@ namespace LINQBridgeVs.DynamicCore
 
         public static void BroadCastData(object target, Stream outgoingData)
         {
-            Log.Configure("DynamicObjectSource");
+            Log.Configure("LINQBridgeVs", "DynamicCore");
             try
             {
                 var targetType = GetInterfaceTypeIfIsIterator(target);

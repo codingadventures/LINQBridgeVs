@@ -31,6 +31,8 @@ namespace LINQBridgeVs.Extension
 {
     internal static class Locations
     {
+        private static readonly string SpecialWindowsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
+        private static readonly string ProgramFilesFolderPath = Environment.GetEnvironmentVariable("ProgramFiles");
 
         public static string InstallFolder
         {
@@ -39,17 +41,20 @@ namespace LINQBridgeVs.Extension
 
         public static readonly string LinqPadDestinationFolder = Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles"), "LINQPad4");
 
-        public static readonly string LinqBridgeTargetFileNamePath = Path.Combine(InstallFolder, Resources.Targets);
-        public static readonly string LinqBridgeTargetFileName = Path.GetFileName(Resources.Targets);
 
-        public static readonly string DotNet40FrameworkPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows),
-                @"Microsoft.NET\Framework\v4.0.30319");
+        public static readonly string CustomAfterTargetFileNamePath = Path.Combine(InstallFolder, Resources.CustomAfterTargets);
+        public static readonly string CustomAfterTargetFileName = Path.GetFileName(Resources.CustomAfterTargets);
 
-        public static readonly string DotNet45FrameworkPath = Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles"),
-                @"MSBuild\12.0\Bin");
+        public static readonly string CustomBeforeTargetFileNamePath = Path.Combine(InstallFolder, Resources.CustomBeforeTargets);
+        public static readonly string CustomBeforeTargetFileName = Path.GetFileName(Resources.CustomBeforeTargets);
 
-        public static readonly string DotNet40Framework64Path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows),
-                       @"Microsoft.NET\Framework64\v4.0.30319");
+        public static readonly string MsBuildPath = Path.Combine(ProgramFilesFolderPath, "MSBuild", "v4.0");
+
+        public static readonly string DotNet40FrameworkPath = Path.Combine(SpecialWindowsFolderPath, @"Microsoft.NET\Framework\v4.0.30319");
+
+        public static readonly string DotNet45FrameworkPath = Path.Combine(ProgramFilesFolderPath, @"MSBuild\12.0\Bin");
+
+        public static readonly string DotNet40Framework64Path = Path.Combine(SpecialWindowsFolderPath, @"Microsoft.NET\Framework64\v4.0.30319");
 
         public static readonly string MicrosoftCommonTargetFileNamePath = Path.Combine(DotNet40FrameworkPath, "Microsoft.Common.targets");
 
@@ -57,10 +62,5 @@ namespace LINQBridgeVs.Extension
 
         public static readonly string MicrosoftCommonTargetX64FileNamePath = Path.Combine(DotNet40Framework64Path, "Microsoft.Common.targets");
 
-        public static readonly string IcaclsArguments45 = String.Format("\"{0}\" /grant Everyone:F", DotNet45FrameworkPath);
-
-        public static readonly string IcaclsArgumentsCommonTarget = String.Format("{0} /grant Everyone:F", MicrosoftCommonTargetFileNamePath);
-        public static readonly string IcaclsArguments45CommonTarget = String.Format("\"{0}\" /grant Everyone:F", MicrosoftCommonTarget45FileNamePath);
-        public static readonly string IcaclsArgumentsX64CommonTarget = String.Format("{0} /grant Everyone:F", MicrosoftCommonTargetX64FileNamePath);
     }
 }

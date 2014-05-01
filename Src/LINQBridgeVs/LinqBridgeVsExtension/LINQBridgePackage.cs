@@ -82,6 +82,7 @@ namespace LINQBridgeVs.Extension
             }
         }
 
+        #region [ Obsolete ]
         private XDocument _microsoftCommonTargetDocument;
         public XDocument MicrosoftCommonTargetDocument
         {
@@ -114,6 +115,8 @@ namespace LINQBridgeVs.Extension
             }
 
         }
+        #endregion
+
         #region Package Members
 
         /// <summary>
@@ -173,31 +176,14 @@ namespace LINQBridgeVs.Extension
                 //Any reference of LINQBridgeVs
                 if (Process.GetProcessesByName(VisualStudioProcessName).Length > 1) return;
 
-                Log.Write("Disabling LINQBridgeVS. Only one VS instance opened");
-              
-                PackageConfigurator.DisableLinqBridge(MicrosoftCommonTargetDocument, Locations.MicrosoftCommonTargetFileNamePath);
-                Log.Write("LINQBridgeVS Disabled for x86 Operating System");
-
-                if (Environment.Is64BitOperatingSystem)
-                { 
-                    PackageConfigurator.DisableLinqBridge(MicrosoftCommonTargetX64Document, Locations.MicrosoftCommonTargetX64FileNamePath);
-                    Log.Write("LINQBridgeVS Disabled for x64 Operating System");
-
-                }
-                if (PackageConfigurator.IsFramework45Installed)
-                {
-                    PackageConfigurator.DisableLinqBridge(MicrosoftCommonTarget45Document, Locations.MicrosoftCommonTarget45FileNamePath);
-                    Log.Write("LINQBridgeVS Disabled for framework 4.5");
-                }
-
-                PackageConfigurator.IsEnvironmentConfigured = false;
+                //This simulate an uninstall. if it's the last instance of VS running disable LINQBridgeVs
+                PackageConfigurator.IsLinqBridgeEnabled = false;
             }
             catch (Exception e)
             {
                 Log.Write(e, "OnBeginShutdown Error...");
 
             }
-
         }
 
         private void OnStartupComplete()
@@ -209,22 +195,22 @@ namespace LINQBridgeVs.Extension
                 _dteEvents.OnStartupComplete -= OnStartupComplete;
                 _dteEvents = null;
 
-                PackageConfigurator.EnableLinqBridge(MicrosoftCommonTargetDocument, Locations.MicrosoftCommonTargetFileNamePath);
-                Log.Write("LINQBridgeVS Enabled for x86 Operating System");
+                PackageConfigurator.RemoveBridgeBuildTargetFromMicrosoftCommon(MicrosoftCommonTargetDocument, Locations.MicrosoftCommonTargetFileNamePath);
+                Log.Write("BridgeBuild.targets Removed for x86 Operating System");
 
                 if (Environment.Is64BitOperatingSystem)
                 {
-                    PackageConfigurator.EnableLinqBridge(MicrosoftCommonTargetX64Document, Locations.MicrosoftCommonTargetX64FileNamePath);
-                    Log.Write("LINQBridgeVS Enabled for x64 Operating System");
-                
+                    PackageConfigurator.RemoveBridgeBuildTargetFromMicrosoftCommon(MicrosoftCommonTargetX64Document, Locations.MicrosoftCommonTargetX64FileNamePath);
+                    Log.Write("BridgeBuild.targets Removed for x64 Operating System");
+
                 }
                 if (PackageConfigurator.IsFramework45Installed)
                 {
-                    PackageConfigurator.EnableLinqBridge(MicrosoftCommonTarget45Document, Locations.MicrosoftCommonTarget45FileNamePath);
-                    Log.Write("LINQBridgeVS Enabled for framework 4.5");
-                
+                    PackageConfigurator.RemoveBridgeBuildTargetFromMicrosoftCommon(MicrosoftCommonTarget45Document, Locations.MicrosoftCommonTarget45FileNamePath);
+                    Log.Write("BridgeBuild.targets Removed for framework 4.5");
                 }
 
+                PackageConfigurator.IsLinqBridgeEnabled = true;
                 Log.Write("OnStartupComplete End");
 
             }
@@ -233,11 +219,6 @@ namespace LINQBridgeVs.Extension
                 Log.Write(e, "OnStartupComplete Error...");
             }
         }
-
-
-
-
-
 
         #endregion
     }

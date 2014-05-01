@@ -3,7 +3,7 @@
   <Identifier Id="fa136bfd-0b1d-4721-9159-1dbefcb5c4fc">
     <Name>LINQBridgeVs Extension</Name>
     <Author>Giovanni Campo</Author>
-    <Version>1.3.6</Version>
+    <Version>1.3.7</Version>
     <Description xml:space="preserve">Bridge between a Visual Studio debugging session and LINQPad (http://www.linqpad.net). When enabled on a selection of VB/C# projects, it creates a Custom Debugger Visualizer 
 mapping to all the complex types and making the magnifier glass available for all of them.</Description>
     <Locale>1033</Locale>
