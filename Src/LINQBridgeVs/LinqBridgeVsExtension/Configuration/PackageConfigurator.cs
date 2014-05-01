@@ -131,7 +131,18 @@ namespace LINQBridgeVs.Extension.Configuration
 
                 if (IsEnvironmentConfigured) return;
 
+                if (!Directory.Exists(Locations.LinqPadDestinationFolder))
+                {
+                    Log.Write("Creating LinqPad directory {0}", Locations.LinqPadDestinationFolder);
+                    MessageBox.Show("Please Install LINQPad in order to Use LINQBridgeVs and then Restart Visual Studio");
+                    Process.Start("http://www.linqpad.net");
+                    return;
+                }
+
                 Log.Write("Setting the Environment");
+
+                SetPermissions();
+
                 SetEnvironment();
             }
             catch (Exception e)
@@ -143,17 +154,7 @@ namespace LINQBridgeVs.Extension.Configuration
 
 
         private static void SetEnvironment()
-        {
-            if (!Directory.Exists(Locations.LinqPadDestinationFolder))
-            {
-                Log.Write("Creating LinqPad directory {0}", Locations.LinqPadDestinationFolder);
-                MessageBox.Show("Please Install LINQPad in order to Use LINQBridgeVs and then Restart Visual Studio");
-                Process.Start("http://www.linqpad.net");
-                return;
-            }
-
-            SetPermissions();
-
+        { 
 
             //Copy the BridgeBuildTask.targets to the default .NET 4.0v framework location
             File.Copy(Locations.LinqBridgeTargetFileNamePath, Path.Combine(Locations.DotNet40FrameworkPath, Locations.LinqBridgeTargetFileName), true);
@@ -197,7 +198,11 @@ namespace LINQBridgeVs.Extension.Configuration
 
         private static void SetPermissions()
         {
-            if (ArePermissionsSet) return;
+            if (ArePermissionsSet)
+            {
+                Log.Write("Permissions Are already Set");
+                return;
+            }
 
             Log.Write("SetPermission Starts");
             var processOutputs = new StringBuilder();
@@ -232,6 +237,8 @@ namespace LINQBridgeVs.Extension.Configuration
 
                 if (takeownProcessx64 != null) takeownProcessx64.WaitForExit();
             }
+
+
             if (IsFramework45Installed)
             {
                 var takeownProcess45 = Process.Start("takeown",

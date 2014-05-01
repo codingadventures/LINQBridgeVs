@@ -110,7 +110,7 @@ namespace LINQBridgeVs.Extension
             get
             {
                 _microsoftCommonTarget45Document = _microsoftCommonTarget45Document ?? XDocument.Load(Locations.MicrosoftCommonTarget45FileNamePath);
-                return _microsoftCommonTargetX64Document;
+                return _microsoftCommonTarget45Document;
             }
 
         }

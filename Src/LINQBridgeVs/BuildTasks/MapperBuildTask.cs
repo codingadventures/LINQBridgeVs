@@ -42,15 +42,23 @@ namespace LINQBridgeVs.BuildTasks
         /// </returns>
         public bool Execute()
         {
-            Log.Configure("MapperBuildTask");
+           
             try
             {
+                Log.Configure("MapperBuildTask");
+
                 var installationPaths = VisualStudioOptions.GetInstallationPath(VisualStudioVer).ToList();
+
+                Log.Write("Installation Paths {0}", string.Join(",", installationPaths.ToArray()));
 
                 var visualizerAssemblyLocation = VisualStudioOptions.GetVisualizerAssemblyLocation(VisualStudioVer);
 
+                Log.Write("Visualizer Assembly location {0}", visualizerAssemblyLocation);
+
                 VisualizerTypeMapper.MapDotNetFrameworkTypes(installationPaths, VisualStudioVer,
                     visualizerAssemblyLocation);
+
+                Log.Write(".NET Framework type Mapped");
 
                 var typeMapper = new VisualizerTypeMapper(visualizerAssemblyLocation);
 
@@ -58,6 +66,10 @@ namespace LINQBridgeVs.BuildTasks
 
                 typeMapper.Save(installationPaths, VisualizerAssemblyName);
 
+                Log.Write("Assembly {0} Mapped", Assembly);
+
+
+                return true;
             }
             catch (Exception e)
             {
