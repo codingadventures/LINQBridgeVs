@@ -18,7 +18,7 @@
     <MapperBuildTask Assembly="@(MainAssembly->'%(FullPath)')"   VisualStudioVer="$(VisualStudioVersion)"   />
   </Target>
   
-  <Target Name="Information" Condition="'$(IsProjectEnabled)' == 'True' AND '$(IsExtensionEnabled)' == 'True'">
+  <Target Name="Information" Condition="'$(IsExtensionEnabled)' == 'True'">
 	<Message Text="Assembly Name: $(VisualStudioVersion)" Importance="high" />
 	<Message Text="Visual Studio Version: $(VisualStudioVersion)" Importance="high" />
 	<Message Text="Product Base Registry Path: $(ProductBaseRegistryPath)" Importance="high" />

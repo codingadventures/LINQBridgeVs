@@ -31,7 +31,6 @@ using System.Linq;
 using System.Reflection;
 using System.Security.AccessControl;
 using System.Security.Principal;
-using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
@@ -94,25 +93,6 @@ namespace LINQBridgeVs.Extension.Configuration
             }
         }
 
-        private static bool ArePermissionsSet
-        {
-            get
-            {
-                using (var key = Registry.CurrentUser.OpenSubKey(GetRegistryKeyWithVersion(Resources.ConfigurationRegistryKey)))
-                {
-                    return key != null && Convert.ToBoolean(key.GetValue("ArePermissionsSet"));
-                }
-            }
-            set
-            {
-                using (var key = Registry.CurrentUser.CreateSubKey(GetRegistryKeyWithVersion(Resources.ConfigurationRegistryKey)))
-                {
-                    if (key != null)
-                        key.SetValue("ArePermissionsSet", value);
-                }
-            }
-        }
-
         public static bool IsLinqBridgeEnabled
         {
             get
@@ -142,8 +122,7 @@ namespace LINQBridgeVs.Extension.Configuration
                 if (LINQBridgeVsExtensionVersion != CurrentAssemblyVersion)
                 {
                     Log.Write("New LINQBridgeVs Extensions. Previous Version {0}. Current Version {1}", LINQBridgeVsExtensionVersion, CurrentAssemblyVersion);
-                    ArePermissionsSet
-                        = IsEnvironmentConfigured = false;
+                    IsEnvironmentConfigured = false;
                     LINQBridgeVsExtensionVersion = CurrentAssemblyVersion;
                 }
 
@@ -172,30 +151,13 @@ namespace LINQBridgeVs.Extension.Configuration
 
         private static void SetEnvironment()
         {
-            if (!Directory.Exists(Locations.MsBuildPath))
-            {
-                try
-                {
-                    var sec = new DirectorySecurity();
-                    // Using this instead of the "Everyone" string means we work on non-English systems.
-                    var everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
-                    sec.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
-                    Directory.CreateDirectory(Locations.MsBuildPath, sec);
-                }
-                catch (Exception exception)
-                {
-                    Log.Write(exception);
-                    Log.Write("Error creating MSBuild Path folder in {0}", Locations.MsBuildPath);
-                    throw;
-                }
-            }
-
+            var msBuildDir = CreateMsBuildTargetDirectory();
             //Copy the CustomAfter and CustomBefore to the default MSbuild v4.0 location
-            File.Copy(Locations.CustomAfterTargetFileNamePath, Path.Combine(Locations.MsBuildPath, Locations.CustomAfterTargetFileName), true);
-            Log.Write("CustomAfterTargetFileName Targets copied to {0} ", Path.Combine(Locations.MsBuildPath, Locations.CustomAfterTargetFileName));
+            File.Copy(Locations.CustomAfterTargetFileNamePath, Path.Combine(msBuildDir, Locations.CustomAfterTargetFileName), true);
+            Log.Write("CustomAfterTargetFileName Targets copied to {0} ", Path.Combine(msBuildDir, Locations.CustomAfterTargetFileName));
 
-            File.Copy(Locations.CustomBeforeTargetFileNamePath, Path.Combine(Locations.MsBuildPath, Locations.CustomBeforeTargetFileName), true);
-            Log.Write("CustomBeforeTargetFileName Targets copied to {0} ", Path.Combine(Locations.MsBuildPath, Locations.CustomBeforeTargetFileName));
+            File.Copy(Locations.CustomBeforeTargetFileNamePath, Path.Combine(msBuildDir, Locations.CustomBeforeTargetFileName), true);
+            Log.Write("CustomBeforeTargetFileName Targets copied to {0} ", Path.Combine(msBuildDir, Locations.CustomBeforeTargetFileName));
 
             Log.Write("Setting IsEnvironmentConfigured to True");
             IsEnvironmentConfigured = true;
@@ -219,7 +181,6 @@ namespace LINQBridgeVs.Extension.Configuration
 
         private static string GetRegistryKeyWithVersion(string key)
         {
-
             return String.Format(key, _vsVersion);
         }
 
@@ -255,6 +216,32 @@ namespace LINQBridgeVs.Extension.Configuration
             return !IsBridgeEnabled(assemblyName);
         }
 
+        private static string CreateMsBuildTargetDirectory()
+        {
+            var msBuildVersion = MsBuildVersion.GetMsBuildVersion(_vsVersion);
+            var directoryToCreate = Path.Combine(Locations.MsBuildPath, msBuildVersion);
+            Log.Write("MsBuild Directory being created {0}", directoryToCreate);
+            if (!Directory.Exists(directoryToCreate))
+            {
+                try
+                {
+                    var sec = new DirectorySecurity();
+                    // Using this instead of the "Everyone" string means we work on non-English systems.
+                    var everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+                    sec.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
+                    Directory.CreateDirectory(directoryToCreate, sec);
+                    return directoryToCreate;
+                }
+                catch (Exception exception)
+                {
+                    Log.Write(exception);
+                    Log.Write("Error creating MSBuild Path folder in {0}", Locations.MsBuildPath);
+                    throw;
+                }
+            }
+            Log.Write("MSBuild Path {0} already exists", directoryToCreate);
+            return directoryToCreate;
+        }
 
         [Obsolete("Keep them for Backward compatibility. Microsoft.Common.targets should not be modifie anymore")]
         public static void RemoveBridgeBuildTargetFromMicrosoftCommon(XDocument document, string location)

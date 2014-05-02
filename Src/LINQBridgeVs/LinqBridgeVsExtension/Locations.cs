@@ -48,7 +48,7 @@ namespace LINQBridgeVs.Extension
         public static readonly string CustomBeforeTargetFileNamePath = Path.Combine(InstallFolder, Resources.CustomBeforeTargets);
         public static readonly string CustomBeforeTargetFileName = Path.GetFileName(Resources.CustomBeforeTargets);
 
-        public static readonly string MsBuildPath = Path.Combine(ProgramFilesFolderPath, "MSBuild", "v4.0");
+        public static readonly string MsBuildPath = Path.Combine(ProgramFilesFolderPath, "MSBuild");
 
         public static readonly string DotNet40FrameworkPath = Path.Combine(SpecialWindowsFolderPath, @"Microsoft.NET\Framework\v4.0.30319");
 

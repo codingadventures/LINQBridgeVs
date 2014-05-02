@@ -35,6 +35,8 @@ namespace LINQBridgeVs.VisualStudio
 
         public string AssemblyLocation;
 
+        public string MsBuildVersion;
+
     }
 
     public static class VisualStudioOptions
@@ -58,7 +60,8 @@ namespace LINQBridgeVs.VisualStudio
                         InstallationPaths =
                             new List<string> {Vs2010Path1, Vs2010Path2},
 
-                        AssemblyLocation = DynamicVisualizer.V10.Settings.AssemblyLocation
+                        AssemblyLocation = DynamicVisualizer.V10.Settings.AssemblyLocation,
+                        MsBuildVersion = "v4.0"
                     }
                 },
                 {
@@ -66,7 +69,9 @@ namespace LINQBridgeVs.VisualStudio
                     {
                         InstallationPaths =
                             new List<string> {Vs2012Path1},
-                        AssemblyLocation = DynamicVisualizer.V11.Settings.AssemblyLocation
+                        AssemblyLocation = DynamicVisualizer.V11.Settings.AssemblyLocation,
+                        MsBuildVersion = "v4.0"
+
                     }
                 },
                 {
@@ -74,7 +79,8 @@ namespace LINQBridgeVs.VisualStudio
                     {
                         InstallationPaths =
                             new List<string> {Vs2013Path1},
-                        AssemblyLocation = DynamicVisualizer.V12.Settings.AssemblyLocation
+                        AssemblyLocation = DynamicVisualizer.V12.Settings.AssemblyLocation,
+                        MsBuildVersion = "v12.0"
                     }
                 }
             };
@@ -100,6 +106,13 @@ namespace LINQBridgeVs.VisualStudio
             CheckVersion(visualStudioVersion);
 
             return VisualStudioPaths[visualStudioVersion].InstallationPaths;
+        }
+
+        public static string GetMsBuildVersion(string visualStudioVersion)
+        {
+            CheckVersion(visualStudioVersion);
+            return VisualStudioPaths[visualStudioVersion].MsBuildVersion;
+
         }
     }
 }
