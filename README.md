@@ -50,6 +50,22 @@ for the user running the debugger (IIS_IUSRS if a WebSite).
 
 *Platform:* Windows 8
 
+***Can't find the magnifying glass***
+
+*Solution:* Make sure you are running as Administrator you Visual Studio instance. 
+
+*Platform:* Any
+
+*Visual Studio:* Any
+
+***Can't find the magnifying glass - Visual Studio 2013***
+
+*Solution:* Please update to the latest version (1.3.7) from the Visual Studio Gallery. Please always remember to run Visual Studio As Administrator.
+
+*Platform:* Any
+
+*Visual Studio:* 2013
+
 [logo]: https://raw.github.com/nbasakuragi/LINQBridgeVs/master/Src/LINQBridgeVs/LinqBridgeVsExtension/Resources/LINQBridgeLogo.png "LINQBridge"
 
 [resharper]: https://raw.github.com/nbasakuragi/LINQBridgeVs/master/Src/LINQBridgeVs/LinqBridgeVsExtension/Resources/resharperLogo.png "Resharper"
