@@ -52,7 +52,7 @@ for the user running the debugger (IIS_IUSRS if a WebSite).
 
 ***Can't find the magnifying glass***
 
-*Solution:* Make sure you are running as Administrator you Visual Studio instance. 
+*Solution:* Make sure you are running as Administrator your Visual Studio instance. 
 
 *Platform:* Any
 
