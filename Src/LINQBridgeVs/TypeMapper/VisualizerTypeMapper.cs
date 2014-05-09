@@ -27,6 +27,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using LINQBridgeVs.Logging;
 
 namespace LINQBridgeVs.TypeMapper
@@ -51,12 +53,6 @@ namespace LINQBridgeVs.TypeMapper
             Log.Configure("LINQBridgeVs", "Type Mapper");
             _visualizerAttributeInjector = new VisualizerAttributeInjector(sourceVisualizerAssemblyLocation);
         }
-
-        private static bool IsAlreadyDeployed(string assemblyLocation)
-        {
-            return File.Exists(assemblyLocation);
-        }
-
 
         /// <summary>
         /// Maps the dot net framework types. If the file already exists for a given vs version it won't be
@@ -84,11 +80,6 @@ namespace LINQBridgeVs.TypeMapper
 
             var visualizerInstallationPath = targetVisualizerInstallationPath as IList<string> ??
                                              targetVisualizerInstallationPath.ToList();
-
-            var dotNetFrameworkVisualizerLocation = Path.Combine(visualizerInstallationPath.First(),
-                visualizerFileName);
-
-            if (IsAlreadyDeployed(dotNetFrameworkVisualizerLocation)) return;
 
             var visualizerInjector = new VisualizerAttributeInjector(sourceVisualizerAssemblyLocation);
 
@@ -134,6 +125,7 @@ namespace LINQBridgeVs.TypeMapper
 
             visualizerInstallationPath.ForEach(debuggerVisualizerPath =>
             {
+                CreateDirWithPermission(debuggerVisualizerPath);
                 var location = Path.Combine(debuggerVisualizerPath, visualizerFileName);
                 visualizerInjector.SaveDebuggerVisualizer(location);
             });
@@ -158,12 +150,7 @@ namespace LINQBridgeVs.TypeMapper
         {
             var debuggerVisualizerAssemblyLocation = debuggerVisualizerPath + fileName;
 
-            if (!Directory.Exists(debuggerVisualizerPath))
-                Directory.CreateDirectory(debuggerVisualizerPath);
-
-            //if (IsAlreadyDeployed(debuggerVisualizerAssemblyLocation))
-            //    //Get all the custom attributes that map other type and import them into the current visualizer
-            //    _visualizerAttributeInjector.SyncronizeMappedTypes(debuggerVisualizerAssemblyLocation);
+            CreateDirWithPermission(debuggerVisualizerPath);
 
             _visualizerAttributeInjector.SaveDebuggerVisualizer(debuggerVisualizerAssemblyLocation);
         }
@@ -178,5 +165,29 @@ namespace LINQBridgeVs.TypeMapper
             debuggerVisualizerPaths.ForEach(debuggerVisualizerPath => Save(debuggerVisualizerPath, fileName));
         }
 
+        private static void CreateDirWithPermission(string folder)
+        {
+
+            var sec = new DirectorySecurity();
+            // Using this instead of the "Everyone" string means we work on non-English systems.
+            var everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+            var rule = new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize,
+                InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None,
+                AccessControlType.Allow);
+
+
+            if (Directory.Exists(folder))
+            {
+                var di = new DirectoryInfo(folder);
+                var security = di.GetAccessControl();
+                security.AddAccessRule(rule);
+                security.SetAccessRule(rule);
+                di.SetAccessControl(security);
+                return;
+
+            }
+            sec.AddAccessRule(rule);
+            Directory.CreateDirectory(folder, sec);
+        }
     }
 }
