@@ -16,10 +16,10 @@ namespace DynamicCore.Test
     {
         private readonly Message _message = new Message
                                                 {
-                                                    FileName = DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                                                    FileName = DateTime.Now.ToShortDateString().Replace("/", ""),
                                                     TypeFullName = typeof(CustomType1).FullName,
                                                     TypeNamespace = typeof(CustomType1).Namespace,
-                                                    TypeLocation = @"\Level1\Level2\Level2\"
+                                                    TypeName = typeof(CustomType1).Name
                                                 };
 
         //[TestMethod]
@@ -54,7 +54,7 @@ namespace DynamicCore.Test
 
 
             var dstScriptPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                                             "LINQPad Queries");
+                                             "LINQPad Queries", "LINQBridge");
 
             var fileNamePath = Path.Combine(dstScriptPath, string.Format(_message.FileName, _message.TypeFullName));
 

@@ -33,7 +33,6 @@ namespace LINQBridgeVs.DynamicCore.Forms
         public TemporaryForm()
         {
             SuspendLayout();
-            Name = "Waiting LINQBridgeVs";
             FormBorderStyle = FormBorderStyle.None;
             MaximizeBox = false;
             Name = "TemporaryForm";

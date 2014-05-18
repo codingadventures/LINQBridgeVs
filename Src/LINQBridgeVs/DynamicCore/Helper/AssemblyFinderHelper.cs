@@ -32,18 +32,17 @@ using LINQBridgeVs.Logging;
 
 namespace LINQBridgeVs.DynamicCore.Helper
 {
-    public static class AssemblyFinderHelper
+    internal static class AssemblyFinderHelper
     {
         private const string SearchPattern = "*{0}*.dll";
-        private const string BaseRootPathForWeb = "Temporary ASP.NET Files";
         private const int MaxDepth = 4;
 
-        private static readonly Func<string, bool> IsSystemAssembly =
+        internal static readonly Func<string, bool> IsSystemAssembly =
             name => name.Contains("Microsoft") || name.Contains("System") || name.Contains("mscorlib");
 
         public static IFileSystem FileSystem { private get; set; }
 
-        public static IEnumerable<string> GetReferencedAssembliesPath(this _Assembly assembly, bool includeSystemAssemblies = false)
+        public static IEnumerable<string> GetReferencedAssembliesPath(this _Assembly assembly, string location, bool includeSystemAssemblies = false)
         {
             Log.Write("GetReferencedAssembliesPath Started - Parameters assembly: {0}, includeSystemAssemblies: {1}", assembly.ToString(), includeSystemAssemblies);
             var retPaths = new List<string>();
@@ -61,7 +60,7 @@ namespace LINQBridgeVs.DynamicCore.Helper
             var currentAssemblyPath = string.Empty;
             try
             {
-                currentAssemblyPath = FileSystem.Path.GetDirectoryName(assembly.Location);
+                currentAssemblyPath = FileSystem.Path.GetDirectoryName(location);
             }
             catch (Exception exception)
             {
@@ -88,7 +87,6 @@ namespace LINQBridgeVs.DynamicCore.Helper
         internal static string FindPath(string fileToSearch, string rootPath, int depth = 0)
         {
             if (rootPath == null) return string.Empty;
-            if (rootPath.EndsWith(BaseRootPathForWeb)) return string.Empty;
             if (depth >= MaxDepth) return rootPath;
 
             try

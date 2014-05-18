@@ -41,11 +41,10 @@ namespace LINQBridgeVs.DynamicCore
     {
         internal const string FileNameFormat = "{0}.linq";
 
-        public static void BroadCastData(object target, Stream outgoingData, string vsVersion)
+        public static void BroadCastData(object target, Stream outgoingData)
         {
             Log.Configure("LINQBridgeVs", "DynamicCore");
 
-            Log.Write("Vs Targeted Version ", vsVersion);
             try
             {
                 var targetType = GetInterfaceTypeIfIsIterator(target);
@@ -73,9 +72,8 @@ namespace LINQBridgeVs.DynamicCore
                 {
                     FileName = string.Format(FileNameFormat, fileName),
                     TypeName = typeName.Trim(),
-                    TypeFullName = targetTypeFullName,
-                    //  TypeLocation = targetType.Assembly.Location, //This is to be changed to read that value off the Registry...
-                    TypeLocation = GetAssemblyLocation(vsVersion, targetType.Name),
+                    TypeFullName = targetTypeFullName, 
+                    //TypeLocation = GetAssemblyLocation(vsVersion, targetType.Name),
                     TypeNamespace = targetType.Namespace,
                     AssemblyQualifiedName = targetType.AssemblyQualifiedName
                 };
@@ -112,33 +110,6 @@ namespace LINQBridgeVs.DynamicCore
             return @type.BaseType.GetInterface("IEnumerable`1");
         }
 
-        /// <summary>
-        /// Gets the assembly location. If an assembly is loaded at Runtime or it's loaded within a IIS context Assembly.Location property is null
-        /// </summary>
-        /// <param name="vsVersion">The Visual Studio version.</param>
-        /// <param name="assemblyName">Name of the assembly to search in the registry</param>
-        /// <returns></returns>
-        private static string GetAssemblyLocation(string vsVersion, string assemblyName)
-        {
-            var registryKeyPath = string.Format(@"Software\LINQBridgeVs\{0}\EnabledProjects", vsVersion);
-
-            using (var key = Registry.CurrentUser.OpenSubKey(registryKeyPath))
-            {
-                var value = key.GetSubKeyNames();
-                foreach (var values in from element in value
-                                       select key.OpenSubKey(element)
-                                           into subKey
-                                           let name = subKey.GetValueNames().FirstOrDefault(p => p == assemblyName)
-                                           where name != null
-                                           select (string[])subKey.GetValue(name))
-                {
-                    Log.Write("Assembly Location Found: ", values[1]);
-                    return values[1]; //At Position 1 there's the Assembly Path previously saved (When project was initially LINQBridged)
-                }
-            }
-            Log.Write("Assembly Location Found None");
-
-            return null;
-        }
+        
     }
 }

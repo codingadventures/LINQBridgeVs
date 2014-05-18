@@ -25,14 +25,16 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using LINQBridgeVs.Logging;
+using Microsoft.Win32;
 
 namespace LINQBridgeVs.DynamicCore.Helper
 {
     internal static class ReferencedAssemblyFinderHelper
     {
 
-        internal static List<string> GetReferencedAssemblies(this Type @type, string originalTypeLocation = null)
+        internal static List<string> GetReferencedAssemblies(this Type @type, string originalTypeLocation)
         {
             var returnList = new List<string>();
             if (@type == null) return returnList;
@@ -51,14 +53,14 @@ namespace LINQBridgeVs.DynamicCore.Helper
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(originalTypeLocation) && originalTypeLocation != @type.Assembly.Location)
-                        returnList.Add(@type.Assembly.Location);
+                    if (!string.IsNullOrEmpty(originalTypeLocation))
+                        returnList.Add(originalTypeLocation);
 
                     Log.WriteIf(
                         !string.IsNullOrEmpty(originalTypeLocation) &&
                         !@type.Assembly.Location.Equals(originalTypeLocation), "No Referenced Assemblies");
 
-                    var referencedAssemblyPaths = @type.Assembly.GetReferencedAssembliesPath();
+                    var referencedAssemblyPaths = @type.Assembly.GetReferencedAssembliesPath(originalTypeLocation);
 
                     returnList.AddRange(referencedAssemblyPaths);
                 }
@@ -71,7 +73,8 @@ namespace LINQBridgeVs.DynamicCore.Helper
             }
 
             return returnList;
-
         }
+
+
     }
 }

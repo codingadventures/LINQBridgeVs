@@ -33,12 +33,16 @@ namespace LINQBridgeVs.DynamicVisualizer.V11
     /// </summary>
     public class DynamicDebuggerVisualizerV11 : DialogDebuggerVisualizer
     {
+        internal const string VsReferencedVersion = "11.0";
+
         protected override void Show(IDialogVisualizerService windowService, IVisualizerObjectProvider objectProvider)
         {
             var dynamicDebuggerVisualizer = new DynamicDebuggerVisualizer();
             var dataStream = objectProvider.GetData();
 
-            var formToShow = dynamicDebuggerVisualizer.ShowVisualizer(dataStream);
+            if (dataStream.Length == 0) return;
+
+            var formToShow = dynamicDebuggerVisualizer.ShowVisualizer(dataStream, VsReferencedVersion);
 
             windowService.ShowDialog(formToShow);
         }

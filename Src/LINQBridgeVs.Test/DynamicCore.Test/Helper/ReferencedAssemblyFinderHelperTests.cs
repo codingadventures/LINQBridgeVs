@@ -49,8 +49,7 @@ namespace DynamicCore.Test.Helper
         [TestMethod]
         public void FindReferencedAssembliesTest()
         {
-
-            var refAss = _dictionary.GetType().GetReferencedAssemblies();
+            var refAss = _dictionary.GetType().GetReferencedAssemblies(SourcePath);
 
             Assert.IsTrue(refAss.Count > 0);
             Assert.AreEqual(refAss[0], SourcePath);

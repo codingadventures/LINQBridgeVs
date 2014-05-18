@@ -23,6 +23,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System.Threading.Tasks;
 using LINQBridgeVs.DynamicCore;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 
@@ -33,14 +34,18 @@ namespace LINQBridgeVs.DynamicVisualizer.V12
     /// </summary>
     public class DynamicDebuggerVisualizerV12 : DialogDebuggerVisualizer
     {
+        internal const string VsReferencedVersion = "12.0";
+
         protected override void Show(IDialogVisualizerService windowService, IVisualizerObjectProvider objectProvider)
         {
             var dynamicDebuggerVisualizer = new DynamicDebuggerVisualizer();
             var dataStream = objectProvider.GetData();
 
-            var formToShow = dynamicDebuggerVisualizer.ShowVisualizer(dataStream);
+            if (dataStream.Length == 0) return;
 
-            windowService.ShowDialog(formToShow);
+            var formToShow = dynamicDebuggerVisualizer.ShowVisualizer(dataStream, VsReferencedVersion);
+
+            Task.Factory.StartNew(() => windowService.ShowDialog(formToShow));
         }
     }
 

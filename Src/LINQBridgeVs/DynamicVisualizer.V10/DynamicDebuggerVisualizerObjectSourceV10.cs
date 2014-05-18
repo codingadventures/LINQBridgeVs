@@ -31,10 +31,9 @@ namespace LINQBridgeVs.DynamicVisualizer.V10
 {
     public class DynamicDebuggerVisualizerObjectSourceV10 : VisualizerObjectSource
     {
-        internal const string VsReferencedVersion = "10.0";
         public override void GetData(object target, Stream outgoingData)
         {
-            DynamicObjectSource.BroadCastData(target, outgoingData, VsReferencedVersion);
+            DynamicObjectSource.BroadCastData(target, outgoingData);
         }
     }
 }

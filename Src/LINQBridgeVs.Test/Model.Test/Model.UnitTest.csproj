@@ -7,8 +7,8 @@
     <ProjectGuid>{8A5E73F6-2093-4669-9C09-BEAB033BE56C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Model.Test</RootNamespace>
-    <AssemblyName>Model.Test</AssemblyName>
+    <RootNamespace>Model.UnitTest</RootNamespace>
+    <AssemblyName>Model.UnitTest</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -24,6 +24,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test|AnyCPU'">
     <OutputPath>bin\Test\</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deploy|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -42,9 +43,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AnotherModel.Test\AnotherModel.Test.csproj">
+    <ProjectReference Include="..\AnotherModel.Test\AnotherModel.UnitTest.csproj">
       <Project>{7B0C3D12-296A-438D-B0EA-B049A0D6D3C1}</Project>
-      <Name>AnotherModel.Test</Name>
+      <Name>AnotherModel.UnitTest</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

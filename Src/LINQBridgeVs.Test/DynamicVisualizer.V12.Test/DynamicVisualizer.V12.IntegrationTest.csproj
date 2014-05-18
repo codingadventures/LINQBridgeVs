@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DDF44401-F193-46B8-BA6C-A3DE88BAED46}</ProjectGuid>
+    <ProjectGuid>{E4E1ED5C-4D75-47C7-A0A4-F57F65C252B4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DynamicCore.Test</RootNamespace>
-    <AssemblyName>DynamicCore.Test</AssemblyName>
+    <RootNamespace>DynamicVisualizer.V12.Test</RootNamespace>
+    <AssemblyName>DynamicVisualizer.V12.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -16,8 +16,7 @@
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -28,27 +27,20 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test|AnyCPU'">
-    <OutputPath>bin\Test\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deploy|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Deploy\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.VisualStudio.DebuggerVisualizers, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    <Reference Include="Microsoft.VisualStudio.DebuggerVisualizers, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\VS2013\Microsoft.VisualStudio.DebuggerVisualizers.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -63,32 +55,17 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="DynamicDebuggerVisualizerTest.cs" />
-    <Compile Include="Helper\ReferencedAssemblyFinderHelperTests.cs" />
+    <Compile Include="DynamicDebuggerVisualizerV12Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Helper\AssemblyFinderHelperTests.cs" />
-    <Compile Include="DynamicObjectSourceTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AnotherModel.Test\AnotherModel.Test.csproj">
-      <Project>{7B0C3D12-296A-438D-B0EA-B049A0D6D3C1}</Project>
-      <Name>AnotherModel.Test</Name>
+    <ProjectReference Include="..\..\LINQBridgeVs\DynamicVisualizer.V12\DynamicVisualizer.V12.csproj">
+      <Project>{835064f0-3c4f-4646-b17a-632c192cce3b}</Project>
+      <Name>DynamicVisualizer.V12</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Model.Test\Model.Test.csproj">
+    <ProjectReference Include="..\Model.Test\Model.UnitTest.csproj">
       <Project>{8A5E73F6-2093-4669-9C09-BEAB033BE56C}</Project>
-      <Name>Model.Test</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\LINQBridgeVs\DynamicCore\DynamicCore.csproj">
-      <Project>{b84fbd50-0b10-4c25-8430-680fc6fc3fea}</Project>
-      <Name>DynamicCore</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\System.IO.Abstractions\System.IO.Abstractions\System.IO.Abstractions.csproj">
-      <Project>{4d398f3a-0784-4401-93cd-46cd2fbd6b92}</Project>
-      <Name>System.IO.Abstractions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\System.IO.Abstractions\TestingHelpers\TestingHelpers.csproj">
-      <Project>{251bd5e5-8133-47a4-ab19-17cf0f43d6ae}</Project>
-      <Name>TestingHelpers</Name>
+      <Name>Model.UnitTest</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
@@ -111,7 +88,6 @@
   </Choose>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

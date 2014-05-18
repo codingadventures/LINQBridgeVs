@@ -7,9 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeMapper", "LINQBridgeVs\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildTasks", "LINQBridgeVs\BuildTasks\BuildTasks.csproj", "{276F3935-E0CA-450F-A55F-AED56DC2024E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildTasks.Test", "LINQBridgeVs.Test\BuildTasks.Test\BuildTasks.Test.csproj", "{5030F9B8-D21E-456D-8A92-F92567D11104}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildTasks.UnitTest", "LINQBridgeVs.Test\BuildTasks.Test\BuildTasks.UnitTest.csproj", "{5030F9B8-D21E-456D-8A92-F92567D11104}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model.Test", "LINQBridgeVs.Test\Model.Test\Model.Test.csproj", "{8A5E73F6-2093-4669-9C09-BEAB033BE56C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model.UnitTest", "LINQBridgeVs.Test\Model.Test\Model.UnitTest.csproj", "{8A5E73F6-2093-4669-9C09-BEAB033BE56C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINQBridgeVs", "LINQBridgeVs\LINQBridgeVsExtension\LINQBridgeVs.csproj", "{1B82F962-5D04-42B6-8D18-7AA8E8FB615F}"
 EndProject
@@ -17,9 +17,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{DEECC213-1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualStudio", "LINQBridgeVs\VisualStudio\VisualStudio.csproj", "{8F6409F1-33E3-4310-BE84-12C4F838C0B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicCore.Test", "LINQBridgeVs.Test\DynamicCore.Test\DynamicCore.Test.csproj", "{DDF44401-F193-46B8-BA6C-A3DE88BAED46}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicCore.UnitTest", "LINQBridgeVs.Test\DynamicCore.Test\DynamicCore.UnitTest.csproj", "{DDF44401-F193-46B8-BA6C-A3DE88BAED46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnotherModel.Test", "LINQBridgeVs.Test\AnotherModel.Test\AnotherModel.Test.csproj", "{7B0C3D12-296A-438D-B0EA-B049A0D6D3C1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnotherModel.UnitTest", "LINQBridgeVs.Test\AnotherModel.Test\AnotherModel.UnitTest.csproj", "{7B0C3D12-296A-438D-B0EA-B049A0D6D3C1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging", "LINQBridgeVs\Logging\Logging.csproj", "{7199EDE0-8090-46D0-9687-54B411A3D02C}"
 EndProject
@@ -43,6 +43,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{129AFA
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V12", "LINQBridgeVs\DynamicVisualizer.V12\DynamicVisualizer.V12.csproj", "{835064F0-3C4F-4646-B17A-632C192CCE3B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V12.IntegrationTest", "LINQBridgeVs.Test\DynamicVisualizer.V12.Test\DynamicVisualizer.V12.IntegrationTest.csproj", "{E4E1ED5C-4D75-47C7-A0A4-F57F65C252B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -170,8 +172,16 @@ Global
 		{835064F0-3C4F-4646-B17A-632C192CCE3B}.Deploy|Any CPU.Build.0 = Deploy|Any CPU
 		{835064F0-3C4F-4646-B17A-632C192CCE3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{835064F0-3C4F-4646-B17A-632C192CCE3B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{835064F0-3C4F-4646-B17A-632C192CCE3B}.Test|Any CPU.ActiveCfg = Release|Any CPU
-		{835064F0-3C4F-4646-B17A-632C192CCE3B}.Test|Any CPU.Build.0 = Release|Any CPU
+		{835064F0-3C4F-4646-B17A-632C192CCE3B}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{835064F0-3C4F-4646-B17A-632C192CCE3B}.Test|Any CPU.Build.0 = Test|Any CPU
+		{E4E1ED5C-4D75-47C7-A0A4-F57F65C252B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4E1ED5C-4D75-47C7-A0A4-F57F65C252B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4E1ED5C-4D75-47C7-A0A4-F57F65C252B4}.Deploy|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4E1ED5C-4D75-47C7-A0A4-F57F65C252B4}.Deploy|Any CPU.Build.0 = Debug|Any CPU
+		{E4E1ED5C-4D75-47C7-A0A4-F57F65C252B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4E1ED5C-4D75-47C7-A0A4-F57F65C252B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4E1ED5C-4D75-47C7-A0A4-F57F65C252B4}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{E4E1ED5C-4D75-47C7-A0A4-F57F65C252B4}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -182,6 +192,7 @@ Global
 		{DDF44401-F193-46B8-BA6C-A3DE88BAED46} = {DEECC213-180D-4C4E-A44B-5785F1C0FB73}
 		{7B0C3D12-296A-438D-B0EA-B049A0D6D3C1} = {DEECC213-180D-4C4E-A44B-5785F1C0FB73}
 		{08ADAF10-E655-4560-BF9C-9287E60247B5} = {DEECC213-180D-4C4E-A44B-5785F1C0FB73}
+		{E4E1ED5C-4D75-47C7-A0A4-F57F65C252B4} = {DEECC213-180D-4C4E-A44B-5785F1C0FB73}
 		{4D398F3A-0784-4401-93CD-46CD2FBD6B92} = {C83880CE-BAA2-4849-BE2C-7F2C88B295A6}
 		{251BD5E5-8133-47A4-AB19-17CF0F43D6AE} = {C83880CE-BAA2-4849-BE2C-7F2C88B295A6}
 	EndGlobalSection

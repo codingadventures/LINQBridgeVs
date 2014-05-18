@@ -38,6 +38,7 @@ using LINQBridgeVs.DynamicCore.Helper;
 using LINQBridgeVs.DynamicCore.Properties;
 using LINQBridgeVs.DynamicCore.Template;
 using LINQBridgeVs.Logging;
+using Microsoft.Win32;
 using Message = LINQBridgeVs.DynamicCore.Template.Message;
 
 namespace LINQBridgeVs.DynamicCore
@@ -83,7 +84,8 @@ namespace LINQBridgeVs.DynamicCore
                 var dst = Path.Combine(dstScriptPath, string.Format(message.FileName, message.TypeFullName));
                 Log.Write("dst: {0}", dst);
 
-                var refAssemblies = new List<string> { message.TypeLocation };
+                var refAssemblies = new List<string>();
+
                 refAssemblies.AddRange(message.ReferencedAssemblies);
 
                 var linqQuery = new Inspection(refAssemblies, message.TypeFullName, message.TypeNamespace, message.TypeName);
@@ -110,11 +112,13 @@ namespace LINQBridgeVs.DynamicCore
         }
 
 
-        public Form ShowVisualizer(Stream inData)
+        public Form ShowVisualizer(Stream inData, string vsVersion)
         {
             Log.Configure("LINQBridgeVs", "DynamicCore");
 
             Log.Write("ShowVisualizer Started...");
+
+            Log.Write("Vs Targeted Version ", vsVersion);
 
             var formatter = new BinaryFormatter();
             var message = (Message)formatter.Deserialize(inData);
@@ -122,8 +126,12 @@ namespace LINQBridgeVs.DynamicCore
             Log.Write("Message deserialized");
             Log.Write(string.Format("Message content /n {0}", message));
 
+
             var type = Type.GetType(message.AssemblyQualifiedName);
-            var referencedAssemblies = type.GetReferencedAssemblies(message.TypeLocation);
+
+            var location = GetAssemblyLocation(type, vsVersion);
+
+            var referencedAssemblies = type.GetReferencedAssemblies(location);
 
             message.ReferencedAssemblies.AddRange(referencedAssemblies);
 
@@ -148,7 +156,9 @@ namespace LINQBridgeVs.DynamicCore
 
                 var linqPadProcess = Process.Start(startInfo);
 
-                Thread.Sleep(100);
+                Thread.Sleep(50);
+
+                if (linqPadProcess == null) return null;
 
                 if (linqPadProcess.HasExited)
                     linqPadProcess = Process.GetProcessesByName("LINQPad").FirstOrDefault();
@@ -174,7 +184,7 @@ namespace LINQBridgeVs.DynamicCore
 
                     SetForegroundWindow(linqPadProcess.MainWindowHandle);
                     Log.Write("LINQPad SetForegroundWindow {0}", linqPadProcess.MainWindowHandle);
-                    Thread.Sleep(100);
+                    Thread.Sleep(50);
                     PostMessage(linqPadProcess.MainWindowHandle, WmKeydown, VkF5, 0);
                     PostMessage(linqPadProcess.MainWindowHandle, WmKeydown, VkF5, 0);
                     Log.Write("LINQPad PostMessage {0}", VkF5);
@@ -196,6 +206,58 @@ namespace LINQBridgeVs.DynamicCore
             return new TemporaryForm();
         }
 
+        /// <summary>
+        /// Gets the assembly location. If an assembly is loaded at Runtime or it's loaded within a IIS context Assembly.Location property is null
+        /// </summary>
+        /// <param name="type">The Type.</param>
+        /// <param name="vsVersion">The Visual Studio version.</param>
+        /// <returns></returns>
+        private static string GetAssemblyLocation(Type @type, string vsVersion)
+        {
+
+            var registryKeyPath = string.Format(@"Software\LINQBridgeVs\{0}\Solutions", vsVersion);
+
+            using (var key = Registry.CurrentUser.OpenSubKey(registryKeyPath))
+            {
+                if (key != null)
+                {
+                    var values = key.GetSubKeyNames();
+                    var registryKey = key;
+
+                    foreach (var value in values)
+                    {
+                        var subKey = registryKey.OpenSubKey(value);
+
+                        if (subKey == null) continue;
+
+                        var name = subKey.GetValueNames().FirstOrDefault(p =>
+                        {
+                            if (!@type.IsGenericType)
+                                return p == @type.Assembly.GetName().Name;
+                            var genericType = @type.GetGenericArguments()[0];
+                            
+                            if (AssemblyFinderHelper.IsSystemAssembly(genericType.Assembly.GetName().Name))
+                                return false;
+
+                            return p == genericType.Assembly.GetName().Name;
+                        });
+
+                        if (string.IsNullOrEmpty(name)) continue;
+                        
+                        var keyValues = (string[])subKey.GetValue(name);
+
+                        Log.Write("Assembly Location Found: ", keyValues[1]);
+
+                        return keyValues[1];//At Position 1 there's the Assembly Path previously saved (When project was initially LINQBridged)
+                    }
+
+                }
+            }
+            Log.Write("Assembly Location Found None");
+            return string.Empty;
+        }
+
+        #region [ DllImport ]
         [DllImport("user32.dll")]
         private static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
 
@@ -204,5 +266,6 @@ namespace LINQBridgeVs.DynamicCore
 
         [DllImport("user32.dll")]
         static extern bool PostMessage(IntPtr hWnd, UInt32 msg, int wParam, int lParam);
+        #endregion
     }
 }

@@ -34,7 +34,7 @@ namespace LINQBridgeVs.DynamicCore.Template
         public string FileName;
         public string TypeName;
         public string TypeFullName;
-        public string TypeLocation;
+     
         public string TypeNamespace;
         public string AssemblyQualifiedName;
         public readonly List<string> ReferencedAssemblies;
@@ -52,8 +52,7 @@ namespace LINQBridgeVs.DynamicCore.Template
                 + Environment.NewLine 
                 + "TypeName: " + TypeName 
                 + Environment.NewLine 
-                + "TypeLocation: " + TypeLocation 
-                + Environment.NewLine
+                
                 + "TypeNamespace: " + TypeNamespace 
                 + Environment.NewLine;
         }

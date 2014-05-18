@@ -29,24 +29,10 @@ namespace DynamicCore.Test
             Assert.AreEqual(message.FileName, "IEnumerable(Int32).linq");
             Assert.AreEqual(message.TypeFullName, "System.Collections.Generic.IEnumerable<System.Int32>");
             Assert.AreEqual(message.TypeName, "IEnumerableInt32");
-            Assert.AreEqual(message.TypeLocation, @"C:\Windows\Microsoft.NET\Framework\v4.0.30319\mscorlib.dll");
             Assert.AreEqual(message.TypeNamespace, "System.Collections.Generic");
         }
 
-        [TestMethod]
-        public void BroadCastData_AsParallelIteratorShouldSucceed()
-        {
-            var r = TestQuery.AsParallel();
-
-            var message = DeserializeMessage(r);
-
-
-            Assert.AreEqual(message.FileName, "IEnumerable(Int32).linq");
-            Assert.AreEqual(message.TypeFullName, "System.Collections.Generic.IEnumerable<System.Int32>");
-            Assert.AreEqual(message.TypeName, "IEnumerableInt32");
-            Assert.AreEqual(message.TypeLocation, @"C:\Windows\Microsoft.NET\Framework\v4.0.30319\mscorlib.dll");
-            Assert.AreEqual(message.TypeNamespace, "System.Collections.Generic");
-        }
+       
 
         [TestMethod]
         public void BroadCastData_OfTypeIteratorShouldSucced()
@@ -58,7 +44,6 @@ namespace DynamicCore.Test
             Assert.AreEqual(message.FileName, "IEnumerable(Int16).linq");
             Assert.AreEqual(message.TypeFullName, "System.Collections.Generic.IEnumerable<System.Int16>");
             Assert.AreEqual(message.TypeName, "IEnumerableInt16");
-            Assert.AreEqual(message.TypeLocation, @"C:\Windows\Microsoft.NET\Framework\v4.0.30319\mscorlib.dll");
             Assert.AreEqual(message.TypeNamespace, "System.Collections.Generic");
         }
 
@@ -69,10 +54,9 @@ namespace DynamicCore.Test
 
             var message = DeserializeMessage(r);
 
-            Assert.AreEqual(message.FileName, "IEnumerable(Int16).linq");
-            Assert.AreEqual(message.TypeFullName, "System.Collections.Generic.IEnumerable<System.Int16>");
-            Assert.AreEqual(message.TypeName, "IEnumerableInt16");
-            Assert.AreEqual(message.TypeLocation, @"C:\Windows\Microsoft.NET\Framework\v4.0.30319\mscorlib.dll");
+            Assert.AreEqual(message.FileName, "Dictionary(Int32, Object).linq");
+            Assert.AreEqual(message.TypeFullName, "System.Collections.Generic.Dictionary<System.Int32, System.Object>");
+            Assert.AreEqual(message.TypeName, "DictionaryInt32Object");
             Assert.AreEqual(message.TypeNamespace, "System.Collections.Generic");
         }
 
@@ -83,10 +67,9 @@ namespace DynamicCore.Test
 
             var message = DeserializeMessage(r);
 
-            Assert.AreEqual(message.FileName, "IEnumerable(Int16).linq");
+            Assert.AreEqual(message.FileName, "Anonymous(Int32).linq");
             Assert.AreEqual(message.TypeFullName, "System.Collections.Generic.IEnumerable<System.Int16>");
             Assert.AreEqual(message.TypeName, "IEnumerableInt16");
-            Assert.AreEqual(message.TypeLocation, @"C:\Windows\Microsoft.NET\Framework\v4.0.30319\mscorlib.dll");
             Assert.AreEqual(message.TypeNamespace, "System.Collections.Generic");
         }
 
