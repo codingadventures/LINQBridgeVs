@@ -27,6 +27,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using EnvDTE;
@@ -65,7 +66,7 @@ namespace LINQBridgeVs.Extension
             Log.Configure("LINQBridgeVs", "LINQBridgeVsExtension");
 
             _application = app;
-            PackageConfigurator.Configure(_application.Version);
+            PackageConfigurator.Configure(_application.Version, _application.Solution.FileName);
         }
         private static bool IsSupported(string uniqueName)
         {
@@ -93,11 +94,22 @@ namespace LINQBridgeVs.Extension
         {
             get
             {
-                return SelectedProject.Properties.Cast<Property>().First(property => property.Name == "AssemblyName").Value.ToString();
+                return SelectedProject.Properties.Item("AssemblyName").Value.ToString();
             }
         }
 
-       
+        private string SelectedProjectOutputPath
+        {
+            get
+            {
+                var path = SelectedProject.Properties.Item("FullPath").Value.ToString();
+                var outputPath = SelectedProject.ConfigurationManager.ActiveConfiguration.Properties.Item("OutputPath").Value.ToString();
+                var fileName = SelectedProject.Properties.Item("OutputFileName").Value.ToString();
+                return Path.Combine(path, outputPath, fileName);
+            }
+        }
+
+
         public void Execute(CommandAction action)
         {
 
@@ -114,14 +126,15 @@ namespace LINQBridgeVs.Extension
             {
                 case CommandAction.Enable:
                     const string enableMessage = "Following project dependencies have been found...LINQBridge them? (Recommended)";
-                    PackageConfigurator.EnableProject(SelectedAssemblyName);
+                    PackageConfigurator.EnableProject(SelectedProjectOutputPath, SelectedAssemblyName);
                     var enabledDependencies = new List<string>();
                     enabledDependencies.Insert(0, SelectedAssemblyName);
 
                     if (references.Any(project => PackageConfigurator.IsBridgeDisabled(project.AssemblyName)))
                     {
                         var projectDependencies = new ProjectDependencies(references, enableMessage);
-                        enabledDependencies.AddRange(projectDependencies.ShowDependencies(PackageConfigurator.EnableProject).ToList());
+                        var dependencies = projectDependencies.ShowDependencies(PackageConfigurator.EnableProject);
+                        enabledDependencies.AddRange(dependencies.Select(project => project.AssemblyName));
                     }
 
                     MessageBox.Show(string.Format("LINQBridge on {0} has been Enabled...", string.Join(", ", enabledDependencies)), "Success", MessageBoxButtons.OK);
@@ -130,14 +143,15 @@ namespace LINQBridgeVs.Extension
                 case CommandAction.Disable:
                     const string disableMessage = "Following project dependencies have been found...Un-LINQBridge them? (Recommended)";
 
-                    PackageConfigurator.DisableProject(SelectedAssemblyName);
+                    PackageConfigurator.DisableProject(SelectedProjectOutputPath, SelectedAssemblyName);
                     var disableDependencies = new List<string>();
                     disableDependencies.Insert(0, SelectedAssemblyName);
 
                     if (references.Any(project => PackageConfigurator.IsBridgeEnabled(project.AssemblyName)))
                     {
                         var projectDependencies = new ProjectDependencies(references, disableMessage);
-                        disableDependencies.AddRange(projectDependencies.ShowDependencies(PackageConfigurator.DisableProject));
+                        var dependencies = projectDependencies.ShowDependencies(PackageConfigurator.DisableProject);
+                        disableDependencies.AddRange(dependencies.Select(project => project.AssemblyName));
                     }
 
                     MessageBox.Show(string.Format("LINQBridge on {0} has been Disabled...", string.Join(", ", disableDependencies)), "Success", MessageBoxButtons.OK);
@@ -158,7 +172,7 @@ namespace LINQBridgeVs.Extension
             cmd.Enabled = (CommandStates.Enabled & states) != 0;
         }
 
-     
+
 
         private CommandStates GetStatus(CommandAction action)
         {

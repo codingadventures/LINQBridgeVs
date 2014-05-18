@@ -34,16 +34,21 @@ namespace LINQBridgeVs.Extension.Forms
 {
     internal partial class ProjectDependencies : Form
     {
-        private Action<string> _onOk;
+        private Action<string, string> _onOk;
         private readonly IEnumerable<Project> _foundProjects;
 
-        private IEnumerable<string> SelectedProjects
+        private IEnumerable<Project> SelectedProjects
         {
             get
             {
                 return from DataGridViewRow row in ProjectsDataGridView.Rows
                        where Convert.ToBoolean(row.Cells[0].Value)
-                       select row.Cells[2].Value.ToString();
+                       select new Project
+                       {
+                           AssemblyName = row.Cells[2].Value.ToString(),
+                           AssemblyPath = row.Cells[3].Value.ToString(),
+                           DependencyType = DependencyType.ProjectReference
+                       };
 
             }
         }
@@ -54,14 +59,16 @@ namespace LINQBridgeVs.Extension.Forms
             ProjectsDataGridView.CellClick += ProjectsDataGridView_CellClick;
             ProjectsDataGridView.DataBindingComplete += ProjectsDataGridView_DataBindingComplete;
             MessageLabel.Text = message;
-
         }
 
         void ProjectsDataGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
+            ProjectsDataGridView.Columns[0].Width = 20;
+
             foreach (DataGridViewRow row in ProjectsDataGridView.Rows)
             {
                 row.Cells[0].Value = true;
+
             }
         }
 
@@ -86,7 +93,7 @@ namespace LINQBridgeVs.Extension.Forms
             }
         }
 
-        internal IEnumerable<string> ShowDependencies(Action<string> onOk)
+        internal IEnumerable<Project> ShowDependencies(Action<string, string> onOk)
         {
             _onOk = onOk;
             ProjectsDataGridView.DataSource = _foundProjects.ToList();
@@ -96,12 +103,13 @@ namespace LINQBridgeVs.Extension.Forms
                 return SelectedProjects;
             }
 
-            return Enumerable.Empty<string>();
+            return Enumerable.Empty<Project>();
         }
 
         private void OkButton_Click(object sender, EventArgs e)
         {
-            SelectedProjects.ForEach(_onOk);
+
+            SelectedProjects.ForEach(p => _onOk(p.AssemblyName, p.AssemblyPath));
             DialogResult = DialogResult.OK;
             Close();
         }

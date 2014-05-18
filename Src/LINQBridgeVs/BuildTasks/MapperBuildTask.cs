@@ -58,8 +58,6 @@ namespace LINQBridgeVs.BuildTasks
                 VisualizerTypeMapper.MapDotNetFrameworkTypes(installationPaths, VisualStudioVer,
                     visualizerAssemblyLocation);
 
-                Log.Write(".NET Framework type Mapped");
-
                 var typeMapper = new VisualizerTypeMapper(visualizerAssemblyLocation);
 
                 typeMapper.MapAssembly(Assembly);
@@ -88,6 +86,9 @@ namespace LINQBridgeVs.BuildTasks
 
         [Required]
         public string VisualStudioVer { private get; set; }
+
+        [Required]
+        public string SolutionName { get; set; }
 
         private string VisualizerAssemblyName
         {

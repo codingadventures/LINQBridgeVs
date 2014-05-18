@@ -19,10 +19,12 @@
   </Target>
   
   <Target Name="Information" Condition="'$(IsExtensionEnabled)' == 'True'">
-	<Message Text="Assembly Name: $(VisualStudioVersion)" Importance="high" />
-	<Message Text="Visual Studio Version: $(VisualStudioVersion)" Importance="high" />
-	<Message Text="Product Base Registry Path: $(ProductBaseRegistryPath)" Importance="high" />
+	  <!--<Message Text="Assembly Name: $(VisualStudioVersion)" Importance="high" />
+	  <Message Text="Visual Studio Version: $(VisualStudioVersion)" Importance="high" />
+	  <Message Text="Product Base Registry Path: $(ProductBaseRegistryPath)" Importance="high" />
     <Message Text="Is Project Enabled: $(IsProjectEnabled)" Importance="high" />
-	<Message Text="Install Folder Path: $(InstallFolderPath)" Importance="high" />
-	</Target>
+	  <Message Text="Install Folder Path: $(InstallFolderPath)" Importance="high" />
+    <Message Text="Solution Name: $(SolutionName)" Importance="high" />-->
+    <Message Text="Registry value $(registry:HKEY_CURRENT_USER\Software\LINQBridgeVs@InstallFolderPath)"/>
+  </Target>
 </Project>

@@ -136,7 +136,7 @@ namespace LINQBridgeVs.TypeMapper
                     break;
                 case MetadataScopeType.ModuleDefinition:
                     var moduleDefinition = typeReference.Scope as ModuleDefinition;
-                    if (moduleDefinition != null) scope = FromCILToTypeName(typeReference.FullName) + ", " + moduleDefinition.Assembly.ToString();
+                    if (moduleDefinition != null) scope = FromCILToTypeName(typeReference.FullName) + ", " + moduleDefinition.Assembly;
                     break;
                 default:
                     throw new Exception(string.Format("Assembly Scope Null. Check assembly {0}", typeReference.FullName));

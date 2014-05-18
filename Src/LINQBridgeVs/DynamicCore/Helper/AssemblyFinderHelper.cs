@@ -56,9 +56,20 @@ namespace LINQBridgeVs.DynamicCore.Helper
             if (!referencedAssemblies.Any()) return retPaths;
             Log.Write(string.Format("There are {0} referenced non system assemblies", referencedAssemblies.Count));
 
+            Log.Write(string.Format("Current Assembly is at location {0}", assembly.Location));
 
-            var currentAssemblyPath = FileSystem.Path.GetDirectoryName(assembly.Location);
-            if (currentAssemblyPath == null) return Enumerable.Empty<string>();
+            var currentAssemblyPath = string.Empty;
+            try
+            {
+                currentAssemblyPath = FileSystem.Path.GetDirectoryName(assembly.Location);
+            }
+            catch (Exception exception)
+            {
+                Log.Write(exception, string.Format("GetDirectoryName of assembly: {0} failed. Path is wrong {1}", assembly.FullName, assembly.Location));
+            }
+
+
+            if (string.IsNullOrEmpty(currentAssemblyPath)) return Enumerable.Empty<string>();
 
             Log.Write("currentAssemblyPath: {0}", currentAssemblyPath);
 
@@ -103,7 +114,7 @@ namespace LINQBridgeVs.DynamicCore.Helper
             }
             catch (Exception e)
             {
-                Log.Write(e, "FindPath");
+                Log.Write(e, "Exception in FindPath");
                 throw;
             }
 

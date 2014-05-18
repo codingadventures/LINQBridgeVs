@@ -39,12 +39,13 @@ namespace LINQBridgeVs.Extension.Dependency
     {
         public DependencyType DependencyType { get; set; }
 
-       
         public string AssemblyName { get; set; }
+
+        public string AssemblyPath { get; set; }
 
         public override string ToString()
         {
-            return string.Format("{0} {1}", DependencyType, AssemblyName);
+            return string.Format("{0} {1} {2}", DependencyType, AssemblyName, AssemblyPath);
         }
     }
 }

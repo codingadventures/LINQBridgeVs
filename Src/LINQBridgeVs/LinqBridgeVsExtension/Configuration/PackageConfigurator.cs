@@ -43,8 +43,15 @@ namespace LINQBridgeVs.Extension.Configuration
     internal static class PackageConfigurator
     {
         private static string _vsVersion;
+        private static string _solutionName;
+
         private static readonly string CurrentAssemblyVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
         public static readonly bool IsFramework45Installed = Directory.Exists(Locations.DotNet45FrameworkPath);
+
+        private const string LINQBridgeVsVersionRegistryValue = "LINQBridgeVsVersion";
+        private const string LINQBridgeVsConfiguredRegistryValue = "IsLINQBridgeVsConfigured";
+        private const string LINQBridgeVsEnabledRegistryValue = "IsLinqBridgeEnabled";
+        private const string LINQBridgeVsInstallFolderPathRegistryValue = "InstallFolderPath";
 
         private static string LINQBridgeVsExtensionVersion
         {
@@ -54,7 +61,7 @@ namespace LINQBridgeVs.Extension.Configuration
                 {
                     if (key == null) return string.Empty;
 
-                    var value = key.GetValue("LINQBridgeVsVersion");
+                    var value = key.GetValue(LINQBridgeVsVersionRegistryValue);
 
                     if (value != null)
                         return value.ToString();
@@ -69,7 +76,7 @@ namespace LINQBridgeVs.Extension.Configuration
                 using (var key = Registry.CurrentUser.CreateSubKey(GetRegistryKeyWithVersion(Resources.ProductVersion)))
                 {
                     if (key != null)
-                        key.SetValue("LINQBridgeVsVersion", value);
+                        key.SetValue(LINQBridgeVsVersionRegistryValue, value);
                 }
             }
         }
@@ -78,17 +85,17 @@ namespace LINQBridgeVs.Extension.Configuration
         {
             get
             {
-                using (var key = Registry.CurrentUser.OpenSubKey(GetRegistryKeyWithVersion(Resources.ConfigurationRegistryKey)))
+                using (var key = Registry.CurrentUser.OpenSubKey(GetRegistryKeyWithVersion(Resources.ProductVersion)))
                 {
-                    return key != null && Convert.ToBoolean(key.GetValue("IsLINQBridgeVsConfigured"));
+                    return key != null && Convert.ToBoolean(key.GetValue(LINQBridgeVsConfiguredRegistryValue));
                 }
             }
             set
             {
-                using (var key = Registry.CurrentUser.CreateSubKey(GetRegistryKeyWithVersion(Resources.ConfigurationRegistryKey)))
+                using (var key = Registry.CurrentUser.CreateSubKey(GetRegistryKeyWithVersion(Resources.ProductVersion)))
                 {
                     if (key != null)
-                        key.SetValue("IsLINQBridgeVsConfigured", value);
+                        key.SetValue(LINQBridgeVsConfiguredRegistryValue, value);
                 }
             }
         }
@@ -99,7 +106,7 @@ namespace LINQBridgeVs.Extension.Configuration
             {
                 using (var key = Registry.CurrentUser.OpenSubKey(GetRegistryKeyWithVersion(Resources.ProductVersion)))
                 {
-                    return key != null && Convert.ToBoolean(key.GetValue("IsLinqBridgeEnabled"));
+                    return key != null && Convert.ToBoolean(key.GetValue(LINQBridgeVsEnabledRegistryValue));
                 }
             }
             set
@@ -107,16 +114,17 @@ namespace LINQBridgeVs.Extension.Configuration
                 using (var key = Registry.CurrentUser.CreateSubKey(GetRegistryKeyWithVersion(Resources.ProductVersion)))
                 {
                     if (key != null)
-                        key.SetValue("IsLinqBridgeEnabled", value);
+                        key.SetValue(LINQBridgeVsEnabledRegistryValue, value);
                 }
             }
         }
 
-        public static void Configure(string vsVersion)
+        public static void Configure(string vsVersion, string solutionName)
         {
             _vsVersion = vsVersion;
+            _solutionName = solutionName;
             Log.Write("Configuring LINQBridgeVs Extension");
-
+          
             try
             {
                 if (LINQBridgeVsExtensionVersion != CurrentAssemblyVersion)
@@ -131,13 +139,7 @@ namespace LINQBridgeVs.Extension.Configuration
 
                 if (IsEnvironmentConfigured) return;
 
-                if (!Directory.Exists(Locations.LinqPadDestinationFolder))
-                {
-                    Log.Write("Creating LinqPad directory {0}", Locations.LinqPadDestinationFolder);
-                    MessageBox.Show("Please Install LINQPad in order to Use LINQBridgeVs and then Restart Visual Studio");
-                    Process.Start("http://www.linqpad.net");
-                    return;
-                }
+                if (!IsLINQPadInstalled()) return;
 
                 Log.Write("Setting the Environment");
 
@@ -147,6 +149,15 @@ namespace LINQBridgeVs.Extension.Configuration
             {
                 Log.Write(e, "Error Configuring LINQBridgeVs");
             }
+        }
+
+        private static bool IsLINQPadInstalled()
+        {
+            if (Directory.Exists(Locations.LinqPadDestinationFolder)) return false;
+
+            MessageBox.Show("Please Install LINQPad in order to Use LINQBridgeVs and then Restart Visual Studio");
+            Process.Start("http://www.linqpad.net");
+            return true;
         }
 
         private static void SetEnvironment()
@@ -170,12 +181,10 @@ namespace LINQBridgeVs.Extension.Configuration
             {
                 if (key == null) return;
 
-                var value = key.GetValue("InstallFolderPath");
-
+                var value = key.GetValue(LINQBridgeVsInstallFolderPathRegistryValue);
                 if (value != null && value.Equals(Locations.InstallFolder)) return;
-
                 Log.Write("Setting InstallFolderPath to {0}", Locations.InstallFolder);
-                key.SetValue("InstallFolderPath", Locations.InstallFolder);
+                key.SetValue(LINQBridgeVsInstallFolderPathRegistryValue, Locations.InstallFolder);
             }
         }
 
@@ -184,30 +193,37 @@ namespace LINQBridgeVs.Extension.Configuration
             return String.Format(key, _vsVersion);
         }
 
-        public static void EnableProject(string assemblyName)
+        public static void EnableProject(string assemblyPath, string assemblyName)
         {
-            using (var key = Registry.CurrentUser.CreateSubKey(GetRegistryKeyWithVersion(Resources.EnabledProjectsRegistryKey)))
+            var keyPath = string.Format(GetRegistryKeyWithVersion(Resources.EnabledProjectsRegistryKey), _solutionName);
+            using (var key = Registry.CurrentUser.CreateSubKey(keyPath))
             {
                 if (key != null)
-                    key.SetValue(assemblyName, true);
+                    key.SetValue(assemblyName, new[] { "True", assemblyPath }, RegistryValueKind.MultiString);
             }
         }
 
-        public static void DisableProject(string assemblyName)
+
+
+        public static void DisableProject(string assemblyPath, string assemblyName)
         {
-            using (var key = Registry.CurrentUser.OpenSubKey(GetRegistryKeyWithVersion(Resources.EnabledProjectsRegistryKey), true))
+            var keyPath = string.Format(GetRegistryKeyWithVersion(Resources.EnabledProjectsRegistryKey), _solutionName);
+
+            using (var key = Registry.CurrentUser.OpenSubKey(keyPath, true))
             {
-                if (key != null) key.SetValue(assemblyName, false);
+                if (key != null) key.SetValue(assemblyName, new[] { "False", assemblyPath }, RegistryValueKind.MultiString);
             }
         }
 
         public static bool IsBridgeEnabled(string assemblyName)
         {
-            using (var key = Registry.CurrentUser.OpenSubKey(GetRegistryKeyWithVersion(Resources.EnabledProjectsRegistryKey), true))
+            var keyPath = string.Format(GetRegistryKeyWithVersion(Resources.EnabledProjectsRegistryKey), _solutionName);
+
+            using (var key = Registry.CurrentUser.OpenSubKey(keyPath, false))
             {
                 if (key == null) return false;
-                var value = key.GetValue(assemblyName);
-                return value != null && Convert.ToBoolean(value);
+                var value = (string[])key.GetValue(assemblyName);
+                return value != null && Convert.ToBoolean(value[0]);
             }
         }
 

@@ -35,5 +35,6 @@ namespace LINQBridgeVs.Extension.Extension
             foreach (var item in sequence)
                 action(item);
         }
+      
     }
 }

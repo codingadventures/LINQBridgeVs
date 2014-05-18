@@ -54,16 +54,19 @@ namespace LINQBridgeVs.Extension.Dependency
                 from proj in loadedProject.Items
                 where proj.ItemType.Equals("ProjectReference") || proj.ItemType.Equals("Reference")
                 where !proj.EvaluatedInclude.Contains("Microsoft") && !proj.EvaluatedInclude.Contains("System")
+                where proj.ItemType.Equals("ProjectReference")
+                let referenceProjectFileName = Path.Combine(loadedProject.DirectoryPath, proj.Xml.Include)
+                let referenceProjectPath = Path.GetDirectoryName(referenceProjectFileName)
+                let referenceProjectXDocument = XDocument.Load(referenceProjectFileName)
                 select new Project
                 {
                     DependencyType =
                         proj.ItemType.Equals("Reference") ? DependencyType.AssemblyReference : DependencyType.ProjectReference,
-                    AssemblyName = proj.ItemType.Equals("ProjectReference")
-                        ? XDocument.Load(Path.Combine(loadedProject.DirectoryPath, proj.Xml.Include))
-                            .XPathSelectElement("/aw:Project/aw:PropertyGroup/aw:AssemblyName", namespaceManager)
-                            .Value
-                        : string.Empty
-                   
+                    AssemblyName =
+                            referenceProjectXDocument.XPathSelectElement("/aw:Project/aw:PropertyGroup/aw:AssemblyName", namespaceManager)
+                            .Value,
+                    AssemblyPath = Path.Combine(referenceProjectPath, referenceProjectXDocument.XPathSelectElement("/aw:Project/aw:PropertyGroup/aw:OutputPath", namespaceManager).Value)
+
                 };
         }
     }
