@@ -1,15 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using LINQBridgeVs.DynamicCore;
 using LINQBridgeVs.DynamicCore.Template;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Model.Test;
-using System;
-using System.IO;
+using Model.UnitTest;
 
-namespace DynamicCore.Test
+namespace DynamicCore.UnitTest
 {
     [TestClass]
     public class DynamicDebuggerVisualizerTest

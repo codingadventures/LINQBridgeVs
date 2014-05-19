@@ -34,6 +34,7 @@ namespace LINQBridgeVs.DynamicVisualizer.V11
     public class DynamicDebuggerVisualizerV11 : DialogDebuggerVisualizer
     {
         internal const string VsReferencedVersion = "11.0";
+        internal const string TestRegistryKey = @"Software\LINQBridgeVs\11.0\Test";
 
         protected override void Show(IDialogVisualizerService windowService, IVisualizerObjectProvider objectProvider)
         {
@@ -44,7 +45,16 @@ namespace LINQBridgeVs.DynamicVisualizer.V11
 
             var formToShow = dynamicDebuggerVisualizer.ShowVisualizer(dataStream, VsReferencedVersion);
 
-            windowService.ShowDialog(formToShow);
+            if (!IsTest())
+                windowService.ShowDialog(formToShow);
+        }
+
+        private static bool IsTest()
+        {
+            using (var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(TestRegistryKey))
+            {
+                return key != null;
+            }
         }
     }
 

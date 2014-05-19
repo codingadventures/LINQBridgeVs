@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E4E1ED5C-4D75-47C7-A0A4-F57F65C252B4}</ProjectGuid>
+    <ProjectGuid>{BD5831E5-EF85-4EA5-A63B-6AD7F8C1CA28}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DynamicVisualizer.V12.IntegrationTest</RootNamespace>
-    <AssemblyName>DynamicVisualizer.V12.IntegrationTest</AssemblyName>
+    <RootNamespace>DynamicVisualizer.V10.IntegrationTest</RootNamespace>
+    <AssemblyName>DynamicVisualizer.V10.IntegrationTest</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -16,7 +16,6 @@
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,11 +35,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.VisualStudio.DebuggerVisualizers, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.VisualStudio.DebuggerVisualizers, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\VS2013\Microsoft.VisualStudio.DebuggerVisualizers.dll</HintPath>
+      <HintPath>..\..\Lib\VS2010\Microsoft.VisualStudio.DebuggerVisualizers.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -55,17 +57,17 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="DynamicDebuggerVisualizerV12Test.cs" />
+    <Compile Include="DynamicDebuggerVisualizerV10Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\LINQBridgeVs\DynamicVisualizer.V12\DynamicVisualizer.V12.csproj">
-      <Project>{835064f0-3c4f-4646-b17a-632c192cce3b}</Project>
-      <Name>DynamicVisualizer.V12</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Model.Test\Model.UnitTest.csproj">
+    <ProjectReference Include="..\LINQBridgeVs.Test\Model.Test\Model.UnitTest.csproj">
       <Project>{8A5E73F6-2093-4669-9C09-BEAB033BE56C}</Project>
       <Name>Model.UnitTest</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LINQBridgeVs\DynamicVisualizer.V10\DynamicVisualizer.V10.csproj">
+      <Project>{88641BE0-4023-4563-B7C9-8816624549AC}</Project>
+      <Name>DynamicVisualizer.V10</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AnotherModel.Test
+namespace AnotherModel.UnitTest
 {
     [Serializable]
     public class AnotherModelTest

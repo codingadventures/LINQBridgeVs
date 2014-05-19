@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using AnotherModel.Test;
+using AnotherModel.UnitTest;
 
-
-namespace Model.Test
+namespace Model.UnitTest
 {
     [Serializable]
     public class CustomType1

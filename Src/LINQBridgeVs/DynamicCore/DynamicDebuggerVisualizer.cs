@@ -31,6 +31,8 @@ using System.IO.Abstractions;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Threading;
 using System.Windows.Forms;
 using LINQBridgeVs.DynamicCore.Forms;
@@ -50,6 +52,7 @@ namespace LINQBridgeVs.DynamicCore
         private static readonly string MyDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
         private const UInt32 WmKeydown = 0x0100;
+        private const UInt32 WmSetFocus = 0x0007;
         private const int VkF5 = 0x74;
         private const int SwShownormal = 1;
 
@@ -77,7 +80,11 @@ namespace LINQBridgeVs.DynamicCore
 
                 if (!FileSystem.Directory.Exists(dstScriptPath))
                 {
-                    FileSystem.Directory.CreateDirectory(dstScriptPath);
+                    var sec = new DirectorySecurity();
+                    // Using this instead of the "Everyone" string means we work on non-English systems.
+                    var everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+                    sec.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
+                    FileSystem.Directory.CreateDirectory(dstScriptPath, sec);
                     Log.Write(string.Format("Directory Created: {0}", dstScriptPath));
                 }
 
@@ -154,48 +161,11 @@ namespace LINQBridgeVs.DynamicCore
             try
             {
 
-                var linqPadProcess = Process.Start(startInfo);
+                Process.Start(startInfo).WaitForInputIdle(-1);
+                  
+                SendInputToLINQPad();
 
-                Thread.Sleep(50);
-
-                if (linqPadProcess == null) return null;
-
-                if (linqPadProcess.HasExited)
-                    linqPadProcess = Process.GetProcessesByName("LINQPad").FirstOrDefault();
-                else
-                    linqPadProcess.WaitForInputIdle();
-
-
-                if (linqPadProcess != null)
-                {
-                    while (linqPadProcess.MainWindowHandle == IntPtr.Zero)
-                    {
-                        // Discard cached information about the process
-                        // because MainWindowHandle might be cached.
-                        var index = 0;
-                        Log.Write("Waiting MainWindowHandle... - Iteration: {0}", ++index);
-                        linqPadProcess.Refresh();
-                        Thread.Sleep(10);
-                    }
-
-                    Thread.Sleep(100);
-                    ShowWindowAsync(linqPadProcess.MainWindowHandle, SwShownormal);
-                    Log.Write("LINQPad ShowWindowAsync {0}", linqPadProcess.MainWindowHandle);
-
-                    SetForegroundWindow(linqPadProcess.MainWindowHandle);
-                    Log.Write("LINQPad SetForegroundWindow {0}", linqPadProcess.MainWindowHandle);
-                    Thread.Sleep(50);
-                    PostMessage(linqPadProcess.MainWindowHandle, WmKeydown, VkF5, 0);
-                    PostMessage(linqPadProcess.MainWindowHandle, WmKeydown, VkF5, 0);
-                    Log.Write("LINQPad PostMessage {0}", VkF5);
-
-                    Log.Write("LINQPad Successfully started");
-
-                    linqPadProcess.Dispose();
-                }
-                else
-                    Log.Write("LINQPad Process is null");
-
+                Log.Write("LINQPad Successfully started");
             }
             catch (Exception e)
             {
@@ -235,7 +205,7 @@ namespace LINQBridgeVs.DynamicCore
                             if (!@type.IsGenericType)
                                 return p == @type.Assembly.GetName().Name;
                             var genericType = @type.GetGenericArguments()[0];
-                            
+
                             if (AssemblyFinderHelper.IsSystemAssembly(genericType.Assembly.GetName().Name))
                                 return false;
 
@@ -243,7 +213,7 @@ namespace LINQBridgeVs.DynamicCore
                         });
 
                         if (string.IsNullOrEmpty(name)) continue;
-                        
+
                         var keyValues = (string[])subKey.GetValue(name);
 
                         Log.Write("Assembly Location Found: ", keyValues[1]);
@@ -255,6 +225,39 @@ namespace LINQBridgeVs.DynamicCore
             }
             Log.Write("Assembly Location Found None");
             return string.Empty;
+        }
+
+        private static void SendInputToLINQPad()
+        {
+            try
+            {
+                var linqPadProcess = Process.GetProcessesByName("LINQPad")[0];
+
+                while (linqPadProcess.MainWindowHandle == IntPtr.Zero)
+                {
+                    // Discard cached information about the process
+                    // because MainWindowHandle might be cached.
+                    var index = 0;
+                    Log.Write("Waiting MainWindowHandle... - Iteration: {0}", ++index);
+                    linqPadProcess.Refresh();
+                    Thread.Sleep(10);
+                }
+
+                ShowWindowAsync(linqPadProcess.MainWindowHandle, SwShownormal);
+                Log.Write("LINQPad ShowWindowAsync {0}", linqPadProcess.MainWindowHandle);
+
+                SetForegroundWindow(linqPadProcess.MainWindowHandle);
+                Log.Write("LINQPad SetForegroundWindow {0}", linqPadProcess.MainWindowHandle);
+                Thread.Sleep(20);
+                PostMessage(linqPadProcess.MainWindowHandle, WmSetFocus, VkF5, 0);
+                Thread.Sleep(20);
+                PostMessage(linqPadProcess.MainWindowHandle, WmKeydown, VkF5, 0);
+                Log.Write("LINQPad PostMessage {0}", VkF5);
+            }
+            catch (Exception e)
+            {
+                Log.Write(e, "Error during LINQPad Sending inputs");
+            }
         }
 
         #region [ DllImport ]

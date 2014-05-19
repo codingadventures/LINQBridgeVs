@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
-using AnotherModel.Test;
+using AnotherModel.UnitTest;
 using LINQBridgeVs.DynamicCore.Helper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Model.Test;
+using Model.UnitTest;
 
-namespace DynamicCore.Test.Helper
+namespace DynamicCore.UnitTest.Helper
 {
     [TestClass]
     public class ReferencedAssemblyFinderHelperTests

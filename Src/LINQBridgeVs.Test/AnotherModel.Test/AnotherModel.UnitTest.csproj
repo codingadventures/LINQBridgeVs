@@ -7,8 +7,8 @@
     <ProjectGuid>{7B0C3D12-296A-438D-B0EA-B049A0D6D3C1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AnotherModel.Test</RootNamespace>
-    <AssemblyName>AnotherModel.Test</AssemblyName>
+    <RootNamespace>AnotherModel.UnitTest</RootNamespace>
+    <AssemblyName>AnotherModel.UnitTest</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
