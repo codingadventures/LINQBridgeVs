@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VsSDK.IntegrationTestLibrary;
 using Microsoft.VSSDK.Tools.VsIdeTesting;
@@ -63,18 +61,18 @@ namespace VSPackage1_IntegrationTests.IntegrationTests
             UIThreadInvoker.Invoke((ThreadInvoker)delegate()
             {
                 //Solution and project creation parameters
-                string solutionName = "VBWinApp";
-                string projectName = "VBWinApp";
+                var solutionName = "VBWinApp";
+                var projectName = "VBWinApp";
 
                 //Template parameters
-                string language = "VisualBasic";
-                string projectTemplateName = "WindowsApplication.Zip";
-                string itemTemplateName = "CodeFile.zip";
-                string newFileName = "Test.vb";
+                var language = "VisualBasic";
+                var projectTemplateName = "WindowsApplication.Zip";
+                var itemTemplateName = "CodeFile.zip";
+                var newFileName = "Test.vb";
 
-                DTE dte = (DTE)VsIdeTestHostContext.ServiceProvider.GetService(typeof(DTE));
+                var dte = (DTE)VsIdeTestHostContext.ServiceProvider.GetService(typeof(DTE));
 
-                TestUtils testUtils = new TestUtils();
+                var testUtils = new TestUtils();
 
                 testUtils.CreateEmptySolution(TestContext.TestDir, solutionName);
                 Assert.AreEqual<int>(0, testUtils.ProjectCount());
@@ -86,12 +84,12 @@ namespace VSPackage1_IntegrationTests.IntegrationTests
                 Assert.AreEqual<int>(1, testUtils.ProjectCount());
 
                 //Get the project
-                Project project = dte.Solution.Item(1);
+                var project = dte.Solution.Item(1);
                 Assert.IsNotNull(project);
                 Assert.IsTrue(string.Compare(project.Name, projectName, StringComparison.InvariantCultureIgnoreCase) == 0);
 
                 //Verify Adding new code file to project
-                ProjectItem newCodeFileItem = testUtils.AddNewItemFromVsTemplate(project.ProjectItems, itemTemplateName, language, newFileName);
+                var newCodeFileItem = testUtils.AddNewItemFromVsTemplate(project.ProjectItems, itemTemplateName, language, newFileName);
                 Assert.IsNotNull(newCodeFileItem, "Could not create new project item");
 
             });

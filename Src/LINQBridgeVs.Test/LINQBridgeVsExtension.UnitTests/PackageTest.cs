@@ -9,14 +9,11 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
-using System;
-using System.Collections;
-using System.Text;
-using System.Reflection;
+using LINQBridgeVs.Extension;
 using Microsoft.VsSDK.UnitTestLibrary;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Company.VSPackage1;
+ 
 
 namespace VSPackage1_UnitTests
 {
@@ -26,13 +23,13 @@ namespace VSPackage1_UnitTests
         [TestMethod()]
         public void CreateInstance()
         {
-            VSPackage1Package package = new VSPackage1Package();
+            var package = new LINQBridgeVsPackage();
         }
 
         [TestMethod()]
         public void IsIVsPackage()
         {
-            VSPackage1Package package = new VSPackage1Package();
+            var package = new LINQBridgeVsPackage();
             Assert.IsNotNull(package as IVsPackage, "The object does not implement IVsPackage");
         }
 
@@ -40,11 +37,11 @@ namespace VSPackage1_UnitTests
         public void SetSite()
         {
             // Create the package
-            IVsPackage package = new VSPackage1Package() as IVsPackage;
+            var package = new LINQBridgeVsPackage() as IVsPackage;
             Assert.IsNotNull(package, "The object does not implement IVsPackage");
 
             // Create a basic service provider
-            OleServiceProvider serviceProvider = OleServiceProvider.CreateOleServiceProviderWithBasicServices();
+            var serviceProvider = OleServiceProvider.CreateOleServiceProviderWithBasicServices();
 
             // Site the package
             Assert.AreEqual(0, package.SetSite(serviceProvider), "SetSite did not return S_OK");

@@ -44,13 +44,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{129AFA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V12", "LINQBridgeVs\DynamicVisualizer.V12\DynamicVisualizer.V12.csproj", "{835064F0-3C4F-4646-B17A-632C192CCE3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V12.IntegrationTest", "LINQBridgeVs.Test\DynamicVisualizer.V12.Test\DynamicVisualizer.V12.IntegrationTest.csproj", "{E4E1ED5C-4D75-47C7-A0A4-F57F65C252B4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V12.IntegrationTest", "LINQBridgeVs.Test\DynamicVisualizer.V12.IntegrationTest\DynamicVisualizer.V12.IntegrationTest.csproj", "{E4E1ED5C-4D75-47C7-A0A4-F57F65C252B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V10.IntegrationTest", "DynamicVisualizer.V10.IntegrationTest\DynamicVisualizer.V10.IntegrationTest.csproj", "{BD5831E5-EF85-4EA5-A63B-6AD7F8C1CA28}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V10.IntegrationTest", "LINQBridgeVs.Test\DynamicVisualizer.V10.IntegrationTest\DynamicVisualizer.V10.IntegrationTest.csproj", "{BD5831E5-EF85-4EA5-A63B-6AD7F8C1CA28}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "IntegrationTests", "{07B00FDB-0426-4FAA-8C5E-DACDF7D03EDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V11.IntegrationTest", "DynamicVisualizer.V11.IntegrationTest\DynamicVisualizer.V11.IntegrationTest.csproj", "{8B9A8154-A426-4B55-8F63-302C69662490}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V11.IntegrationTest", "LINQBridgeVs.Test\DynamicVisualizer.V11.IntegrationTest\DynamicVisualizer.V11.IntegrationTest.csproj", "{8B9A8154-A426-4B55-8F63-302C69662490}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINQBridgeVsExtension.IntegrationTests", "LINQBridgeVs.Test\LINQBridgeVsExtension.IntegrationTests\LINQBridgeVsExtension.IntegrationTests.csproj", "{2EDB3AE9-CF0F-48C6-9BEB-FAF5FAC5BDAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINQBridgeVsExtension.UnitTests", "LINQBridgeVs.Test\LINQBridgeVsExtension.UnitTests\LINQBridgeVsExtension.UnitTests.csproj", "{0AC90EDD-AD20-4FA8-A187-06C23BE9A455}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -204,6 +208,22 @@ Global
 		{8B9A8154-A426-4B55-8F63-302C69662490}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8B9A8154-A426-4B55-8F63-302C69662490}.Test|Any CPU.ActiveCfg = Release|Any CPU
 		{8B9A8154-A426-4B55-8F63-302C69662490}.Test|Any CPU.Build.0 = Release|Any CPU
+		{2EDB3AE9-CF0F-48C6-9BEB-FAF5FAC5BDAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EDB3AE9-CF0F-48C6-9BEB-FAF5FAC5BDAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EDB3AE9-CF0F-48C6-9BEB-FAF5FAC5BDAB}.Deploy|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EDB3AE9-CF0F-48C6-9BEB-FAF5FAC5BDAB}.Deploy|Any CPU.Build.0 = Debug|Any CPU
+		{2EDB3AE9-CF0F-48C6-9BEB-FAF5FAC5BDAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EDB3AE9-CF0F-48C6-9BEB-FAF5FAC5BDAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EDB3AE9-CF0F-48C6-9BEB-FAF5FAC5BDAB}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{2EDB3AE9-CF0F-48C6-9BEB-FAF5FAC5BDAB}.Test|Any CPU.Build.0 = Release|Any CPU
+		{0AC90EDD-AD20-4FA8-A187-06C23BE9A455}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AC90EDD-AD20-4FA8-A187-06C23BE9A455}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AC90EDD-AD20-4FA8-A187-06C23BE9A455}.Deploy|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AC90EDD-AD20-4FA8-A187-06C23BE9A455}.Deploy|Any CPU.Build.0 = Debug|Any CPU
+		{0AC90EDD-AD20-4FA8-A187-06C23BE9A455}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AC90EDD-AD20-4FA8-A187-06C23BE9A455}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AC90EDD-AD20-4FA8-A187-06C23BE9A455}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{0AC90EDD-AD20-4FA8-A187-06C23BE9A455}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -214,10 +234,12 @@ Global
 		{DDF44401-F193-46B8-BA6C-A3DE88BAED46} = {DEECC213-180D-4C4E-A44B-5785F1C0FB73}
 		{7B0C3D12-296A-438D-B0EA-B049A0D6D3C1} = {DEECC213-180D-4C4E-A44B-5785F1C0FB73}
 		{08ADAF10-E655-4560-BF9C-9287E60247B5} = {DEECC213-180D-4C4E-A44B-5785F1C0FB73}
+		{0AC90EDD-AD20-4FA8-A187-06C23BE9A455} = {DEECC213-180D-4C4E-A44B-5785F1C0FB73}
 		{4D398F3A-0784-4401-93CD-46CD2FBD6B92} = {C83880CE-BAA2-4849-BE2C-7F2C88B295A6}
 		{251BD5E5-8133-47A4-AB19-17CF0F43D6AE} = {C83880CE-BAA2-4849-BE2C-7F2C88B295A6}
 		{BD5831E5-EF85-4EA5-A63B-6AD7F8C1CA28} = {07B00FDB-0426-4FAA-8C5E-DACDF7D03EDC}
 		{E4E1ED5C-4D75-47C7-A0A4-F57F65C252B4} = {07B00FDB-0426-4FAA-8C5E-DACDF7D03EDC}
 		{8B9A8154-A426-4B55-8F63-302C69662490} = {07B00FDB-0426-4FAA-8C5E-DACDF7D03EDC}
+		{2EDB3AE9-CF0F-48C6-9BEB-FAF5FAC5BDAB} = {07B00FDB-0426-4FAA-8C5E-DACDF7D03EDC}
 	EndGlobalSection
 EndGlobal

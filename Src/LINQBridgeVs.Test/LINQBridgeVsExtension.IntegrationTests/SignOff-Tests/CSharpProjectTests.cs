@@ -1,7 +1,4 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VsSDK.IntegrationTestLibrary;
 using Microsoft.VSSDK.Tools.VsIdeTesting;
 
@@ -61,7 +58,7 @@ namespace VSPackage1_IntegrationTests.IntegrationTests
         {
             UIThreadInvoker.Invoke((ThreadInvoker)delegate()
             {
-                TestUtils testUtils = new TestUtils();
+                var testUtils = new TestUtils();
 
                 testUtils.CreateEmptySolution(TestContext.TestDir, "CSWinApp");
                 Assert.AreEqual<int>(0, testUtils.ProjectCount());

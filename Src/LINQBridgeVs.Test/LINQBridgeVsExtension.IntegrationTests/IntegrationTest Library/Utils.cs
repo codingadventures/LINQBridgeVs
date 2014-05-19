@@ -3,15 +3,10 @@ using System.IO;
 using System.Text;
 using System.Reflection;
 using System.Diagnostics;
-using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel.Design;
-using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.Shell;
 using EnvDTE;
 using EnvDTE80;
-using Microsoft.Win32;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VSSDK.Tools.VsIdeTesting;
@@ -36,11 +31,11 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
             string result = null;
 
             // Use the .NET procedure for loading a file embedded in the assembly
-            Stream stream = assembly.GetManifestResourceStream(resourceName);
+            var stream = assembly.GetManifestResourceStream(resourceName);
             if (stream != null)
             {
                 // Convert bytes to string
-                byte[] fileContentsAsBytes = new byte[stream.Length];
+                var fileContentsAsBytes = new byte[stream.Length];
                 stream.Read(fileContentsAsBytes, 0, (int)stream.Length);
                 result = Encoding.Default.GetString(fileContentsAsBytes);
             }
@@ -49,7 +44,7 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
                 // Embedded resource not found - list available resources
                 Debug.WriteLine("Unable to find the embedded resource file '" + resourceName + "'.");
                 Debug.WriteLine("  Available resources:");
-                foreach (string aResourceName in assembly.GetManifestResourceNames())
+                foreach (var aResourceName in assembly.GetManifestResourceNames())
                 {
                     Debug.WriteLine("    " + aResourceName);
                 }
@@ -67,12 +62,12 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
         public static void WriteEmbeddedResourceToFile(Assembly assembly, string embeddedResourceName, string fileName)
         {
             // Get file contents
-            string fileContents = GetEmbeddedStringResource(assembly, embeddedResourceName);
+            var fileContents = GetEmbeddedStringResource(assembly, embeddedResourceName);
             if (fileContents == null)
                 throw new ApplicationException("Failed to get embedded resource '" + embeddedResourceName + "' from assembly '" + assembly.FullName);
 
             // Write to file
-            StreamWriter sw = new StreamWriter(fileName);
+            var sw = new StreamWriter(fileName);
             sw.Write(fileContents);
             sw.Close();
         }
@@ -86,7 +81,7 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
         public static void WriteEmbeddedResourceToBinaryFile(Assembly assembly, string embeddedResourceName, string fileName)
         {
             // Get file contents
-            Stream stream = assembly.GetManifestResourceStream(embeddedResourceName);
+            var stream = assembly.GetManifestResourceStream(embeddedResourceName);
             if (stream == null)
                 throw new InvalidOperationException("Failed to get embedded resource '" + embeddedResourceName + "' from assembly '" + assembly.FullName);
 
@@ -95,10 +90,10 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
             FileStream fs = null;
             try
             {
-                byte[] fileContentsAsBytes = new byte[stream.Length];
+                var fileContentsAsBytes = new byte[stream.Length];
                 stream.Read(fileContentsAsBytes, 0, (int)stream.Length);
 
-                FileMode mode = FileMode.CreateNew;
+                var mode = FileMode.CreateNew;
                 if (File.Exists(fileName))
                 {
                     mode = FileMode.Truncate;
@@ -140,10 +135,10 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
         public static string GetNewFileName(string directory, string baseFileName, string extension)
         {
             // Get the new file name
-            string fileName = GetNewFileOrDirectoryNameWithoutCreatingAnything(directory, baseFileName, extension);
+            var fileName = GetNewFileOrDirectoryNameWithoutCreatingAnything(directory, baseFileName, extension);
 
             // Create an empty file to mark it as taken
-            StreamWriter sw = new StreamWriter(fileName);
+            var sw = new StreamWriter(fileName);
 
             sw.Write("");
             sw.Close();
@@ -161,7 +156,7 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
         public static string GetNewDirectoryName(string directory, string baseDirectoryName)
         {
             // Get the new file name
-            string directoryName = GetNewFileOrDirectoryNameWithoutCreatingAnything(directory, baseDirectoryName, null);
+            var directoryName = GetNewFileOrDirectoryNameWithoutCreatingAnything(directory, baseDirectoryName, null);
 
             // Create an empty directory to make it as occupied
             Directory.CreateDirectory(directoryName);
@@ -180,7 +175,7 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
         {
             // - get a file name that we can use
             string fileName;
-            int i = 1;
+            var i = 1;
 
             string fullFileName = null;
             while (true)
@@ -212,20 +207,20 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
         {
             CloseCurrentSolution(__VSSLNSAVEOPTIONS.SLNSAVEOPT_NoSave);
 
-            string solutionDirectory = GetNewDirectoryName(directory, solutionName);
+            var solutionDirectory = GetNewDirectoryName(directory, solutionName);
 
             // Create and force save solution
-            IVsSolution solutionService = (IVsSolution)VsIdeTestHostContext.ServiceProvider.GetService(typeof(IVsSolution));
+            var solutionService = (IVsSolution)VsIdeTestHostContext.ServiceProvider.GetService(typeof(IVsSolution));
             solutionService.CreateSolution(solutionDirectory, solutionName, (uint)__VSCREATESOLUTIONFLAGS.CSF_SILENT);
             solutionService.SaveSolutionElement((uint)__VSSLNSAVEOPTIONS.SLNSAVEOPT_ForceSave, null, 0);
-            DTE dte = VsIdeTestHostContext.Dte;
+            var dte = VsIdeTestHostContext.Dte;
             Assert.AreEqual(solutionName + ".sln", Path.GetFileName(dte.Solution.FileName), "Newly created solution has wrong Filename");
         }
 
         public void CloseCurrentSolution(__VSSLNSAVEOPTIONS saveoptions)
         {
             // Get solution service
-            IVsSolution solutionService = (IVsSolution)VsIdeTestHostContext.ServiceProvider.GetService(typeof(IVsSolution));
+            var solutionService = (IVsSolution)VsIdeTestHostContext.ServiceProvider.GetService(typeof(IVsSolution));
 
             // Close already open solution
             solutionService.CloseSolutionElement((uint)saveoptions, null, 0);
@@ -234,7 +229,7 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
         public void ForceSaveSolution()
         {
             // Get solution service
-            IVsSolution solutionService = (IVsSolution)VsIdeTestHostContext.ServiceProvider.GetService(typeof(IVsSolution));
+            var solutionService = (IVsSolution)VsIdeTestHostContext.ServiceProvider.GetService(typeof(IVsSolution));
 
             // Force-save the solution
             solutionService.SaveSolutionElement((uint)__VSSLNSAVEOPTIONS.SLNSAVEOPT_ForceSave, null, 0);
@@ -247,7 +242,7 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
         public int ProjectCount()
         {
             // Get solution service
-            IVsSolution solutionService = (IVsSolution)VsIdeTestHostContext.ServiceProvider.GetService(typeof(IVsSolution));
+            var solutionService = (IVsSolution)VsIdeTestHostContext.ServiceProvider.GetService(typeof(IVsSolution));
             object projectCount;
             solutionService.GetProperty((int)__VSPROPID.VSPROPID_ProjectCount, out projectCount);
             return (int)projectCount;
@@ -264,14 +259,14 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
         /// <returns>New project.</returns>
         public void CreateProjectFromTemplate(string projectName, string templateName, string language, bool exclusive)
         {
-            DTE dte = (DTE)VsIdeTestHostContext.ServiceProvider.GetService(typeof(DTE));
+            var dte = (DTE)VsIdeTestHostContext.ServiceProvider.GetService(typeof(DTE));
 
-            Solution2 sol = dte.Solution as Solution2;
-            string projectTemplate = sol.GetProjectTemplate(templateName, language);
+            var sol = dte.Solution as Solution2;
+            var projectTemplate = sol.GetProjectTemplate(templateName, language);
 
             // - project name and directory
-            string solutionDirectory = Directory.GetParent(dte.Solution.FullName).FullName;
-            string projectDirectory = GetNewDirectoryName(solutionDirectory, projectName);
+            var solutionDirectory = Directory.GetParent(dte.Solution.FullName).FullName;
+            var projectDirectory = GetNewDirectoryName(solutionDirectory, projectName);
 
             dte.Solution.AddFromTemplate(projectTemplate, projectDirectory, projectName, false);
         }
@@ -293,11 +288,11 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
             if (name == null)
                 throw new ArgumentException("name");
 
-            DTE dte = (DTE)VsIdeTestHostContext.ServiceProvider.GetService(typeof(DTE));
+            var dte = (DTE)VsIdeTestHostContext.ServiceProvider.GetService(typeof(DTE));
 
-            Solution2 sol = dte.Solution as Solution2;
+            var sol = dte.Solution as Solution2;
 
-            string filename = sol.GetProjectItemTemplate(templateName, language);
+            var filename = sol.GetProjectItemTemplate(templateName, language);
 
             parent.AddFromTemplate(filename, name);
 
@@ -311,7 +306,7 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
         public void SaveDocument(string documentMoniker)
         {
             // Get document cookie and hierarchy for the file
-            IVsRunningDocumentTable runningDocumentTableService = (IVsRunningDocumentTable)VsIdeTestHostContext.ServiceProvider.GetService(typeof(IVsRunningDocumentTable));
+            var runningDocumentTableService = (IVsRunningDocumentTable)VsIdeTestHostContext.ServiceProvider.GetService(typeof(IVsRunningDocumentTable));
             uint docCookie;
             IntPtr docData;
             IVsHierarchy hierarchy;
@@ -325,14 +320,14 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
                 out docCookie);
 
             // Save the document
-            IVsSolution solutionService = (IVsSolution)VsIdeTestHostContext.ServiceProvider.GetService(typeof(IVsSolution));
+            var solutionService = (IVsSolution)VsIdeTestHostContext.ServiceProvider.GetService(typeof(IVsSolution));
             solutionService.SaveSolutionElement((uint)__VSSLNSAVEOPTIONS.SLNSAVEOPT_ForceSave, hierarchy, docCookie);
         }
 
         public void CloseInEditorWithoutSaving(string fullFileName)
         {
             // Get the RDT service
-            IVsRunningDocumentTable runningDocumentTableService = (IVsRunningDocumentTable)VsIdeTestHostContext.ServiceProvider.GetService(typeof(IVsRunningDocumentTable));
+            var runningDocumentTableService = (IVsRunningDocumentTable)VsIdeTestHostContext.ServiceProvider.GetService(typeof(IVsRunningDocumentTable));
             Assert.IsNotNull(runningDocumentTableService, "Failed to get the Running Document Table Service");
 
             // Get our document cookie and hierarchy for the file
@@ -349,7 +344,7 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
                 out docCookie);
 
             // Get the SolutionService
-            IVsSolution solutionService = VsIdeTestHostContext.ServiceProvider.GetService(typeof(IVsSolution)) as IVsSolution;
+            var solutionService = VsIdeTestHostContext.ServiceProvider.GetService(typeof(IVsSolution)) as IVsSolution;
             Assert.IsNotNull(solutionService, "Failed to get IVsSolution service");
 
             // Close the document
@@ -363,10 +358,10 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
         #region Methods: Handling Toolwindows
         public bool CanFindToolwindow(Guid persistenceGuid)
         {
-            IVsUIShell uiShellService = VsIdeTestHostContext.ServiceProvider.GetService(typeof(SVsUIShell)) as IVsUIShell;
+            var uiShellService = VsIdeTestHostContext.ServiceProvider.GetService(typeof(SVsUIShell)) as IVsUIShell;
             Assert.IsNotNull(uiShellService);
             IVsWindowFrame windowFrame;
-            int hr = uiShellService.FindToolWindow((uint)__VSFINDTOOLWIN.FTW_fFindFirst, ref persistenceGuid, out windowFrame);
+            var hr = uiShellService.FindToolWindow((uint)__VSFINDTOOLWIN.FTW_fFindFirst, ref persistenceGuid, out windowFrame);
             Assert.IsTrue(hr == VSConstants.S_OK);
 
             return (windowFrame != null);
@@ -376,7 +371,7 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
         #region Methods: Loading packages
         public IVsPackage LoadPackage(Guid packageGuid)
         {
-            IVsShell shellService = (IVsShell)VsIdeTestHostContext.ServiceProvider.GetService(typeof(SVsShell));
+            var shellService = (IVsShell)VsIdeTestHostContext.ServiceProvider.GetService(typeof(SVsShell));
             IVsPackage package;
             shellService.LoadPackage(ref packageGuid, out package);
             Assert.IsNotNull(package, "Failed to load package");
@@ -391,9 +386,9 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
         {
             object Customin = null;
             object Customout = null;
-            string guidString = cmd.Guid.ToString("B").ToUpper();
-            int cmdId = cmd.ID;
-            DTE dte = VsIdeTestHostContext.Dte;
+            var guidString = cmd.Guid.ToString("B").ToUpper();
+            var cmdId = cmd.ID;
+            var dte = VsIdeTestHostContext.Dte;
             dte.Commands.Raise(guidString, cmdId, ref Customin, ref Customout);
         }
 

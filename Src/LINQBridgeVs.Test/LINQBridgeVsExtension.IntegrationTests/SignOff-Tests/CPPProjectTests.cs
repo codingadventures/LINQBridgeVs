@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VsSDK.IntegrationTestLibrary;
 using Microsoft.VSSDK.Tools.VsIdeTesting;
@@ -64,27 +62,27 @@ namespace VSPackage1_IntegrationTests.IntegrationTests
             UIThreadInvoker.Invoke((ThreadInvoker)delegate()
             {
                 //Solution and project creation parameters
-                string solutionName = "CPPWinApp";
-                string projectName = "CPPWinApp";
+                var solutionName = "CPPWinApp";
+                var projectName = "CPPWinApp";
 
                 //Template parameters
-                string projectType = "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}";
-                string projectTemplateName = Path.Combine("vcNet", "mc++appwiz.vsz");
+                var projectType = "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}";
+                var projectTemplateName = Path.Combine("vcNet", "mc++appwiz.vsz");
 
-                string itemTemplateName = "newc++file.cpp";
-                string newFileName = "Test.cpp";
+                var itemTemplateName = "newc++file.cpp";
+                var newFileName = "Test.cpp";
 
-                DTE dte = (DTE)VsIdeTestHostContext.ServiceProvider.GetService(typeof(DTE));
+                var dte = (DTE)VsIdeTestHostContext.ServiceProvider.GetService(typeof(DTE));
 
-                TestUtils testUtils = new TestUtils();
+                var testUtils = new TestUtils();
 
                 testUtils.CreateEmptySolution(TestContext.TestDir, solutionName);
                 Assert.AreEqual<int>(0, testUtils.ProjectCount());
 
                 //Add new CPP Windows application project to existing solution
-                string solutionDirectory = Directory.GetParent(dte.Solution.FullName).FullName;
-                string projectDirectory = TestUtils.GetNewDirectoryName(solutionDirectory, projectName);
-                string projectTemplatePath = Path.Combine(dte.Solution.get_TemplatePath(projectType), projectTemplateName);
+                var solutionDirectory = Directory.GetParent(dte.Solution.FullName).FullName;
+                var projectDirectory = TestUtils.GetNewDirectoryName(solutionDirectory, projectName);
+                var projectTemplatePath = Path.Combine(dte.Solution.get_TemplatePath(projectType), projectTemplateName);
                 Assert.IsTrue(File.Exists(projectTemplatePath), string.Format("Could not find template file: {0}", projectTemplatePath));
                 dte.Solution.AddFromTemplate(projectTemplatePath, projectDirectory, projectName, false);
 
@@ -92,14 +90,14 @@ namespace VSPackage1_IntegrationTests.IntegrationTests
                 Assert.AreEqual<int>(1, testUtils.ProjectCount());
 
                 //Get the project
-                Project project = dte.Solution.Item(1);
+                var project = dte.Solution.Item(1);
                 Assert.IsNotNull(project);
                 Assert.IsTrue(string.Compare(project.Name, projectName, StringComparison.InvariantCultureIgnoreCase) == 0);
 
                 //Verify Adding new code file to project
-                string newItemTemplatePath = Path.Combine(dte.Solution.ProjectItemsTemplatePath(projectType), itemTemplateName);
+                var newItemTemplatePath = Path.Combine(dte.Solution.ProjectItemsTemplatePath(projectType), itemTemplateName);
                 Assert.IsTrue(File.Exists(newItemTemplatePath));
-                ProjectItem item = project.ProjectItems.AddFromTemplate(newItemTemplatePath, newFileName);
+                var item = project.ProjectItems.AddFromTemplate(newItemTemplatePath, newFileName);
                 Assert.IsNotNull(item);
 
             });

@@ -2,7 +2,6 @@
 namespace Microsoft.VsSDK.IntegrationTestLibrary
 {
     using System;
-    using System.Collections.Generic;
     using System.Text;
     using System.Runtime.InteropServices;
     using System.Threading;
@@ -135,7 +134,7 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
         internal void Start()
         {
             // We ask for the uishell here since we cannot do that on the therad that we will spawn.
-            IVsUIShell uiShell = Package.GetGlobalService(typeof(SVsUIShell)) as IVsUIShell;
+            var uiShell = Package.GetGlobalService(typeof(SVsUIShell)) as IVsUIShell;
 
             if (uiShell == null)
             {
@@ -144,7 +143,7 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
 
             this.uiShell = uiShell;
 
-            System.Threading.Thread thread = new System.Threading.Thread(new ThreadStart(this.HandleDialogBoxes));
+            var thread = new System.Threading.Thread(new ThreadStart(this.HandleDialogBoxes));
             thread.Start();
 
             // We should never deadlock here, hence do not use the lock. Wait to be sure that the thread started.
@@ -168,7 +167,7 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
         /// <returns>The result of the dialog boxes closing</returns>
         internal bool WaitForDialogThreadToTerminate(int numberOfMillisecondsToWait)
         {
-            bool signaled = false;
+            var signaled = false;
 
             // We give millisecondsToWait sec to bring up and close the dialog box.
             signaled = this.threadDone.WaitOne(numberOfMillisecondsToWait, false);
@@ -195,8 +194,8 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
         private void HandleDialogBoxes()
         {
             // No synchronization numberOfDialogsToWaitFor since it is readonly
-            IntPtr[] hwnds = new IntPtr[this.numberOfDialogsToWaitFor];
-            bool[] dialogBoxCloseResults = new bool[this.numberOfDialogsToWaitFor];
+            var hwnds = new IntPtr[this.numberOfDialogsToWaitFor];
+            var dialogBoxCloseResults = new bool[this.numberOfDialogsToWaitFor];
 
             try
             {
@@ -207,12 +206,12 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
                 }
 
                 // The loop will be exited either if a message is send by the caller thread or if we found the dialog. If a message box text is specified the loop will not exit until the dialog is found.
-                bool stayInLoop = true;
-                int dialogBoxesToWaitFor = 1;
+                var stayInLoop = true;
+                var dialogBoxesToWaitFor = 1;
 
                 while (stayInLoop)
                 {
-                    int hwndIndex = dialogBoxesToWaitFor - 1;
+                    var hwndIndex = dialogBoxesToWaitFor - 1;
 
                     // We need to lock since the caller might set context to null.
                     lock (Mutex)
@@ -229,14 +228,14 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
 
                     if (hwnds[hwndIndex] != IntPtr.Zero)
                     {
-                        StringBuilder windowClassName = new StringBuilder(256);
+                        var windowClassName = new StringBuilder(256);
                         NativeMethods.GetClassName(hwnds[hwndIndex], windowClassName, windowClassName.Capacity);
 
                         // The #32770 is the class name of a messagebox dialog.
                         if (windowClassName.ToString().Contains("#32770"))
                         {
-                            IntPtr unmanagedMemoryLocation = IntPtr.Zero;
-                            string dialogBoxText = String.Empty;
+                            var unmanagedMemoryLocation = IntPtr.Zero;
+                            var dialogBoxText = String.Empty;
                             try
                             {
                                 unmanagedMemoryLocation = Marshal.AllocHGlobal(10 * 1024);
@@ -255,7 +254,7 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
                             {
 
                                 // Since this is running on the main thread be sure that we close the dialog.
-                                bool dialogCloseResult = false;
+                                var dialogCloseResult = false;
                                 if (this.buttonAction != 0)
                                 {
                                     dialogCloseResult = NativeMethods.EndDialog(hwnds[hwndIndex], this.buttonAction);
@@ -280,7 +279,7 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
                 //Let the main thread run a possible close command.
                 System.Threading.Thread.Sleep(2000);
 
-                foreach (IntPtr hwnd in hwnds)
+                foreach (var hwnd in hwnds)
                 {
                     // At this point the dialog should be closed, if not attempt to close it.
                     if (hwnd != IntPtr.Zero)
@@ -294,7 +293,7 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
                     // Be optimistic.
                     this.dialogBoxCloseResult = true;
 
-                    for (int i = 0; i < dialogBoxCloseResults.Length; i++)
+                    for (var i = 0; i < dialogBoxCloseResults.Length; i++)
                     {
                         if (!dialogBoxCloseResults[i])
                         {
@@ -316,21 +315,21 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
         /// <returns>True if found.</returns>
         private static bool FindMessageBoxString(IntPtr hwnd, IntPtr unmanagedMemoryLocation)
         {
-            StringBuilder sb = new StringBuilder(512);
+            var sb = new StringBuilder(512);
             NativeMethods.GetClassName(hwnd, sb, sb.Capacity);
 
             if (sb.ToString().ToLower().Contains("static"))
             {
-                StringBuilder windowText = new StringBuilder(2048);
+                var windowText = new StringBuilder(2048);
                 NativeMethods.GetWindowText(hwnd, windowText, windowText.Capacity);
 
                 if (windowText.Length > 0)
                 {
-                    IntPtr stringAsPtr = IntPtr.Zero;
+                    var stringAsPtr = IntPtr.Zero;
                     try
                     {
                         stringAsPtr = Marshal.StringToHGlobalAnsi(windowText.ToString());
-                        char[] stringAsArray = windowText.ToString().ToCharArray();
+                        var stringAsArray = windowText.ToString().ToCharArray();
 
                         // Since unicode characters are copied check if we are out of the allocated length.
                         // If not add the end terminating zero.
