@@ -35,6 +35,7 @@ using LINQBridgeVs.Extension.Configuration;
 using LINQBridgeVs.Extension.Dependency;
 using LINQBridgeVs.Extension.Forms;
 using LINQBridgeVs.Logging;
+using Microsoft.VisualStudio.PlatformUI;
 using Project = EnvDTE.Project;
 
 namespace LINQBridgeVs.Extension
@@ -66,7 +67,7 @@ namespace LINQBridgeVs.Extension
             Log.Configure("LINQBridgeVs", "LINQBridgeVsExtension");
 
             _application = app;
-            PackageConfigurator.Configure(_application.Version, _application.Solution.FileName);
+            PackageConfigurator.Configure(_application.Version);
         }
         private static bool IsSupported(string uniqueName)
         {
@@ -87,6 +88,18 @@ namespace LINQBridgeVs.Extension
                     return null;
 
                 return project;
+            }
+        }
+
+        private string _solutionName;
+        private string SolutionName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_solutionName))
+                    _solutionName = Path.GetFileNameWithoutExtension(_application.Solution.FileName);
+
+                return _solutionName;
             }
         }
 
@@ -116,7 +129,8 @@ namespace LINQBridgeVs.Extension
             if (SelectedProject == null)
                 return;
 
-            var allProjectReferences = Crawler.FindProjectDependencies(SelectedProject.FullName);
+
+            var allProjectReferences = Crawler.FindProjectDependencies(SelectedProject.FullName, SolutionName);
             var foundProjects = allProjectReferences as IList<Dependency.Project> ?? allProjectReferences.ToList();
             var projectReferences = foundProjects.Where(project => project.DependencyType == DependencyType.ProjectReference);
             // var assemblyReferences = allProjectReferences.Where(project => project.DependencyType == DependencyType.AssemblyReference);
@@ -126,11 +140,11 @@ namespace LINQBridgeVs.Extension
             {
                 case CommandAction.Enable:
                     const string enableMessage = "Following project dependencies have been found...LINQBridge them? (Recommended)";
-                    PackageConfigurator.EnableProject(SelectedProjectOutputPath, SelectedAssemblyName);
+                    PackageConfigurator.EnableProject(SelectedProjectOutputPath, SelectedAssemblyName, SolutionName);
                     var enabledDependencies = new List<string>();
                     enabledDependencies.Insert(0, SelectedAssemblyName);
 
-                    if (references.Any(project => PackageConfigurator.IsBridgeDisabled(project.AssemblyName)))
+                    if (references.Any(project => PackageConfigurator.IsBridgeDisabled(project.AssemblyName, SolutionName)))
                     {
                         var projectDependencies = new ProjectDependencies(references, enableMessage);
                         var dependencies = projectDependencies.ShowDependencies(PackageConfigurator.EnableProject);
@@ -143,11 +157,11 @@ namespace LINQBridgeVs.Extension
                 case CommandAction.Disable:
                     const string disableMessage = "Following project dependencies have been found...Un-LINQBridge them? (Recommended)";
 
-                    PackageConfigurator.DisableProject(SelectedProjectOutputPath, SelectedAssemblyName);
+                    PackageConfigurator.DisableProject(SelectedProjectOutputPath, SelectedAssemblyName, SolutionName);
                     var disableDependencies = new List<string>();
                     disableDependencies.Insert(0, SelectedAssemblyName);
 
-                    if (references.Any(project => PackageConfigurator.IsBridgeEnabled(project.AssemblyName)))
+                    if (references.Any(project => PackageConfigurator.IsBridgeEnabled(project.AssemblyName, SolutionName)))
                     {
                         var projectDependencies = new ProjectDependencies(references, disableMessage);
                         var dependencies = projectDependencies.ShowDependencies(PackageConfigurator.DisableProject);
@@ -186,10 +200,10 @@ namespace LINQBridgeVs.Extension
             if (SelectedProject == null)
                 return result;
 
-            if (PackageConfigurator.IsBridgeDisabled(SelectedAssemblyName))
+            if (PackageConfigurator.IsBridgeDisabled(SelectedAssemblyName, SolutionName))
                 result |= 1;
 
-            if (PackageConfigurator.IsBridgeEnabled(SelectedAssemblyName))
+            if (PackageConfigurator.IsBridgeEnabled(SelectedAssemblyName, SolutionName))
                 result |= 2;
 
             return result;

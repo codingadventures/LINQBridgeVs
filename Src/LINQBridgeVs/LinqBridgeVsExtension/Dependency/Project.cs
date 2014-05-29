@@ -43,6 +43,8 @@ namespace LINQBridgeVs.Extension.Dependency
 
         public string AssemblyPath { get; set; }
 
+        public string SolutionName { get; set; }
+
         public override string ToString()
         {
             return string.Format("{0} {1} {2}", DependencyType, AssemblyName, AssemblyPath);

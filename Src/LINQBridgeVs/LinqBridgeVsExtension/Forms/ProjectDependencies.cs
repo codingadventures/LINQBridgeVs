@@ -34,8 +34,10 @@ namespace LINQBridgeVs.Extension.Forms
 {
     internal partial class ProjectDependencies : Form
     {
-        private Action<string, string> _onOk;
+        #region [ Fields ]
+        private Action<string, string, string> _onOk;
         private readonly IEnumerable<Project> _foundProjects;
+        #endregion
 
         private IEnumerable<Project> SelectedProjects
         {
@@ -52,6 +54,13 @@ namespace LINQBridgeVs.Extension.Forms
 
             }
         }
+
+        #region [ Constructor ]
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProjectDependencies"/> class.
+        /// </summary>
+        /// <param name="foundProjects">The dependant found projects.</param>
+        /// <param name="message">The message to show </param>
         internal ProjectDependencies(IEnumerable<Project> foundProjects, string message)
         {
             _foundProjects = foundProjects;
@@ -60,6 +69,9 @@ namespace LINQBridgeVs.Extension.Forms
             ProjectsDataGridView.DataBindingComplete += ProjectsDataGridView_DataBindingComplete;
             MessageLabel.Text = message;
         }
+        #endregion
+
+        #region [ ProjectsDataGridView Events ]
 
         void ProjectsDataGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
@@ -92,24 +104,28 @@ namespace LINQBridgeVs.Extension.Forms
                     break;
             }
         }
+        #endregion
 
-        internal IEnumerable<Project> ShowDependencies(Action<string, string> onOk)
+
+        internal IEnumerable<Project> ShowDependencies(Action<string, string, string> onOk)
         {
             _onOk = onOk;
             ProjectsDataGridView.DataSource = _foundProjects.ToList();
             var res = ShowDialog();
-            if (res == DialogResult.OK)
-            {
-                return SelectedProjects;
-            }
-
-            return Enumerable.Empty<Project>();
+            return res == DialogResult.OK ? SelectedProjects : Enumerable.Empty<Project>();
         }
+
+        #region [ Button Events ]
 
         private void OkButton_Click(object sender, EventArgs e)
         {
 
-            SelectedProjects.ForEach(p => _onOk(p.AssemblyName, p.AssemblyPath));
+            SelectedProjects.ForEach(p
+                => _onOk(
+                    System.IO.Path.GetDirectoryName(p.AssemblyPath)
+                    , p.AssemblyName
+                    , p.SolutionName));
+
             DialogResult = DialogResult.OK;
             Close();
         }
@@ -120,5 +136,7 @@ namespace LINQBridgeVs.Extension.Forms
 
             Close();
         }
+
+        #endregion
     }
 }

@@ -40,8 +40,9 @@ namespace LINQBridgeVs.Extension.Dependency
         /// Finds the project dependencies given a csproj or vbproj file
         /// </summary>
         /// <param name="csvbProjectName">Name of the CS or VB project.</param>
+        /// <param name="solutionName">Name of the solution.</param>
         /// <returns></returns>
-        public static IEnumerable<Project> FindProjectDependencies(string csvbProjectName)
+        public static IEnumerable<Project> FindProjectDependencies(string csvbProjectName, string solutionName)
         {
             var namespaceManager = new XmlNamespaceManager(new NameTable());
             namespaceManager.AddNamespace("aw", MsbuildNamespace);
@@ -65,8 +66,8 @@ namespace LINQBridgeVs.Extension.Dependency
                     AssemblyName =
                             referenceProjectXDocument.XPathSelectElement("/aw:Project/aw:PropertyGroup/aw:AssemblyName", namespaceManager)
                             .Value,
-                    AssemblyPath = Path.Combine(referenceProjectPath, referenceProjectXDocument.XPathSelectElement("/aw:Project/aw:PropertyGroup/aw:OutputPath", namespaceManager).Value)
-
+                    AssemblyPath = Path.Combine(referenceProjectPath, referenceProjectXDocument.XPathSelectElement("/aw:Project/aw:PropertyGroup/aw:OutputPath", namespaceManager).Value),
+                    SolutionName = solutionName
                 };
         }
     }
