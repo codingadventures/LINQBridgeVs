@@ -36,6 +36,18 @@ namespace LINQBridgeVs.DynamicVisualizer.V12
         internal const string VsReferencedVersion = "12.0";
         internal const string TestRegistryKey = @"Software\LINQBridgeVs\12.0\Test";
 
+        internal static bool IsTest
+        {
+            get
+            {
+                using (var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(TestRegistryKey))
+                {
+                    return key != null;
+                }
+            }
+        }
+
+
         protected override void Show(IDialogVisualizerService windowService, IVisualizerObjectProvider objectProvider)
         {
             var dynamicDebuggerVisualizer = new DynamicDebuggerVisualizer();
@@ -43,19 +55,13 @@ namespace LINQBridgeVs.DynamicVisualizer.V12
 
             if (dataStream.Length == 0) return;
 
-            var formToShow = dynamicDebuggerVisualizer.ShowVisualizer(dataStream, VsReferencedVersion);
+            var formToShow = dynamicDebuggerVisualizer.ShowLINQPad(dataStream, VsReferencedVersion);
 
-            if (!IsTest())
+            if (!IsTest)
                 windowService.ShowDialog(formToShow);
         }
 
-        private static bool IsTest()
-        {
-            using (var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(TestRegistryKey))
-            {
-                return key != null;
-            }
-        }
+
     }
 
 

@@ -21,15 +21,7 @@ namespace DynamicCore.UnitTest
                                                     TypeName = typeof(CustomType1).Name
                                                 };
 
-        //[TestMethod]
-        //public void LINQPadDebuggerVisualizerShowTest()
-        //{
-
-        //    var c = new List<VisualizationTestClass>();
-        //    c.Add(new VisualizationTestClass());
-        //    var myHost = new VisualizerDevelopmentHost(c, typeof(DynamicDebuggerVisualizer), typeof(DynamicDebuggerVisualizerObjectSource));
-        //    myHost.ShowVisualizer();
-        //}
+       
         private static IFileSystem _fileSystem;
 
         [ClassInitialize]
@@ -45,11 +37,11 @@ namespace DynamicCore.UnitTest
         }
 
         [TestMethod]
-        public void DeployScriptTest()
+        public void DeployLinqScriptTest()
         {
 
             var cVisualizerObjectSource = new DynamicDebuggerVisualizer(_fileSystem);
-            cVisualizerObjectSource.DeployLinqScripts(_message);
+            cVisualizerObjectSource.DeployLinqScript(_message);
 
 
             var dstScriptPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),

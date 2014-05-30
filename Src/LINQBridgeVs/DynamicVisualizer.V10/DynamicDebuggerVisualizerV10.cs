@@ -43,7 +43,7 @@ namespace LINQBridgeVs.DynamicVisualizer.V10
 
             if (dataStream.Length == 0) return;
 
-            var formToShow = dynamicDebuggerVisualizer.ShowVisualizer(dataStream, VsReferencedVersion);
+            var formToShow = dynamicDebuggerVisualizer.ShowLINQPad(dataStream, VsReferencedVersion);
 
             if (!IsTest())
                 windowService.ShowDialog(formToShow);

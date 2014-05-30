@@ -59,9 +59,21 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\LINQBridgeVs\DynamicCore\DynamicCore.csproj">
+      <Project>{B84FBD50-0B10-4C25-8430-680FC6FC3FEA}</Project>
+      <Name>DynamicCore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\LINQBridgeVs\DynamicVisualizer.V12\DynamicVisualizer.V12.csproj">
       <Project>{835064f0-3c4f-4646-b17a-632c192cce3b}</Project>
       <Name>DynamicVisualizer.V12</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\System.IO.Abstractions\System.IO.Abstractions\System.IO.Abstractions.csproj">
+      <Project>{4D398F3A-0784-4401-93CD-46CD2FBD6B92}</Project>
+      <Name>System.IO.Abstractions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\System.IO.Abstractions\TestingHelpers\TestingHelpers.csproj">
+      <Project>{251BD5E5-8133-47A4-AB19-17CF0F43D6AE}</Project>
+      <Name>TestingHelpers</Name>
     </ProjectReference>
     <ProjectReference Include="..\Model.Test\Model.UnitTest.csproj">
       <Project>{8A5E73F6-2093-4669-9C09-BEAB033BE56C}</Project>

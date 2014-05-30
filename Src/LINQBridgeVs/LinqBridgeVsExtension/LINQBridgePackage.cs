@@ -125,6 +125,7 @@ namespace LINQBridgeVs.Extension
         /// </summary>
         protected override void Initialize()
         {
+            System.Diagnostics.Debugger.Break();
             base.Initialize();
 
             _dte = (DTE)GetService(typeof(SDTE));

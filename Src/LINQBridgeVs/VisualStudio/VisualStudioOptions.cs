@@ -107,12 +107,5 @@ namespace LINQBridgeVs.VisualStudio
 
             return VisualStudioPaths[visualStudioVersion].InstallationPaths;
         }
-
-        public static string GetMsBuildVersion(string visualStudioVersion)
-        {
-            CheckVersion(visualStudioVersion);
-            return VisualStudioPaths[visualStudioVersion].MsBuildVersion;
-
-        }
     }
 }

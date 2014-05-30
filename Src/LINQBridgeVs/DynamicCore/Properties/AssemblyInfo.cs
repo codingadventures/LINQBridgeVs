@@ -36,3 +36,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 [assembly: InternalsVisibleTo("DynamicCore.UnitTest")]
+[assembly: InternalsVisibleTo("DynamicVisualizer.V12.IntegrationTest")]
+[assembly: InternalsVisibleTo("DynamicVisualizer.V10.IntegrationTest")]
+[assembly: InternalsVisibleTo("DynamicVisualizer.V11.IntegrationTest")]

@@ -45,34 +45,58 @@ using Message = LINQBridgeVs.DynamicCore.Template.Message;
 
 namespace LINQBridgeVs.DynamicCore
 {
+    /// <summary>
+    /// Core of Dynamic Visualizer. This class is used by all three (At the moment) DynamicVisualizerVx (for VS2010, VS2012, VS2013)
+    /// It opens LINQPad and create dynamically a linqscript.
+    /// </summary>
     public class DynamicDebuggerVisualizer
     {
-        private IFileSystem FileSystem { get; set; }
+        private static IFileSystem _fileSystem;
+
+        internal static IFileSystem FileSystem
+        {
+            get { return _fileSystem ?? (_fileSystem = new FileSystem()); }
+            set { _fileSystem = value; }
+        }
 
         private static readonly string MyDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
+
+        #region [ Consts ]
         private const UInt32 WmKeydown = 0x0100;
         private const UInt32 WmSetFocus = 0x0007;
         private const int VkF5 = 0x74;
         private const int SwShownormal = 1;
+        #endregion
 
+        #region [ Constructors ]
         public DynamicDebuggerVisualizer()
-            : this(new FileSystem())
         {
+
         }
 
-        public DynamicDebuggerVisualizer(IFileSystem fileSystem)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DynamicDebuggerVisualizer"/> class. Internal for testing purpose only.
+        /// </summary>
+        /// <param name="fileSystem">The file system. System.IO.Abstraction can be used to Mock the file System. </param>
+        internal DynamicDebuggerVisualizer(IFileSystem fileSystem)
         {
             FileSystem = fileSystem;
             AssemblyFinderHelper.FileSystem = FileSystem;
 
         }
 
-        internal void DeployLinqScripts(Message message)
+        #endregion
+
+        /// <summary>
+        /// Deploys the dynamically generated linqscript.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        internal void DeployLinqScript(Message message)
         {
             try
             {
-                Log.Write("Entered in DeployLinqScripts");
+                Log.Write("Entered in DeployLinqScript");
                 // Log.Write("Message: {0}", message);
 
                 var dstScriptPath = Path.Combine(MyDocuments, Resources.LINQPadQuery);
@@ -113,13 +137,19 @@ namespace LINQBridgeVs.DynamicCore
             }
             catch (Exception e)
             {
-                Log.Write(e, "DynamicDebuggerVisualizer.DeployLinqScripts");
+                Log.Write(e, "DynamicDebuggerVisualizer.DeployLinqScript");
                 throw;
             }
         }
 
 
-        public Form ShowVisualizer(Stream inData, string vsVersion)
+        /// <summary>
+        /// Shows the visualizer.
+        /// </summary>
+        /// <param name="inData">The in data.</param>
+        /// <param name="vsVersion">The vs version.</param>
+        /// <returns></returns>
+        public Form ShowLINQPad(Stream inData, string vsVersion)
         {
             Log.Configure("LINQBridgeVs", "DynamicCore");
 
@@ -142,7 +172,7 @@ namespace LINQBridgeVs.DynamicCore
 
             message.ReferencedAssemblies.AddRange(referencedAssemblies);
 
-            DeployLinqScripts(message);
+            DeployLinqScript(message);
             Log.Write("LinqQuery Successfully deployed");
 
             var linqQueryfileName = Path.Combine(MyDocuments, Resources.LINQPadQuery, message.FileName);
@@ -160,9 +190,9 @@ namespace LINQBridgeVs.DynamicCore
 
             try
             {
+                var process = Process.Start(startInfo);
+                if (process != null) process.WaitForInputIdle(-1);
 
-                Process.Start(startInfo).WaitForInputIdle(-1);
-                  
                 SendInputToLINQPad();
 
                 Log.Write("LINQPad Successfully started");
@@ -176,8 +206,10 @@ namespace LINQBridgeVs.DynamicCore
             return new TemporaryForm();
         }
 
+        #region [ Private Static Methods ]
         /// <summary>
-        /// Gets the assembly location. If an assembly is loaded at Runtime or it's loaded within a IIS context Assembly.Location property is null
+        /// Gets the assembly location. If an assembly is loaded at Runtime or it's loaded within a IIS context Assembly.Location property could be null
+        /// This method reads the original location of the assembly that was LINQBridged
         /// </summary>
         /// <param name="type">The Type.</param>
         /// <param name="vsVersion">The Visual Studio version.</param>
@@ -227,6 +259,9 @@ namespace LINQBridgeVs.DynamicCore
             return string.Empty;
         }
 
+        /// <summary>
+        /// Sends the input to LINQPad. Simulates key inputs to run a linqscript (F5)
+        /// </summary>
         private static void SendInputToLINQPad()
         {
             try
@@ -259,6 +294,8 @@ namespace LINQBridgeVs.DynamicCore
                 Log.Write(e, "Error during LINQPad Sending inputs");
             }
         }
+
+        #endregion
 
         #region [ DllImport ]
         [DllImport("user32.dll")]

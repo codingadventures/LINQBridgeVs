@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
+using LINQBridgeVs.DynamicCore;
 using LINQBridgeVs.DynamicVisualizer.V12;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -21,6 +23,13 @@ namespace DynamicVisualizer.V12.IntegrationTest
         [ClassInitialize]
         public static void Init(TestContext ctx)
         {
+            DynamicDebuggerVisualizer.FileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { @"c:\myfile.txt", new MockFileData("Testing is meh.") },
+                { @"c:\demo\jQuery.js", new MockFileData("some js") },
+                { @"c:\demo\image.gif", new MockFileData(new byte[] { 0x12, 0x34, 0x56, 0xd2 }) }
+            });
+
             using (var key = Registry.CurrentUser.CreateSubKey(SolutionRegistryKey))
             {
                 if (key == null) return;
@@ -33,6 +42,7 @@ namespace DynamicVisualizer.V12.IntegrationTest
                 if (key != null)
                     key.SetValue("Test", true);
             }
+
             if (Directory.Exists(LINQPadScriptFolder))
                 Directory.Delete(LINQPadScriptFolder, true);
         }
@@ -60,6 +70,8 @@ namespace DynamicVisualizer.V12.IntegrationTest
             var myHost = new VisualizerDevelopmentHost(enumerable, typeof(DynamicDebuggerVisualizerV12), typeof(DynamicDebuggerVisualizerObjectSourceV12));
 
             myHost.ShowVisualizer();
+
+
         }
 
         [ClassCleanup]
