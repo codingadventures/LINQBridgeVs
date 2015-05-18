@@ -1,5 +1,7 @@
 ![alt text][logo]
 ==========
+
+[![Join the chat at https://gitter.im/nbasakuragi/LINQBridgeVs](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/nbasakuragi/LINQBridgeVs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
  
 What's LINQBridgeVs?
 -----------------
