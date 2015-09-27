@@ -31,9 +31,9 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using Microsoft.Build.Evaluation;
 
-namespace LINQBridgeVs.Extension.Dependency
+namespace LINQBridgeVs.Helper.Dependency
 {
-    internal class Crawler
+    public class Crawler
     {
         private const string MsbuildNamespace = "http://schemas.microsoft.com/developer/msbuild/2003";
         /// <summary>

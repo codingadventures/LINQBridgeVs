@@ -25,17 +25,17 @@
 
 using System;
 
-namespace LINQBridgeVs.Extension.Dependency
+namespace LINQBridgeVs.Helper.Dependency
 {
     [Serializable]
-    internal enum DependencyType
+    public enum DependencyType
     {
         ProjectReference,
         AssemblyReference
     }
 
     [Serializable]
-    internal class Project
+    public class Project
     {
         public DependencyType DependencyType { get; set; }
 

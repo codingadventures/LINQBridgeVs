@@ -38,15 +38,16 @@ using System.Xml.XPath;
 using LINQBridgeVs.Logging;
 using Microsoft.Win32;
 
-namespace LINQBridgeVs.Extension.Configuration
+namespace LINQBridgeVs.Helper.Configuration
 {
-    internal static class PackageConfigurator
+    public static class PackageConfigurator
     {
         private static string _vsVersion;
 
         private static readonly string CurrentAssemblyVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
         public static readonly bool IsFramework45Installed = Directory.Exists(Locations.DotNet45FrameworkPath);
 
+        // ReSharper disable once InconsistentNaming
         private const string LINQBridgeVsVersionRegistryValue = "LINQBridgeVsVersion";
         private const string LINQBridgeVsConfiguredRegistryValue = "IsLINQBridgeVsConfigured";
         private const string LINQBridgeVsEnabledRegistryValue = "IsLinqBridgeEnabled";

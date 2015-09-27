@@ -1,4 +1,4 @@
-﻿namespace LINQBridgeVs.Extension.Forms
+﻿namespace LINQBridgeVs.Helper.Forms
 {
     partial class ProjectDependencies
     {

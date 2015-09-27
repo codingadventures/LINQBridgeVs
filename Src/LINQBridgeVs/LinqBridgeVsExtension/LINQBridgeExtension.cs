@@ -25,34 +25,16 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 using EnvDTE;
-using LINQBridgeVs.Extension.Configuration;
-using LINQBridgeVs.Extension.Dependency;
-using LINQBridgeVs.Extension.Forms;
+using LINQBridgeVs.Helper;
+using LINQBridgeVs.Helper.Configuration;
 using LINQBridgeVs.Logging;
-using Microsoft.VisualStudio.PlatformUI;
-using Project = EnvDTE.Project;
 
 namespace LINQBridgeVs.Extension
 {
-    [Flags]
-    public enum CommandStates
-    {
-        None = 0,
-        Visible = 0x01,
-        Enabled = 0x02
-    }
-
-    public enum CommandAction
-    {
-        Enable,
-        Disable
-    }
 
     public class LINQBridgeVsExtension
     {
@@ -125,58 +107,10 @@ namespace LINQBridgeVs.Extension
 
         public void Execute(CommandAction action)
         {
-
             if (SelectedProject == null)
                 return;
 
-
-            var allProjectReferences = Crawler.FindProjectDependencies(SelectedProject.FullName, SolutionName);
-            var foundProjects = allProjectReferences as IList<Dependency.Project> ?? allProjectReferences.ToList();
-            var projectReferences = foundProjects.Where(project => project.DependencyType == DependencyType.ProjectReference);
-            // var assemblyReferences = allProjectReferences.Where(project => project.DependencyType == DependencyType.AssemblyReference);
-
-            var references = projectReferences as IList<Dependency.Project> ?? projectReferences.ToList();
-            switch (action)
-            {
-                case CommandAction.Enable:
-                    const string enableMessage = "Following project dependencies have been found...LINQBridge them? (Recommended)";
-                    PackageConfigurator.EnableProject(SelectedProjectOutputPath, SelectedAssemblyName, SolutionName);
-                    var enabledDependencies = new List<string>();
-                    enabledDependencies.Insert(0, SelectedAssemblyName);
-
-                    if (references.Any(project => PackageConfigurator.IsBridgeDisabled(project.AssemblyName, SolutionName)))
-                    {
-                        var projectDependencies = new ProjectDependencies(references, enableMessage);
-                        var dependencies = projectDependencies.ShowDependencies(PackageConfigurator.EnableProject);
-                        enabledDependencies.AddRange(dependencies.Select(project => project.AssemblyName));
-                    }
-
-                    MessageBox.Show(string.Format("LINQBridge on {0} has been Enabled...", string.Join(", ", enabledDependencies)), "Success", MessageBoxButtons.OK);
-
-                    break;
-                case CommandAction.Disable:
-                    const string disableMessage = "Following project dependencies have been found...Un-LINQBridge them? (Recommended)";
-
-                    PackageConfigurator.DisableProject(SelectedProjectOutputPath, SelectedAssemblyName, SolutionName);
-                    var disableDependencies = new List<string>();
-                    disableDependencies.Insert(0, SelectedAssemblyName);
-
-                    if (references.Any(project => PackageConfigurator.IsBridgeEnabled(project.AssemblyName, SolutionName)))
-                    {
-                        var projectDependencies = new ProjectDependencies(references, disableMessage);
-                        var dependencies = projectDependencies.ShowDependencies(PackageConfigurator.DisableProject);
-                        disableDependencies.AddRange(dependencies.Select(project => project.AssemblyName));
-                    }
-
-                    MessageBox.Show(string.Format("LINQBridge on {0} has been Disabled...", string.Join(", ", disableDependencies)), "Success", MessageBoxButtons.OK);
-
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException("action");
-            }
-
-
-
+            BridgeTrigger.Execute(new BridgeTrigger.ExecuteParams(action, SelectedProject.FullName, SolutionName, SelectedAssemblyName, SelectedProjectOutputPath));
         }
 
         public void UpdateCommand(MenuCommand cmd, CommandAction action)
@@ -185,8 +119,6 @@ namespace LINQBridgeVs.Extension
             cmd.Visible = (CommandStates.Visible & states) != 0;
             cmd.Enabled = (CommandStates.Enabled & states) != 0;
         }
-
-
 
         private CommandStates GetStatus(CommandAction action)
         {

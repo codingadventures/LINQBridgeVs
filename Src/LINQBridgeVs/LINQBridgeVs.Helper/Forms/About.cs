@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace LINQBridgeVs.Extension.Forms
+namespace LINQBridgeVs.Helper.Forms
 {
     public partial class About : Form
     {
@@ -15,7 +15,7 @@ namespace LINQBridgeVs.Extension.Forms
             var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
             VersionLabel.Text = fvi.ProductVersion;
             GitHubLinkLabel.LinkClicked += LinkedLabelClicked;
-            LogoPictureBox.Image = Resources.LINQBridgeLogo;
+            //LogoPictureBox.Image = Images.LINQBridgeLogo;
         }
 
         private static void LinkedLabelClicked(object sender, LinkLabelLinkClickedEventArgs e)

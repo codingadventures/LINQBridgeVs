@@ -27,9 +27,9 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace LINQBridgeVs.Extension
+namespace LINQBridgeVs.Helper
 {
-    internal static class Locations
+    public static class Locations
     {
         private static readonly string SpecialWindowsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
         private static readonly string ProgramFilesFolderPath = Environment.GetEnvironmentVariable("ProgramFiles");

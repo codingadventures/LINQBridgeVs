@@ -24,17 +24,23 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 
-namespace LINQBridgeVs.Extension.Extension
+namespace LINQBridgeVs.Helper.Configuration
 {
-    internal static class EnumerableExtension
+    internal static class MsBuildVersion
     {
-        public static void ForEach<T>(this IEnumerable<T> sequence, Action<T> action)
+        public static string GetMsBuildVersion(string vsVersion)
         {
-            foreach (var item in sequence)
-                action(item);
+            switch (vsVersion)
+            {
+                case "10.0":
+                case "11.0":
+                    return "v4.0";
+                case "12.0":
+                    return "v12.0";
+                default :
+                    throw new ArgumentException("Visual Studio Version not Supported", "vsVersion");
+            }
         }
-      
     }
 }

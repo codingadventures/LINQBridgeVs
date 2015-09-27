@@ -62,6 +62,10 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Abstractions">
+      <HintPath>..\..\packages\System.IO.Abstractions.2.0.0.116\lib\net40\System.IO.Abstractions.dll</HintPath>
+	   <Ilmerge>True</Ilmerge>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -102,11 +106,6 @@
     <ProjectReference Include="..\Logging\Logging.csproj">
       <Project>{7199ede0-8090-46d0-9687-54b411a3d02c}</Project>
       <Name>Logging</Name>
-      <Ilmerge>True</Ilmerge>
-    </ProjectReference>
-    <ProjectReference Include="..\..\System.IO.Abstractions\System.IO.Abstractions\System.IO.Abstractions.csproj">
-      <Project>{4d398f3a-0784-4401-93cd-46cd2fbd6b92}</Project>
-      <Name>System.IO.Abstractions</Name>
       <Ilmerge>True</Ilmerge>
     </ProjectReference>
   </ItemGroup>

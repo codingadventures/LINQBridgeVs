@@ -27,10 +27,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using LINQBridgeVs.Extension.Dependency;
-using LINQBridgeVs.Extension.Extension;
+using LINQBridgeVs.Helper.Dependency;
+using LINQBridgeVs.Helper.Extension;
 
-namespace LINQBridgeVs.Extension.Forms
+namespace LINQBridgeVs.Helper.Forms
 {
     internal partial class ProjectDependencies : Form
     {
@@ -51,7 +51,6 @@ namespace LINQBridgeVs.Extension.Forms
                            AssemblyPath = row.Cells[3].Value.ToString(),
                            DependencyType = DependencyType.ProjectReference
                        };
-
             }
         }
 
