@@ -18,6 +18,7 @@ namespace BuildTasks.UnitTest
         }
 
         [TestMethod]
+        [TestCategory("UnitTest")]
         public void Clean_BuildTask_Test_Should_Succeed()
         {
 

@@ -38,7 +38,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicCore", "LINQBridgeVs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V10", "LINQBridgeVs\DynamicVisualizer.V10\DynamicVisualizer.V10.csproj", "{88641BE0-4023-4563-B7C9-8816624549AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeMapper.Test", "LINQBridgeVs.Test\TypeMapper.Test\TypeMapper.Test.csproj", "{08ADAF10-E655-4560-BF9C-9287E60247B5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeMapper.UnitTest", "LINQBridgeVs.Test\TypeMapper.Test\TypeMapper.UnitTest.csproj", "{08ADAF10-E655-4560-BF9C-9287E60247B5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V12", "LINQBridgeVs\DynamicVisualizer.V12\DynamicVisualizer.V12.csproj", "{835064F0-3C4F-4646-B17A-632C192CCE3B}"
 EndProject
@@ -48,7 +48,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V10.Integ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V11.IntegrationTest", "LINQBridgeVs.Test\DynamicVisualizer.V11.IntegrationTest\DynamicVisualizer.V11.IntegrationTest.csproj", "{8B9A8154-A426-4B55-8F63-302C69662490}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINQBridgeVsExtension.UnitTests", "LINQBridgeVs.Test\LINQBridgeVsExtension.UnitTests\LINQBridgeVsExtension.UnitTests.csproj", "{0AC90EDD-AD20-4FA8-A187-06C23BE9A455}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINQBridgeVsExtension.IntegrationTest", "LINQBridgeVs.Test\LINQBridgeVsExtension.UnitTests\LINQBridgeVsExtension.IntegrationTest.csproj", "{0AC90EDD-AD20-4FA8-A187-06C23BE9A455}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINQBridgeVs.Helper", "LINQBridgeVs\LINQBridgeVs.Helper\LINQBridgeVs.Helper.csproj", "{0FA0053B-AB53-40DF-A060-6DCC22568A23}"
 EndProject
@@ -213,6 +213,6 @@ Global
 		{E4E1ED5C-4D75-47C7-A0A4-F57F65C252B4} = {07B00FDB-0426-4FAA-8C5E-DACDF7D03EDC}
 		{BD5831E5-EF85-4EA5-A63B-6AD7F8C1CA28} = {07B00FDB-0426-4FAA-8C5E-DACDF7D03EDC}
 		{8B9A8154-A426-4B55-8F63-302C69662490} = {07B00FDB-0426-4FAA-8C5E-DACDF7D03EDC}
-		{0AC90EDD-AD20-4FA8-A187-06C23BE9A455} = {DEECC213-180D-4C4E-A44B-5785F1C0FB73}
+		{0AC90EDD-AD20-4FA8-A187-06C23BE9A455} = {07B00FDB-0426-4FAA-8C5E-DACDF7D03EDC}
 	EndGlobalSection
 EndGlobal
