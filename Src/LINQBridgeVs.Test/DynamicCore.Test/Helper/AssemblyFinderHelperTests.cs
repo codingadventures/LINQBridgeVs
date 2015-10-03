@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions.TestingHelpers;
+using System.Linq;
 using LINQBridgeVs.DynamicCore.Helper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -20,56 +21,45 @@ namespace DynamicCore.UnitTest.Helper
         [ClassInitialize]
         public static void Initialize(TestContext c)
         {
+            var paths = new string[]
+            {
+                @"c:\Root1\Version1\A\FakeA.dll",
+                @"c:\Root1\Version1\B\FakeB.dll",
+                @"c:\Root1\Version1\C\Version2\Nest\FakeC.dll",
+                @"c:\Root1\Version1\C\Version2\FakeD.dll",
+                @"c:\Root1\Version1\C\FakeE"
+            };
 
-            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
-                                                        {
-                                                            {
-                                                                SourcePath1,
-                                                                new MockFileData(string.Empty)
-                                                                    {
-                                                                        LastAccessTime =
-                                                                            DateTime.Now
-                                                                    }
-                                                            },
-                                                            {
-                                                                SourcePath2,
-                                                                new MockFileData(string.Empty)
-                                                                    {
-                                                                        LastAccessTime =
-                                                                            DateTime.Now
-                                                                                    .AddHours(1)
-                                                                    }
-                                                            },
-                                                        });
+            var dictionary = paths.ToDictionary(t => t, t => new MockFileData(string.Empty));
 
-           
-
-          
-            AssemblyFinderHelper.FileSystem = mockFileSystem;
+            AssemblyFinderHelper.FileSystem = new MockFileSystem(dictionary);
         }
 
         [TestMethod]
+        [TestCategory("UnitTest")]
         public void Test_FindPath()
         {
             //Arrange
-            
+
             //Act
-            var actual = AssemblyFinderHelper.FindPath("Fake", StartPath);
+            var actual = AssemblyFinderHelper.FindPath("FakeB", StartPath);
 
             //Assert
             Assert.AreEqual(SourcePath2, actual);
         }
-        
+
         [TestMethod]
-        public void TestFindPathShouldExitAfterFourIterations()
+        [TestCategory("UnitTest")]
+
+        public void Test_Find_Path_Should_Exit_After_Four_Iterations()
         {
             //Arrange
-            
+
             //Act
             var actual = AssemblyFinderHelper.FindPath("Nothing", StartPath);
 
             //Assert
-            Assert.AreEqual(@"c:\Root1\", actual);
+            Assert.AreEqual(@"c:\Root1", actual);
         }
     }
 }
