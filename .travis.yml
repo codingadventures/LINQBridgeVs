@@ -3,4 +3,4 @@ solution: Src/LINQBridgeVs.sln
 before_install:
   - sudo apt-get install nunit-console
 before_script:
-  - nuget restore solution-name.sln
+  - nuget restore Src/LINQBridgeVs.sln
