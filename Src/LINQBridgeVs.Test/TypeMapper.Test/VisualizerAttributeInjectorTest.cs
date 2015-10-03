@@ -22,6 +22,7 @@ namespace TypeMapper.Test
         }
 
         [TestMethod]
+        [TestCategory("UnitTest")]
         public void Visualizer_MapType_Should_Create_DegguberVisualizerAttribute_OfType_This_In_Target_Assembly()
         {
             var debuggerVisualizerTargetName = Path.Combine(_thisAssemblyDirectoryName, "TestA.dll");
@@ -41,6 +42,7 @@ namespace TypeMapper.Test
         }
 
         [TestMethod]
+        [TestCategory("UnitTest")]
         public void Visualizer_MapType_Should_Create_DegguberVisualizerAttribute_OfType_IList_In_Target_Assembly()
         {
             var debuggerVisualizerTargetName = Path.Combine(_thisAssemblyDirectoryName, "TestB.dll");
@@ -61,6 +63,7 @@ namespace TypeMapper.Test
 
 
         [TestMethod]
+        [TestCategory("UnitTest")]
         public void Visualizer_MapTypeFromAssembly_Should_Map_All_Types()
         {
             var debuggerVisualizerTargetName = Path.Combine(_thisAssemblyDirectoryName, "TestC.dll");

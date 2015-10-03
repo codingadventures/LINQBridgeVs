@@ -17,6 +17,7 @@ namespace DynamicCore.UnitTest
               select i;
 
         [TestMethod]
+        [TestCategory("UnitTest")]
         public void BroadCastData_SkipWhileIteratorShouldSucceed()
         {
             var r = TestQuery.SkipWhile(i => i < 45);
@@ -33,6 +34,7 @@ namespace DynamicCore.UnitTest
        
 
         [TestMethod]
+        [TestCategory("UnitTest")]
         public void BroadCastData_OfTypeIteratorShouldSucceed()
         {
             var r = TestQuery.OfType<short>();
@@ -46,6 +48,7 @@ namespace DynamicCore.UnitTest
         }
 
         [TestMethod]
+        [TestCategory("UnitTest")]
         public void BroadCastData_DictionaryShouldSucceed()
         {
             var r = new Dictionary<int, object> { { 1, "Test" } };
@@ -59,6 +62,7 @@ namespace DynamicCore.UnitTest
         }
 
         [TestMethod]
+        [TestCategory("UnitTest")]
         public void BroadCastData_AnonymousShouldSucceed()
         {
             var r = TestQuery.Select(i => new { Value = i });

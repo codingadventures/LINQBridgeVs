@@ -37,6 +37,7 @@ namespace DynamicCore.UnitTest
         }
 
         [TestMethod]
+        [TestCategory("UnitTest")]
         public void DeployLinqScriptTest()
         {
 

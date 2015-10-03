@@ -39,6 +39,7 @@ namespace DynamicVisualizer.V11.IntegrationTest
         } 
 
         [TestMethod]
+        [TestCategory("Integration")]
         public void ShowVisualizerWithLinqQueryTest()
         {
             var query = from i in Enumerable.Range(1, 10)
@@ -49,6 +50,7 @@ namespace DynamicVisualizer.V11.IntegrationTest
         }
 
         [TestMethod]
+        [TestCategory("Integration")]
         public void ShowVisualizerWithLinqQueryAndCustomTypeTest()
         {
             var enumerable = new List<VisualizationTestClass>

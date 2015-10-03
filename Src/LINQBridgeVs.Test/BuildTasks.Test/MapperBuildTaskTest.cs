@@ -18,6 +18,7 @@ namespace BuildTasks.UnitTest
         }
 
         [TestMethod]
+        [TestCategory("UnitTest")]
         public void MapperBuildTaskTest_V11_Should_Succeed()
         {
 
@@ -35,6 +36,7 @@ namespace BuildTasks.UnitTest
         }
 
         [TestMethod]
+        [TestCategory("UnitTest")]
         public void MapperBuildTaskTest_V10_Should_Succeed()
         {
 

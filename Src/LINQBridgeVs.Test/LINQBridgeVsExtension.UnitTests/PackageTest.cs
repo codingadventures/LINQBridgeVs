@@ -19,13 +19,15 @@ namespace LINQBridgeVsExtension.UnitTests
     [TestClass()]
     public class PackageTest
     {
-        [TestMethod()]
+        [TestMethod]
+        [TestCategory("Integration")]
         public void CreateInstance()
         {
             var package = new LINQBridgeVsPackage();
         }
 
-        [TestMethod()]
+        [TestMethod]
+        [TestCategory("Integration")]
         public void IsIVsPackage()
         {
             var package = new LINQBridgeVsPackage();
