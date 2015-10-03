@@ -4,8 +4,6 @@
 [![Join the chat at https://gitter.im/nbasakuragi/LINQBridgeVs](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/nbasakuragi/LINQBridgeVs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/ibasbqbycm33plpi?svg=true)](https://ci.appveyor.com/project/nbasakuragi/linqbridgevs)
-
-[![Coverage Status](https://coveralls.io/repos/nbasakuragi/LINQBridgeVs/badge.svg?branch=master&service=github)](https://coveralls.io/github/nbasakuragi/LINQBridgeVs?branch=master)
  
 What's LINQBridgeVs?
 -----------------
