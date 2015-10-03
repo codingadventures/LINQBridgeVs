@@ -16,6 +16,7 @@ namespace DynamicCore.UnitTest.Helper
         private const string SourcePath = @"c:\Root1\Version1\A\AnotherModel.Test.dll";
 
         [ClassInitialize]
+        [TestCategory("UnitTest")]
         public static void Initialize(TestContext c)
         {
 
@@ -38,6 +39,7 @@ namespace DynamicCore.UnitTest.Helper
         }
 
         [TestInitialize]
+        [TestCategory("UnitTest")]
         public void Init()
         {
             var customType4 = new CustomType4 { { "1", new AnotherModelTest() } };
@@ -47,6 +49,7 @@ namespace DynamicCore.UnitTest.Helper
         }
 
         [TestMethod]
+        [TestCategory("UnitTest")]
         public void FindReferencedAssembliesTest()
         {
             var refAss = _dictionary.GetType().GetReferencedAssemblies(SourcePath);

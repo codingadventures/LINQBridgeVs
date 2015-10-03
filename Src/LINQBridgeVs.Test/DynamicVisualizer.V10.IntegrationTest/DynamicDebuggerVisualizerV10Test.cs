@@ -1,5 +1,7 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using LINQBridgeVs.DynamicVisualizer.V10;
@@ -13,6 +15,23 @@ namespace DynamicVisualizer.V10.IntegrationTest
     [TestClass]
     public class DynamicDebuggerVisualizerV10Test
     {
+        private static class ProcessKiller
+        {
+            public static void Kill(string processName)
+            {
+                try
+                {
+                    foreach (var proc in Process.GetProcessesByName(processName))
+                    {
+                        proc.Kill();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //do nothin
+                }
+            }
+        }
         private const string SolutionRegistryKey = @"Software\LINQBridgeVs\10.0\Solutions\LINQBridgeVsTestSolution";
     
         private static readonly string LINQPadScriptFolder =
@@ -38,7 +57,11 @@ namespace DynamicVisualizer.V10.IntegrationTest
                 Directory.Delete(LINQPadScriptFolder, true);
         }
 
-        
+        [TestInitialize]
+        public  void CloseLINQPadProcess()
+        {
+            ProcessKiller.Kill("LINQPad");
+        }
 
         [TestMethod]
         [TestCategory("Integration")]
@@ -70,6 +93,7 @@ namespace DynamicVisualizer.V10.IntegrationTest
         public static void ClassDispose()
         {
             Registry.CurrentUser.DeleteSubKey(DynamicDebuggerVisualizerV10.TestRegistryKey);
+            ProcessKiller.Kill("LINQPad");
         }
 
     }
