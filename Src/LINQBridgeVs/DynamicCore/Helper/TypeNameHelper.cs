@@ -26,6 +26,8 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -72,6 +74,8 @@ namespace LINQBridgeVs.DynamicCore.Helper
                 return fullName ? type.FullName : type.Name;
             }
 
+            var anonymousTypeName = GetAnonymousTypeName(type);
+           
             // replace `2 with <type1, type2="">
             var regex = new Regex("`[0-9]+");
             var evaluator = new GenericsMatchEvaluator(type.GetGenericArguments(), fullName);
@@ -84,9 +88,54 @@ namespace LINQBridgeVs.DynamicCore.Helper
             {
                 name = name.Substring(0, start) + name.Substring(end + 2);
             }
-            return regex.Replace(name, evaluator.Evaluate);
+            var retName = regex.Replace(name, evaluator.Evaluate);
+            
+            return anonymousTypeName.Length != 0 ? retName.Replace(anonymousTypeName,"AnonymousType") : retName;
         }
 
+        private static string GetAnonymousTypeName(Type @type)
+        {
+            if (type == null) return string.Empty;
+
+            var genericTypes = type.GetGenericArguments();
+
+            foreach (var genericType in genericTypes)
+            {
+                var  anonymousTypeName = GetAnonymousTypeName(genericType);
+                if (anonymousTypeName.Length > 0) return anonymousTypeName;
+            }
+
+            //leaf
+            var hasCompilerGeneratedAttribute = type.GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Any();
+            var nameContainsAnonymousType = type.FullName.Contains("AnonymousType");
+            var isAnonymousType = hasCompilerGeneratedAttribute && nameContainsAnonymousType;
+
+            if (!isAnonymousType) return string.Empty;
+         
+            var hasMoreGenericParams = @type.GetGenericArguments().Length != 0;
+            return hasMoreGenericParams ? @type.Name.Split('`')[0] : @type.Name;
+        }
+
+        private static bool IsAnonymousType(Type type)
+        {
+            if (type == null) return false;
+
+            var hasCompilerGeneratedAttribute = type.GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Any();
+            var nameContainsAnonymousType = type.FullName.Contains("AnonymousType");
+            var isAnonymousType = hasCompilerGeneratedAttribute && nameContainsAnonymousType;
+
+            if (isAnonymousType) return true;
+
+            var genericTypes = type.GetGenericArguments();
+
+            foreach (var genericType in genericTypes)
+            {
+                isAnonymousType = IsAnonymousType(genericType);
+                if (isAnonymousType) break;
+            }
+
+            return isAnonymousType;
+        }
         class GenericsMatchEvaluator
         {
             readonly Type[] _generics;

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -8,7 +6,7 @@ using LINQBridgeVs.DynamicCore;
 using LINQBridgeVs.DynamicCore.Template;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace DynamicCore.Test
+namespace DynamicCore.UnitTest
 {
     [TestClass]
     public class DynamicObjectSourceTest
@@ -35,7 +33,7 @@ namespace DynamicCore.Test
        
 
         [TestMethod]
-        public void BroadCastData_OfTypeIteratorShouldSucced()
+        public void BroadCastData_OfTypeIteratorShouldSucceed()
         {
             var r = TestQuery.OfType<short>();
 
@@ -48,7 +46,7 @@ namespace DynamicCore.Test
         }
 
         [TestMethod]
-        public void BroadCastData_DictionaryShouldSucced()
+        public void BroadCastData_DictionaryShouldSucceed()
         {
             var r = new Dictionary<int, object> { { 1, "Test" } };
 
@@ -61,15 +59,15 @@ namespace DynamicCore.Test
         }
 
         [TestMethod]
-        public void BroadCastData_AnonymousShouldSucced()
+        public void BroadCastData_AnonymousShouldSucceed()
         {
             var r = TestQuery.Select(i => new { Value = i });
 
             var message = DeserializeMessage(r);
 
-            Assert.AreEqual(message.FileName, "Anonymous(Int32).linq");
-            Assert.AreEqual(message.TypeFullName, "System.Collections.Generic.IEnumerable<System.Int16>");
-            Assert.AreEqual(message.TypeName, "IEnumerableInt16");
+            Assert.AreEqual(message.FileName, "IEnumerable(AnonymousType(Int32)).linq");
+            Assert.AreEqual(message.TypeFullName, "System.Collections.Generic.IEnumerable<AnonymousType<System.Int32>>");
+            Assert.AreEqual(message.TypeName, "IEnumerableAnonymousTypeInt32");
             Assert.AreEqual(message.TypeNamespace, "System.Collections.Generic");
         }
 
