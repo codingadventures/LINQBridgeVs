@@ -1,6 +1,0 @@
-language: csharp
-solution: Src/LINQBridgeVs.sln
-before_install:
-  - sudo apt-get install nunit-console
-before_script:
-  - nuget restore Src/LINQBridgeVs.sln

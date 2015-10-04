@@ -39,11 +39,8 @@ namespace DynamicCore.UnitTest.Helper
         [TestCategory("UnitTest")]
         public void Test_FindPath()
         {
-            //Arrange
-
             //Act
             var actual = AssemblyFinderHelper.FindPath("FakeB", StartPath);
-
             //Assert
             Assert.AreEqual(SourcePath2, actual);
         }
@@ -53,11 +50,8 @@ namespace DynamicCore.UnitTest.Helper
 
         public void Test_Find_Path_Should_Exit_After_Four_Iterations()
         {
-            //Arrange
-
             //Act
             var actual = AssemblyFinderHelper.FindPath("Nothing", StartPath);
-
             //Assert
             Assert.AreEqual(@"c:\Root1", actual);
         }

@@ -40,11 +40,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deploy|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Deploy\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;DEPLOY</DefineConstants>
+    <DefineConstants>TRACE;DEPLOY</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Optimize>true</Optimize>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Grapple">
@@ -64,7 +65,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Abstractions">
       <HintPath>..\..\packages\System.IO.Abstractions.2.0.0.116\lib\net40\System.IO.Abstractions.dll</HintPath>
-	   <Ilmerge>True</Ilmerge>
+      <Ilmerge>True</Ilmerge>
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
