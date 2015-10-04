@@ -47,12 +47,13 @@ namespace LINQBridgeVs.Helper.Configuration
         private static readonly string CurrentAssemblyVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
         public static readonly bool IsFramework45Installed = Directory.Exists(Locations.DotNet45FrameworkPath);
 
-        // ReSharper disable once InconsistentNaming
+        // ReSharper disable InconsistentNaming
         private const string LINQBridgeVsVersionRegistryValue = "LINQBridgeVsVersion";
         private const string LINQBridgeVsConfiguredRegistryValue = "IsLINQBridgeVsConfigured";
         private const string LINQBridgeVsEnabledRegistryValue = "IsLinqBridgeEnabled";
         private const string LINQBridgeVsInstallFolderPathRegistryValue = "InstallFolderPath";
 
+        #region [ Private Methods ]
         private static string LINQBridgeVsExtensionVersion
         {
             get
@@ -80,6 +81,79 @@ namespace LINQBridgeVs.Helper.Configuration
                 }
             }
         }
+        private static bool IsLINQPadInstalled()
+        {
+            if (Directory.Exists(Locations.LinqPadDestinationFolder)) return false;
+
+            MessageBox.Show("Please Install LINQPad in order to Use LINQBridgeVs and then Restart Visual Studio");
+            Process.Start("http://www.linqpad.net");
+            return true;
+        }
+
+        private static void SetEnvironment()
+        {
+            var msBuildDir = CreateMsBuildTargetDirectory();
+            //Copy the CustomAfter and CustomBefore to the default MSbuild v4.0 location
+            File.Copy(Locations.CustomAfterTargetFileNamePath, Path.Combine(msBuildDir, Locations.CustomAfterTargetFileName), true);
+            Log.Write("CustomAfterTargetFileName Targets copied to {0} ", Path.Combine(msBuildDir, Locations.CustomAfterTargetFileName));
+
+            File.Copy(Locations.CustomBeforeTargetFileNamePath, Path.Combine(msBuildDir, Locations.CustomBeforeTargetFileName), true);
+            Log.Write("CustomBeforeTargetFileName Targets copied to {0} ", Path.Combine(msBuildDir, Locations.CustomBeforeTargetFileName));
+
+            Log.Write("Setting IsEnvironmentConfigured to True");
+            IsEnvironmentConfigured = true;
+        }
+
+        private static void SetInstallationFolder()
+        {
+            //Set in the registry the installer location if it is has changed
+            using (var key = Registry.CurrentUser.CreateSubKey(GetRegistryKey(Resources.ProductRegistryKey, _vsVersion)))
+            {
+                if (key == null) return;
+
+                var value = key.GetValue(LINQBridgeVsInstallFolderPathRegistryValue);
+                if (value != null && value.Equals(Locations.InstallFolder)) return;
+                Log.Write("Setting InstallFolderPath to {0}", Locations.InstallFolder);
+                key.SetValue(LINQBridgeVsInstallFolderPathRegistryValue, Locations.InstallFolder);
+            }
+        }
+
+        private static string GetRegistryKey(string key, params object[] argStrings)
+        {
+            return String.Format(key, argStrings);
+        }
+
+        private static string CreateMsBuildTargetDirectory()
+        {
+            var msBuildVersion = MsBuildVersion.GetMsBuildVersion(_vsVersion);
+            var directoryToCreate = Path.Combine(Locations.MsBuildPath, msBuildVersion);
+            Log.Write("MsBuild Directory being created {0}", directoryToCreate);
+            if (!Directory.Exists(directoryToCreate))
+            {
+                try
+                {
+                    var sec = new DirectorySecurity();
+                    // Using this instead of the "Everyone" string means we work on non-English systems.
+                    var everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+                    sec.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
+                    Directory.CreateDirectory(directoryToCreate, sec);
+                    return directoryToCreate;
+                }
+                catch (Exception exception)
+                {
+                    Log.Write(exception);
+                    Log.Write("Error creating MSBuild Path folder in {0}", Locations.MsBuildPath);
+                    throw;
+                }
+            }
+            Log.Write("MSBuild Path {0} already exists", directoryToCreate);
+            return directoryToCreate;
+        }
+
+
+        #endregion
+
+        #region [ Public Methods ]
 
         public static bool IsEnvironmentConfigured
         {
@@ -151,51 +225,9 @@ namespace LINQBridgeVs.Helper.Configuration
             }
         }
 
-        private static bool IsLINQPadInstalled()
-        {
-            if (Directory.Exists(Locations.LinqPadDestinationFolder)) return false;
-
-            MessageBox.Show("Please Install LINQPad in order to Use LINQBridgeVs and then Restart Visual Studio");
-            Process.Start("http://www.linqpad.net");
-            return true;
-        }
-
-        private static void SetEnvironment()
-        {
-            var msBuildDir = CreateMsBuildTargetDirectory();
-            //Copy the CustomAfter and CustomBefore to the default MSbuild v4.0 location
-            File.Copy(Locations.CustomAfterTargetFileNamePath, Path.Combine(msBuildDir, Locations.CustomAfterTargetFileName), true);
-            Log.Write("CustomAfterTargetFileName Targets copied to {0} ", Path.Combine(msBuildDir, Locations.CustomAfterTargetFileName));
-
-            File.Copy(Locations.CustomBeforeTargetFileNamePath, Path.Combine(msBuildDir, Locations.CustomBeforeTargetFileName), true);
-            Log.Write("CustomBeforeTargetFileName Targets copied to {0} ", Path.Combine(msBuildDir, Locations.CustomBeforeTargetFileName));
-
-            Log.Write("Setting IsEnvironmentConfigured to True");
-            IsEnvironmentConfigured = true;
-        }
-
-        private static void SetInstallationFolder()
-        {
-            //Set in the registry the installer location if it is has changed
-            using (var key = Registry.CurrentUser.CreateSubKey(GetRegistryKey(Resources.ProductRegistryKey, _vsVersion)))
-            {
-                if (key == null) return;
-
-                var value = key.GetValue(LINQBridgeVsInstallFolderPathRegistryValue);
-                if (value != null && value.Equals(Locations.InstallFolder)) return;
-                Log.Write("Setting InstallFolderPath to {0}", Locations.InstallFolder);
-                key.SetValue(LINQBridgeVsInstallFolderPathRegistryValue, Locations.InstallFolder);
-            }
-        }
-
-        private static string GetRegistryKey(string key, params object[] argStrings)
-        {
-            return String.Format(key, argStrings);
-        }
-
         public static void EnableProject(string assemblyPath, string assemblyName, string solutionName)
         {
-            var keyPath = string.Format(GetRegistryKey (Resources.EnabledProjectsRegistryKey, _vsVersion, solutionName));
+            var keyPath = string.Format(GetRegistryKey(Resources.EnabledProjectsRegistryKey, _vsVersion, solutionName));
             using (var key = Registry.CurrentUser.CreateSubKey(keyPath))
             {
                 if (key != null)
@@ -232,32 +264,9 @@ namespace LINQBridgeVs.Helper.Configuration
             return !IsBridgeEnabled(assemblyName, solutionName);
         }
 
-        private static string CreateMsBuildTargetDirectory()
-        {
-            var msBuildVersion = MsBuildVersion.GetMsBuildVersion(_vsVersion);
-            var directoryToCreate = Path.Combine(Locations.MsBuildPath, msBuildVersion);
-            Log.Write("MsBuild Directory being created {0}", directoryToCreate);
-            if (!Directory.Exists(directoryToCreate))
-            {
-                try
-                {
-                    var sec = new DirectorySecurity();
-                    // Using this instead of the "Everyone" string means we work on non-English systems.
-                    var everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
-                    sec.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
-                    Directory.CreateDirectory(directoryToCreate, sec);
-                    return directoryToCreate;
-                }
-                catch (Exception exception)
-                {
-                    Log.Write(exception);
-                    Log.Write("Error creating MSBuild Path folder in {0}", Locations.MsBuildPath);
-                    throw;
-                }
-            }
-            Log.Write("MSBuild Path {0} already exists", directoryToCreate);
-            return directoryToCreate;
-        }
+        #endregion
+
+        #region [ Obsolete Methods ]
 
         [Obsolete("Keep them for Backward compatibility. Microsoft.Common.targets should not be modifie anymore")]
         public static void RemoveBridgeBuildTargetFromMicrosoftCommon(XDocument document, string location)
@@ -287,5 +296,7 @@ namespace LINQBridgeVs.Helper.Configuration
 
             return linqBridgeTargetImportNode;
         }
+
+        #endregion
     }
 }

@@ -1,11 +1,14 @@
-﻿namespace LINQBridgeVs.Helper.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LINQBridgeVs.Helper.Forms
 {
     partial class ProjectDependencies
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -114,10 +117,10 @@
 
         #endregion
 
-        private System.Windows.Forms.DataGridView ProjectsDataGridView;
-        private System.Windows.Forms.Button OkButton;
-        private System.Windows.Forms.Button CancelButton;
-        private System.Windows.Forms.Label MessageLabel;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn SelectedProject;
+        private DataGridView ProjectsDataGridView;
+        private Button OkButton;
+        private Button CancelButton;
+        private Label MessageLabel;
+        private DataGridViewCheckBoxColumn SelectedProject;
     }
 }

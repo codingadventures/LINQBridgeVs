@@ -1,5 +1,4 @@
-﻿using System;
-using LINQBridgeVs.Helper.Dependency;
+﻿using LINQBridgeVs.Helper.Dependency;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LINQBridgeVs.Helper.UnitTest

@@ -1,11 +1,14 @@
-﻿namespace LINQBridgeVs.Helper.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LINQBridgeVs.Helper.Forms
 {
     partial class About
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -152,13 +155,13 @@
 
         #endregion
 
-        private System.Windows.Forms.Button CloseButton;
-        private System.Windows.Forms.LinkLabel GitHubLinkLabel;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label VersionLabel;
-        private System.Windows.Forms.PictureBox LogoPictureBox;
+        private Button CloseButton;
+        private LinkLabel GitHubLinkLabel;
+        private Label label1;
+        private Label label2;
+        private Label label3;
+        private Label label4;
+        private Label VersionLabel;
+        private PictureBox LogoPictureBox;
     }
 }

@@ -25,9 +25,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using LINQBridgeVs.Logging;
-using Microsoft.Win32;
 
 namespace LINQBridgeVs.DynamicCore.Helper
 {

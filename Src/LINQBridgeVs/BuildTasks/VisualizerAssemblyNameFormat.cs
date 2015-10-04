@@ -23,6 +23,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System.IO;
 
 namespace LINQBridgeVs.BuildTasks
 {
@@ -30,7 +31,7 @@ namespace LINQBridgeVs.BuildTasks
     {
         internal static string GetTargetVisualizerAssemblyName(string vsVersion, string assembly)
         { 
-            return System.IO.Path.GetFileNameWithoutExtension(assembly) + ".Visualizer.V" + vsVersion + ".dll";
+            return Path.GetFileNameWithoutExtension(assembly) + ".Visualizer.V" + vsVersion + ".dll";
         }
     }
 }

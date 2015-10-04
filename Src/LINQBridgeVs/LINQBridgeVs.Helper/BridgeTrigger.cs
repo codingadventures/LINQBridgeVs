@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using LINQBridgeVs.Helper.Configuration;
 using LINQBridgeVs.Helper.Dependency;
@@ -56,11 +55,11 @@ namespace LINQBridgeVs.Helper
         public static void Execute(ExecuteParams executeParams)
         {
             var allProjectReferences = Crawler.FindProjectDependencies(executeParams.ProjectName, executeParams.SolutionName);
-            var foundProjects = allProjectReferences as IList<Helper.Dependency.Project> ?? allProjectReferences.ToList();
+            var foundProjects = allProjectReferences as IList<Project> ?? allProjectReferences.ToList();
             var projectReferences = foundProjects.Where(project => project.DependencyType == DependencyType.ProjectReference);
             // var assemblyReferences = allProjectReferences.Where(project => project.DependencyType == DependencyType.AssemblyReference);
 
-            var references = projectReferences as IList<Helper.Dependency.Project> ?? projectReferences.ToList();
+            var references = projectReferences as IList<Project> ?? projectReferences.ToList();
             switch (executeParams.Action)
             {
                 case CommandAction.Enable:

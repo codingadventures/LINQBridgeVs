@@ -23,12 +23,14 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using LINQBridgeVs.Logging;
 using Microsoft.Build.Evaluation;
 
 namespace LINQBridgeVs.Helper.Dependency
@@ -44,12 +46,23 @@ namespace LINQBridgeVs.Helper.Dependency
         /// <returns></returns>
         public static IEnumerable<Project> FindProjectDependencies(string csvbProjectName, string solutionName)
         {
+            if (string.IsNullOrEmpty(csvbProjectName))
+            {
+                Log.Write("LINQBridgeVs.Helper.Dependency.Crawler: csvbProjectName is null or empty");
+                return Enumerable.Empty<Project>();
+            }
+
+            var projectFileName = Path.GetFileName(csvbProjectName);
+
             var namespaceManager = new XmlNamespaceManager(new NameTable());
             namespaceManager.AddNamespace("aw", MsbuildNamespace);
 
 
-            var loadedProject = ProjectCollection.GlobalProjectCollection.LoadedProjects.FirstOrDefault(
-                p => p.FullPath.Equals(csvbProjectName)) ?? new Microsoft.Build.Evaluation.Project(csvbProjectName);
+            var loadedProject =
+                ProjectCollection.GlobalProjectCollection.LoadedProjects
+                .FirstOrDefault(p => CompareProjectFileName(p, csvbProjectName))
+                ??
+                new Microsoft.Build.Evaluation.Project(csvbProjectName);
 
             return
                 from proj in loadedProject.Items
@@ -70,5 +83,19 @@ namespace LINQBridgeVs.Helper.Dependency
                     SolutionName = solutionName
                 };
         }
+
+        private static readonly Func<Microsoft.Build.Evaluation.Project, string, bool> CompareProjectFileName =
+            (project, projectToCompare) =>
+            {
+                if (project == null) return false;
+
+                var proj1FileName = Path.GetFileName(project.FullPath);
+                var proj2FileName = Path.GetFileName(projectToCompare);
+
+                return
+                    !string.IsNullOrEmpty(proj1FileName)
+                    && !string.IsNullOrEmpty(proj2FileName)
+                    && proj1FileName.Equals(proj2FileName);
+            };
     }
 }

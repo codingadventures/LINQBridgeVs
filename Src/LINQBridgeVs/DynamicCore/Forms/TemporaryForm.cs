@@ -23,6 +23,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -48,7 +49,7 @@ namespace LINQBridgeVs.DynamicCore.Forms
             ResumeLayout(false);
         }
 
-        protected override void OnClick(System.EventArgs e)
+        protected override void OnClick(EventArgs e)
         {
             base.OnClick(e);
             Invalidate();

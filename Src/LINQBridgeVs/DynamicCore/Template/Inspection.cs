@@ -7,19 +7,22 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
+
+using System;
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Reflection;
+using System.Text;
+
 namespace LINQBridgeVs.DynamicCore.Template
 {
-    using System.Linq;
-    using System.Text;
-    using System.Collections.Generic;
-    using System;
-    
     /// <summary>
     /// Class to produce the template output
     /// </summary>
     
     #line 1 "C:\Users\giovanni.campo\Documents\GitHub\LINQBridgeVs\Src\LINQBridgeVs\DynamicCore\Template\Inspection.tt"
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "11.0.0.0")]
+    [GeneratedCode("Microsoft.VisualStudio.TextTemplating", "11.0.0.0")]
     public partial class Inspection : InspectionBase
     {
 #line hidden
@@ -100,28 +103,28 @@ namespace LINQBridgeVs.DynamicCore.Template
     /// <summary>
     /// Base class for this transformation
     /// </summary>
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "11.0.0.0")]
+    [GeneratedCode("Microsoft.VisualStudio.TextTemplating", "11.0.0.0")]
     public class InspectionBase
     {
         #region Fields
-        private global::System.Text.StringBuilder generationEnvironmentField;
-        private global::System.CodeDom.Compiler.CompilerErrorCollection errorsField;
-        private global::System.Collections.Generic.List<int> indentLengthsField;
+        private StringBuilder generationEnvironmentField;
+        private CompilerErrorCollection errorsField;
+        private List<int> indentLengthsField;
         private string currentIndentField = "";
         private bool endsWithNewline;
-        private global::System.Collections.Generic.IDictionary<string, object> sessionField;
+        private IDictionary<string, object> sessionField;
         #endregion
         #region Properties
         /// <summary>
         /// The string builder that generation-time code is using to assemble generated output
         /// </summary>
-        protected System.Text.StringBuilder GenerationEnvironment
+        protected StringBuilder GenerationEnvironment
         {
             get
             {
                 if ((this.generationEnvironmentField == null))
                 {
-                    this.generationEnvironmentField = new global::System.Text.StringBuilder();
+                    this.generationEnvironmentField = new StringBuilder();
                 }
                 return this.generationEnvironmentField;
             }
@@ -133,13 +136,13 @@ namespace LINQBridgeVs.DynamicCore.Template
         /// <summary>
         /// The error collection for the generation process
         /// </summary>
-        public System.CodeDom.Compiler.CompilerErrorCollection Errors
+        public CompilerErrorCollection Errors
         {
             get
             {
                 if ((this.errorsField == null))
                 {
-                    this.errorsField = new global::System.CodeDom.Compiler.CompilerErrorCollection();
+                    this.errorsField = new CompilerErrorCollection();
                 }
                 return this.errorsField;
             }
@@ -147,13 +150,13 @@ namespace LINQBridgeVs.DynamicCore.Template
         /// <summary>
         /// A list of the lengths of each indent that was added with PushIndent
         /// </summary>
-        private System.Collections.Generic.List<int> indentLengths
+        private List<int> indentLengths
         {
             get
             {
                 if ((this.indentLengthsField == null))
                 {
-                    this.indentLengthsField = new global::System.Collections.Generic.List<int>();
+                    this.indentLengthsField = new List<int>();
                 }
                 return this.indentLengthsField;
             }
@@ -171,7 +174,7 @@ namespace LINQBridgeVs.DynamicCore.Template
         /// <summary>
         /// Current transformation session
         /// </summary>
-        public virtual global::System.Collections.Generic.IDictionary<string, object> Session
+        public virtual IDictionary<string, object> Session
         {
             get
             {
@@ -202,7 +205,7 @@ namespace LINQBridgeVs.DynamicCore.Template
                 this.endsWithNewline = false;
             }
             // Check if the current text ends with a newline
-            if (textToAppend.EndsWith(global::System.Environment.NewLine, global::System.StringComparison.CurrentCulture))
+            if (textToAppend.EndsWith(Environment.NewLine, StringComparison.CurrentCulture))
             {
                 this.endsWithNewline = true;
             }
@@ -214,7 +217,7 @@ namespace LINQBridgeVs.DynamicCore.Template
                 return;
             }
             // Everywhere there is a newline in the text, add an indent after it
-            textToAppend = textToAppend.Replace(global::System.Environment.NewLine, (global::System.Environment.NewLine + this.currentIndentField));
+            textToAppend = textToAppend.Replace(Environment.NewLine, (Environment.NewLine + this.currentIndentField));
             // If the text ends with a newline, then we should strip off the indent added at the very end
             // because the appropriate indent will be added when the next time Write() is called
             if (this.endsWithNewline)
@@ -240,21 +243,21 @@ namespace LINQBridgeVs.DynamicCore.Template
         /// </summary>
         public void Write(string format, params object[] args)
         {
-            this.Write(string.Format(global::System.Globalization.CultureInfo.CurrentCulture, format, args));
+            this.Write(string.Format(CultureInfo.CurrentCulture, format, args));
         }
         /// <summary>
         /// Write formatted text directly into the generated output
         /// </summary>
         public void WriteLine(string format, params object[] args)
         {
-            this.WriteLine(string.Format(global::System.Globalization.CultureInfo.CurrentCulture, format, args));
+            this.WriteLine(string.Format(CultureInfo.CurrentCulture, format, args));
         }
         /// <summary>
         /// Raise an error
         /// </summary>
         public void Error(string message)
         {
-            System.CodeDom.Compiler.CompilerError error = new global::System.CodeDom.Compiler.CompilerError();
+            CompilerError error = new CompilerError();
             error.ErrorText = message;
             this.Errors.Add(error);
         }
@@ -263,7 +266,7 @@ namespace LINQBridgeVs.DynamicCore.Template
         /// </summary>
         public void Warning(string message)
         {
-            System.CodeDom.Compiler.CompilerError error = new global::System.CodeDom.Compiler.CompilerError();
+            CompilerError error = new CompilerError();
             error.ErrorText = message;
             error.IsWarning = true;
             this.Errors.Add(error);
@@ -275,7 +278,7 @@ namespace LINQBridgeVs.DynamicCore.Template
         {
             if ((indent == null))
             {
-                throw new global::System.ArgumentNullException("indent");
+                throw new ArgumentNullException("indent");
             }
             this.currentIndentField = (this.currentIndentField + indent);
             this.indentLengths.Add(indent.Length);
@@ -313,11 +316,11 @@ namespace LINQBridgeVs.DynamicCore.Template
         /// </summary>
         public class ToStringInstanceHelper
         {
-            private System.IFormatProvider formatProviderField  = global::System.Globalization.CultureInfo.InvariantCulture;
+            private IFormatProvider formatProviderField  = CultureInfo.InvariantCulture;
             /// <summary>
             /// Gets or sets format provider to be used by ToStringWithCulture method.
             /// </summary>
-            public System.IFormatProvider FormatProvider
+            public IFormatProvider FormatProvider
             {
                 get
                 {
@@ -338,11 +341,11 @@ namespace LINQBridgeVs.DynamicCore.Template
             {
                 if ((objectToConvert == null))
                 {
-                    throw new global::System.ArgumentNullException("objectToConvert");
+                    throw new ArgumentNullException("objectToConvert");
                 }
-                System.Type t = objectToConvert.GetType();
-                System.Reflection.MethodInfo method = t.GetMethod("ToString", new System.Type[] {
-                            typeof(System.IFormatProvider)});
+                Type t = objectToConvert.GetType();
+                MethodInfo method = t.GetMethod("ToString", new Type[] {
+                            typeof(IFormatProvider)});
                 if ((method == null))
                 {
                     return objectToConvert.ToString();

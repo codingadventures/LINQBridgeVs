@@ -29,13 +29,14 @@ using System.Runtime.InteropServices;
 using System.Xml.Linq;
 using EnvDTE;
 using EnvDTE80;
-using LINQBridgeVs.Helper.Configuration;
 using LINQBridgeVs.Helper;
+using LINQBridgeVs.Helper.Configuration;
 using LINQBridgeVs.Helper.Forms;
 using LINQBridgeVs.Logging;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Debugger = System.Diagnostics.Debugger;
 using Process = System.Diagnostics.Process;
 
 namespace LINQBridgeVs.Extension
@@ -126,7 +127,7 @@ namespace LINQBridgeVs.Extension
         /// </summary>
         protected override void Initialize()
         {
-            System.Diagnostics.Debugger.Break();
+            Debugger.Break();
             base.Initialize();
 
             _dte = (DTE)GetService(typeof(SDTE));

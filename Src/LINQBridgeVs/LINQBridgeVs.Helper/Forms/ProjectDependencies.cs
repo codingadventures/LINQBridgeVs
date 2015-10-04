@@ -25,6 +25,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using LINQBridgeVs.Helper.Dependency;
@@ -121,7 +122,7 @@ namespace LINQBridgeVs.Helper.Forms
 
             SelectedProjects.ForEach(p
                 => _onOk(
-                    System.IO.Path.GetDirectoryName(p.AssemblyPath)
+                    Path.GetDirectoryName(p.AssemblyPath)
                     , p.AssemblyName
                     , p.SolutionName));
 

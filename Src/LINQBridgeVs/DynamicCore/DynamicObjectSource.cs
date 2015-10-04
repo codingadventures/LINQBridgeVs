@@ -23,17 +23,15 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
+using System.Collections;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.RegularExpressions;
 using Grapple;
 using LINQBridgeVs.DynamicCore.Helper;
 using LINQBridgeVs.DynamicCore.Template;
 using LINQBridgeVs.Logging;
-using Microsoft.Win32;
-using System;
-using System.Collections;
-using System.IO;
-using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text.RegularExpressions;
 
 namespace LINQBridgeVs.DynamicCore
 {

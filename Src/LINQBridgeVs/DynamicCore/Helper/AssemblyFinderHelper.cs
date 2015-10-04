@@ -25,6 +25,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -95,7 +96,7 @@ namespace LINQBridgeVs.DynamicCore.Helper
                 Log.Write("SearchPattern: {0} in folder {1}", string.Format(SearchPattern, fileToSearch), rootPath);
                 depth++;
                 var file = FileSystem.Directory
-                    .EnumerateFiles(rootPath, string.Format(SearchPattern, fileToSearch), System.IO.SearchOption.AllDirectories)
+                    .EnumerateFiles(rootPath, string.Format(SearchPattern, fileToSearch), SearchOption.AllDirectories)
                     .AsParallel()
                     .OrderByDescending(info => FileSystem.FileInfo.FromFileName(info).LastAccessTime)
                     .FirstOrDefault();

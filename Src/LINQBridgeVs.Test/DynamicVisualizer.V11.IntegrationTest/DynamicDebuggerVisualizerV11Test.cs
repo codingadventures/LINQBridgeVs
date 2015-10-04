@@ -1,13 +1,13 @@
-﻿using LINQBridgeVs.DynamicVisualizer.V11;
-using Microsoft.VisualStudio.DebuggerVisualizers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Win32;
-using Model.UnitTest;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using LINQBridgeVs.DynamicVisualizer.V11;
+using Microsoft.VisualStudio.DebuggerVisualizers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Win32;
+using Model.UnitTest;
 
 namespace DynamicVisualizer.V11.IntegrationTest
 {

@@ -25,6 +25,7 @@
 
 using LINQBridgeVs.DynamicCore;
 using Microsoft.VisualStudio.DebuggerVisualizers;
+using Microsoft.Win32;
 
 namespace LINQBridgeVs.DynamicVisualizer.V12
 {
@@ -40,7 +41,7 @@ namespace LINQBridgeVs.DynamicVisualizer.V12
         {
             get
             {
-                using (var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(TestRegistryKey))
+                using (var key = Registry.CurrentUser.OpenSubKey(TestRegistryKey))
                 {
                     return key != null;
                 }

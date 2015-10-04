@@ -12,7 +12,6 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 using LINQBridgeVs.Extension;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.VsSDK.UnitTestLibrary;
 
 namespace LINQBridgeVsExtension.UnitTests
 {
