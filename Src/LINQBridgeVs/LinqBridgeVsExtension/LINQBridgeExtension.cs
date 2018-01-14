@@ -32,6 +32,7 @@ using EnvDTE;
 using LINQBridgeVs.Helper;
 using LINQBridgeVs.Helper.Configuration;
 using LINQBridgeVs.Logging;
+using Project = EnvDTE.Project;
 
 namespace LINQBridgeVs.Extension
 {
@@ -62,10 +63,8 @@ namespace LINQBridgeVs.Extension
             get
             {
                 var items = _application.ActiveSolutionProjects as IEnumerable;
-                if (items == null)
-                    return null;
 
-                var project = items.OfType<Project>().FirstOrDefault();
+                var project = items?.OfType<Project>().FirstOrDefault();
                 if (project == null || !IsSupported(project.UniqueName))
                     return null;
 
@@ -85,13 +84,7 @@ namespace LINQBridgeVs.Extension
             }
         }
 
-        private string SelectedAssemblyName
-        {
-            get
-            {
-                return SelectedProject.Properties.Item("AssemblyName").Value.ToString();
-            }
-        }
+        private string SelectedAssemblyName => SelectedProject.Properties.Item("AssemblyName").Value.ToString();
 
         private string SelectedProjectOutputPath
         {

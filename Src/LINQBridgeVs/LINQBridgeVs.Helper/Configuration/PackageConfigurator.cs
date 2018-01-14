@@ -83,7 +83,11 @@ namespace LINQBridgeVs.Helper.Configuration
         }
         private static bool IsLINQPadInstalled()
         {
-            if (Directory.Exists(Locations.LinqPadDestinationFolder)) return false;
+            if (Directory.Exists(Locations.LinqPad4DestinationFolder))
+                return true;
+
+            if (Directory.Exists(Locations.LinqPad4DestinationFolder86))
+                return true;
 
             MessageBox.Show("Please Install LINQPad in order to Use LINQBridgeVs and then Restart Visual Studio");
             Process.Start("http://www.linqpad.net");
@@ -211,12 +215,15 @@ namespace LINQBridgeVs.Helper.Configuration
                 //Always check if installation folder has changed
                 SetInstallationFolder();
 
-                if (IsEnvironmentConfigured) return;
+                if (!IsLINQPadInstalled())
+                    return;
 
-                if (!IsLINQPadInstalled()) return;
+                if (IsEnvironmentConfigured)
+                    return;
 
                 Log.Write("Setting the Environment");
 
+                //TODO: add logic to set the environment again for installed newer version
                 SetEnvironment();
             }
             catch (Exception e)
@@ -230,8 +237,7 @@ namespace LINQBridgeVs.Helper.Configuration
             var keyPath = string.Format(GetRegistryKey(Resources.EnabledProjectsRegistryKey, _vsVersion, solutionName));
             using (var key = Registry.CurrentUser.CreateSubKey(keyPath))
             {
-                if (key != null)
-                    key.SetValue(assemblyName, new[] { "True", assemblyPath }, RegistryValueKind.MultiString);
+                key?.SetValue($"{solutionName}_{assemblyName}", new[] { "True" }, RegistryValueKind.String);
             }
         }
 
@@ -243,7 +249,7 @@ namespace LINQBridgeVs.Helper.Configuration
 
             using (var key = Registry.CurrentUser.OpenSubKey(keyPath, true))
             {
-                if (key != null) key.SetValue(assemblyName, new[] { "False", assemblyPath }, RegistryValueKind.MultiString);
+                key?.SetValue($"{solutionName}_{assemblyName}", new[] { "False" }, RegistryValueKind.String);
             }
         }
 

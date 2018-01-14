@@ -32,14 +32,13 @@ namespace LINQBridgeVs.Helper
     public static class Locations
     {
         private static readonly string SpecialWindowsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
-        private static readonly string ProgramFilesFolderPath = Environment.GetEnvironmentVariable("ProgramFiles");
+        private static readonly string ProgramFilesFolderPath = Environment.GetEnvironmentVariable("PROGRAMFILES");
+        private static readonly string ProgramFilesx86FolderPath = Environment.GetEnvironmentVariable("PROGRAMFILES(X86)");
 
-        public static string InstallFolder
-        {
-            get { return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location); }
-        }
+        public static string InstallFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
-        public static readonly string LinqPadDestinationFolder = Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles"), "LINQPad4");
+        public static readonly string LinqPad4DestinationFolder = Path.Combine(ProgramFilesFolderPath, "LINQPad4");
+        public static readonly string LinqPad4DestinationFolder86 = Path.Combine(ProgramFilesx86FolderPath, "LINQPad4");
 
 
         public static readonly string CustomAfterTargetFileNamePath = Path.Combine(InstallFolder, Resources.CustomAfterTargets);
@@ -62,5 +61,9 @@ namespace LINQBridgeVs.Helper
 
         public static readonly string MicrosoftCommonTargetX64FileNamePath = Path.Combine(DotNet40Framework64Path, "Microsoft.Common.targets");
 
+        static Locations()
+        {
+            
+        }
     }
 }

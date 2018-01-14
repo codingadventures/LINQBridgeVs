@@ -47,7 +47,7 @@ namespace LINQBridgeVs.Helper.Dependency
 
         public override string ToString()
         {
-            return string.Format("{0} {1} {2}", DependencyType, AssemblyName, AssemblyPath);
+            return $"{DependencyType} {AssemblyName} {AssemblyPath}";
         }
     }
 }

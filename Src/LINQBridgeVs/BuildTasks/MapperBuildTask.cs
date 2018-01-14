@@ -87,16 +87,8 @@ namespace LINQBridgeVs.BuildTasks
         [Required]
         public string VisualStudioVer { private get; set; }
 
-        [Required]
-        public string SolutionName { get; set; }
+        private string VisualizerAssemblyName => VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(VisualStudioVer, Assembly);
 
-        private string VisualizerAssemblyName
-        {
-            get
-            {
-                return VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(VisualStudioVer, Assembly);
-            }
-        }
         public IBuildEngine BuildEngine { get; set; }
 
         public ITaskHost HostObject { get; set; }

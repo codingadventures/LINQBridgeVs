@@ -13,7 +13,7 @@
   <UsingTask TaskName="MapperBuildTask" AssemblyFile="$([MSBuild]::Unescape('$(InstallFolderPath)'))\LINQBridgeVs.BuildTasks.dll" />
   <UsingTask TaskName="CleanBuildTask" AssemblyFile="$([MSBuild]::Unescape('$(InstallFolderPath)'))\LINQBridgeVs.BuildTasks.dll" />
 
-  <Target Name="LINQBridgeAfterBuild" DependsOnTargets="CoreCompile" Condition="'$(IsProjectEnabled)' == 'True' AND '$(IsExtensionEnabled)' == 'True'">
+  <Target Name="LINQBridgeAfterBuild" DependsOnTargets="CoreCompile" Condition="('$(IsProjectEnabled)' == 'True' OR '$(IsProjectEnabled_new)' == 'True') AND '$(IsExtensionEnabled)' == 'True'">
     <SInjectionBuildTask Assembly="@(MainAssembly->'%(FullPath)')" Snk="$(MSBuildProjectDirectory)\$(AssemblyOriginatorKeyFile)"  />
     <MapperBuildTask Assembly="@(MainAssembly->'%(FullPath)')"   VisualStudioVer="$(VisualStudioVersion)"   />
   </Target>

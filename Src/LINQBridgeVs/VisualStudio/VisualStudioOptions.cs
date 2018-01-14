@@ -46,6 +46,7 @@ namespace LINQBridgeVs.VisualStudio
         private static readonly string Vs2010Path2 = MyDocuments + Resources.VS2010Path2;
         private static readonly string Vs2012Path1 = MyDocuments + Resources.VS2012Path1;
         private static readonly string Vs2013Path1 = MyDocuments + Resources.VS2013Path1;
+        private static readonly string Vs2015Path1 = MyDocuments + Resources.VS2015Path1;
 
 
         private static readonly Dictionary<string, Settings> VisualStudioPaths;
@@ -82,16 +83,25 @@ namespace LINQBridgeVs.VisualStudio
                         AssemblyLocation = DynamicVisualizer.V12.Settings.AssemblyLocation,
                         MsBuildVersion = "v12.0"
                     }
+                },
+                {
+                    "14.0", new Settings
+                    {
+                        InstallationPaths =
+                            new List<string> {Vs2015Path1},
+                        AssemblyLocation = DynamicVisualizer.V14.Settings.AssemblyLocation,
+                        MsBuildVersion = "v14.0"
+                    }
                 }
             };
         }
 
         private static void CheckVersion(string vsInputVersion)
         {
-            if (vsInputVersion == null) throw new ArgumentNullException("vsInputVersion");
+            if (vsInputVersion == null) throw new ArgumentNullException(nameof(vsInputVersion));
 
             if (!VisualStudioPaths.ContainsKey(vsInputVersion))
-                throw new ArgumentException("This Version of visual studio is not yet supported.", "vsInputVersion");
+                throw new ArgumentException("This Version of visual studio is not yet supported.", nameof(vsInputVersion));
         }
 
         public static string GetVisualizerAssemblyLocation(string visualStudioVersion)

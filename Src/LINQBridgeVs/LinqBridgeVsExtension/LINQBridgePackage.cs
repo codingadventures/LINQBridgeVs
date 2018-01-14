@@ -41,18 +41,16 @@ using Process = System.Diagnostics.Process;
 
 namespace LINQBridgeVs.Extension
 {
-    /// <summary>
-    /// This is the class that implements the package exposed by this assembly.
-    ///
-    /// The minimum requirement for a class to be considered a valid package for Visual Studio
-    /// is to implement the IVsPackage interface and register itself with the shell.
-    /// This package uses the helper classes defined inside the Managed Package Framework (MPF)
-    /// to do it: it derives from the Package class that provides the implementation of the 
-    /// IVsPackage interface and uses the registration attributes defined in the framework to 
-    /// register itself and its components with the shell.
-    /// </summary>
-    // This attribute tells the PkgDef creation utility (CreatePkgDef.exe) that this class is
-    // a package.
+    /// <inheritdoc />
+    ///  <summary>
+    ///  This is the class that implements the package exposed by this assembly.
+    ///  The minimum requirement for a class to be considered a valid package for Visual Studio
+    ///  is to implement the IVsPackage interface and register itself with the shell.
+    ///  This package uses the helper classes defined inside the Managed Package Framework (MPF)
+    ///  to do it: it derives from the Package class that provides the implementation of the 
+    ///  IVsPackage interface and uses the registration attributes defined in the framework to 
+    ///  register itself and its components with the shell.
+    ///  </summary>
     [PackageRegistration(UseManagedResourcesOnly = true)]
     // This attribute is used to register the information needed to show this package
     // in the Help/About dialog of Visual Studio.
@@ -62,6 +60,7 @@ namespace LINQBridgeVs.Extension
     [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)]
     [ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string)]
     [Guid(GuidList.GuidBridgeVsExtensionPkgString)]
+    [ProvideToolWindow(typeof(LINQBridgeVs.Extension.ToolWindow1))]
     public sealed class LINQBridgeVsPackage : Package
     {
 
@@ -142,7 +141,7 @@ namespace LINQBridgeVs.Extension
 
             var bridge = new LINQBridgeVsExtension(_dte);
 
-            //// Add our command handlers for menu (commands must exist in the .vsct file)
+            // Add our command handlers for menu (commands must exist in the .vsct file)
             var mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (null == mcs) return;
 
@@ -164,6 +163,7 @@ namespace LINQBridgeVs.Extension
             mcs.AddCommand(menuItemEnable);
             mcs.AddCommand(menuItemDisable);
             mcs.AddCommand(menuItemAbout);
+            LINQBridgeVs.Extension.ToolWindow1Command.Initialize(this);
         }
 
         private void HandleVisualStudioShutDown()

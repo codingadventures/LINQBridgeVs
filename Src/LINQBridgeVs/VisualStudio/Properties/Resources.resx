@@ -129,4 +129,7 @@
   <data name="VS2013Path1" xml:space="preserve">
     <value>\\Visual Studio 2013\Visualizers\</value>
   </data>
+  <data name="VS2015Path1" xml:space="preserve">
+    <value>\\Visual Studio 2015\Visualizers\</value>
+  </data>
 </root>

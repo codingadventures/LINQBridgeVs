@@ -38,8 +38,10 @@ namespace LINQBridgeVs.Helper.Configuration
                     return "v4.0";
                 case "12.0":
                     return "v12.0";
+                case "14.0":
+                    return "v14.0";
                 default :
-                    throw new ArgumentException("Visual Studio Version not Supported", "vsVersion");
+                    throw new ArgumentException("Visual Studio Version not Supported", nameof(vsVersion));
             }
         }
     }

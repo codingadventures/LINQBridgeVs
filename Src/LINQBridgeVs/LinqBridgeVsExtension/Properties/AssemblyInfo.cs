@@ -37,7 +37,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Giovanni Campo")]
 [assembly: AssemblyProduct("LINQBridgeVs")]
-[assembly: AssemblyCopyright("Copyright © Giovanni Campo 2013")]
+[assembly: AssemblyCopyright("Copyright © Giovanni Campo 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]   
 [assembly: ComVisible(false)]     
