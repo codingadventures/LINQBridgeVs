@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 Giovanni Campo
+// Copyright (c) 2013 - 2018 Giovanni Campo
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -28,10 +28,10 @@ using System.Collections;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
+using Bridge.Logging;
 using Grapple;
 using LINQBridgeVs.DynamicCore.Helper;
 using LINQBridgeVs.DynamicCore.Template;
-using LINQBridgeVs.Logging;
 
 namespace LINQBridgeVs.DynamicCore
 {

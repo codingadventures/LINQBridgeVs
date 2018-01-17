@@ -3,7 +3,6 @@
   <PropertyGroup>
     <ProductBaseRegistryPath>HKEY_CURRENT_USER\Software\LINQBridgeVs\$(VisualStudioVersion)</ProductBaseRegistryPath>
     <IsProjectEnabled>$([MSBuild]::GetRegistryValueFromView('$(ProductBaseRegistryPath)\Solutions\$(SolutionName)', '$(AssemblyName)', 'False', RegistryView.Registry64, RegistryView.Registry32))</IsProjectEnabled>
-    <IsProjectEnabled_new>$([MSBuild]::GetRegistryValueFromView('$(ProductBaseRegistryPath)\Solutions\$(SolutionName)', '$(SolutionName)_$(AssemblyName)', 'False', RegistryView.Registry64, RegistryView.Registry32))</IsProjectEnabled_new>
     <InstallFolderPath>$([MSBuild]::GetRegistryValueFromView('$(ProductBaseRegistryPath)', 'InstallFolderPath', 'False', RegistryView.Registry64, RegistryView.Registry32))</InstallFolderPath>
     <IsExtensionEnabled>$([MSBuild]::GetRegistryValueFromView('$(ProductBaseRegistryPath)', 'IsLinqBridgeEnabled', 'False', RegistryView.Registry64, RegistryView.Registry32))</IsExtensionEnabled>
   </PropertyGroup>

@@ -46,9 +46,13 @@
     <Compile Include="VisualizerAssemblyNameFormat.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Logging\Logging.csproj">
-      <Project>{7199EDE0-8090-46D0-9687-54B411A3D02C}</Project>
+    <ProjectReference Include="..\..\Logging\Logging.csproj">
+      <Project>{0b546762-c8c0-45c6-bc42-c5d91d510351}</Project>
       <Name>Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SInject\SInject.csproj">
+      <Project>{cd851c2d-8b24-4d72-b2a1-149f7d27c2f1}</Project>
+      <Name>SInject</Name>
     </ProjectReference>
     <ProjectReference Include="..\TypeMapper\TypeMapper.csproj">
       <Project>{fcc8bf06-3173-4d21-a157-d1167b6407c9}</Project>
@@ -76,14 +80,6 @@
     <Reference Include="Mono.Cecil.Rocks, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Mono.Cecil.0.9.6.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
       <Private>True</Private>
-    </Reference>
-    <Reference Include="SInject, Version=0.2.5214.16578, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\SInject.0.2\lib\net40\SInject.dll</HintPath>
-    </Reference>
-    <Reference Include="SInject.Logging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\SInject.0.2\lib\net40\SInject.Logging.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

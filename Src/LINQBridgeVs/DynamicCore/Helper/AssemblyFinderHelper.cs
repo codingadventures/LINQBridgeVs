@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 Giovanni Campo
+// Copyright (c) 2013 - 2018 Giovanni Campo
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -29,7 +29,7 @@ using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Runtime.InteropServices;
-using LINQBridgeVs.Logging;
+using Bridge.Logging;
 
 namespace LINQBridgeVs.DynamicCore.Helper
 {
@@ -54,9 +54,9 @@ namespace LINQBridgeVs.DynamicCore.Helper
                                                .ToList();
 
             if (!referencedAssemblies.Any()) return retPaths;
-            Log.Write(string.Format("There are {0} referenced non system assemblies", referencedAssemblies.Count));
+            Log.Write($"There are {referencedAssemblies.Count} referenced non system assemblies");
 
-            Log.Write(string.Format("Current Assembly is at location {0}", assembly.Location));
+            Log.Write($"Current Assembly is at location {assembly.Location}");
 
             var currentAssemblyPath = string.Empty;
             try
@@ -65,7 +65,8 @@ namespace LINQBridgeVs.DynamicCore.Helper
             }
             catch (Exception exception)
             {
-                Log.Write(exception, string.Format("GetDirectoryName of assembly: {0} failed. Path is wrong {1}", assembly.FullName, assembly.Location));
+                Log.Write(exception,
+                    $"GetDirectoryName of assembly: {assembly.FullName} failed. Path is wrong {assembly.Location}");
             }
 
 

@@ -27,12 +27,12 @@ using System;
 using System.ComponentModel.Design;
 using System.Runtime.InteropServices;
 using System.Xml.Linq;
+using Bridge.Logging;
 using EnvDTE;
 using EnvDTE80;
 using LINQBridgeVs.Helper;
 using LINQBridgeVs.Helper.Configuration;
 using LINQBridgeVs.Helper.Forms;
-using LINQBridgeVs.Logging;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -60,7 +60,6 @@ namespace LINQBridgeVs.Extension
     [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)]
     [ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string)]
     [Guid(GuidList.GuidBridgeVsExtensionPkgString)]
-    [ProvideToolWindow(typeof(LINQBridgeVs.Extension.ToolWindow1))]
     public sealed class LINQBridgeVsPackage : Package
     {
 
@@ -120,13 +119,13 @@ namespace LINQBridgeVs.Extension
 
         #region Package Members
 
+        /// <inheritdoc />
         /// <summary>
         /// Initialization of the package; this method is called right after the package is sited, so this is the place
         /// where you can put all the initialization code that rely on services provided by VisualStudio.
         /// </summary>
         protected override void Initialize()
         {
-            Debugger.Break();
             base.Initialize();
 
             _dte = (DTE)GetService(typeof(SDTE));
@@ -163,7 +162,6 @@ namespace LINQBridgeVs.Extension
             mcs.AddCommand(menuItemEnable);
             mcs.AddCommand(menuItemDisable);
             mcs.AddCommand(menuItemAbout);
-            LINQBridgeVs.Extension.ToolWindow1Command.Initialize(this);
         }
 
         private void HandleVisualStudioShutDown()

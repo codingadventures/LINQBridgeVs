@@ -1,6 +1,5 @@
-﻿
-#region License
-// Copyright (c) 2013 Giovanni Campo
+﻿#region License
+// Copyright (c) 2013 - 2018 Giovanni Campo
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -29,13 +28,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using LINQBridgeVs.Logging;
+using Bridge.Logging;
 using Mono.Cecil;
 using Mono.Cecil.Pdb;
 using Mono.Cecil.Rocks;
 
 namespace LINQBridgeVs.TypeMapper
 {
+    /// <inheritdoc />
     /// <summary>
     /// This class injects the DebuggerVisualizerAttribute into a given assembly
     /// </summary>

@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 Giovanni Campo
+// Copyright (c) 2013 - 2018 Giovanni Campo
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -28,10 +28,10 @@ using System.Collections;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
+using Bridge.Logging;
 using EnvDTE;
 using LINQBridgeVs.Helper;
 using LINQBridgeVs.Helper.Configuration;
-using LINQBridgeVs.Logging;
 using Project = EnvDTE.Project;
 
 namespace LINQBridgeVs.Extension

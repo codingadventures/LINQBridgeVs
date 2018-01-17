@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 Giovanni Campo
+// Copyright (c) 2013 - 2018 Giovanni Campo
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -35,11 +35,11 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Threading;
 using System.Windows.Forms;
+using Bridge.Logging;
 using LINQBridgeVs.DynamicCore.Forms;
 using LINQBridgeVs.DynamicCore.Helper;
 using LINQBridgeVs.DynamicCore.Properties;
 using LINQBridgeVs.DynamicCore.Template;
-using LINQBridgeVs.Logging;
 using Microsoft.Win32;
 using Message = LINQBridgeVs.DynamicCore.Template.Message;
 
@@ -161,7 +161,7 @@ namespace LINQBridgeVs.DynamicCore
             var message = (Message)formatter.Deserialize(inData);
 
             Log.Write("Message deserialized");
-            Log.Write(string.Format("Message content /n {0}", message));
+            Log.Write($"Message content /n {message}");
 
 
             var type = Type.GetType(message.AssemblyQualifiedName);
