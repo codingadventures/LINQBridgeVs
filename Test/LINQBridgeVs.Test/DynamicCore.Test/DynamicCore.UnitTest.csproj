@@ -84,6 +84,10 @@
     <Compile Include="DynamicObjectSourceTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Src\Logging\Logging.csproj">
+      <Project>{0B546762-C8C0-45C6-BC42-C5D91D510351}</Project>
+      <Name>Logging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AnotherModel.Test\AnotherModel.UnitTest.csproj">
       <Project>{7B0C3D12-296A-438D-B0EA-B049A0D6D3C1}</Project>
       <Name>AnotherModel.UnitTest</Name>

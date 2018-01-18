@@ -85,7 +85,7 @@
       <Name>DynamicVisualizer.V12</Name>
     </ProjectReference>
     <ProjectReference Include="..\Model.Test\Model.UnitTest.csproj">
-      <Project>{8A5E73F6-2093-4669-9C09-BEAB033BE56C}</Project>
+      <Project>{8a5e73f6-2093-4669-9c09-beab033be56c}</Project>
       <Name>Model.UnitTest</Name>
     </ProjectReference>
   </ItemGroup>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
+using Bridge.Logging;
 using LINQBridgeVs.DynamicCore;
 using LINQBridgeVs.DynamicCore.Template;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -40,6 +41,7 @@ namespace DynamicCore.UnitTest
         [TestCategory("UnitTest")]
         public void DeployLinqScriptTest()
         {
+            Log.Configure("UnitTest", "DynamicDebuggerVisualizerUnitTest");
 
             var cVisualizerObjectSource = new DynamicDebuggerVisualizer(_fileSystem);
             cVisualizerObjectSource.DeployLinqScript(_message);

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Bridge.Logging;
 using LINQBridgeVs.Helper.Dependency;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -13,7 +14,6 @@ namespace LINQBridgeVs.Helper.UnitTest
     public class CrawlerUnitTest
     {
         private const string CsProject = @"Model.UnitTest.xml";
-        private const string Solution = @"..\..\LINQBridgeVs.sln";
         [TestMethod]
         [TestCategory("UnitTest")]
         public void Files_Needed_For_Testing_Should_Be_Deployed()
@@ -50,6 +50,8 @@ namespace LINQBridgeVs.Helper.UnitTest
         [TestCategory("UnitTest")]
         public void Crawler_Should_Return_An_Empty_Collection_When_Input_Is_Empty()
         {
+            Log.Configure("UnitTest","CrawlerUnitTest");
+
             var projects = Crawler.FindProjectDependencies(string.Empty, string.Empty).ToList();
 
 

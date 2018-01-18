@@ -52,8 +52,6 @@ namespace LINQBridgeVs.Helper.Dependency
                 return Enumerable.Empty<Project>();
             }
 
-            var projectFileName = Path.GetFileName(csvbProjectName);
-
             var namespaceManager = new XmlNamespaceManager(new NameTable());
             namespaceManager.AddNamespace("aw", MsbuildNamespace);
 

@@ -1,15 +1,14 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("LINQBridgeVs Visualizer")]
-[assembly: AssemblyDescription("LINQBridgeVs Visualizer")]
+[assembly: AssemblyTitle("DynamicVisualizer.V14.IntegrationTest")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Giovanni Campo")]
-[assembly: AssemblyProduct("LINQBridgeVs Visualizer")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("DynamicVisualizer.V14.IntegrationTest")]
 [assembly: AssemblyCopyright("Copyright © Giovanni Campo 2013 - 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("f2414a2b-98a7-4d4c-a031-1701ea4a506b")]
+[assembly: Guid("6bbaf21b-b07a-4da4-9d11-e9a18490ed73")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -34,4 +33,3 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: InternalsVisibleTo("DynamicVisualizer.V14.IntegrationTest")]
