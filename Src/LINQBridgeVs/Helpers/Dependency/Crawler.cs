@@ -70,14 +70,15 @@ namespace LINQBridgeVs.Helper.Dependency
                 let referenceProjectFileName = Path.Combine(loadedProject.DirectoryPath, proj.Xml.Include)
                 let referenceProjectPath = Path.GetDirectoryName(referenceProjectFileName)
                 let referenceProjectXDocument = XDocument.Load(referenceProjectFileName)
+                let assemblyName = referenceProjectXDocument.XPathSelectElement("/aw:Project/aw:PropertyGroup/aw:AssemblyName", namespaceManager)?.Value
+                let outputType = referenceProjectXDocument.XPathSelectElement("/aw:Project/aw:PropertyGroup/aw:OutputType", namespaceManager)?.Value
+                let outputPath = referenceProjectXDocument.XPathSelectElement("/aw:Project/aw:PropertyGroup/aw:OutputPath", namespaceManager)?.Value
                 select new Project
                 {
                     DependencyType =
                         proj.ItemType.Equals("Reference") ? DependencyType.AssemblyReference : DependencyType.ProjectReference,
-                    AssemblyName =
-                            referenceProjectXDocument.XPathSelectElement("/aw:Project/aw:PropertyGroup/aw:AssemblyName", namespaceManager)
-                            .Value,
-                    AssemblyPath = Path.Combine(referenceProjectPath, referenceProjectXDocument.XPathSelectElement("/aw:Project/aw:PropertyGroup/aw:OutputPath", namespaceManager).Value),
+                    AssemblyName = assemblyName,
+                    AssemblyPath = Path.GetFullPath(Path.Combine(referenceProjectPath, outputPath, assemblyName + (outputType.Equals("Library") ? ".dll" : ".exe"))),
                     SolutionName = solutionName
                 };
         }

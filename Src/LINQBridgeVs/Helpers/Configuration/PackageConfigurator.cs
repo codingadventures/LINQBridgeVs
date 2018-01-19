@@ -231,7 +231,7 @@ namespace LINQBridgeVs.Helper.Configuration
             using (RegistryKey key = Registry.CurrentUser.CreateSubKey(keyPath))
             {
                 key?.SetValue($"{assemblyName}", "True" , RegistryValueKind.String);
-                key?.SetValue($"{assemblyName}_location",  assemblyPath, RegistryValueKind.String);
+                key?.SetValue($"{assemblyName}_location", Path.GetFullPath(assemblyPath), RegistryValueKind.String);
             }
         }
 

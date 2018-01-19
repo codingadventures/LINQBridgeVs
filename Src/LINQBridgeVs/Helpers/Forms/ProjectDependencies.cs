@@ -45,13 +45,14 @@ namespace LINQBridgeVs.Helper.Forms
             get
             {
                 return from DataGridViewRow row in ProjectsDataGridView.Rows
-                       where Convert.ToBoolean(row.Cells[0].Value)
-                       select new Project
-                       {
-                           AssemblyName = row.Cells[2].Value.ToString(),
-                           AssemblyPath = row.Cells[3].Value.ToString(),
-                           DependencyType = DependencyType.ProjectReference
-                       };
+                    where Convert.ToBoolean(row.Cells[0].Value)
+                    select new Project
+                    {
+                        AssemblyName = row.Cells[2].Value.ToString(),
+                        AssemblyPath = row.Cells[3].Value.ToString(),
+                        SolutionName = row.Cells[4].Value.ToString(),
+                        DependencyType = DependencyType.ProjectReference
+                    };
             }
         }
 
@@ -119,10 +120,9 @@ namespace LINQBridgeVs.Helper.Forms
 
         private void OkButton_Click(object sender, EventArgs e)
         {
-
             SelectedProjects.ForEach(p
                 => _onOk(
-                    Path.GetDirectoryName(p.AssemblyPath)
+                    p.AssemblyPath
                     , p.AssemblyName
                     , p.SolutionName));
 
