@@ -56,11 +56,11 @@ namespace LINQBridgeVs.Helper.Configuration
         {
             get
             {
-                using (var key = Registry.CurrentUser.OpenSubKey(GetRegistryKey(Resources.ProductVersion, _runningVisualStudioVersion)))
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(GetRegistryKey(Resources.ProductVersion, _runningVisualStudioVersion)))
                 {
                     if (key == null) return string.Empty;
 
-                    var value = key.GetValue(VersionRegistryValue);
+                    object value = key.GetValue(VersionRegistryValue);
 
                     if (value != null)
                         return value.ToString();
@@ -70,7 +70,7 @@ namespace LINQBridgeVs.Helper.Configuration
 
             set
             {
-                using (var key = Registry.CurrentUser.CreateSubKey(GetRegistryKey(Resources.ProductVersion, _runningVisualStudioVersion)))
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(GetRegistryKey(Resources.ProductVersion, _runningVisualStudioVersion)))
                 {
                     key?.SetValue(VersionRegistryValue, value);
                 }
@@ -92,7 +92,7 @@ namespace LINQBridgeVs.Helper.Configuration
 
         private static void SetEnvironment()
         {
-            var msBuildDir = CreateMsBuildTargetDirectory();
+            string msBuildDir = CreateMsBuildTargetDirectory();
             //Copy the CustomAfter and CustomBefore to the default MSbuild v4.0 location
             File.Copy(Locations.CustomAfterTargetFileNamePath, Path.Combine(msBuildDir, Locations.CustomAfterTargetFileName), true);
             Log.Write("CustomAfterTargetFileName Targets copied to {0} ", Path.Combine(msBuildDir, Locations.CustomAfterTargetFileName));
@@ -107,11 +107,11 @@ namespace LINQBridgeVs.Helper.Configuration
         private static void SetInstallationFolder()
         {
             //Set in the registry the installer location if it is has changed
-            using (var key = Registry.CurrentUser.CreateSubKey(GetRegistryKey(Resources.ProductRegistryKey, _runningVisualStudioVersion)))
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(GetRegistryKey(Resources.ProductRegistryKey, _runningVisualStudioVersion)))
             {
                 if (key == null) return;
 
-                var value = key.GetValue(InstallFolderPathRegistryValue);
+                object value = key.GetValue(InstallFolderPathRegistryValue);
                 if (value != null && value.Equals(Locations.InstallFolder)) return;
                 Log.Write("Setting InstallFolderPath to {0}", Locations.InstallFolder);
                 key.SetValue(InstallFolderPathRegistryValue, Locations.InstallFolder);
@@ -125,16 +125,16 @@ namespace LINQBridgeVs.Helper.Configuration
 
         private static string CreateMsBuildTargetDirectory()
         {
-            var msBuildVersion = MsBuildVersion.GetMsBuildVersion(_runningVisualStudioVersion);
-            var directoryToCreate = Path.Combine(Locations.MsBuildPath, msBuildVersion);
+            string msBuildVersion = MsBuildVersion.GetMsBuildVersion(_runningVisualStudioVersion);
+            string directoryToCreate = Path.Combine(Locations.MsBuildPath, msBuildVersion);
             Log.Write("MsBuild Directory being created {0}", directoryToCreate);
             if (!Directory.Exists(directoryToCreate))
             {
                 try
                 {
-                    var sec = new DirectorySecurity();
+                    DirectorySecurity sec = new DirectorySecurity();
                     // Using this instead of the "Everyone" string means we work on non-English systems.
-                    var everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+                    SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
                     sec.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
                     Directory.CreateDirectory(directoryToCreate, sec);
                     return directoryToCreate;
@@ -158,14 +158,14 @@ namespace LINQBridgeVs.Helper.Configuration
         {
             get
             {
-                using (var key = Registry.CurrentUser.OpenSubKey(GetRegistryKey(Resources.ProductVersion, _runningVisualStudioVersion)))
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(GetRegistryKey(Resources.ProductVersion, _runningVisualStudioVersion)))
                 {
                     return key != null && Convert.ToBoolean(key.GetValue(ConfiguredRegistryValue));
                 }
             }
             set
             {
-                using (var key = Registry.CurrentUser.CreateSubKey(GetRegistryKey(Resources.ProductVersion, _runningVisualStudioVersion)))
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(GetRegistryKey(Resources.ProductVersion, _runningVisualStudioVersion)))
                 {
                     key?.SetValue(ConfiguredRegistryValue, value);
                 }
@@ -176,14 +176,14 @@ namespace LINQBridgeVs.Helper.Configuration
         {
             get
             {
-                using (var key = Registry.CurrentUser.OpenSubKey(GetRegistryKey(Resources.ProductVersion, _runningVisualStudioVersion)))
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(GetRegistryKey(Resources.ProductVersion, _runningVisualStudioVersion)))
                 {
                     return key != null && Convert.ToBoolean(key.GetValue(EnabledRegistryValue));
                 }
             }
             set
             {
-                using (var key = Registry.CurrentUser.CreateSubKey(GetRegistryKey(Resources.ProductVersion, _runningVisualStudioVersion)))
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(GetRegistryKey(Resources.ProductVersion, _runningVisualStudioVersion)))
                 {
                     key?.SetValue(EnabledRegistryValue, value);
                 }
@@ -227,8 +227,8 @@ namespace LINQBridgeVs.Helper.Configuration
 
         public static void EnableProject(string assemblyPath, string assemblyName, string solutionName)
         {
-            var keyPath = string.Format(GetRegistryKey(Resources.EnabledProjectsRegistryKey, _runningVisualStudioVersion, solutionName));
-            using (var key = Registry.CurrentUser.CreateSubKey(keyPath))
+            string keyPath = string.Format(GetRegistryKey(Resources.EnabledProjectsRegistryKey, _runningVisualStudioVersion, solutionName));
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(keyPath))
             {
                 key?.SetValue($"{assemblyName}", "True" , RegistryValueKind.String);
                 key?.SetValue($"{assemblyName}_location",  assemblyPath, RegistryValueKind.String);
@@ -237,9 +237,9 @@ namespace LINQBridgeVs.Helper.Configuration
 
         public static void DisableProject(string assemblyPath, string assemblyName, string solutionName)
         {
-            var keyPath = string.Format(GetRegistryKey(Resources.EnabledProjectsRegistryKey, _runningVisualStudioVersion, solutionName));
+            string keyPath = string.Format(GetRegistryKey(Resources.EnabledProjectsRegistryKey, _runningVisualStudioVersion, solutionName));
 
-            using (var key = Registry.CurrentUser.OpenSubKey(keyPath, true))
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(keyPath, true))
             {
                 key?.DeleteValue(assemblyName);
                 key?.DeleteValue($"{assemblyName}_location");
@@ -248,13 +248,13 @@ namespace LINQBridgeVs.Helper.Configuration
 
         public static bool IsBridgeEnabled(string assemblyName, string solutionName)
         {
-            var keyPath = string.Format(GetRegistryKey(Resources.EnabledProjectsRegistryKey, _runningVisualStudioVersion, solutionName));
+            string keyPath = string.Format(GetRegistryKey(Resources.EnabledProjectsRegistryKey, _runningVisualStudioVersion, solutionName));
 
-            using (var key = Registry.CurrentUser.OpenSubKey(keyPath, false))
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(keyPath, false))
             {
                 if (key == null) return false;
-                var value = (string)key.GetValue(assemblyName);
-                return value != null && Convert.ToBoolean(value[0]);
+                string value = (string)key.GetValue(assemblyName);
+                return value != null && Convert.ToBoolean(value);
             }
         }
 
@@ -270,7 +270,7 @@ namespace LINQBridgeVs.Helper.Configuration
         [Obsolete("Keep them for Backward compatibility. Microsoft.Common.targets should not be modifie anymore")]
         public static void RemoveBridgeBuildTargetFromMicrosoftCommon(XDocument document, string location)
         {
-            var linqBridgeTargetImportNode = GetTargetImportNode(document);
+            XElement linqBridgeTargetImportNode = GetTargetImportNode(document);
 
             if (linqBridgeTargetImportNode == null) return;
 
@@ -282,16 +282,16 @@ namespace LINQBridgeVs.Helper.Configuration
         [Obsolete("Keep them for Backward compatibility. Microsoft.Common.targets should not be modifie anymore")]
         private static XElement GetTargetImportNode(XDocument document)
         {
-            var namespaceManager = new XmlNamespaceManager(new NameTable());
+            XmlNamespaceManager namespaceManager = new XmlNamespaceManager(new NameTable());
             namespaceManager.AddNamespace("aw", "http://schemas.microsoft.com/developer/msbuild/2003");
 
-            var importProjectNode =
+            IEnumerable importProjectNode =
                 (IEnumerable)
                     document.XPathEvaluate("/aw:Project/aw:Import[@Project='BridgeBuildTask.targets']",
                         namespaceManager);
 
 
-            var linqBridgeTargetImportNode = importProjectNode.Cast<XElement>().FirstOrDefault();
+            XElement linqBridgeTargetImportNode = importProjectNode.Cast<XElement>().FirstOrDefault();
 
             return linqBridgeTargetImportNode;
         }

@@ -78,12 +78,12 @@ namespace DynamicCore.UnitTest
         [TestCategory("UnitTest")]
         public void BroadCastData_CustomObjectShouldSucceed()
         {
-            IEnumerable<CustomType1> r = TestQuery.Select(i => new Model.UnitTest.CustomType1());
+            IEnumerable<CustomType1> r = TestQuery.Select(i => new CustomType1());
 
             Message message = DeserializeMessage(r);
 
-            Assert.AreEqual(message.FileName, "IEnumerable(CustomType1).linq");
-            Assert.AreEqual(message.TypeFullName, "System.Collections.Generic.IEnumerable<CustomType1>");
+            Assert.AreEqual(message.FileName, "IEnumerable(Model.UnitTest.CustomType1).linq");
+            Assert.AreEqual(message.TypeFullName, "System.Collections.Generic.IEnumerable<Model.UnitTest.CustomType1>");
             Assert.AreEqual(message.TypeName, "IEnumerableCustomType1");
             Assert.AreEqual(message.TypeNamespace, "System.Collections.Generic");
         }
