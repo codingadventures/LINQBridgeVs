@@ -41,7 +41,7 @@ namespace LINQBridgeVs.DynamicVisualizer.V14
         {
             get
             {
-                using (var key = Registry.CurrentUser.OpenSubKey(TestRegistryKey))
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(TestRegistryKey))
                 {
                     return key != null;
                 }

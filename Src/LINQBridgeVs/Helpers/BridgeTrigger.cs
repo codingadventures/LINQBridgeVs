@@ -57,7 +57,6 @@ namespace LINQBridgeVs.Helper
             var allProjectReferences = Crawler.FindProjectDependencies(executeParams.ProjectName, executeParams.SolutionName);
             var foundProjects = allProjectReferences as IList<Project> ?? allProjectReferences.ToList();
             var projectReferences = foundProjects.Where(project => project.DependencyType == DependencyType.ProjectReference);
-            // var assemblyReferences = allProjectReferences.Where(project => project.DependencyType == DependencyType.AssemblyReference);
 
             var references = projectReferences as IList<Project> ?? projectReferences.ToList();
             switch (executeParams.Action)

@@ -25,7 +25,9 @@
 
 using System;
 using System.Collections;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
 using Bridge.Logging;
@@ -44,21 +46,21 @@ namespace LINQBridgeVs.DynamicCore
             Log.Configure("LINQBridgeVs", "DynamicCore");
 
             try
-            {
-                var targetType = GetInterfaceTypeIfIsIterator(target);
-                var targetTypeFullName = TypeNameHelper.GetDisplayName(targetType, true);
-                var targetTypeName = TypeNameHelper.GetDisplayName(targetType, false);
+            { 
+                Type targetType = GetInterfaceTypeIfIsIterator(target);
+                string targetTypeFullName = TypeNameHelper.GetDisplayName(targetType, true);
+                string targetTypeName = TypeNameHelper.GetDisplayName(targetType, false);
                 //I'm lazy I know it...
-                var pattern1 = new Regex("[<]");
-                var pattern2 = new Regex("[>]");
-                var pattern3 = new Regex("[,]");
-                var pattern4 = new Regex("[`]");
-                var pattern5 = new Regex("[ ]");
+                Regex pattern1 = new Regex("[<]");
+                Regex pattern2 = new Regex("[>]");
+                Regex pattern3 = new Regex("[,]");
+                Regex pattern4 = new Regex("[`]");
+                Regex pattern5 = new Regex("[ ]");
 
-                var fileName = pattern1.Replace(targetTypeFullName, "(");
+                string fileName = pattern1.Replace(targetTypeFullName, "(");
                 fileName = pattern2.Replace(fileName, ")");
 
-                var typeName = pattern1.Replace(targetTypeName, string.Empty);
+                string typeName = pattern1.Replace(targetTypeName, string.Empty);
                 typeName = pattern2.Replace(typeName, string.Empty);
                 typeName = pattern3.Replace(typeName, string.Empty);
                 typeName = pattern4.Replace(typeName, string.Empty);
@@ -66,24 +68,23 @@ namespace LINQBridgeVs.DynamicCore
 
                 fileName = TypeNameHelper.RemoveSystemNamespaces(fileName);
 
-                var message = new Message
+                Message message = new Message
                 {
                     FileName = string.Format(FileNameFormat, fileName),
                     TypeName = typeName.Trim(),
-                    TypeFullName = targetTypeFullName, 
-                    //TypeLocation = GetAssemblyLocation(vsVersion, targetType.Name),
+                    TypeFullName = targetTypeFullName,
                     TypeNamespace = targetType.Namespace,
                     AssemblyQualifiedName = targetType.AssemblyQualifiedName
                 };
 
-                var binaryFormatter = new BinaryFormatter();
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
                 binaryFormatter.Serialize(outgoingData, message);
 
                 Log.Write("BroadCastData to LINQBridgeVsTruck");
 
-                var truck = new Truck("LINQBridgeVsTruck");
+                Truck truck = new Truck("LINQBridgeVsTruck");
                 truck.LoadCargo(target);
-                var res = truck.DeliverTo(typeName);
+                bool res = truck.DeliverTo(typeName);
                 Log.Write("Data Succesfully Shipped to Grapple");
 
             }
@@ -96,7 +97,7 @@ namespace LINQBridgeVs.DynamicCore
         private static Type GetInterfaceTypeIfIsIterator(object o)
         {
             Log.Write("GetInterfaceTypeIfIsIterator Started");
-            var @type = o.GetType();
+            Type @type = o.GetType();
 
             if (!@type.IsNestedPrivate || !@type.Name.Contains("Iterator") ||
                 !@type.FullName.Contains("System.Linq.Enumerable") || !(o is IEnumerable)) return @type;

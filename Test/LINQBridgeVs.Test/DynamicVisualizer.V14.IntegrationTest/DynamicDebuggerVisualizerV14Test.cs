@@ -35,9 +35,9 @@ namespace DynamicVisualizer.V14.IntegrationTest
             }
         }
 
+        private const string SolutionRegistryKey = @"Software\LINQBridgeVs\14.0\Solutions\DynamicVisualizer.V14.IntegrationTest";
+        private const string SolutionRegistryKeyModel = @"Software\LINQBridgeVs\14.0\Solutions\UnitTest.Model";
 
-        private const string SolutionRegistryKey = @"Software\LINQBridgeVs\12.0\Solutions\LINQBridgeVsTestSolution";
-    
         private static readonly string LINQPadScriptFolder =
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "LINQPad Queries");
 
@@ -54,8 +54,17 @@ namespace DynamicVisualizer.V14.IntegrationTest
             using (var key = Registry.CurrentUser.CreateSubKey(SolutionRegistryKey))
             {
                 if (key == null) return;
-                key.SetValue(typeof(DynamicDebuggerVisualizerV14Test).Assembly.GetName().Name, new[] { "True", typeof(DynamicDebuggerVisualizerV14Test).Assembly.Location });
-                key.SetValue(typeof(VisualizationTestClass).Assembly.GetName().Name, new[] { "True", typeof(VisualizationTestClass).Assembly.Location });
+                key.SetValue(typeof(DynamicDebuggerVisualizerV14Test).Assembly.GetName().Name, "True");
+                key.SetValue(typeof(DynamicDebuggerVisualizerV14Test).Assembly.GetName().Name + "_location", typeof(DynamicDebuggerVisualizerV14Test).Assembly.Location);
+            }
+
+            using (var key = Registry.CurrentUser.CreateSubKey(SolutionRegistryKeyModel))
+            {
+                if (key == null) return;
+
+                key.SetValue(typeof(VisualizationTestClass).Assembly.GetName().Name, "True");
+                key.SetValue(typeof(VisualizationTestClass).Assembly.GetName().Name+ "_location", typeof(VisualizationTestClass).Assembly.Location);
+
             }
 
             using (var key = Registry.CurrentUser.CreateSubKey(DynamicDebuggerVisualizerV14.TestRegistryKey))
@@ -69,11 +78,11 @@ namespace DynamicVisualizer.V14.IntegrationTest
         }
 
         [TestInitialize]
-        public   void CloseLINQPadProcess()
+        public void CloseLINQPadProcess()
         {
             ProcessKiller.Kill("LINQPad");
         }
-     
+
         [TestMethod]
         [TestCategory("Integration")]
         public void ShowVisualizerWithLinqQueryTest()
@@ -96,17 +105,16 @@ namespace DynamicVisualizer.V14.IntegrationTest
                 new VisualizationTestClass{CustomType1 = new CustomType1{IntField2 = 3, SField1 = "!"}},
             };
             var myHost = new VisualizerDevelopmentHost(enumerable, typeof(DynamicDebuggerVisualizerV14), typeof(DynamicDebuggerVisualizerObjectSourceV14));
-
             myHost.ShowVisualizer();
-
-
         }
 
         [ClassCleanup]
         public static void ClassDispose()
         {
+            Registry.CurrentUser.DeleteSubKey(SolutionRegistryKey);
+            Registry.CurrentUser.DeleteSubKey(SolutionRegistryKeyModel);
             Registry.CurrentUser.DeleteSubKey(DynamicDebuggerVisualizerV14.TestRegistryKey);
-            ProcessKiller.Kill("LINQPad");            
+            ProcessKiller.Kill("LINQPad");
         }
 
     }

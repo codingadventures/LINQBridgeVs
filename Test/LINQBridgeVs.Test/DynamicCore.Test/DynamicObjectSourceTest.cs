@@ -5,6 +5,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using LINQBridgeVs.DynamicCore;
 using LINQBridgeVs.DynamicCore.Template;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Model.UnitTest;
 
 namespace DynamicCore.UnitTest
 {
@@ -30,8 +31,6 @@ namespace DynamicCore.UnitTest
             Assert.AreEqual(message.TypeName, "IEnumerableInt32");
             Assert.AreEqual(message.TypeNamespace, "System.Collections.Generic");
         }
-
-       
 
         [TestMethod]
         [TestCategory("UnitTest")]
@@ -72,6 +71,20 @@ namespace DynamicCore.UnitTest
             Assert.AreEqual(message.FileName, "IEnumerable(AnonymousType(Int32)).linq");
             Assert.AreEqual(message.TypeFullName, "System.Collections.Generic.IEnumerable<AnonymousType<System.Int32>>");
             Assert.AreEqual(message.TypeName, "IEnumerableAnonymousTypeInt32");
+            Assert.AreEqual(message.TypeNamespace, "System.Collections.Generic");
+        }
+
+        [TestMethod]
+        [TestCategory("UnitTest")]
+        public void BroadCastData_CustomObjectShouldSucceed()
+        {
+            IEnumerable<CustomType1> r = TestQuery.Select(i => new Model.UnitTest.CustomType1());
+
+            Message message = DeserializeMessage(r);
+
+            Assert.AreEqual(message.FileName, "IEnumerable(CustomType1).linq");
+            Assert.AreEqual(message.TypeFullName, "System.Collections.Generic.IEnumerable<CustomType1>");
+            Assert.AreEqual(message.TypeName, "IEnumerableCustomType1");
             Assert.AreEqual(message.TypeNamespace, "System.Collections.Generic");
         }
 

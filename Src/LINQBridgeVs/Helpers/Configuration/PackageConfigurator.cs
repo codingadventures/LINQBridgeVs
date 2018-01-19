@@ -231,6 +231,7 @@ namespace LINQBridgeVs.Helper.Configuration
             using (var key = Registry.CurrentUser.CreateSubKey(keyPath))
             {
                 key?.SetValue($"{assemblyName}", "True" , RegistryValueKind.String);
+                key?.SetValue($"{assemblyName}_location",  assemblyPath, RegistryValueKind.String);
             }
         }
 
@@ -240,7 +241,8 @@ namespace LINQBridgeVs.Helper.Configuration
 
             using (var key = Registry.CurrentUser.OpenSubKey(keyPath, true))
             {
-                key?.SetValue($"{assemblyName}",  "False" , RegistryValueKind.String);
+                key?.DeleteValue(assemblyName);
+                key?.DeleteValue($"{assemblyName}_location");
             }
         }
 
@@ -251,7 +253,7 @@ namespace LINQBridgeVs.Helper.Configuration
             using (var key = Registry.CurrentUser.OpenSubKey(keyPath, false))
             {
                 if (key == null) return false;
-                var value = (string[])key.GetValue(assemblyName);
+                var value = (string)key.GetValue(assemblyName);
                 return value != null && Convert.ToBoolean(value[0]);
             }
         }

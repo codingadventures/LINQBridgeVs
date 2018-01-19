@@ -99,34 +99,34 @@ namespace LINQBridgeVs.DynamicCore
                 Log.Write("Entered in DeployLinqScript");
                 // Log.Write("Message: {0}", message);
 
-                var dstScriptPath = Path.Combine(MyDocuments, Resources.LINQPadQuery);
+                string dstScriptPath = Path.Combine(MyDocuments, Resources.LINQPadQuery);
                 Log.Write("dstScriptPath: {0}", dstScriptPath);
 
                 if (!FileSystem.Directory.Exists(dstScriptPath))
                 {
-                    var sec = new DirectorySecurity();
+                    DirectorySecurity sec = new DirectorySecurity();
                     // Using this instead of the "Everyone" string means we work on non-English systems.
-                    var everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+                    SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
                     sec.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
                     FileSystem.Directory.CreateDirectory(dstScriptPath, sec);
                     Log.Write(string.Format("Directory Created: {0}", dstScriptPath));
                 }
 
-                var dst = Path.Combine(dstScriptPath, string.Format(message.FileName, message.TypeFullName));
+                string dst = Path.Combine(dstScriptPath, string.Format(message.FileName, message.TypeFullName));
                 Log.Write("dst: {0}", dst);
 
-                var refAssemblies = new List<string>();
+                List<string> refAssemblies = new List<string>();
 
                 refAssemblies.AddRange(message.ReferencedAssemblies);
 
-                var linqQuery = new Inspection(refAssemblies, message.TypeFullName, message.TypeNamespace, message.TypeName);
-                var linqQueryText = linqQuery.TransformText();
+                Inspection linqQuery = new Inspection(refAssemblies, message.TypeFullName, message.TypeNamespace, message.TypeName);
+                string linqQueryText = linqQuery.TransformText();
 
                 Log.Write("LinqQuery file Transformed");
 
 
-                using (var memoryStream = FileSystem.File.Open(dst, FileMode.Create))
-                using (var streamWriter = new StreamWriter(memoryStream))
+                using (Stream memoryStream = FileSystem.File.Open(dst, FileMode.Create))
+                using (StreamWriter streamWriter = new StreamWriter(memoryStream))
                 {
                     streamWriter.Write(linqQueryText);
                     streamWriter.Flush();
@@ -157,27 +157,27 @@ namespace LINQBridgeVs.DynamicCore
 
             Log.Write("Vs Targeted Version ", vsVersion);
 
-            var formatter = new BinaryFormatter();
-            var message = (Message)formatter.Deserialize(inData);
+            BinaryFormatter formatter = new BinaryFormatter();
+            Message message = (Message)formatter.Deserialize(inData);
 
             Log.Write("Message deserialized");
             Log.Write($"Message content /n {message}");
 
 
-            var type = Type.GetType(message.AssemblyQualifiedName);
+            Type type = Type.GetType(message.AssemblyQualifiedName);
 
-            var location = GetAssemblyLocation(type, vsVersion);
+            string location = GetAssemblyLocation(type, vsVersion);
 
-            var referencedAssemblies = type.GetReferencedAssemblies(location);
+            List<string> referencedAssemblies = type.GetReferencedAssemblies(location);
 
             message.ReferencedAssemblies.AddRange(referencedAssemblies);
 
             DeployLinqScript(message);
             Log.Write("LinqQuery Successfully deployed");
 
-            var linqQueryfileName = Path.Combine(MyDocuments, Resources.LINQPadQuery, message.FileName);
+            string linqQueryfileName = Path.Combine(MyDocuments, Resources.LINQPadQuery, message.FileName);
 
-            var startInfo = new ProcessStartInfo
+            ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 WindowStyle = ProcessWindowStyle.Normal,
                 FileName = Resources.LINQPadExe,
@@ -190,7 +190,7 @@ namespace LINQBridgeVs.DynamicCore
 
             try
             {
-                var process = Process.Start(startInfo);
+                Process process = Process.Start(startInfo);
                 if (process != null) process.WaitForInputIdle(-1);
 
                 SendInputToLINQPad();
@@ -208,8 +208,8 @@ namespace LINQBridgeVs.DynamicCore
 
         #region [ Private Static Methods ]
         /// <summary>
-        /// Gets the assembly location. If an assembly is loaded at Runtime or it's loaded within a IIS context Assembly.Location property could be null
-        /// This method reads the original location of the assembly that was LINQBridged
+        /// Gets the assembly location. If an assembly is loaded at Runtime or it's loaded within IIS context, Assembly.Location property could be null
+        /// This method reads the original location of the assembly that was Bridged
         /// </summary>
         /// <param name="type">The Type.</param>
         /// <param name="vsVersion">The Visual Studio version.</param>
@@ -217,26 +217,26 @@ namespace LINQBridgeVs.DynamicCore
         private static string GetAssemblyLocation(Type @type, string vsVersion)
         {
 
-            var registryKeyPath = string.Format(@"Software\LINQBridgeVs\{0}\Solutions", vsVersion);
+            string registryKeyPath = string.Format(@"Software\LINQBridgeVs\{0}\Solutions", vsVersion);
 
-            using (var key = Registry.CurrentUser.OpenSubKey(registryKeyPath))
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(registryKeyPath))
             {
                 if (key != null)
                 {
-                    var values = key.GetSubKeyNames();
-                    var registryKey = key;
+                    string[] values = key.GetSubKeyNames();
+                    RegistryKey registryKey = key;
 
-                    foreach (var value in values)
+                    foreach (string value in values)
                     {
-                        var subKey = registryKey.OpenSubKey(value);
+                        RegistryKey subKey = registryKey.OpenSubKey(value);
 
                         if (subKey == null) continue;
 
-                        var name = subKey.GetValueNames().FirstOrDefault(p =>
+                        string name = subKey.GetValueNames().FirstOrDefault(p =>
                         {
                             if (!@type.IsGenericType)
                                 return p == @type.Assembly.GetName().Name;
-                            var genericType = @type.GetGenericArguments()[0];
+                            Type genericType = @type.GetGenericArguments()[0];
 
                             if (AssemblyFinderHelper.IsSystemAssembly(genericType.Assembly.GetName().Name))
                                 return false;
@@ -246,11 +246,11 @@ namespace LINQBridgeVs.DynamicCore
 
                         if (string.IsNullOrEmpty(name)) continue;
 
-                        var keyValues = (string[])subKey.GetValue(name);
+                        string assemblyLoc = (string) subKey.GetValue(name + "_location");
 
-                        Log.Write("Assembly Location Found: ", keyValues[1]);
+                        Log.Write("Assembly Location Found: ", assemblyLoc);
 
-                        return keyValues[1];//At Position 1 there's the Assembly Path previously saved (When project was initially LINQBridged)
+                        return assemblyLoc;
                     }
 
                 }
@@ -266,13 +266,13 @@ namespace LINQBridgeVs.DynamicCore
         {
             try
             {
-                var linqPadProcess = Process.GetProcessesByName("LINQPad")[0];
+                Process linqPadProcess = Process.GetProcessesByName("LINQPad")[0];
 
                 while (linqPadProcess.MainWindowHandle == IntPtr.Zero)
                 {
                     // Discard cached information about the process
                     // because MainWindowHandle might be cached.
-                    var index = 0;
+                    int index = 0;
                     Log.Write("Waiting MainWindowHandle... - Iteration: {0}", ++index);
                     linqPadProcess.Refresh();
                     Thread.Sleep(10);
