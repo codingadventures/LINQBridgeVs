@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 Giovanni Campo
+// Copyright (c) 2013 - 2018 Giovanni Campo
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -36,7 +36,6 @@ using LINQBridgeVs.Helper.Forms;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using Debugger = System.Diagnostics.Debugger;
 using Process = System.Diagnostics.Process;
 
 namespace LINQBridgeVs.Extension
@@ -113,7 +112,6 @@ namespace LINQBridgeVs.Extension
                 _microsoftCommonTarget45Document = _microsoftCommonTarget45Document ?? XDocument.Load(Locations.MicrosoftCommonTarget45FileNamePath);
                 return _microsoftCommonTarget45Document;
             }
-
         }
         #endregion
 

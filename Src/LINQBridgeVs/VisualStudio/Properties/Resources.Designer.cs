@@ -19,7 +19,7 @@ namespace LINQBridgeVs.VisualStudio.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -102,6 +102,15 @@ namespace LINQBridgeVs.VisualStudio.Properties {
         internal static string VS2015Path1 {
             get {
                 return ResourceManager.GetString("VS2015Path1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to \\Visual Studio 2017\Visualizers\.
+        /// </summary>
+        internal static string VS2017Path1 {
+            get {
+                return ResourceManager.GetString("VS2017Path1", resourceCulture);
             }
         }
     }

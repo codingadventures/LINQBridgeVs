@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 Giovanni Campo
+// Copyright (c) 2013 - 2018 Giovanni Campo
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -23,28 +23,10 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-
-namespace LINQBridgeVs.Helper.Configuration
+namespace LINQBridgeVs.DynamicVisualizer.V15
 {
-    internal static class MsBuildVersion
+    public class Settings
     {
-        public static string GetMsBuildVersion(string vsVersion)
-        {
-            switch (vsVersion)
-            {
-                case "10.0":
-                case "11.0":
-                    return "v4.0";
-                case "12.0":
-                    return "v12.0";
-                case "14.0":
-                    return "v14.0";
-                case "15.0":
-                    return "V15.0";
-                default :
-                    throw new ArgumentException("Visual Studio Version not Supported", nameof(vsVersion));
-            }
-        }
+        public static string AssemblyLocation => typeof(Settings).Assembly.Location;
     }
 }

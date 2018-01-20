@@ -36,7 +36,6 @@ using Project = EnvDTE.Project;
 
 namespace LINQBridgeVs.Extension
 {
-
     public class LINQBridgeVsExtension
     {
         #region [ Private Properties ]

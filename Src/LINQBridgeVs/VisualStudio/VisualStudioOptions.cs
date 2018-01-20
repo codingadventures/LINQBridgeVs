@@ -36,7 +36,6 @@ namespace LINQBridgeVs.VisualStudio
         public string AssemblyLocation;
 
         public string MsBuildVersion;
-
     }
 
     public static class VisualStudioOptions
@@ -47,6 +46,7 @@ namespace LINQBridgeVs.VisualStudio
         private static readonly string Vs2012Path1 = MyDocuments + Resources.VS2012Path1;
         private static readonly string Vs2013Path1 = MyDocuments + Resources.VS2013Path1;
         private static readonly string Vs2015Path1 = MyDocuments + Resources.VS2015Path1;
+        private static readonly string Vs2017Path1 = MyDocuments + Resources.VS2017Path1;
 
 
         private static readonly Dictionary<string, Settings> VisualStudioPaths;
@@ -91,6 +91,15 @@ namespace LINQBridgeVs.VisualStudio
                             new List<string> {Vs2015Path1},
                         AssemblyLocation = DynamicVisualizer.V14.Settings.AssemblyLocation,
                         MsBuildVersion = "v14.0"
+                    }
+                },
+                {
+                    "15.0", new Settings
+                    {
+                        InstallationPaths =
+                            new List<string> {Vs2017Path1},
+                        AssemblyLocation = DynamicVisualizer.V15.Settings.AssemblyLocation,
+                        MsBuildVersion = "v15.0"
                     }
                 }
             };

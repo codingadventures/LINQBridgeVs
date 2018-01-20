@@ -1,11 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{DEECC213-180D-4C4E-A44B-5785F1C0FB73}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "IntegrationTests", "{07B00FDB-0426-4FAA-8C5E-DACDF7D03EDC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installer", "Installer", "{6DB52A93-035F-4E8A-A9F1-2C98ABB586E6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Grapple", "Grapple", "{0205ECAD-AF6C-4517-BEF0-4EE1A331CFC6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SInject", "SInject", "{F576F2DD-FB2C-469B-B769-8D622225430D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V11", "LINQBridgeVs\DynamicVisualizer.V11\DynamicVisualizer.V11.csproj", "{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}"
 EndProject
@@ -47,15 +53,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINQBridgeVs.Helper.UnitTes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V14", "LINQBridgeVs\DynamicVisualizer.V14\DynamicVisualizer.V14.csproj", "{0BEB30C9-243B-4192-8633-423B9322C587}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installer", "Installer", "{6DB52A93-035F-4E8A-A9F1-2C98ABB586E6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grapple", "Grapple\Grapple.csproj", "{79C0C9ED-D22C-4855-97C1-F6BD0127A531}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging", "Logging\Logging.csproj", "{0B546762-C8C0-45C6-BC42-C5D91D510351}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Grapple", "Grapple", "{0205ECAD-AF6C-4517-BEF0-4EE1A331CFC6}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SInject", "SInject", "{F576F2DD-FB2C-469B-B769-8D622225430D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SInject", "SInject\SInject.csproj", "{CD851C2D-8B24-4D72-B2A1-149F7D27C2F1}"
 EndProject
@@ -66,6 +66,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SInject.Test.Model", "..\Test\SInject.Test.Model\SInject.Test.Model.csproj", "{BF2D610C-BD8F-4C1C-A23D-6B213E6699F3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V14.IntegrationTest", "..\Test\LINQBridgeVs.Test\DynamicVisualizer.V14.IntegrationTest\DynamicVisualizer.V14.IntegrationTest.csproj", "{F3E217BC-EDD0-4354-AC29-C7525D5019E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V15", "LINQBridgeVs\DynamicVisualizer.V15\DynamicVisualizer.V15.csproj", "{6278C369-9593-4E93-A725-010717E7FC10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSIXProject1", "VSIXProject1\VSIXProject1.csproj", "{75261856-C908-41D1-86C2-C88206F7679B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -265,6 +269,22 @@ Global
 		{F3E217BC-EDD0-4354-AC29-C7525D5019E4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F3E217BC-EDD0-4354-AC29-C7525D5019E4}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{F3E217BC-EDD0-4354-AC29-C7525D5019E4}.Test|Any CPU.Build.0 = Test|Any CPU
+		{6278C369-9593-4E93-A725-010717E7FC10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6278C369-9593-4E93-A725-010717E7FC10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6278C369-9593-4E93-A725-010717E7FC10}.Deploy|Any CPU.ActiveCfg = Deploy|Any CPU
+		{6278C369-9593-4E93-A725-010717E7FC10}.Deploy|Any CPU.Build.0 = Deploy|Any CPU
+		{6278C369-9593-4E93-A725-010717E7FC10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6278C369-9593-4E93-A725-010717E7FC10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6278C369-9593-4E93-A725-010717E7FC10}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{6278C369-9593-4E93-A725-010717E7FC10}.Test|Any CPU.Build.0 = Test|Any CPU
+		{75261856-C908-41D1-86C2-C88206F7679B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75261856-C908-41D1-86C2-C88206F7679B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75261856-C908-41D1-86C2-C88206F7679B}.Deploy|Any CPU.ActiveCfg = Debug|Any CPU
+		{75261856-C908-41D1-86C2-C88206F7679B}.Deploy|Any CPU.Build.0 = Debug|Any CPU
+		{75261856-C908-41D1-86C2-C88206F7679B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75261856-C908-41D1-86C2-C88206F7679B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75261856-C908-41D1-86C2-C88206F7679B}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{75261856-C908-41D1-86C2-C88206F7679B}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -286,5 +306,8 @@ Global
 		{5D370118-2F96-49B6-B49A-62B6D2B46633} = {DEECC213-180D-4C4E-A44B-5785F1C0FB73}
 		{BF2D610C-BD8F-4C1C-A23D-6B213E6699F3} = {DEECC213-180D-4C4E-A44B-5785F1C0FB73}
 		{F3E217BC-EDD0-4354-AC29-C7525D5019E4} = {07B00FDB-0426-4FAA-8C5E-DACDF7D03EDC}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9B340B3F-C600-4B71-92DC-41BCFDE468C4}
 	EndGlobalSection
 EndGlobal

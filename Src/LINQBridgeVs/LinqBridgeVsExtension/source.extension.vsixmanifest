@@ -1,24 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
-  <Metadata>
-    <Identity Id="LINQBridgeVS.Giovanni Campo.93d93bed-e4dc-42a8-bfe2-a0b7676a45b2" Version="1.3.7" Language="en-US" Publisher="Giovanni Campo" />
-    <DisplayName>LINQBridgeVs Debugger Visualizer</DisplayName>
-    <Description xml:space="preserve">Bridge between a Visual Studio debugging session and LINQPad (http://www.linqpad.net). When enabled on a selection of VB/C# projects, it creates a Custom Debugger Visualizer mapping to all the complex types and making the magnifier glass available for all of them.</Description>
-    <License>License.txt</License>
-    <GettingStartedGuide>https://github.com/nbasakuragi/LINQBridgeVs</GettingStartedGuide>
-    <Icon>Resources\LINQBridge.ico</Icon>
-  </Metadata>
+    <Metadata>
+        <Identity Id="LINQBridgeVS.Giovanni Campo.93d93bed-e4dc-42a8-bfe2-a0b7676a45b2" Version="1.3.7" Language="en-US" Publisher="Giovanni Campo" />
+        <DisplayName>LINQBridgeVs Debugger Visualizer</DisplayName>
+        <Description xml:space="preserve">Bridge between a Visual Studio debugging session and LINQPad (http://www.linqpad.net). When enabled on a selection of VB/C# projects, it creates a Custom Debugger Visualizer mapping to all the complex types and making the magnifier glass available for all of them.</Description>
+        <License>License.txt</License>
+        <GettingStartedGuide>https://github.com/nbasakuragi/LINQBridgeVs</GettingStartedGuide>
+        <Icon>Resources\LINQBridge.ico</Icon>
+    </Metadata>
 
-  <Installation>
-    <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[11.0,14.0]" />
-    <InstallationTarget Version="[14.0,15.0)" Id="Microsoft.VisualStudio.Community" />
-    <InstallationTarget Version="[11.0,15.0)" Id="Microsoft.VisualStudio.Enterprise" />
-  </Installation>
-  <Dependencies>
-    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.0,)" d:InstallSource="Download" />
-    <Dependency Id="Microsoft.VisualStudio.MPF" DisplayName="Visual Studio MPF" d:Source="Installed" Version="[11.0,14.0)" />
-  </Dependencies>
-  <Assets>
-    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
-  </Assets>
+    <Installation>
+        <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[11.0,15.0)" />
+        <InstallationTarget Version="[14.0,15.0)" Id="Microsoft.VisualStudio.Community" />
+        <InstallationTarget Version="[11.0,15.0)" Id="Microsoft.VisualStudio.Enterprise" />
+    </Installation>
+    <Dependencies>
+        <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.0,)" d:InstallSource="Download" />
+        <Dependency Id="Microsoft.VisualStudio.MPF" DisplayName="Visual Studio MPF" d:Source="Installed" Version="[11.0,15.0)" />
+    </Dependencies>
+    <Assets>
+        <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+    </Assets>
+    <Prerequisites>
+        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0.26606.0,16.0)" DisplayName="Visual Studio core editor" />
+    </Prerequisites>
 </PackageManifest>

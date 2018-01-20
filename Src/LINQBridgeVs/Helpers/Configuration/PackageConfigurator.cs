@@ -135,9 +135,19 @@ namespace LINQBridgeVs.Helper.Configuration
                     DirectorySecurity sec = new DirectorySecurity();
                     // Using this instead of the "Everyone" string means we work on non-English systems.
                     SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
-                    sec.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
+                    sec.AddAccessRule(new FileSystemAccessRule(everyone,
+                        FileSystemRights.Modify | FileSystemRights.Synchronize,
+                        InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None,
+                        AccessControlType.Allow));
                     Directory.CreateDirectory(directoryToCreate, sec);
                     return directoryToCreate;
+                }
+                catch (UnauthorizedAccessException uae)
+                {
+                    Log.Write(uae);
+                    MessageBox.Show(
+                        "It hasn't been possible to complete the configuration of LINQBridgeVs. Please restart Visual Studio as Administrator");
+                    throw;
                 }
                 catch (Exception exception)
                 {

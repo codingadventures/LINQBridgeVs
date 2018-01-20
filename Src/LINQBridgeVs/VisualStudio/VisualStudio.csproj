@@ -83,6 +83,10 @@
       <Project>{0beb30c9-243b-4192-8633-423b9322c587}</Project>
       <Name>DynamicVisualizer.V14</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DynamicVisualizer.V15\DynamicVisualizer.V15.csproj">
+      <Project>{6278c369-9593-4e93-a725-010717e7fc10}</Project>
+      <Name>DynamicVisualizer.V15</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
