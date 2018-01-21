@@ -109,14 +109,13 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Grapple\Grapple.csproj">
-      <Project>{79c0c9ed-d22c-4855-97c1-f6bd0127a531}</Project>
+      <Project>{79C0C9ED-D22C-4855-97C1-F6BD0127A531}</Project>
       <Name>Grapple</Name>
-	  <Ilmerge>True</Ilmerge>
     </ProjectReference>
     <ProjectReference Include="..\..\Logging\Logging.csproj">
       <Project>{0b546762-c8c0-45c6-bc42-c5d91d510351}</Project>
       <Name>Logging</Name>
-	  <Ilmerge>True</Ilmerge>
+      <Ilmerge>True</Ilmerge>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
