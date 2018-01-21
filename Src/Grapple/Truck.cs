@@ -254,6 +254,5 @@ namespace Grapple
 
             Log.Write("Folder Successfully Created");
         }
-
     }
 }

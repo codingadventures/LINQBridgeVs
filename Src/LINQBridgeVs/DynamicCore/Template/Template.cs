@@ -28,7 +28,7 @@ using LINQBridgeVs.DynamicCore.Helper;
 
 namespace LINQBridgeVs.DynamicCore.Template
 {
-    public sealed partial class Inspection
+    public partial class Inspection
     {
         private readonly string _typeNamespace;
 
