@@ -23,6 +23,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using Bridge.Logging;
 using System;
 using System.IO;
 using System.Runtime.Serialization;
@@ -46,6 +47,7 @@ namespace Grapple.Serialization
         public override void Serialize<T>(Stream aStream, T objToSerialize)
         {
             aStream.Seek(0, SeekOrigin.Begin);
+            Log.Write("Serialization Used: " + this.ToString());
 
             try
             {
@@ -53,6 +55,9 @@ namespace Grapple.Serialization
             }
             catch (SerializationException)
             {
+                Log.Write("Binary Serialization unsuccessful");
+                Log.Write("Next Serialization Method: " + Successor.ToString());
+
                 aStream.Seek(0, SeekOrigin.Begin);
 
                 Successor.Serialize(aStream, objToSerialize);
@@ -151,6 +156,11 @@ namespace Grapple.Serialization
                 @object = Successor.Deserialize(objToDeserialize, type);
             }
             return @object;
+        }
+
+        public override string ToString()
+        {
+            return "Binary Serializer";
         }
     }
 }

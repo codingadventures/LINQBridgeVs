@@ -34,12 +34,9 @@ namespace Grapple.Grapple
 
     internal class BinaryGrapple : IGrapple
     {
-
         #region [ IGrapple Methods ]
-
         public Tuple<Type, byte[]> Grab<T>(T item)
         {
-
             var @type = item.GetType();
             byte[] byteStream = { };
             var serializedType = @type;
@@ -74,8 +71,6 @@ namespace Grapple.Grapple
             return serviceSerializer.Deserialize<T>(item);
         }
 
-
-
         public object Release(byte[] item, Type type)
         {
             var serviceSerializer = FactorySerializer.CreateServiceSerializer(type);
@@ -84,8 +79,5 @@ namespace Grapple.Grapple
         }
 
         #endregion
-
-
     }
-
 }

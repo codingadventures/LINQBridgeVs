@@ -96,5 +96,10 @@ namespace Grapple.Serialization
         {
             return (type.GetInterface("ICollection") != null);
         }
+
+        public override string ToString()
+        {
+            return "JsonSerializer";
+        }
     }
 }

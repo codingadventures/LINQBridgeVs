@@ -32,7 +32,7 @@ namespace LINQBridgeVs.DynamicVisualizer.V15
     /// <inheritdoc />
     /// <summary>
     /// </summary>
-    public class DynamicDebuggerVisualizerV14 : DialogDebuggerVisualizer
+    public class DynamicDebuggerVisualizerV15 : DialogDebuggerVisualizer
     {
         internal const string VsReferencedVersion = "15.0";
         internal const string TestRegistryKey = @"Software\LINQBridgeVs\15.0\Test";

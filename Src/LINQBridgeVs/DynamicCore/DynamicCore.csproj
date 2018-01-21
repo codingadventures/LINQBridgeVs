@@ -48,6 +48,10 @@
     <Optimize>true</Optimize>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.10.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
+	  <Ilmerge>True</Ilmerge>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -106,7 +110,7 @@
     <ProjectReference Include="..\..\Grapple\Grapple.csproj">
       <Project>{79c0c9ed-d22c-4855-97c1-f6bd0127a531}</Project>
       <Name>Grapple</Name>
-	   <Ilmerge>True</Ilmerge>
+      <Ilmerge>True</Ilmerge>
     </ProjectReference>
     <ProjectReference Include="..\..\Logging\Logging.csproj">
       <Project>{0b546762-c8c0-45c6-bc42-c5d91d510351}</Project>

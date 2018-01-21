@@ -33,7 +33,6 @@ namespace Grapple.Serialization
     /// </summary>
     public interface IServiceSerializer
     {
-
         /// <summary>
         /// Serializes the specified a stream.
         /// </summary>

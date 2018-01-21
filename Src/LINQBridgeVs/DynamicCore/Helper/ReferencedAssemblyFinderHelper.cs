@@ -31,7 +31,6 @@ namespace LINQBridgeVs.DynamicCore.Helper
 {
     internal static class ReferencedAssemblyFinderHelper
     {
-
         internal static List<string> GetReferencedAssemblies(this Type @type, string originalTypeLocation)
         {
             var returnList = new List<string>();

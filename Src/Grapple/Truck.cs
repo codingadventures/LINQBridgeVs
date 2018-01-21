@@ -142,7 +142,7 @@ namespace Grapple
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public IEnumerable<T> UnStuffCargo<T>()
+        public IEnumerable<T> UnLoadCargo<T>()
         {
             Log.Write("Unstuffing Cargo of Type {0}", typeof(T).FullName);
 
@@ -160,7 +160,7 @@ namespace Grapple
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public IEnumerable<object> UnStuffCargo(Type type)
+        public IEnumerable<object> UnLoadCargo(Type type)
         {
             Log.Write("Unstuffing Cargo of Type {0}", type.FullName);
 
@@ -170,7 +170,6 @@ namespace Grapple
                     select objects.Select(o => _grapple.Release(o, type)))
                    .SelectMany(o => o);
         }
-
 
         /// <summary>
         /// 
@@ -183,7 +182,7 @@ namespace Grapple
         {
             try
             {
-                return Task.Factory.StartNew(() => WaitNextTruck(address, timeout));
+                return Task.Factory.StartNew(() => WaitForNextTruck(address, timeout));
             }
             catch (AggregateException ae)
             {
@@ -196,7 +195,7 @@ namespace Grapple
             }
         }
 
-        private void WaitNextTruck(string address, int timeout)
+        private void WaitForNextTruck(string address, int timeout)
         {
             const int waiting = 100;
 
@@ -209,7 +208,7 @@ namespace Grapple
                 if (buffer.Length == 0)
                 {
                     Thread.Sleep(waiting);
-                    WaitNextTruck(address, timeout - waiting);
+                    WaitForNextTruck(address, timeout - waiting);
                 }
                 else
                     //Container is being merged with the current loaded
@@ -241,10 +240,9 @@ namespace Grapple
             }
         }
 
-
         private static void CreateDeliveryFolder(string address)
         {
-            Log.Write("Creating folder for Delivery {0}", address);
+            Log.Write("Creating folder for Delivery {0}", Path.GetFullPath(address));
 
             if (Directory.Exists(address)) return;
 

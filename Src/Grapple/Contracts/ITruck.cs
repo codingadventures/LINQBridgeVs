@@ -33,8 +33,8 @@ namespace Grapple.Contracts
     {
         void LoadCargo<T>(T item);
         bool DeliverTo(string address = null);
-        IEnumerable<T> UnStuffCargo<T>();
-        IEnumerable<object> UnStuffCargo(Type type);
+        IEnumerable<T> UnLoadCargo<T>();
+        IEnumerable<object> UnLoadCargo(Type type);
  
         Task WaitDelivery(string address, int timeout = 5000);
     }

@@ -184,7 +184,6 @@ namespace LINQBridgeVs.TypeMapper
                 security.SetAccessRule(rule);
                 di.SetAccessControl(security);
                 return;
-
             }
             sec.AddAccessRule(rule);
             Directory.CreateDirectory(folder, sec);

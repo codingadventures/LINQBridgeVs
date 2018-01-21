@@ -51,8 +51,7 @@ namespace LINQBridgeVs.DynamicCore.Template
                 + "TypeFullName: " + TypeFullName  
                 + Environment.NewLine 
                 + "TypeName: " + TypeName 
-                + Environment.NewLine 
-                
+                + Environment.NewLine
                 + "TypeNamespace: " + TypeNamespace 
                 + Environment.NewLine;
         }

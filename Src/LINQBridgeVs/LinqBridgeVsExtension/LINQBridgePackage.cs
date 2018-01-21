@@ -66,9 +66,6 @@ namespace LINQBridgeVs.Extension
         private DTE _dte;
         private const string VisualStudioProcessName = "devenv";
         private DTE2 _mApplicationObject;
-
-        DTEEvents _mPackageDteEvents;
-
         public DTE2 ApplicationObject
         {
             get
@@ -131,11 +128,6 @@ namespace LINQBridgeVs.Extension
 
             _dteEvents.OnStartupComplete += OnStartupComplete;
 
-
-            _mPackageDteEvents = ApplicationObject.Events.DTEEvents;
-            _mPackageDteEvents.OnBeginShutdown += HandleVisualStudioShutDown;
-
-
             var bridge = new LINQBridgeVsExtension(_dte);
 
             // Add our command handlers for menu (commands must exist in the .vsct file)
@@ -162,28 +154,6 @@ namespace LINQBridgeVs.Extension
             mcs.AddCommand(menuItemAbout);
         }
 
-        private void HandleVisualStudioShutDown()
-        {
-            try
-            {
-                Log.Write("OnBeginShutdown");
-
-                _mPackageDteEvents.OnBeginShutdown -= HandleVisualStudioShutDown;
-                _dteEvents = null;
-                _mPackageDteEvents = null;
-                //Check if there's only one instance of VS running. if it's so then remove from Microsoft.Common.Target 
-                //Any reference of LINQBridgeVs
-                if (Process.GetProcessesByName(VisualStudioProcessName).Length > 1) return;
-
-                //This simulate an uninstall. if it's the last instance of VS running disable LINQBridgeVs
-                PackageConfigurator.IsLinqBridgeEnabled = false;
-            }
-            catch (Exception e)
-            {
-                Log.Write(e, "OnBeginShutdown Error...");
-
-            }
-        }
 
         private void OnStartupComplete()
         {
@@ -193,6 +163,9 @@ namespace LINQBridgeVs.Extension
 
                 _dteEvents.OnStartupComplete -= OnStartupComplete;
                 _dteEvents = null;
+
+                //do this once
+                if (PackageConfigurator.AreOldTargetsRemoved) return;
 
                 PackageConfigurator.RemoveBridgeBuildTargetFromMicrosoftCommon(MicrosoftCommonTargetDocument, Locations.MicrosoftCommonTargetFileNamePath);
                 Log.Write("BridgeBuild.targets Removed for x86 Operating System");
@@ -209,9 +182,8 @@ namespace LINQBridgeVs.Extension
                     Log.Write("BridgeBuild.targets Removed for framework 4.5");
                 }
 
-                PackageConfigurator.IsLinqBridgeEnabled = true;
                 Log.Write("OnStartupComplete End");
-
+                PackageConfigurator.AreOldTargetsRemoved = true;
             }
             catch (Exception e)
             {

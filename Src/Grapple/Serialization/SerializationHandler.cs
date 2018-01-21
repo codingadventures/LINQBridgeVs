@@ -31,7 +31,6 @@ namespace Grapple.Serialization
 {
     internal abstract class SerializationHandler : IServiceSerializer
     {
-
         protected SerializationHandler Successor;
 
         public void SetSuccessor(SerializationHandler successor)

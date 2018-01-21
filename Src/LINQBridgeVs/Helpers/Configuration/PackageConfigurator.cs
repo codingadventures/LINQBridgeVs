@@ -48,7 +48,7 @@ namespace LINQBridgeVs.Helper.Configuration
         
         private const string VersionRegistryValue = "LINQBridgeVsVersion";
         private const string ConfiguredRegistryValue = "IsLINQBridgeVsConfigured";
-        private const string EnabledRegistryValue = "IsLinqBridgeEnabled";
+        private const string OldTargetsRegistryValue = "AreOldTargetsRemoved";
         private const string InstallFolderPathRegistryValue = "InstallFolderPath";
 
         #region [ Private Methods ]
@@ -182,20 +182,20 @@ namespace LINQBridgeVs.Helper.Configuration
             }
         }
 
-        public static bool IsLinqBridgeEnabled
+        public static bool AreOldTargetsRemoved
         {
             get
             {
                 using (RegistryKey key = Registry.CurrentUser.OpenSubKey(GetRegistryKey(Resources.ProductVersion, _runningVisualStudioVersion)))
                 {
-                    return key != null && Convert.ToBoolean(key.GetValue(EnabledRegistryValue));
+                    return key != null && Convert.ToBoolean(key.GetValue(OldTargetsRegistryValue));
                 }
             }
             set
             {
                 using (RegistryKey key = Registry.CurrentUser.CreateSubKey(GetRegistryKey(Resources.ProductVersion, _runningVisualStudioVersion)))
                 {
-                    key?.SetValue(EnabledRegistryValue, value);
+                    key?.SetValue(OldTargetsRegistryValue, value);
                 }
             }
         }
