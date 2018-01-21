@@ -8,7 +8,7 @@
 What's LINQBridgeVs?
 -----------------
 
-LINQBridgeVs is a Visual Studio Extension compatible with Visual Studio 2010/2012/2013.
+LINQBridgeVs is a Visual Studio Extension compatible with Visual Studio 2012/2012/2013/2015/2017.
 It is a bridge between a Visual Studio debugging session and [LINQPad] (http://www.linqpad.net).
 When enabled on a selection of VB/C# projects, it creates a Custom Debugger Visualizer 
 mapping to all the complex types and making the magnifier glass 
@@ -36,7 +36,7 @@ Clicking the magnifier will export the instance to [LINQPad](http://www.linqpad.
 
 ## Compatibility
 
-LINQBridgeVs is compatible for Visual Studio 2010/2012/2013. At the moment available **only for .NET Framework 4.0 onwards**
+LINQBridgeVs is compatible for Visual Studio 2012/2013/2015/2015. It works **for .NET Framework 4.0 - 4.6.2**. There is no support for .NET Framework 2.0 to 3.5 
 
 
 ## Known Issues
