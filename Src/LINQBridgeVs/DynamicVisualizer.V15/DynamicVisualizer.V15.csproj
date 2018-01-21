@@ -77,7 +77,7 @@
       <Output TaskParameter="Include" ItemName="IlmergeAssemblies" />
     </CreateItem>
     <Message Text="MERGING: @(IlmergeAssemblies->'%(Filename)') " Importance="High" />
-    <Exec Condition=" '$(Configuration)' == 'Deploy' " Command="&quot;$(SolutionDir)packages\ILMerge.2.14.1208\tools\Ilmerge.exe&quot; /out:@(MainAssembly) &quot;@(IntermediateAssembly)&quot; @(IlmergeAssemblies->'&quot;%(FullPath)&quot;', ' ') /lib:&quot;$(SolutionDir)..\Lib\VS2015&quot;" />
+    <Exec Condition=" '$(Configuration)' == 'Deploy' " Command="&quot;$(SolutionDir)packages\ILMerge.2.14.1208\tools\Ilmerge.exe&quot; /out:@(MainAssembly) &quot;@(IntermediateAssembly)&quot; @(IlmergeAssemblies->'&quot;%(FullPath)&quot;', ' ') /lib:&quot;$(SolutionDir)..\Lib\VS2017&quot;" />
   </Target>
   <Target Name="AfterResolveReferences" Condition=" '$(Configuration)' == 'Deploy' ">
     <Message Text="Filtering out ilmerge assemblies from ReferenceCopyLocalPaths" Importance="High" />
