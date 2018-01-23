@@ -75,10 +75,6 @@
       <Project>{c6798d16-89f5-4bff-8b62-2be6d4bbc192}</Project>
       <Name>DynamicVisualizer.V11</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DynamicVisualizer.V10\DynamicVisualizer.V10.csproj">
-      <Project>{88641be0-4023-4563-b7c9-8816624549ac}</Project>
-      <Name>DynamicVisualizer.V10</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DynamicVisualizer.V14\DynamicVisualizer.V14.csproj">
       <Project>{0beb30c9-243b-4192-8633-423b9322c587}</Project>
       <Name>DynamicVisualizer.V14</Name>

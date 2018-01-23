@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{DEECC213-180D-4C4E-A44B-5785F1C0FB73}"
 EndProject
@@ -33,15 +33,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnotherModel.UnitTest", "..
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicCore", "LINQBridgeVs\DynamicCore\DynamicCore.csproj", "{B84FBD50-0B10-4C25-8430-680FC6FC3FEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V10", "LINQBridgeVs\DynamicVisualizer.V10\DynamicVisualizer.V10.csproj", "{88641BE0-4023-4563-B7C9-8816624549AC}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeMapper.UnitTest.V11", "..\Test\LINQBridgeVs.Test\TypeMapper.Test\TypeMapper.UnitTest.V11.csproj", "{08ADAF10-E655-4560-BF9C-9287E60247B5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V12", "LINQBridgeVs\DynamicVisualizer.V12\DynamicVisualizer.V12.csproj", "{835064F0-3C4F-4646-B17A-632C192CCE3B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V12.IntegrationTest", "..\Test\LINQBridgeVs.Test\DynamicVisualizer.V12.IntegrationTest\DynamicVisualizer.V12.IntegrationTest.csproj", "{E4E1ED5C-4D75-47C7-A0A4-F57F65C252B4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V10.IntegrationTest", "..\Test\LINQBridgeVs.Test\DynamicVisualizer.V10.IntegrationTest\DynamicVisualizer.V10.IntegrationTest.csproj", "{BD5831E5-EF85-4EA5-A63B-6AD7F8C1CA28}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V11.IntegrationTest", "..\Test\LINQBridgeVs.Test\DynamicVisualizer.V11.IntegrationTest\DynamicVisualizer.V11.IntegrationTest.csproj", "{8B9A8154-A426-4B55-8F63-302C69662490}"
 EndProject
@@ -68,6 +64,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V14.IntegrationTest", "..\Test\LINQBridgeVs.Test\DynamicVisualizer.V14.IntegrationTest\DynamicVisualizer.V14.IntegrationTest.csproj", "{F3E217BC-EDD0-4354-AC29-C7525D5019E4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V15", "LINQBridgeVs\DynamicVisualizer.V15\DynamicVisualizer.V15.csproj", "{6278C369-9593-4E93-A725-010717E7FC10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V15.IntegrationTest", "..\Test\LINQBridgeVs.Test\DynamicVisualizer.V15.IntegrationTest\DynamicVisualizer.V15.IntegrationTest.csproj", "{4F104507-DC9D-41F2-AFA4-3262C31007BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -149,14 +147,6 @@ Global
 		{B84FBD50-0B10-4C25-8430-680FC6FC3FEA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B84FBD50-0B10-4C25-8430-680FC6FC3FEA}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{B84FBD50-0B10-4C25-8430-680FC6FC3FEA}.Test|Any CPU.Build.0 = Test|Any CPU
-		{88641BE0-4023-4563-B7C9-8816624549AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{88641BE0-4023-4563-B7C9-8816624549AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{88641BE0-4023-4563-B7C9-8816624549AC}.Deploy|Any CPU.ActiveCfg = Deploy|Any CPU
-		{88641BE0-4023-4563-B7C9-8816624549AC}.Deploy|Any CPU.Build.0 = Deploy|Any CPU
-		{88641BE0-4023-4563-B7C9-8816624549AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{88641BE0-4023-4563-B7C9-8816624549AC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{88641BE0-4023-4563-B7C9-8816624549AC}.Test|Any CPU.ActiveCfg = Test|Any CPU
-		{88641BE0-4023-4563-B7C9-8816624549AC}.Test|Any CPU.Build.0 = Test|Any CPU
 		{08ADAF10-E655-4560-BF9C-9287E60247B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{08ADAF10-E655-4560-BF9C-9287E60247B5}.Deploy|Any CPU.ActiveCfg = Deploy|Any CPU
 		{08ADAF10-E655-4560-BF9C-9287E60247B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -177,12 +167,6 @@ Global
 		{E4E1ED5C-4D75-47C7-A0A4-F57F65C252B4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E4E1ED5C-4D75-47C7-A0A4-F57F65C252B4}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{E4E1ED5C-4D75-47C7-A0A4-F57F65C252B4}.Test|Any CPU.Build.0 = Test|Any CPU
-		{BD5831E5-EF85-4EA5-A63B-6AD7F8C1CA28}.Debug|Any CPU.ActiveCfg = Test|Any CPU
-		{BD5831E5-EF85-4EA5-A63B-6AD7F8C1CA28}.Deploy|Any CPU.ActiveCfg = Deploy|Any CPU
-		{BD5831E5-EF85-4EA5-A63B-6AD7F8C1CA28}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BD5831E5-EF85-4EA5-A63B-6AD7F8C1CA28}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BD5831E5-EF85-4EA5-A63B-6AD7F8C1CA28}.Test|Any CPU.ActiveCfg = Test|Any CPU
-		{BD5831E5-EF85-4EA5-A63B-6AD7F8C1CA28}.Test|Any CPU.Build.0 = Test|Any CPU
 		{8B9A8154-A426-4B55-8F63-302C69662490}.Debug|Any CPU.ActiveCfg = Test|Any CPU
 		{8B9A8154-A426-4B55-8F63-302C69662490}.Deploy|Any CPU.ActiveCfg = Deploy|Any CPU
 		{8B9A8154-A426-4B55-8F63-302C69662490}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -274,6 +258,14 @@ Global
 		{6278C369-9593-4E93-A725-010717E7FC10}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6278C369-9593-4E93-A725-010717E7FC10}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{6278C369-9593-4E93-A725-010717E7FC10}.Test|Any CPU.Build.0 = Test|Any CPU
+		{4F104507-DC9D-41F2-AFA4-3262C31007BE}.Debug|Any CPU.ActiveCfg = Deploy|Any CPU
+		{4F104507-DC9D-41F2-AFA4-3262C31007BE}.Debug|Any CPU.Build.0 = Deploy|Any CPU
+		{4F104507-DC9D-41F2-AFA4-3262C31007BE}.Deploy|Any CPU.ActiveCfg = Deploy|Any CPU
+		{4F104507-DC9D-41F2-AFA4-3262C31007BE}.Deploy|Any CPU.Build.0 = Deploy|Any CPU
+		{4F104507-DC9D-41F2-AFA4-3262C31007BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F104507-DC9D-41F2-AFA4-3262C31007BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F104507-DC9D-41F2-AFA4-3262C31007BE}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{4F104507-DC9D-41F2-AFA4-3262C31007BE}.Test|Any CPU.Build.0 = Test|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -285,7 +277,6 @@ Global
 		{7B0C3D12-296A-438D-B0EA-B049A0D6D3C1} = {DEECC213-180D-4C4E-A44B-5785F1C0FB73}
 		{08ADAF10-E655-4560-BF9C-9287E60247B5} = {DEECC213-180D-4C4E-A44B-5785F1C0FB73}
 		{E4E1ED5C-4D75-47C7-A0A4-F57F65C252B4} = {07B00FDB-0426-4FAA-8C5E-DACDF7D03EDC}
-		{BD5831E5-EF85-4EA5-A63B-6AD7F8C1CA28} = {07B00FDB-0426-4FAA-8C5E-DACDF7D03EDC}
 		{8B9A8154-A426-4B55-8F63-302C69662490} = {07B00FDB-0426-4FAA-8C5E-DACDF7D03EDC}
 		{0AC90EDD-AD20-4FA8-A187-06C23BE9A455} = {07B00FDB-0426-4FAA-8C5E-DACDF7D03EDC}
 		{7520E391-50B3-4938-9141-0EC491693968} = {DEECC213-180D-4C4E-A44B-5785F1C0FB73}
@@ -295,6 +286,7 @@ Global
 		{5D370118-2F96-49B6-B49A-62B6D2B46633} = {DEECC213-180D-4C4E-A44B-5785F1C0FB73}
 		{BF2D610C-BD8F-4C1C-A23D-6B213E6699F3} = {DEECC213-180D-4C4E-A44B-5785F1C0FB73}
 		{F3E217BC-EDD0-4354-AC29-C7525D5019E4} = {07B00FDB-0426-4FAA-8C5E-DACDF7D03EDC}
+		{4F104507-DC9D-41F2-AFA4-3262C31007BE} = {07B00FDB-0426-4FAA-8C5E-DACDF7D03EDC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9B340B3F-C600-4B71-92DC-41BCFDE468C4}

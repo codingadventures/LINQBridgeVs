@@ -46,22 +46,5 @@ namespace LINQBridgeVsExtension.UnitTests
             var package = new LINQBridgeVsPackage();
             Assert.IsNotNull(package as IVsPackage, "The object does not implement IVsPackage");
         }
-
-        //[TestMethod()]
-        //public void SetSite()
-        //{
-        //    // Create the package
-        //    var package = new LINQBridgeVsPackage() as IVsPackage;
-        //    Assert.IsNotNull(package, "The object does not implement IVsPackage");
-
-        //    // Create a basic service provider
-        //    var serviceProvider = OleServiceProvider.CreateOleServiceProviderWithBasicServices();
-
-        //    // Site the package
-        //    Assert.AreEqual(0, package.SetSite(serviceProvider), "SetSite did not return S_OK");
-
-        //    // Unsite the package
-        //    Assert.AreEqual(0, package.SetSite(null), "SetSite(null) did not return S_OK");
-        //}
     }
 }

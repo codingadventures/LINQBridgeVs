@@ -56,16 +56,6 @@ namespace LINQBridgeVs.VisualStudio
             VisualStudioPaths = new Dictionary<string, Settings>
             {
                 {
-                    "10.0", new Settings
-                    {
-                        InstallationPaths =
-                            new List<string> {Vs2010Path1, Vs2010Path2},
-
-                        AssemblyLocation = DynamicVisualizer.V10.Settings.AssemblyLocation,
-                        MsBuildVersion = "v4.0"
-                    }
-                },
-                {
                     "11.0", new Settings
                     {
                         InstallationPaths =
