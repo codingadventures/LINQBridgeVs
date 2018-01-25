@@ -49,7 +49,7 @@ namespace LINQBridgeVs.Extension
             Log.Configure("LINQBridgeVs", "LINQBridgeVsExtension");
 
             _application = app;
-            PackageConfigurator.Configure(_application.Version);
+            PackageConfigurator.Configure(_application.Version, _application.Edition);
         }
         private static bool IsSupported(string uniqueName)
         {

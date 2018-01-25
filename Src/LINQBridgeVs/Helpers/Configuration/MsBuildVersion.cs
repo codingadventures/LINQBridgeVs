@@ -27,13 +27,12 @@ using System;
 
 namespace LINQBridgeVs.Helper.Configuration
 {
-    internal static class MsBuildVersion
+    internal static class MsBuildVersionHelper
     {
         public static string GetMsBuildVersion(string vsVersion)
         {
             switch (vsVersion)
             {
-                case "10.0":
                 case "11.0":
                     return "v4.0";
                 case "12.0":

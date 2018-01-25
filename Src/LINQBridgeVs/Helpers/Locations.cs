@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 Giovanni Campo
+// Copyright (c) 2013 - 2018 Giovanni Campo
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -29,17 +29,17 @@ using System.Reflection;
 
 namespace LINQBridgeVs.Helper
 {
+    /// <summary>
+    /// This static class is a container for all the folders needed in the extension
+    /// </summary>
     public static class Locations
     {
         private static readonly string SpecialWindowsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
         private static readonly string ProgramFilesFolderPath = Environment.GetEnvironmentVariable("PROGRAMFILES");
-        private static readonly string ProgramFilesx86FolderPath = Environment.GetEnvironmentVariable("PROGRAMFILES(X86)");
 
         public static string InstallFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
         public static readonly string LinqPad4DestinationFolder = Path.Combine(ProgramFilesFolderPath, "LINQPad4");
-        public static readonly string LinqPad4DestinationFolder86 = Path.Combine(ProgramFilesx86FolderPath, "LINQPad4");
-
 
         public static readonly string CustomAfterTargetFileNamePath = Path.Combine(InstallFolder, Resources.CustomAfterTargets);
         public static readonly string CustomAfterTargetFileName = Path.GetFileName(Resources.CustomAfterTargets);
@@ -48,6 +48,8 @@ namespace LINQBridgeVs.Helper
         public static readonly string CustomBeforeTargetFileName = Path.GetFileName(Resources.CustomBeforeTargets);
 
         public static readonly string MsBuildPath = Path.Combine(ProgramFilesFolderPath, "MSBuild");
+
+        public static readonly string MsBuildPath2017 = Path.Combine(ProgramFilesFolderPath, @"Microsoft Visual Studio\2017\{0}\MSBuild");
 
         public static readonly string DotNet40FrameworkPath = Path.Combine(SpecialWindowsFolderPath, @"Microsoft.NET\Framework\v4.0.30319");
 

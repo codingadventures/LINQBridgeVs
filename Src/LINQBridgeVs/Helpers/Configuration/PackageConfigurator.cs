@@ -42,7 +42,7 @@ namespace LINQBridgeVs.Helper.Configuration
     public static class PackageConfigurator
     {
         private static string _runningVisualStudioVersion;
-
+        private static string _vsEdition;
         private static readonly string CurrentAssemblyVersion = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
         public static readonly bool IsFramework45Installed = Directory.Exists(Locations.DotNet45FrameworkPath);
         
@@ -80,9 +80,6 @@ namespace LINQBridgeVs.Helper.Configuration
         private static bool IsLINQPadInstalled()
         {
             if (Directory.Exists(Locations.LinqPad4DestinationFolder))
-                return true;
-
-            if (Directory.Exists(Locations.LinqPad4DestinationFolder86))
                 return true;
 
             MessageBox.Show("Please Install LINQPad in order to Use LINQBridgeVs and then Restart Visual Studio");
@@ -125,8 +122,16 @@ namespace LINQBridgeVs.Helper.Configuration
 
         private static string CreateMsBuildTargetDirectory()
         {
-            string msBuildVersion = MsBuildVersion.GetMsBuildVersion(_runningVisualStudioVersion);
-            string directoryToCreate = Path.Combine(Locations.MsBuildPath, msBuildVersion);
+            string msBuildVersion = MsBuildVersionHelper.GetMsBuildVersion(_runningVisualStudioVersion);
+            string directoryToCreate = string.Empty;
+            //if it's v15 it's Visual studio 2017
+            if (msBuildVersion.Equals("V15.0"))
+            {
+                directoryToCreate = Path.Combine(string.Format(Locations.MsBuildPath2017, _vsEdition), msBuildVersion);
+            }
+            else
+                directoryToCreate = Path.Combine(Locations.MsBuildPath, msBuildVersion);
+
             Log.Write("MsBuild Directory being created {0}", directoryToCreate);
             if (!Directory.Exists(directoryToCreate))
             {
@@ -200,9 +205,10 @@ namespace LINQBridgeVs.Helper.Configuration
             }
         }
 
-        public static void Configure(string vsVersion)
+        public static void Configure(string vsVersion, string vsEdition)
         {
             _runningVisualStudioVersion = vsVersion;
+            _vsEdition = vsEdition;
 
             Log.Write("Configuring LINQBridgeVs Extension");
 
