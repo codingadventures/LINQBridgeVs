@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace LINQBridgeVs.DynamicCore.Template
+namespace BridgeVs.DynamicCore.Template
 {
     using System.Linq;
     using System.Text;

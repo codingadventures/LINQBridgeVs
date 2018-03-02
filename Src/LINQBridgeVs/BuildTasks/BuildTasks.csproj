@@ -8,8 +8,8 @@
     <ProjectGuid>{276F3935-E0CA-450F-A55F-AED56DC2024E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LINQBridgeVs.BuildTasks</RootNamespace>
-    <AssemblyName>LINQBridgeVs.BuildTasks</AssemblyName>
+    <RootNamespace>BridgeVs.BuildTasks</RootNamespace>
+    <AssemblyName>BridgeVs.BuildTasks</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -38,14 +38,25 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Optimize>true</Optimize>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\LinqBridgeVsExtension\Key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="CleanBuildTask.cs" />
     <Compile Include="MapperBuildTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SInjectionBuildTask.cs" />
     <Compile Include="VisualizerAssemblyNameFormat.cs" />
+    <Compile Include="VisualStudioOptions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Grapple\Grapple.csproj">
+      <Project>{79c0c9ed-d22c-4855-97c1-f6bd0127a531}</Project>
+      <Name>Grapple</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Logging\Logging.csproj">
       <Project>{0b546762-c8c0-45c6-bc42-c5d91d510351}</Project>
       <Name>Logging</Name>
@@ -54,37 +65,62 @@
       <Project>{cd851c2d-8b24-4d72-b2a1-149f7d27c2f1}</Project>
       <Name>SInject</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DynamicCore\DynamicCore.csproj">
+      <Project>{b84fbd50-0b10-4c25-8430-680fc6fc3fea}</Project>
+      <Name>DynamicCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DynamicVisualizer.V11\DynamicVisualizer.V11.csproj">
+      <Project>{c6798d16-89f5-4bff-8b62-2be6d4bbc192}</Project>
+      <Name>DynamicVisualizer.V11</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DynamicVisualizer.V12\DynamicVisualizer.V12.csproj">
+      <Project>{835064f0-3c4f-4646-b17a-632c192cce3b}</Project>
+      <Name>DynamicVisualizer.V12</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DynamicVisualizer.V14\DynamicVisualizer.V14.csproj">
+      <Project>{0beb30c9-243b-4192-8633-423b9322c587}</Project>
+      <Name>DynamicVisualizer.V14</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DynamicVisualizer.V15\DynamicVisualizer.V15.csproj">
+      <Project>{6278c369-9593-4e93-a725-010717e7fc10}</Project>
+      <Name>DynamicVisualizer.V15</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TypeMapper\TypeMapper.csproj">
       <Project>{fcc8bf06-3173-4d21-a157-d1167b6407c9}</Project>
       <Name>TypeMapper</Name>
     </ProjectReference>
-    <ProjectReference Include="..\VisualStudio\VisualStudio.csproj">
-      <Project>{8f6409f1-33e3-4310-be84-12c4f838c0b0}</Project>
-      <Name>VisualStudio</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="ILMerge">
+      <HintPath>..\..\packages\ILMerge.2.14.1208\tools\ILMerge.exe</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Mono.Cecil.0.9.6.4\lib\net40\Mono.Cecil.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Mono.Cecil.Mdb, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Mono.Cecil.0.9.6.4\lib\net40\Mono.Cecil.Mdb.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Mono.Cecil.Pdb, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Mono.Cecil.0.9.6.4\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Mono.Cecil.Rocks, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Mono.Cecil.0.9.6.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
-      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.11.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Abstractions, Version=2.1.0.178, Culture=neutral, PublicKeyToken=96bf224d23c43e59, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.IO.Abstractions.2.1.0.178\lib\net40\System.IO.Abstractions.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\LinqBridgeVsExtension\Key.snk">
+      <Link>Key.snk</Link>
+    </None>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>

@@ -29,11 +29,11 @@ using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Runtime.InteropServices;
-using Bridge.Logging;
+using BridgeVs.Logging;
 
-namespace LINQBridgeVs.DynamicCore.Helper
+namespace BridgeVs.DynamicCore.Helper
 {
-    internal static class AssemblyFinderHelper
+    public static class AssemblyFinderHelper
     {
         private const string SearchPattern = "*{0}*.dll";
         private const int MaxDepth = 4;

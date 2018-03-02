@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LINQBridgeVs.Helper
+namespace BridgeVs.Helper
 {
     [Flags]
     public enum CommandStates

@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 Giovanni Campo
+// Copyright (c) 2013 - 2018 Giovanni Campo
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -26,7 +26,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace LINQBridgeVs.Helper.Extension
+namespace BridgeVs.Helper.Extension
 {
     public static class EnumerableExtension
     {
@@ -35,6 +35,5 @@ namespace LINQBridgeVs.Helper.Extension
             foreach (var item in sequence)
                 action(item);
         }
-      
     }
 }

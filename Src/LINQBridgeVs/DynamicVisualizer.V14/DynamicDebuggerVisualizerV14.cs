@@ -23,11 +23,11 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using LINQBridgeVs.DynamicCore;
+using BridgeVs.DynamicCore;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using Microsoft.Win32;
 
-namespace LINQBridgeVs.DynamicVisualizer.V14
+namespace BridgeVs.DynamicVisualizer.V14
 {
     /// <inheritdoc />
     /// <summary>

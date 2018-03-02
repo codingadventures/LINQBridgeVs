@@ -26,7 +26,7 @@
 using System.IO;
 using Microsoft.Build.Framework;
 
-namespace LINQBridgeVs.BuildTasks
+namespace BridgeVs.BuildTasks
 {
     public class CleanBuildTask : ITask
     {

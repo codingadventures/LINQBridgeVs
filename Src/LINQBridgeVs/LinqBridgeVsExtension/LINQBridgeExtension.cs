@@ -28,28 +28,23 @@ using System.Collections;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
-using Bridge.Logging;
+using BridgeVs.Logging;
 using EnvDTE;
-using LINQBridgeVs.Helper;
-using LINQBridgeVs.Helper.Configuration;
+using BridgeVs.Helper;
+using BridgeVs.Helper.Configuration;
 using Project = EnvDTE.Project;
 
-namespace LINQBridgeVs.Extension
+namespace BridgeVs.Extension
 {
     public class LINQBridgeVsExtension
     {
         #region [ Private Properties ]
         private readonly DTE _application;
-
-
         #endregion
 
         public LINQBridgeVsExtension(DTE app)
         {
-            Log.Configure("LINQBridgeVs", "LINQBridgeVsExtension");
-
-            _application = app;
-            PackageConfigurator.Configure(_application.Version, _application.Edition);
+            _application = app; 
         }
         private static bool IsSupported(string uniqueName)
         {
@@ -96,7 +91,6 @@ namespace LINQBridgeVs.Extension
             }
         }
 
-
         public void Execute(CommandAction action)
         {
             if (SelectedProject == null)
@@ -109,7 +103,7 @@ namespace LINQBridgeVs.Extension
         {
             var states = GetStatus(action);
             cmd.Visible = (CommandStates.Visible & states) != 0;
-            cmd.Enabled = (CommandStates.Enabled & states) != 0;
+            cmd.Enabled = (CommandStates.Enabled & states) != 0 && PackageConfigurator.IsLINQBridgeVsConfigured;
         }
 
         private CommandStates GetStatus(CommandAction action)

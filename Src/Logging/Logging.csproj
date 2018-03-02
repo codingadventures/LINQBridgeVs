@@ -7,8 +7,8 @@
     <ProjectGuid>{0B546762-C8C0-45C6-BC42-C5D91D510351}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Bridge.Logging</RootNamespace>
-    <AssemblyName>Bridge.Logging</AssemblyName>
+    <RootNamespace>BridgeVs.Logging</RootNamespace>
+    <AssemblyName>BridgeVs.Logging</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

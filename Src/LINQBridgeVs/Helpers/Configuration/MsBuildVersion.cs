@@ -25,7 +25,7 @@
 
 using System;
 
-namespace LINQBridgeVs.Helper.Configuration
+namespace BridgeVs.Helper.Configuration
 {
     internal static class MsBuildVersionHelper
     {

@@ -24,10 +24,10 @@
 #endregion
 
 using System.IO;
-using LINQBridgeVs.DynamicCore;
+using BridgeVs.DynamicCore;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 
-namespace LINQBridgeVs.DynamicVisualizer.V15
+namespace BridgeVs.DynamicVisualizer.V15
 {  
     public class DynamicDebuggerVisualizerObjectSourceV15 : VisualizerObjectSource 
     {

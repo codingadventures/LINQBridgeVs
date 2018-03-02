@@ -25,7 +25,7 @@
 
 using System;
 
-namespace LINQBridgeVs.Helper.Dependency
+namespace BridgeVs.Helper.Dependency
 {
     [Serializable]
     public enum DependencyType

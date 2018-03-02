@@ -26,19 +26,21 @@
 using System;
 using System.ComponentModel.Design;
 using System.Runtime.InteropServices;
-using System.Xml.Linq;
-using Bridge.Logging;
+using System.Windows;
 using EnvDTE;
 using EnvDTE80;
-using LINQBridgeVs.Helper;
-using LINQBridgeVs.Helper.Configuration;
-using LINQBridgeVs.Helper.Forms;
+using BridgeVs.Helper;
+using BridgeVs.Helper.Forms;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using Process = System.Diagnostics.Process;
+using BridgeVs.Logging;
+using BridgeVs.Helper.Configuration;
+using System.Security.Principal;
+using System.Globalization;
+using System.Diagnostics;
 
-namespace LINQBridgeVs.Extension
+namespace BridgeVs.Extension
 {
     /// <inheritdoc />
     ///  <summary>
@@ -58,59 +60,20 @@ namespace LINQBridgeVs.Extension
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)]
     [ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string)]
+    [ProvideAutoLoad(VSConstants.UICONTEXT.EmptySolution_string)]
     [Guid(GuidList.GuidBridgeVsExtensionPkgString)]
     public sealed class LINQBridgeVsPackage : Package
     {
-
-        private DTEEvents _dteEvents;
         private DTE _dte;
         private const string VisualStudioProcessName = "devenv";
-        private DTE2 _mApplicationObject;
-        public DTE2 ApplicationObject
+
+        public static bool IsElevated
         {
             get
             {
-                if (_mApplicationObject != null) return _mApplicationObject;
-                // Get an instance of the currently running Visual Studio IDE
-                var dte = (DTE)GetService(typeof(DTE));
-                _mApplicationObject = dte as DTE2;
-                return _mApplicationObject;
+                return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
             }
         }
-
-        #region [ Obsolete ]
-        private XDocument _microsoftCommonTargetDocument;
-        public XDocument MicrosoftCommonTargetDocument
-        {
-            get
-            {
-                _microsoftCommonTargetDocument = _microsoftCommonTargetDocument ?? XDocument.Load(Locations.MicrosoftCommonTargetFileNamePath);
-                return _microsoftCommonTargetDocument;
-            }
-
-        }
-
-        private XDocument _microsoftCommonTargetX64Document;
-        public XDocument MicrosoftCommonTargetX64Document
-        {
-            get
-            {
-                _microsoftCommonTargetX64Document = _microsoftCommonTargetX64Document ?? XDocument.Load(Locations.MicrosoftCommonTargetX64FileNamePath);
-                return _microsoftCommonTargetX64Document;
-            }
-
-        }
-
-        private XDocument _microsoftCommonTarget45Document;
-        public XDocument MicrosoftCommonTarget45Document
-        {
-            get
-            {
-                _microsoftCommonTarget45Document = _microsoftCommonTarget45Document ?? XDocument.Load(Locations.MicrosoftCommonTarget45FileNamePath);
-                return _microsoftCommonTarget45Document;
-            }
-        }
-        #endregion
 
         #region Package Members
 
@@ -121,24 +84,23 @@ namespace LINQBridgeVs.Extension
         /// </summary>
         protected override void Initialize()
         {
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
             base.Initialize();
 
             _dte = (DTE)GetService(typeof(SDTE));
-            _dteEvents = _dte.Events.DTEEvents;
-
-            _dteEvents.OnStartupComplete += OnStartupComplete;
 
             var bridge = new LINQBridgeVsExtension(_dte);
+            bool isLinqBridgeVsConfigured = PackageConfigurator.IsLINQBridgeVsConfigured;
 
-            // Add our command handlers for menu (commands must exist in the .vsct file)
+            // Add our command handlers for menu(commands must exist in the.vsct file)
             var mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (null == mcs) return;
 
-            //// Create the command for the menu item.
+            // Create the command for the menu item.
             var enableCommand = new CommandID(GuidList.GuidBridgeVsExtensionCmdSet, (int)PkgCmdIdList.CmdIdEnableBridge);
             var menuItemEnable = new OleMenuCommand((s, e) => bridge.Execute(CommandAction.Enable), enableCommand);
             menuItemEnable.BeforeQueryStatus += (s, e) => bridge.UpdateCommand(menuItemEnable, CommandAction.Enable);
-
 
             var disableCommand = new CommandID(GuidList.GuidBridgeVsExtensionCmdSet,
                 (int)PkgCmdIdList.CmdIdDisableBridge);
@@ -148,49 +110,44 @@ namespace LINQBridgeVs.Extension
             var aboutCommand = new CommandID(GuidList.GuidBridgeVsExtensionCmdSet, (int)PkgCmdIdList.CmdIdAbout);
             var menuItemAbout = new OleMenuCommand((s, e) => { var about = new About(); about.ShowDialog(); }, aboutCommand);
 
-
             mcs.AddCommand(menuItemEnable);
             mcs.AddCommand(menuItemDisable);
             mcs.AddCommand(menuItemAbout);
-        }
 
-
-        private void OnStartupComplete()
-        {
             try
             {
-                Log.Write("OnStartupComplete");
-
-                _dteEvents.OnStartupComplete -= OnStartupComplete;
-                _dteEvents = null;
-
-                //do this once
-                if (PackageConfigurator.AreOldTargetsRemoved) return;
-
-                PackageConfigurator.RemoveBridgeBuildTargetFromMicrosoftCommon(MicrosoftCommonTargetDocument, Locations.MicrosoftCommonTargetFileNamePath);
-                Log.Write("BridgeBuild.targets Removed for x86 Operating System");
-
-                if (Environment.Is64BitOperatingSystem)
+             //   Log.Configure("LINQBridgeVs", "Extensions");
+                 
+                //if first time user 
+                if (PackageConfigurator.IsLINQBridgeVsConfigured)
                 {
-                    PackageConfigurator.RemoveBridgeBuildTargetFromMicrosoftCommon(MicrosoftCommonTargetX64Document, Locations.MicrosoftCommonTargetX64FileNamePath);
-                    Log.Write("BridgeBuild.targets Removed for x64 Operating System");
-
-                }
-                if (PackageConfigurator.IsFramework45Installed)
-                {
-                    PackageConfigurator.RemoveBridgeBuildTargetFromMicrosoftCommon(MicrosoftCommonTarget45Document, Locations.MicrosoftCommonTarget45FileNamePath);
-                    Log.Write("BridgeBuild.targets Removed for framework 4.5");
+                    return;
                 }
 
-                Log.Write("OnStartupComplete End");
-                PackageConfigurator.AreOldTargetsRemoved = true;
+                if (!IsElevated)
+                {
+                    if (Application.ResourceAssembly == null)
+                        Application.ResourceAssembly = typeof(Welcome).Assembly;
+
+                    Welcome welcomePage = new Welcome(_dte);
+                    welcomePage.Show();
+                }
+                else
+                {
+                    if (!PackageConfigurator.Install(_dte.Version, _dte.Edition))
+                    {
+                        MessageBox.Show("LINQBridgeVs configuration wasn't successful. Please restart Visual Studio");
+                    }
+                }
             }
             catch (Exception e)
             {
-                Log.Write(e, "OnStartupComplete Error...");
+                //Log.Write(e, "OnStartupComplete Error...");
             }
+            watch.Stop();
+            var mill = watch.ElapsedMilliseconds;
         }
-
+         
         #endregion
     }
 }

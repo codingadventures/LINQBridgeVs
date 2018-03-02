@@ -8,8 +8,8 @@
     <ProjectGuid>{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LINQBridgeVs.DynamicVisualizer.V11</RootNamespace>
-    <AssemblyName>LINQBridgeVs.DynamicVisualizer.V11</AssemblyName>
+    <RootNamespace>BridgeVs.DynamicVisualizer.V11</RootNamespace>
+    <AssemblyName>BridgeVs.DynamicVisualizer.V11</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -60,8 +60,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.DebuggerVisualizers, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(SolutionDir)\..\Lib\VS2012\Microsoft.VisualStudio.DebuggerVisualizers.dll</HintPath>
+      <HintPath>..\..\packages\VSSDK.DebuggerVisualizers.11.0.4\lib\net20\Microsoft.VisualStudio.DebuggerVisualizers.dll</HintPath>
+      <Private>True</Private>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -81,11 +81,10 @@
     <ProjectReference Include="..\DynamicCore\DynamicCore.csproj">
       <Project>{b84fbd50-0b10-4c25-8430-680fc6fc3fea}</Project>
       <Name>DynamicCore</Name>
-      <Ilmerge>True</Ilmerge>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -94,7 +93,7 @@
   </Target>
   <Target Name="AfterBuild">
   </Target>
-  -->
+  
   <Target Name="AfterBuild" Condition=" '$(Configuration)' == 'Deploy' ">
     <CreateItem Include="@(ReferencePath)" Condition="'%(CopyLocal)'=='true' and '%(ReferencePath.IlMerge)'=='true'">
       <Output TaskParameter="Include" ItemName="IlmergeAssemblies" />
@@ -107,5 +106,5 @@
     <ItemGroup>
       <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" Condition="'%(ReferenceCopyLocalPaths.IlMerge)'=='true'" />
     </ItemGroup>
-  </Target>
+  </Target>-->
 </Project>

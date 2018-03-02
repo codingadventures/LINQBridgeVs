@@ -27,7 +27,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
 
-namespace LINQBridgeVs.TypeMapper.Comparer
+namespace BridgeVs.TypeMapper.Comparer
 {
     internal class DebuggerVisualizerAttributeComparer :
         IEqualityComparer<CustomAttribute>
@@ -79,12 +79,7 @@ namespace LINQBridgeVs.TypeMapper.Comparer
             {
                 hash = typeReference.FullName.GetHashCode();
             }
-
-
-
             return hash;
         }
-
-
     }
 }

@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 Giovanni Campo
+// Copyright (c) 2013 - 2018 Giovanni Campo
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -24,10 +24,10 @@
 #endregion
 
 using System.IO;
-using LINQBridgeVs.DynamicCore;
+using BridgeVs.DynamicCore;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 
-namespace LINQBridgeVs.DynamicVisualizer.V11
+namespace BridgeVs.DynamicVisualizer.V11
 {  
     public class DynamicDebuggerVisualizerObjectSourceV11 : VisualizerObjectSource 
     {

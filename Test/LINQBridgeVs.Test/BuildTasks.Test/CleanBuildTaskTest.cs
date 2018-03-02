@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using LINQBridgeVs.BuildTasks;
+using BridgeVs.BuildTasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model.UnitTest;
 

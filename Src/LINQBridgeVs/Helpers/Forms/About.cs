@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace LINQBridgeVs.Helper.Forms
+namespace BridgeVs.Helper.Forms
 {
     public partial class About : Form
     {

@@ -23,7 +23,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-namespace LINQBridgeVs.DynamicVisualizer.V11
+namespace BridgeVs.DynamicVisualizer.V11
 {
     public class Settings
     {

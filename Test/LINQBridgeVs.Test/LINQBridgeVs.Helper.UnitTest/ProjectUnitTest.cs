@@ -1,7 +1,7 @@
-﻿using LINQBridgeVs.Helper.Dependency;
+﻿using BridgeVs.Helper.Dependency;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LINQBridgeVs.Helper.UnitTest
+namespace BridgeVs.Helper.UnitTest
 {
     [TestClass]
     public class ProjectUnitTest

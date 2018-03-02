@@ -31,7 +31,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace LINQBridgeVs.DynamicCore.Helper
+namespace BridgeVs.DynamicCore.Helper
 {
     internal static class TypeNameHelper
     {

@@ -34,10 +34,12 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Bridge.Logging;
+using BridgeVs.Logging;
+using BridgeVs.TypeMapper;
+using BridgeVs.VisualStudio;
 using Microsoft.Win32;
 
-namespace LINQBridgeVs.Helper.Configuration
+namespace BridgeVs.Helper.Configuration
 {
     public static class PackageConfigurator
     {
@@ -45,13 +47,60 @@ namespace LINQBridgeVs.Helper.Configuration
         private static string _vsEdition;
         private static readonly string CurrentAssemblyVersion = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
         public static readonly bool IsFramework45Installed = Directory.Exists(Locations.DotNet45FrameworkPath);
-        
+
         private const string VersionRegistryValue = "LINQBridgeVsVersion";
+        private const string LINQPadInstallationPathRegistryValue = "LINQPadInstallationPath";
         private const string ConfiguredRegistryValue = "IsLINQBridgeVsConfigured";
-        private const string OldTargetsRegistryValue = "AreOldTargetsRemoved";
+        private const string IsFTUERegistryValue = "IsFTUE";
         private const string InstallFolderPathRegistryValue = "InstallFolderPath";
 
+        #region [ Obsolete ]
+        private static XDocument _microsoftCommonTargetDocument;
+        public static XDocument MicrosoftCommonTargetDocument
+        {
+            get
+            {
+                _microsoftCommonTargetDocument = _microsoftCommonTargetDocument ?? XDocument.Load(Locations.MicrosoftCommonTargetFileNamePath);
+                return _microsoftCommonTargetDocument;
+            }
+
+        }
+
+        private static XDocument _microsoftCommonTargetX64Document;
+        public static XDocument MicrosoftCommonTargetX64Document
+        {
+            get
+            {
+                _microsoftCommonTargetX64Document = _microsoftCommonTargetX64Document ?? XDocument.Load(Locations.MicrosoftCommonTargetX64FileNamePath);
+                return _microsoftCommonTargetX64Document;
+            }
+
+        }
+
+        private static XDocument _microsoftCommonTarget45Document;
+        public static XDocument MicrosoftCommonTarget45Document
+        {
+            get
+            {
+                _microsoftCommonTarget45Document = _microsoftCommonTarget45Document ?? XDocument.Load(Locations.MicrosoftCommonTarget45FileNamePath);
+                return _microsoftCommonTarget45Document;
+            }
+        }
+        #endregion
+
         #region [ Private Methods ]
+
+        private static string LINQPadInstallationPath
+        {
+            set
+            {
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(Resources.LINQPadInstallationPath))
+                {
+                    key?.SetValue(LINQPadInstallationPathRegistryValue, value);
+                }
+            }
+        }
+
         private static string InstalledExtensionVersion
         {
             get
@@ -76,15 +125,44 @@ namespace LINQBridgeVs.Helper.Configuration
                 }
             }
         }
-        
+
         private static bool IsLINQPadInstalled()
         {
-            if (Directory.Exists(Locations.LinqPad4DestinationFolder))
+            if (Directory.Exists(Locations.LinqPad5DestinationFolder))
+            {
+                LINQPadInstallationPath = Locations.LinqPad4DestinationFolder;
                 return true;
+            }
+            if (Directory.Exists(Locations.LinqPad4DestinationFolder))
+            {
+                LINQPadInstallationPath = Locations.LinqPad4DestinationFolder;
+                return true;
+            }
 
-            MessageBox.Show("Please Install LINQPad in order to Use LINQBridgeVs and then Restart Visual Studio");
-            System.Diagnostics.Process.Start("http://www.linqpad.net");
-            return true;
+            var result = MessageBox.Show("Please Install LINQPad and then Restart Visual Studio or provide a folder", "LINQPad Not Found", MessageBoxButtons.OKCancel);
+
+            if (result == DialogResult.OK)
+            {
+                var dialog = new System.Windows.Forms.OpenFileDialog()
+                {
+                    Multiselect = false,
+                    Filter = "LINQPad 4, 5|*.exe",
+                    InitialDirectory = Locations.ProgramFilesFolderPath
+                };
+                var dialogResult = dialog.ShowDialog();
+                bool isLinqPadFound = dialogResult == DialogResult.OK && dialog.FileName.Contains("LINQPad.exe");
+                if (isLinqPadFound)
+                {
+                    LINQPadInstallationPath = Path.GetDirectoryName(dialog.FileName);
+                    return true;
+                }
+                return false;
+            }
+            else
+            {
+                System.Diagnostics.Process.Start("http://www.linqpad.net");
+                return false;
+            }
         }
 
         private static void SetEnvironment()
@@ -98,7 +176,7 @@ namespace LINQBridgeVs.Helper.Configuration
             Log.Write("CustomBeforeTargetFileName Targets copied to {0} ", Path.Combine(msBuildDir, Locations.CustomBeforeTargetFileName));
 
             Log.Write("Setting IsEnvironmentConfigured to True");
-            IsEnvironmentConfigured = true;
+            //    IsEnvironmentConfigured = true;
         }
 
         private static void SetInstallationFolder()
@@ -151,7 +229,7 @@ namespace LINQBridgeVs.Helper.Configuration
                 {
                     Log.Write(uae);
                     MessageBox.Show(
-                        "It hasn't been possible to complete the configuration of LINQBridgeVs. Please restart Visual Studio as Administrator");
+                        "It hasn't been possible to complete the configuration of BridgeVs. Please restart Visual Studio as Administrator");
                     throw;
                 }
                 catch (Exception exception)
@@ -169,44 +247,49 @@ namespace LINQBridgeVs.Helper.Configuration
 
         #region [ Public Methods ]
 
-        public static bool IsEnvironmentConfigured
+        public static bool IsLINQBridgeVsConfigured
         {
             get
             {
+                if (InstalledExtensionVersion != CurrentAssemblyVersion)
+                {
+                    Log.Write("New LINQBridgeVs Extensions. Previous Version {0}. Current Version {1}", InstalledExtensionVersion, CurrentAssemblyVersion);
+                    return false;
+                }
                 using (RegistryKey key = Registry.CurrentUser.OpenSubKey(GetRegistryKey(Resources.ProductVersion, _runningVisualStudioVersion)))
                 {
-                    return key != null && Convert.ToBoolean(key.GetValue(ConfiguredRegistryValue));
+                    return key != null && Convert.ToBoolean(key.GetValue(IsFTUERegistryValue));
                 }
             }
             set
             {
                 using (RegistryKey key = Registry.CurrentUser.CreateSubKey(GetRegistryKey(Resources.ProductVersion, _runningVisualStudioVersion)))
                 {
-                    key?.SetValue(ConfiguredRegistryValue, value);
+                    key?.SetValue(IsFTUERegistryValue, value);
                 }
             }
         }
-
-        public static bool AreOldTargetsRemoved
+        private static void RemoveOldTargets()
         {
-            get
+            PackageConfigurator.RemoveBridgeBuildTargetFromMicrosoftCommon(MicrosoftCommonTargetDocument, Locations.MicrosoftCommonTargetFileNamePath);
+            Log.Write("BridgeBuild.targets Removed for x86 Operating System");
+
+            if (System.Environment.Is64BitOperatingSystem)
             {
-                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(GetRegistryKey(Resources.ProductVersion, _runningVisualStudioVersion)))
-                {
-                    return key != null && Convert.ToBoolean(key.GetValue(OldTargetsRegistryValue));
-                }
+                PackageConfigurator.RemoveBridgeBuildTargetFromMicrosoftCommon(MicrosoftCommonTargetX64Document, Locations.MicrosoftCommonTargetX64FileNamePath);
+                Log.Write("BridgeBuild.targets Removed for x64 Operating System");
+
             }
-            set
+            if (IsFramework45Installed)
             {
-                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(GetRegistryKey(Resources.ProductVersion, _runningVisualStudioVersion)))
-                {
-                    key?.SetValue(OldTargetsRegistryValue, value);
-                }
+                PackageConfigurator.RemoveBridgeBuildTargetFromMicrosoftCommon(MicrosoftCommonTarget45Document, Locations.MicrosoftCommonTarget45FileNamePath);
+                Log.Write("BridgeBuild.targets Removed for framework 4.5");
             }
         }
 
-        public static void Configure(string vsVersion, string vsEdition)
+        public static bool Install(string vsVersion, string vsEdition)
         {
+
             _runningVisualStudioVersion = vsVersion;
             _vsEdition = vsEdition;
 
@@ -214,30 +297,30 @@ namespace LINQBridgeVs.Helper.Configuration
 
             try
             {
-                if (InstalledExtensionVersion != CurrentAssemblyVersion)
+                if (!IsLINQPadInstalled()) //ask the user to insert a custom location
                 {
-                    Log.Write("New LINQBridgeVs Extensions. Previous Version {0}. Current Version {1}", InstalledExtensionVersion, CurrentAssemblyVersion);
-                    IsEnvironmentConfigured = false;
-                    InstalledExtensionVersion = CurrentAssemblyVersion;
+                    return false;
                 }
+                RemoveOldTargets();
+
+                InstalledExtensionVersion = CurrentAssemblyVersion;
 
                 //Always check if installation folder has changed
                 SetInstallationFolder();
-
-                if (!IsLINQPadInstalled())
-                    return;
-
-                //if (IsEnvironmentConfigured)
-                //    return;
 
                 Log.Write("Setting the Environment");
 
                 //TODO: add logic to set the environment again for installed newer version
                 SetEnvironment();
+
+                IsLINQBridgeVsConfigured = true;
+
+                return true;
             }
             catch (Exception e)
             {
                 Log.Write(e, "Error Configuring LINQBridgeVs");
+                return false;
             }
         }
 
@@ -246,7 +329,7 @@ namespace LINQBridgeVs.Helper.Configuration
             string keyPath = string.Format(GetRegistryKey(Resources.EnabledProjectsRegistryKey, _runningVisualStudioVersion, solutionName));
             using (RegistryKey key = Registry.CurrentUser.CreateSubKey(keyPath))
             {
-                key?.SetValue($"{assemblyName}", "True" , RegistryValueKind.String);
+                key?.SetValue($"{assemblyName}", "True", RegistryValueKind.String);
                 key?.SetValue($"{assemblyName}_location", Path.GetFullPath(assemblyPath), RegistryValueKind.String);
             }
         }
@@ -279,6 +362,27 @@ namespace LINQBridgeVs.Helper.Configuration
             return !IsBridgeEnabled(assemblyName, solutionName);
         }
 
+        private static void CreateDirWithPermission(string folder)
+        {
+            var sec = new DirectorySecurity();
+            // Using this instead of the "Everyone" string means we work on non-English systems.
+            var everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+            var rule = new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize,
+                InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None,
+                AccessControlType.Allow);
+
+            if (Directory.Exists(folder))
+            {
+                var di = new DirectoryInfo(folder);
+                var security = di.GetAccessControl();
+                security.AddAccessRule(rule);
+                security.SetAccessRule(rule);
+                di.SetAccessControl(security);
+                return;
+            }
+            sec.AddAccessRule(rule);
+            Directory.CreateDirectory(folder, sec);
+        }
         #endregion
 
         #region [ Obsolete Methods ]

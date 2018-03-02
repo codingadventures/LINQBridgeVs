@@ -24,9 +24,9 @@
 #endregion
 
 using System.Collections.Generic;
-using LINQBridgeVs.DynamicCore.Helper;
+using BridgeVs.DynamicCore.Helper;
 
-namespace LINQBridgeVs.DynamicCore.Template
+namespace BridgeVs.DynamicCore.Template
 {
     public partial class Inspection
     {

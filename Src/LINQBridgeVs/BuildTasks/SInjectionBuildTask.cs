@@ -25,11 +25,11 @@
 
 using System;
 using System.IO;
-using Bridge.Logging;
+using BridgeVs.Logging;
 using Microsoft.Build.Framework;
 using SInject;
 
-namespace LINQBridgeVs.BuildTasks
+namespace BridgeVs.BuildTasks
 {
     public class SInjectionBuildTask : ITask
     {

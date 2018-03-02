@@ -31,7 +31,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-using Bridge.Logging;
+using BridgeVs.Logging;
 using Mono.Cecil;
 using Mono.Cecil.Pdb;
 using SInject.Reflection;

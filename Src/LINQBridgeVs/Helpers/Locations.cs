@@ -27,7 +27,7 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace LINQBridgeVs.Helper
+namespace BridgeVs.Helper
 {
     /// <summary>
     /// This static class is a container for all the folders needed in the extension
@@ -35,11 +35,13 @@ namespace LINQBridgeVs.Helper
     public static class Locations
     {
         private static readonly string SpecialWindowsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
-        private static readonly string ProgramFilesFolderPath = Environment.GetEnvironmentVariable("PROGRAMFILES");
+        public static readonly string ProgramFilesFolderPath = Environment.GetEnvironmentVariable("PROGRAMFILES");
 
         public static string InstallFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
+
         public static readonly string LinqPad4DestinationFolder = Path.Combine(ProgramFilesFolderPath, "LINQPad4");
+        public static string LinqPad5DestinationFolder = Path.Combine(ProgramFilesFolderPath, "LINQPad5");
 
         public static readonly string CustomAfterTargetFileNamePath = Path.Combine(InstallFolder, Resources.CustomAfterTargets);
         public static readonly string CustomAfterTargetFileName = Path.GetFileName(Resources.CustomAfterTargets);

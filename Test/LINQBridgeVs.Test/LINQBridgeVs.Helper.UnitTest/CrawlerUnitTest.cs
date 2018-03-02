@@ -3,10 +3,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Bridge.Logging;
-using LINQBridgeVs.Helper.Dependency;
+using BridgeVs.Helper.Dependency;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LINQBridgeVs.Helper.UnitTest
+namespace BridgeVs.Helper.UnitTest
 {
     [TestClass]
     [DeploymentItem(@"CsProj\Model.UnitTest.xml")]
@@ -26,7 +26,7 @@ namespace LINQBridgeVs.Helper.UnitTest
         [TestCategory("UnitTest")]
         public void Crawler_Should_Return_One_Project_Dependency()
         {
-            var projects = Crawler.FindProjectDependencies(CsProject, @"..\..\LINQBridgeVs.sln").ToList();
+            var projects = Crawler.FindProjectDependencies(CsProject, @"..\..\BridgeVs.sln").ToList();
 
             //Assert
             var containsAnotherModel = projects.Any(p => p.AssemblyName.Equals("AnotherModel.UnitTest") && p.DependencyType == DependencyType.ProjectReference);
@@ -38,7 +38,7 @@ namespace LINQBridgeVs.Helper.UnitTest
         [TestCategory("UnitTest")]
         public void Crawler_Should_Not_Return_Any_Assembly_Reference()
         {
-            var projects = Crawler.FindProjectDependencies(CsProject, @"..\..\LINQBridgeVs.sln").ToList();
+            var projects = Crawler.FindProjectDependencies(CsProject, @"..\..\BridgeVs.sln").ToList();
 
 
             var noAssemblyDependencyTypes = projects.All(p => p.DependencyType != DependencyType.AssemblyReference);

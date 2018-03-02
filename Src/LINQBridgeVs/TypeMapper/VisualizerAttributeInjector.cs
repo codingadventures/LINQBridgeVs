@@ -28,12 +28,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using Bridge.Logging;
+using BridgeVs.Logging;
 using Mono.Cecil;
 using Mono.Cecil.Pdb;
 using Mono.Cecil.Rocks;
 
-namespace LINQBridgeVs.TypeMapper
+namespace BridgeVs.TypeMapper
 {
     /// <inheritdoc />
     /// <summary>
@@ -225,18 +225,7 @@ namespace LINQBridgeVs.TypeMapper
         {
             references.ForEach(reference => File.Copy(reference, location, true));
         }
-
-        /*
-                /// <summary>
-                /// Saves the debugger visualizer.
-                /// </summary>
-                /// <param name="aStream">A stream.</param>
-                public void SaveDebuggerVisualizer(Stream aStream)
-                { 
-                    _debuggerVisualizerAssembly.Write(aStream, _writerParameters);
-                }
-        */
-
+        
         private static ReaderParameters GetReaderParameters(string assemblyPath)
         {
             var assemblyResolver = new DefaultAssemblyResolver();

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LINQBridgeVs.Helper {
+namespace BridgeVs.Helper {
     using System;
     
     
@@ -19,7 +19,7 @@ namespace LINQBridgeVs.Helper {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -39,7 +39,7 @@ namespace LINQBridgeVs.Helper {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LINQBridgeVs.Helper.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BridgeVs.Helper.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -88,6 +88,15 @@ namespace LINQBridgeVs.Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Software\LINQBridgeVs\.
+        /// </summary>
+        internal static string LINQPadInstallationPath {
+            get {
+                return ResourceManager.GetString("LINQPadInstallationPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Software\LINQBridgeVs\{0}.
         /// </summary>
         internal static string ProductRegistryKey {
@@ -102,6 +111,51 @@ namespace LINQBridgeVs.Helper {
         internal static string ProductVersion {
             get {
                 return ResourceManager.GetString("ProductVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you skip the configuration you won&apos;t be able to use LINQBridgeVs. Are you sure?.
+        /// </summary>
+        internal static string SkipMessage {
+            get {
+                return ResourceManager.GetString("SkipMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to \Visual Studio 2012\Visualizers\.
+        /// </summary>
+        internal static string VS2012Path1 {
+            get {
+                return ResourceManager.GetString("VS2012Path1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to \Visual Studio 2013\Visualizers\.
+        /// </summary>
+        internal static string VS2013Path1 {
+            get {
+                return ResourceManager.GetString("VS2013Path1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to \Visual Studio 2015\Visualizers\.
+        /// </summary>
+        internal static string VS2015Path1 {
+            get {
+                return ResourceManager.GetString("VS2015Path1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to \Visual Studio 2017\Visualizers\.
+        /// </summary>
+        internal static string VS2017Path1 {
+            get {
+                return ResourceManager.GetString("VS2017Path1", resourceCulture);
             }
         }
     }

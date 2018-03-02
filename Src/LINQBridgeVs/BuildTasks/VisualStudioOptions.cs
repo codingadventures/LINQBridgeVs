@@ -24,14 +24,18 @@
 #endregion
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
-using LINQBridgeVs.VisualStudio.Properties;
+using System.Reflection;
+using System.IO;
 
-namespace LINQBridgeVs.VisualStudio
+namespace BridgeVs.VisualStudio
 {
-    internal struct Settings
+    internal class Settings
     {
-        public List<string> InstallationPaths;
+        public string InstallationPaths;
+
+        public Assembly Assembly;
 
         public string AssemblyLocation;
 
@@ -41,12 +45,10 @@ namespace LINQBridgeVs.VisualStudio
     public static class VisualStudioOptions
     {
         private static readonly string MyDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        private static readonly string Vs2010Path1 = MyDocuments + Resources.VS2010Path1;
-        private static readonly string Vs2010Path2 = MyDocuments + Resources.VS2010Path2;
-        private static readonly string Vs2012Path1 = MyDocuments + Resources.VS2012Path1;
-        private static readonly string Vs2013Path1 = MyDocuments + Resources.VS2013Path1;
-        private static readonly string Vs2015Path1 = MyDocuments + Resources.VS2015Path1;
-        private static readonly string Vs2017Path1 = MyDocuments + Resources.VS2017Path1;
+        private static readonly string Vs2012Path1 = MyDocuments + @"\Visual Studio 2012\Visualizers\";
+        private static readonly string Vs2013Path1 = MyDocuments + @"\Visual Studio 2013\Visualizers\";
+        private static readonly string Vs2015Path1 = MyDocuments + @"\Visual Studio 2015\Visualizers\";
+        private static readonly string Vs2017Path1 = MyDocuments + @"\Visual Studio 2017\Visualizers\";
 
 
         private static readonly Dictionary<string, Settings> VisualStudioPaths;
@@ -58,9 +60,9 @@ namespace LINQBridgeVs.VisualStudio
                 {
                     "11.0", new Settings
                     {
-                        InstallationPaths =
-                            new List<string> {Vs2012Path1},
-                        AssemblyLocation = DynamicVisualizer.V11.Settings.AssemblyLocation,
+                        InstallationPaths = Vs2012Path1,
+                        AssemblyLocation = typeof(DynamicVisualizer.V11.Settings).Assembly.Location,
+                        Assembly = typeof(DynamicVisualizer.V11.Settings).Assembly,
                         MsBuildVersion = "v4.0"
 
                     }
@@ -68,27 +70,27 @@ namespace LINQBridgeVs.VisualStudio
                 {
                     "12.0", new Settings
                     {
-                        InstallationPaths =
-                            new List<string> {Vs2013Path1},
-                        AssemblyLocation = DynamicVisualizer.V12.Settings.AssemblyLocation,
+                        InstallationPaths = Vs2013Path1,
+                        AssemblyLocation = typeof(DynamicVisualizer.V12.Settings).Assembly.Location,
+                        Assembly = typeof(DynamicVisualizer.V12.Settings).Assembly,
                         MsBuildVersion = "v12.0"
                     }
                 },
                 {
                     "14.0", new Settings
                     {
-                        InstallationPaths =
-                            new List<string> {Vs2015Path1},
-                        AssemblyLocation = DynamicVisualizer.V14.Settings.AssemblyLocation,
+                        InstallationPaths = Vs2015Path1,
+                        AssemblyLocation =typeof(DynamicVisualizer.V14.Settings).Assembly.Location,
+                        Assembly = typeof(DynamicVisualizer.V14.Settings).Assembly,
                         MsBuildVersion = "v14.0"
                     }
                 },
                 {
                     "15.0", new Settings
                     {
-                        InstallationPaths =
-                            new List<string> {Vs2017Path1},
-                        AssemblyLocation = DynamicVisualizer.V15.Settings.AssemblyLocation,
+                        InstallationPaths = Vs2017Path1,
+                        Assembly = typeof(DynamicVisualizer.V15.Settings).Assembly,
+                        AssemblyLocation = typeof(DynamicVisualizer.V15.Settings).Assembly.Location,
                         MsBuildVersion = "v15.0"
                     }
                 }
@@ -110,7 +112,7 @@ namespace LINQBridgeVs.VisualStudio
             return VisualStudioPaths[visualStudioVersion].AssemblyLocation;
         }
 
-        public static IEnumerable<string> GetInstallationPath(string visualStudioVersion)
+        public static string GetInstallationPath(string visualStudioVersion)
         {
             CheckVersion(visualStudioVersion);
 

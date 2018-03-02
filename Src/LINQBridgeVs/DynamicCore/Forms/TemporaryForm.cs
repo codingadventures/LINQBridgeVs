@@ -27,7 +27,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace LINQBridgeVs.DynamicCore.Forms
+namespace BridgeVs.DynamicCore.Forms
 {
     internal class TemporaryForm : Form
     {

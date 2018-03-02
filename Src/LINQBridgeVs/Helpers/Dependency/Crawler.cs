@@ -30,10 +30,10 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Bridge.Logging;
+using BridgeVs.Logging;
 using Microsoft.Build.Evaluation;
 
-namespace LINQBridgeVs.Helper.Dependency
+namespace BridgeVs.Helper.Dependency
 {
     public class Crawler
     {
@@ -48,7 +48,7 @@ namespace LINQBridgeVs.Helper.Dependency
         {
             if (string.IsNullOrEmpty(csvbProjectName))
             {
-                Log.Write("LINQBridgeVs.Helper.Dependency.Crawler: csvbProjectName is null or empty");
+                Log.Write("BridgeVs.Helper.Dependency.Crawler: csvbProjectName is null or empty");
                 return Enumerable.Empty<Project>();
             }
 

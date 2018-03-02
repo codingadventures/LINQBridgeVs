@@ -27,7 +27,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace LINQBridgeVs.TypeMapper
+namespace BridgeVs.TypeMapper
 {
     public static class EnumerableExtension
     {

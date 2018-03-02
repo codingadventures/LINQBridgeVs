@@ -28,12 +28,12 @@ using System.Collections;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
-using Bridge.Logging;
+using BridgeVs.Logging;
 using Grapple;
-using LINQBridgeVs.DynamicCore.Helper;
-using LINQBridgeVs.DynamicCore.Template;
+using BridgeVs.DynamicCore.Helper;
+using BridgeVs.DynamicCore.Template;
 
-namespace LINQBridgeVs.DynamicCore
+namespace BridgeVs.DynamicCore
 {
     public static class DynamicObjectSource
     {

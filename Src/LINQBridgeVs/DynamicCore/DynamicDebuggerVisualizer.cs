@@ -35,15 +35,15 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Threading;
 using System.Windows.Forms;
-using Bridge.Logging;
-using LINQBridgeVs.DynamicCore.Forms;
-using LINQBridgeVs.DynamicCore.Helper;
-using LINQBridgeVs.DynamicCore.Properties;
-using LINQBridgeVs.DynamicCore.Template;
+using BridgeVs.Logging;
+using BridgeVs.DynamicCore.Forms;
+using BridgeVs.DynamicCore.Helper;
+using BridgeVs.DynamicCore.Properties;
+using BridgeVs.DynamicCore.Template;
 using Microsoft.Win32;
-using Message = LINQBridgeVs.DynamicCore.Template.Message;
+using Message = BridgeVs.DynamicCore.Template.Message;
 
-namespace LINQBridgeVs.DynamicCore
+namespace BridgeVs.DynamicCore
 {
     /// <summary>
     /// Core of Dynamic Visualizer. This class is used by all three (At the moment) DynamicVisualizerVx (for VS2010, VS2012, VS2013)
@@ -60,7 +60,17 @@ namespace LINQBridgeVs.DynamicCore
         }
 
         private static readonly string MyDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
+        private const string LINQPadInstallationPathRegistryValue = "LINQPadInstallationPath";
+        private static string LINQPadInstallationPath
+        {
+            get
+            {
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(LINQPadInstallationPath))
+                {
+                    return key?.GetValue(LINQPadInstallationPathRegistryValue)?.ToString();
+                }
+            }
+        }
 
         #region [ Consts ]
         private const UInt32 WmKeydown = 0x0100;
@@ -83,7 +93,6 @@ namespace LINQBridgeVs.DynamicCore
         {
             FileSystem = fileSystem;
             AssemblyFinderHelper.FileSystem = FileSystem;
-
         }
 
         #endregion
@@ -142,7 +151,6 @@ namespace LINQBridgeVs.DynamicCore
             }
         }
 
-
         /// <summary>
         /// Shows the visualizer.
         /// </summary>
@@ -181,10 +189,9 @@ namespace LINQBridgeVs.DynamicCore
             {
                 WindowStyle = ProcessWindowStyle.Normal,
                 FileName = Resources.LINQPadExe,
-                WorkingDirectory = Environment.GetEnvironmentVariable("ProgramFiles") + @"\LINQPad4",
+                WorkingDirectory = LINQPadInstallationPath,
                 Arguments = linqQueryfileName + " " + Resources.LINQPadCommands
             };
-
 
             Log.Write("About to start LINQPad with these parameters: {0}, {1}", startInfo.FileName, startInfo.Arguments);
 
@@ -216,7 +223,6 @@ namespace LINQBridgeVs.DynamicCore
         /// <returns></returns>
         private static string GetAssemblyLocation(Type @type, string vsVersion)
         {
-
             string registryKeyPath = string.Format(@"Software\LINQBridgeVs\{0}\Solutions", vsVersion);
 
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey(registryKeyPath))

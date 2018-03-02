@@ -27,22 +27,20 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.AccessControl;
-using System.Security.Principal;
-using Bridge.Logging;
+using BridgeVs.Logging;
 
-namespace LINQBridgeVs.TypeMapper
+namespace BridgeVs.TypeMapper
 {
     /// <summary>
     /// Maps all the types of a given assembly to the type T of the debugger visualizer.
-    /// It can map all the Basic DotNet Framework types like: System.Linq.*, System.*, System.Collection.Generic.*
+    /// It can map all of the Basic dotNet Framework types like: System.Linq.*, System.*, System.Collection.Generic.*
     /// </summary>
     public class VisualizerTypeMapper
     {
         private const string DotNetFrameworkVisualizerName = "DotNetDynamicVisualizerType.V{0}.dll";
 
         private readonly VisualizerAttributeInjector _visualizerAttributeInjector;
-
+        public string SourceVisualizerAssemblyLocation { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VisualizerTypeMapper"/> class.
@@ -52,7 +50,9 @@ namespace LINQBridgeVs.TypeMapper
         {
             Log.Configure("LINQBridgeVs", "Type Mapper");
             _visualizerAttributeInjector = new VisualizerAttributeInjector(sourceVisualizerAssemblyLocation);
+            SourceVisualizerAssemblyLocation = sourceVisualizerAssemblyLocation;
         }
+
 
         /// <summary>
         /// Maps the dot net framework types. If the file already exists for a given vs version it won't be
@@ -62,24 +62,27 @@ namespace LINQBridgeVs.TypeMapper
         /// <param name="vsVersion">The vs version.</param>
         /// <param name="sourceVisualizerAssemblyLocation">The source visualizer assembly location.</param>
         /// <returns></returns>
-        public static void MapDotNetFrameworkTypes(IEnumerable<string> targetVisualizerInstallationPath,
+        public static void MapDotNetFrameworkTypes(string visualizerInstallationPath,
             string vsVersion, string sourceVisualizerAssemblyLocation)
         {
-            if (targetVisualizerInstallationPath == null)
-                throw new ArgumentException(@"Installation Path/s cannot be null", "targetVisualizerInstallationPath");
+            if (visualizerInstallationPath == null)
+                throw new ArgumentException(@"Installation Path/s cannot be null", nameof(visualizerInstallationPath));
 
             if (string.IsNullOrEmpty(vsVersion))
-                throw new ArgumentException(@"Visual Studio Version cannot be null", "vsVersion");
+                throw new ArgumentException(@"Visual Studio Version cannot be null", nameof(vsVersion));
 
             if (string.IsNullOrEmpty(sourceVisualizerAssemblyLocation))
                 throw new ArgumentException(@"Visualizer Assembly Location cannot be null",
                     "sourceVisualizerAssemblyLocation");
 
-
             var visualizerFileName = string.Format(DotNetFrameworkVisualizerName, vsVersion);
+            var dotNetAssemblyVisualizerFilePath = Path.Combine(visualizerInstallationPath, visualizerFileName);
 
-            var visualizerInstallationPath = targetVisualizerInstallationPath as IList<string> ??
-                                             targetVisualizerInstallationPath.ToList();
+            if (File.Exists(dotNetAssemblyVisualizerFilePath))
+            {
+                //file already exists don't create it again
+                return;
+            }
 
             var visualizerInjector = new VisualizerAttributeInjector(sourceVisualizerAssemblyLocation);
 
@@ -119,16 +122,10 @@ namespace LINQBridgeVs.TypeMapper
                     && !type.Name.Contains("String")
                     && !type.Name.Contains("IDisposable"));
 
-
             systemLinqTypes.ForEach(visualizerInjector.MapType);
             systemGenericsTypes.ForEach(visualizerInjector.MapType);
 
-            visualizerInstallationPath.ForEach(debuggerVisualizerPath =>
-            {
-                CreateDirWithPermission(debuggerVisualizerPath);
-                var location = Path.Combine(debuggerVisualizerPath, visualizerFileName);
-                visualizerInjector.SaveDebuggerVisualizer(location);
-            });
+            visualizerInjector.SaveDebuggerVisualizer(dotNetAssemblyVisualizerFilePath);
         }
 
         /// <summary>
@@ -140,53 +137,12 @@ namespace LINQBridgeVs.TypeMapper
             _visualizerAttributeInjector.MapTypesFromAssembly(targetAssemblyToMap);
         }
 
-
         /// <summary>
         /// Saves the specified debugger visualizer assembly to a given Path.
         /// </summary>
-        /// <param name="debuggerVisualizerPath">The debugger visualizer assembly location.</param>
-        /// <param name="fileName"></param>
-        private void Save(string debuggerVisualizerPath, string fileName)
-        {
-            var debuggerVisualizerAssemblyLocation = debuggerVisualizerPath + fileName;
-
-            CreateDirWithPermission(debuggerVisualizerPath);
-
-            _visualizerAttributeInjector.SaveDebuggerVisualizer(debuggerVisualizerAssemblyLocation);
-        }
-
-        /// <summary>
-        /// Saves the specified debugger visualizer to a given set of Paths.
-        /// </summary>
-        /// <param name="debuggerVisualizerPaths">The debugger visualizer Paths.</param>
-        /// <param name="fileName"></param>
-        public void Save(IEnumerable<string> debuggerVisualizerPaths, string fileName)
-        {
-            debuggerVisualizerPaths.ForEach(debuggerVisualizerPath => Save(debuggerVisualizerPath, fileName));
-        }
-
-        private static void CreateDirWithPermission(string folder)
-        {
-
-            var sec = new DirectorySecurity();
-            // Using this instead of the "Everyone" string means we work on non-English systems.
-            var everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
-            var rule = new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize,
-                InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None,
-                AccessControlType.Allow);
-
-
-            if (Directory.Exists(folder))
-            {
-                var di = new DirectoryInfo(folder);
-                var security = di.GetAccessControl();
-                security.AddAccessRule(rule);
-                security.SetAccessRule(rule);
-                di.SetAccessControl(security);
-                return;
-            }
-            sec.AddAccessRule(rule);
-            Directory.CreateDirectory(folder, sec);
+        public void Save(string mappedAssemblyFilePath)
+        { 
+            _visualizerAttributeInjector.SaveDebuggerVisualizer(mappedAssemblyFilePath);
         }
     }
 }

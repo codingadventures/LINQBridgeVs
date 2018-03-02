@@ -31,7 +31,7 @@ using System.Net.Mail;
 using System.Security.AccessControl;
 using System.Security.Principal;
 
-namespace Bridge.Logging
+namespace BridgeVs.Logging
 {
     public static class Log
     {
@@ -131,8 +131,10 @@ namespace Bridge.Logging
         public static void Write(string msg, params object[] args)
         {
             if (string.IsNullOrEmpty(_applicationName))
-                throw new Exception("The Log is to be configured first. Call the Configure() method and pass the name of the application!");
-
+            {
+                _applicationName = "LINQBridgeVs";
+                //throw new Exception("The Log is to be configured first. Call the Configure() method and pass the name of the application!");
+            }
             try
             {
                 InternalWrite(msg, args);

@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using LINQBridgeVs.Helper.Configuration;
-using LINQBridgeVs.Helper.Dependency;
-using LINQBridgeVs.Helper.Forms;
+using BridgeVs.Helper.Configuration;
+using BridgeVs.Helper.Dependency;
+using BridgeVs.Helper.Forms;
 
-namespace LINQBridgeVs.Helper
+namespace BridgeVs.Helper
 {
     public static class BridgeTrigger
     {

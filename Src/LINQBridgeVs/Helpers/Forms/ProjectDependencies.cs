@@ -28,10 +28,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using LINQBridgeVs.Helper.Dependency;
-using LINQBridgeVs.Helper.Extension;
+using BridgeVs.Helper.Dependency;
+using BridgeVs.Helper.Extension;
 
-namespace LINQBridgeVs.Helper.Forms
+namespace BridgeVs.Helper.Forms
 {
     internal partial class ProjectDependencies : Form
     {

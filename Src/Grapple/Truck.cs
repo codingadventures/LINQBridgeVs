@@ -32,7 +32,7 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
-using Bridge.Logging;
+using BridgeVs.Logging;
 using Grapple.Contracts;
 using Grapple.Extensions;
 using Grapple.Grapple;

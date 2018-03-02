@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace LINQBridgeVs.Helper.Forms
+namespace BridgeVs.Helper.Forms
 {
     partial class ProjectDependencies
     {

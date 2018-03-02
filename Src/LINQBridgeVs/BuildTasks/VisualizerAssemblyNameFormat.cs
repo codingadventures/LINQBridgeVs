@@ -25,13 +25,14 @@
 
 using System.IO;
 
-namespace LINQBridgeVs.BuildTasks
+namespace BridgeVs.BuildTasks
 {
     internal static class VisualizerAssemblyNameFormat
     {
         internal static string GetTargetVisualizerAssemblyName(string vsVersion, string assembly)
-        { 
-            return Path.GetFileNameWithoutExtension(assembly) + ".Visualizer.V" + vsVersion + ".dll";
+        {
+            var versionNumber = vsVersion.Split('.')[0];
+            return Path.GetFileNameWithoutExtension(assembly) + ".Visualizer.V" + versionNumber + ".dll";
         }
     }
 }
