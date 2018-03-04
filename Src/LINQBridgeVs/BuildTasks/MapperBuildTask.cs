@@ -51,27 +51,29 @@ namespace BridgeVs.BuildTasks
 
                 Log.Write("Installation Path {0}", visualizerInstallationPath);
 
-                var templateVisualizerAssemblyPath = VisualStudioOptions.GetVisualizerAssemblyLocation(VisualStudioVer);
+                //it gets the source path for the visualizer to use (usually from the extension directory)
+                var sourceVisualizerAssemblyPath = VisualStudioOptions.GetVisualizerAssemblyLocation(VisualStudioVer);
 
                 //map dot net framework types only if the assembly does not exist
-                var dotNetAssemblyVisualizerFilePath = Path.Combine(visualizerInstallationPath, templateVisualizerAssemblyPath);
+                var dotNetAssemblyVisualizerFilePath = Path.Combine(visualizerInstallationPath, sourceVisualizerAssemblyPath);
 
-                VisualizerTypeMapper.MapDotNetFrameworkTypes(visualizerInstallationPath, VisualStudioVer, templateVisualizerAssemblyPath);
+                VisualizerTypeMapper.MapDotNetFrameworkTypes(visualizerInstallationPath, VisualStudioVer, sourceVisualizerAssemblyPath);
 
-                Log.Write("Visualizer Assembly location {0}", templateVisualizerAssemblyPath);
+                Log.Write("Visualizer Assembly location {0}", sourceVisualizerAssemblyPath);
 
-                var typeMapper = new VisualizerTypeMapper(templateVisualizerAssemblyPath);
-
+                var typeMapper = new VisualizerTypeMapper(sourceVisualizerAssemblyPath);
+                
                 typeMapper.MapAssembly(Assembly);
 
-                //var currentAssemblyPath = Path.GetDirectoryName(Assembly);
+                var temporaryVisualizerFilePath = Path.Combine(Path.GetDirectoryName(Assembly), VisualizerAssemblyName);
+                
                 var visualizerAssemblyPath = Path.Combine(visualizerInstallationPath, VisualizerAssemblyName);
-                typeMapper.Save(visualizerAssemblyPath);
+                typeMapper.Save(temporaryVisualizerFilePath);
 
                 ILMerge merge = new ILMerge()
                 {
                     OutputFile = Path.Combine(visualizerInstallationPath, VisualizerAssemblyName),
-                    DebugInfo = false,
+                    DebugInfo = true,
                     TargetKind = ILMerge.Kind.SameAsPrimaryAssembly,
                     Closed = false
                 };
@@ -79,7 +81,7 @@ namespace BridgeVs.BuildTasks
                 //the order of input assemblies does matter. the first assembly is used as a template (for assembly attributes also)
                 //for merging all the rest into it
                 merge.SetInputAssemblies(new[] {
-                    visualizerAssemblyPath,
+                    temporaryVisualizerFilePath,
                     typeof(DynamicCore.DynamicDebuggerVisualizer).Assembly.Location,
                     typeof(Newtonsoft.Json.DateFormatHandling).Assembly.Location,
                     typeof(Grapple.Truck).Assembly.Location,
@@ -91,7 +93,8 @@ namespace BridgeVs.BuildTasks
                 merge.Merge();
 
                 Log.Write("Assembly {0} Mapped", Assembly);
-
+                //deletes the visualizer, this is no longer needed
+                File.Delete(temporaryVisualizerFilePath);
                 return true;
             }
             catch (Exception e)

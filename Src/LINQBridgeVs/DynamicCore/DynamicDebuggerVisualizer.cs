@@ -65,7 +65,7 @@ namespace BridgeVs.DynamicCore
         {
             get
             {
-                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(LINQPadInstallationPath))
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(LINQPadInstallationPathRegistryValue))
                 {
                     return key?.GetValue(LINQPadInstallationPathRegistryValue)?.ToString();
                 }

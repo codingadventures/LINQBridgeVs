@@ -34,23 +34,5 @@ namespace BuildTasks.UnitTest
             Assert.IsTrue(result, "Mapper Build Task Execute return false.");
 
         }
-
-        [TestMethod]
-        [TestCategory("UnitTest")]
-        public void MapperBuildTaskTest_V10_Should_Succeed()
-        {
-
-            var mapper = new MapperBuildTask
-            {
-                Assembly = _assemblyModel.Location,
-                VisualStudioVer = "10.0"
-            };
-
-
-            var result = mapper.Execute();
-
-            Assert.IsTrue(result, "Mapper Build Task Execute return false.");
-
-        }
     }
 }

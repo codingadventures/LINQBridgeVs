@@ -70,7 +70,6 @@ namespace TypeMapper.Test
             var visualizerLocation = typeof(DynamicDebuggerVisualizerObjectSourceV11).Assembly.Location;
             var injector = new VisualizerAttributeInjector(visualizerLocation);
 
-         
             injector.MapTypesFromAssembly(_thisAssemblyLocation);
             injector.SaveDebuggerVisualizer(debuggerVisualizerTargetName);
 
