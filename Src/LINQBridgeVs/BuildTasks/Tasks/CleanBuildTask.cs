@@ -33,10 +33,18 @@ namespace BridgeVs.Build.Tasks
     {
         public bool Execute()
         {
-            var visualizerAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(VisualStudioVer, Assembly);
+            string visualizerAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(VisualStudioVer, Assembly);
+            string targetInstallationPath = VisualStudioOptions.GetInstallationPath(VisualStudioVer);
 
-            if (File.Exists(visualizerAssemblyName))
-                File.Delete(visualizerAssemblyName);
+            string visualizerFullPath = Path.Combine(targetInstallationPath, visualizerAssemblyName);
+
+            if (File.Exists(visualizerFullPath))
+                File.Delete(visualizerFullPath);
+
+            //check if pdb also exists and delete it
+            string visualizerPdbFullPath = Path.GetFileNameWithoutExtension(visualizerFullPath) + ".pdb";
+            if (File.Exists(visualizerPdbFullPath))
+                File.Delete(visualizerPdbFullPath);
 
             return true;
         }

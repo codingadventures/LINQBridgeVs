@@ -87,7 +87,7 @@ namespace BridgeVs.Build.Tasks
                 //this returns 
                 string temporaryVisualizerFilePath = CreateDebuggerVisualizer(currentBuildingFolder, dynamicVisualizerSourceAssemblyPath);
 
-                MergeVisualizerWithDependencies(currentBuildingFolder, temporaryVisualizerFilePath);
+                MergeVisualizerWithDependencies(targetInstallationPath, temporaryVisualizerFilePath);
 
                 Log.Write("Assembly {0} Mapped", Assembly);
 
@@ -155,6 +155,11 @@ namespace BridgeVs.Build.Tasks
         private void MergeVisualizerWithDependencies(string visualizerInstallationPath, string temporaryVisualizerFilePath)
         {
             var customVisualizerTargetInstallationPath = Path.Combine(visualizerInstallationPath, TargetVisualizerAssemblyName);
+
+            if (customVisualizerTargetInstallationPath == temporaryVisualizerFilePath)
+            {
+                throw new ArgumentException("Installation Path and temporary path cannot be the same", nameof(temporaryVisualizerFilePath));
+            }
 
             Debug.Assert(customVisualizerTargetInstallationPath != temporaryVisualizerFilePath, "Source and destination cannot be the same");
 

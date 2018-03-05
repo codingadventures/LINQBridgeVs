@@ -6,7 +6,7 @@ using Model.UnitTest;
 namespace BridgeVs.Build.UnitTest
 {
     [TestClass]
-    public class SInjectionBuildTaskTest
+    public class SInjectionBuildTest
     {
         private static Assembly _assemblyModel;
 
@@ -14,7 +14,6 @@ namespace BridgeVs.Build.UnitTest
         public static void Init(TestContext context)
         {
             _assemblyModel = typeof(CustomType1).Assembly;
-
         }
          
         [TestMethod]
@@ -22,21 +21,14 @@ namespace BridgeVs.Build.UnitTest
         public void SInjection_BuildTask_Test_Should_Succeed()
         {
 
-            var sInjectionBuildTask = new SInjectionBuildTask
-                                          {
-                                              Assembly = _assemblyModel.Location
-                                          };
-
+            SInjectionBuildTask sInjectionBuildTask = new SInjectionBuildTask
+            {
+                Assembly = _assemblyModel.Location
+            };
 
             var result = sInjectionBuildTask.Execute();
 
             Assert.IsTrue(result, "SInjection Build Task Execute return false.");
-
         }
-
-        
     }
 }
-
-
-

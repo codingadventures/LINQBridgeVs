@@ -52,6 +52,7 @@ namespace BridgeVs.Build.Tasks
             catch (Exception e)
             {
                 Log.Write(e, @"Error Executing MSBuild Task SInjectionBuildTask ");
+                return false;
             }
 
             return true;
