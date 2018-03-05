@@ -9,7 +9,7 @@
   <Namespace>System.Dynamic</Namespace>
   <Namespace>System.Runtime.Serialization.Formatters</Namespace>
   <Namespace>System.Xml.Linq</Namespace>
-  <Namespace>Grapple</Namespace>
+  <Namespace>BridgeVs.Grapple</Namespace>
   <Namespace><#= _typeNamespace #></Namespace>
   <Reference><#= this.GetType().Assembly.Location #></Reference>
   <# foreach(var elem in this._assemblies){
@@ -22,9 +22,8 @@
 
 void Main()
 {
-     
-        Truck truck = new Truck("LINQBridgeVsTruck");
-		truck.WaitDelivery("<#= _typeName #>").Wait();
-        var @object = truck.UnLoad<<#=_typeToRetrieveFullName#>>();
-        @object.Dump("<#=_typeToRetrieveFullName#>", 2);
+    Truck truck = new Truck("LINQBridgeVsTruck");
+	truck.WaitDelivery("<#= _typeName #>").Wait();
+    var @object = truck.UnLoad<<#=_typeToRetrieveFullName#>>();
+    @object.Dump("<#=_typeToRetrieveFullName#>", 2);
 }

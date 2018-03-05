@@ -15,12 +15,12 @@ namespace DynamicCore.UnitTest
     public class DynamicDebuggerVisualizerTest
     {
         private readonly Message _message = new Message
-                                                {
-                                                    FileName = DateTime.Now.ToShortDateString().Replace("/", ""),
-                                                    TypeFullName = typeof(CustomType1).FullName,
-                                                    TypeNamespace = typeof(CustomType1).Namespace,
-                                                    TypeName = typeof(CustomType1).Name
-                                                };
+        {
+            FileName = DateTime.Now.ToShortDateString().Replace("/", ""),
+            TypeFullName = typeof(CustomType1).FullName,
+            TypeNamespace = typeof(CustomType1).Namespace,
+            TypeName = typeof(CustomType1).Name
+        };
 
        
         private static IFileSystem _fileSystem;
