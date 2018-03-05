@@ -50,13 +50,13 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.11.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Abstractions, Version=2.1.0.178, Culture=neutral, PublicKeyToken=96bf224d23c43e59, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\System.IO.Abstractions.2.1.0.178\lib\net40\System.IO.Abstractions.dll</HintPath>
+      <HintPath>..\packages\System.IO.Abstractions.2.1.0.178\lib\net40\System.IO.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -106,13 +106,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Grapple\BridgeVs.Grapple.csproj">
+    <ProjectReference Include="..\Grapple\BridgeVs.Grapple.csproj">
       <Project>{79c0c9ed-d22c-4855-97c1-f6bd0127a531}</Project>
       <Name>BridgeVs.Grapple</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Logging\Bridgevs.Logging.csproj">
+    <ProjectReference Include="..\Logging\BridgeVs.Logging.csproj">
       <Project>{0b546762-c8c0-45c6-bc42-c5d91d510351}</Project>
-      <Name>Bridgevs.Logging</Name>
+      <Name>BridgeVs.Logging</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

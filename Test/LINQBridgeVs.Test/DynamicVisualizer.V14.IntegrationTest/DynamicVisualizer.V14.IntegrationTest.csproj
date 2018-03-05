@@ -48,8 +48,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.VisualStudio.DebuggerVisualizers, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Microsoft.VisualStudio.DebuggerVisualizers, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>True</SpecificVersion>
       <HintPath>..\..\..\Lib\VS2015\Microsoft.VisualStudio.DebuggerVisualizers.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -78,11 +78,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Src\LINQBridgeVs\DynamicCore\BridgeVs.DynamicCore.csproj">
+    <ProjectReference Include="..\..\..\Src\DynamicCore\BridgeVs.DynamicCore.csproj">
       <Project>{B84FBD50-0B10-4C25-8430-680FC6FC3FEA}</Project>
       <Name>BridgeVs.DynamicCore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Src\LINQBridgeVs\DynamicVisualizer.V14\BridgeVs.DynamicVisualizer.V14.csproj">
+    <ProjectReference Include="..\..\..\Src\DynamicVisualizer.V14\BridgeVs.DynamicVisualizer.V14.csproj">
       <Project>{0beb30c9-243b-4192-8633-423b9322c587}</Project>
       <Name>BridgeVs.DynamicVisualizer.V14</Name>
     </ProjectReference>

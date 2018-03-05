@@ -81,9 +81,9 @@
     <Content Include="Logo\SInject.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Logging\Bridgevs.Logging.csproj">
+    <ProjectReference Include="..\Logging\BridgeVs.Logging.csproj">
       <Project>{0b546762-c8c0-45c6-bc42-c5d91d510351}</Project>
-      <Name>Bridgevs.Logging</Name>
+      <Name>BridgeVs.Logging</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

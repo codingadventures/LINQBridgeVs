@@ -24,42 +24,26 @@
 #endregion
 
 using System;
-using System.IO;
-using BridgeVs.Logging;
-using BridgeVs.SInject;
-using Microsoft.Build.Framework;
 
-namespace BridgeVs.Build.Tasks
+namespace BridgeVs.Helper.Configuration
 {
-    public class SInjectionBuildTask : ITask
+    internal static class MsBuildVersionHelper
     {
-        [Required]
-        public string Assembly { get; set; }
-
-        [Required]
-        public string Snk { get; set; }
-
-        public bool Execute()
+        public static string GetMsBuildVersion(string vsVersion)
         {
-            Log.Configure("LINQBridgeVs","SinjectionBuildTask");
-
-            try
+            switch (vsVersion)
             {
-                var snkCertificate = File.Exists(Snk) ? Snk : null;
-                var sInjection = new SInjection(Assembly, mode: PatchMode.Debug, snkCertificatePath: snkCertificate);
-                sInjection.Patch(SerializationTypes.BinarySerialization);
+                case "11.0":
+                    return "v4.0";
+                case "12.0":
+                    return "v12.0";
+                case "14.0":
+                    return "v14.0";
+                case "15.0":
+                    return "v15.0";
+                default :
+                    throw new ArgumentException("Visual Studio Version not Supported", nameof(vsVersion));
             }
-            catch (Exception e)
-            {
-                Log.Write(e, @"Error Executing MSBuild Task SInjectionBuildTask ");
-                return false;
-            }
-
-            return true;
         }
-
-
-        public IBuildEngine BuildEngine { get; set; }
-        public ITaskHost HostObject { get; set; }
     }
 }

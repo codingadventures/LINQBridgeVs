@@ -7,23 +7,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit Tests", "Unit Tests", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration Test", "Integration Test", "{07B00FDB-0426-4FAA-8C5E-DACDF7D03EDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.DynamicVisualizer.V11", "LINQBridgeVs\DynamicVisualizer.V11\BridgeVs.DynamicVisualizer.V11.csproj", "{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.DynamicVisualizer.V11", "DynamicVisualizer.V11\BridgeVs.DynamicVisualizer.V11.csproj", "{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.Build", "LINQBridgeVs\BuildTasks\BridgeVs.Build.csproj", "{276F3935-E0CA-450F-A55F-AED56DC2024E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.Build", "Build\BridgeVs.Build.csproj", "{276F3935-E0CA-450F-A55F-AED56DC2024E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.Build.UnitTest", "..\Test\LINQBridgeVs.Test\BuildTasks.Test\BridgeVs.Build.UnitTest.csproj", "{5030F9B8-D21E-456D-8A92-F92567D11104}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model.UnitTest", "..\Test\LINQBridgeVs.Test\Model.Test\Model.UnitTest.csproj", "{8A5E73F6-2093-4669-9C09-BEAB033BE56C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.Extension", "LINQBridgeVs\LINQBridgeVsExtension\BridgeVs.Extension.csproj", "{1B82F962-5D04-42B6-8D18-7AA8E8FB615F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.Extension", "VsExtension\BridgeVs.Extension.csproj", "{1B82F962-5D04-42B6-8D18-7AA8E8FB615F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.DynamicCore.UnitTest", "..\Test\LINQBridgeVs.Test\DynamicCore.Test\BridgeVs.DynamicCore.UnitTest.csproj", "{DDF44401-F193-46B8-BA6C-A3DE88BAED46}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnotherModel.UnitTest", "..\Test\LINQBridgeVs.Test\AnotherModel.Test\AnotherModel.UnitTest.csproj", "{7B0C3D12-296A-438D-B0EA-B049A0D6D3C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.DynamicCore", "LINQBridgeVs\DynamicCore\BridgeVs.DynamicCore.csproj", "{B84FBD50-0B10-4C25-8430-680FC6FC3FEA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.DynamicCore", "DynamicCore\BridgeVs.DynamicCore.csproj", "{B84FBD50-0B10-4C25-8430-680FC6FC3FEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.DynamicVisualizer.V12", "LINQBridgeVs\DynamicVisualizer.V12\BridgeVs.DynamicVisualizer.V12.csproj", "{835064F0-3C4F-4646-B17A-632C192CCE3B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.DynamicVisualizer.V12", "DynamicVisualizer.V12\BridgeVs.DynamicVisualizer.V12.csproj", "{835064F0-3C4F-4646-B17A-632C192CCE3B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V12.IntegrationTest", "..\Test\LINQBridgeVs.Test\DynamicVisualizer.V12.IntegrationTest\DynamicVisualizer.V12.IntegrationTest.csproj", "{E4E1ED5C-4D75-47C7-A0A4-F57F65C252B4}"
 EndProject
@@ -31,15 +31,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V11.Integ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINQBridgeVsExtension.IntegrationTest", "..\Test\LINQBridgeVs.Test\LINQBridgeVsExtension.UnitTests\LINQBridgeVsExtension.IntegrationTest.csproj", "{0AC90EDD-AD20-4FA8-A187-06C23BE9A455}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.Extension.Helper", "LINQBridgeVs\Helpers\BridgeVs.Extension.Helper.csproj", "{0FA0053B-AB53-40DF-A060-6DCC22568A23}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.Extension.Helper", "VsExtension.Helper\BridgeVs.Extension.Helper.csproj", "{0FA0053B-AB53-40DF-A060-6DCC22568A23}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.Extension.Helper.UnitTest", "..\Test\LINQBridgeVs.Test\LINQBridgeVs.Helper.UnitTest\BridgeVs.Extension.Helper.UnitTest.csproj", "{7520E391-50B3-4938-9141-0EC491693968}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.DynamicVisualizer.V14", "LINQBridgeVs\DynamicVisualizer.V14\BridgeVs.DynamicVisualizer.V14.csproj", "{0BEB30C9-243B-4192-8633-423B9322C587}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.DynamicVisualizer.V14", "DynamicVisualizer.V14\BridgeVs.DynamicVisualizer.V14.csproj", "{0BEB30C9-243B-4192-8633-423B9322C587}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.Grapple", "Grapple\BridgeVs.Grapple.csproj", "{79C0C9ED-D22C-4855-97C1-F6BD0127A531}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridgevs.Logging", "Logging\Bridgevs.Logging.csproj", "{0B546762-C8C0-45C6-BC42-C5D91D510351}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.Logging", "Logging\BridgeVs.Logging.csproj", "{0B546762-C8C0-45C6-BC42-C5D91D510351}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.SInject", "SInject\BridgeVs.SInject.csproj", "{CD851C2D-8B24-4D72-B2A1-149F7D27C2F1}"
 EndProject
@@ -51,7 +51,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.SInject.UnitTest.M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V14.IntegrationTest", "..\Test\LINQBridgeVs.Test\DynamicVisualizer.V14.IntegrationTest\DynamicVisualizer.V14.IntegrationTest.csproj", "{F3E217BC-EDD0-4354-AC29-C7525D5019E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.DynamicVisualizer.V15", "LINQBridgeVs\DynamicVisualizer.V15\BridgeVs.DynamicVisualizer.V15.csproj", "{6278C369-9593-4E93-A725-010717E7FC10}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.DynamicVisualizer.V15", "DynamicVisualizer.V15\BridgeVs.DynamicVisualizer.V15.csproj", "{6278C369-9593-4E93-A725-010717E7FC10}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicVisualizer.V15.IntegrationTest", "..\Test\LINQBridgeVs.Test\DynamicVisualizer.V15.IntegrationTest\DynamicVisualizer.V15.IntegrationTest.csproj", "{4F104507-DC9D-41F2-AFA4-3262C31007BE}"
 EndProject
@@ -74,10 +74,10 @@ Global
 		{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}.Deploy|Any CPU.ActiveCfg = Deploy|Any CPU
 		{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}.Deploy|Any CPU.Build.0 = Deploy|Any CPU
-		{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}.Deploys|Any CPU.ActiveCfg = Deploys|Any CPU
-		{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}.Deploys|Any CPU.Build.0 = Deploys|Any CPU
-		{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}.Deploys|Any CPU.ActiveCfg = Deploy|Any CPU
+		{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}.Deploys|Any CPU.Build.0 = Deploy|Any CPU
+		{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}.Release|Any CPU.ActiveCfg = Test|Any CPU
+		{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}.Release|Any CPU.Build.0 = Test|Any CPU
 		{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}.Test|Any CPU.Build.0 = Test|Any CPU
 		{276F3935-E0CA-450F-A55F-AED56DC2024E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -148,8 +148,8 @@ Global
 		{835064F0-3C4F-4646-B17A-632C192CCE3B}.Deploy|Any CPU.Build.0 = Deploy|Any CPU
 		{835064F0-3C4F-4646-B17A-632C192CCE3B}.Deploys|Any CPU.ActiveCfg = Deploy|Any CPU
 		{835064F0-3C4F-4646-B17A-632C192CCE3B}.Deploys|Any CPU.Build.0 = Deploy|Any CPU
-		{835064F0-3C4F-4646-B17A-632C192CCE3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{835064F0-3C4F-4646-B17A-632C192CCE3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{835064F0-3C4F-4646-B17A-632C192CCE3B}.Release|Any CPU.ActiveCfg = Test|Any CPU
+		{835064F0-3C4F-4646-B17A-632C192CCE3B}.Release|Any CPU.Build.0 = Test|Any CPU
 		{835064F0-3C4F-4646-B17A-632C192CCE3B}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{835064F0-3C4F-4646-B17A-632C192CCE3B}.Test|Any CPU.Build.0 = Test|Any CPU
 		{E4E1ED5C-4D75-47C7-A0A4-F57F65C252B4}.Debug|Any CPU.ActiveCfg = Test|Any CPU
@@ -200,8 +200,8 @@ Global
 		{0BEB30C9-243B-4192-8633-423B9322C587}.Deploy|Any CPU.Build.0 = Deploy|Any CPU
 		{0BEB30C9-243B-4192-8633-423B9322C587}.Deploys|Any CPU.ActiveCfg = Deploy|Any CPU
 		{0BEB30C9-243B-4192-8633-423B9322C587}.Deploys|Any CPU.Build.0 = Deploy|Any CPU
-		{0BEB30C9-243B-4192-8633-423B9322C587}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0BEB30C9-243B-4192-8633-423B9322C587}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BEB30C9-243B-4192-8633-423B9322C587}.Release|Any CPU.ActiveCfg = Test|Any CPU
+		{0BEB30C9-243B-4192-8633-423B9322C587}.Release|Any CPU.Build.0 = Test|Any CPU
 		{0BEB30C9-243B-4192-8633-423B9322C587}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{0BEB30C9-243B-4192-8633-423B9322C587}.Test|Any CPU.Build.0 = Test|Any CPU
 		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -273,8 +273,8 @@ Global
 		{6278C369-9593-4E93-A725-010717E7FC10}.Deploy|Any CPU.Build.0 = Deploy|Any CPU
 		{6278C369-9593-4E93-A725-010717E7FC10}.Deploys|Any CPU.ActiveCfg = Deploy|Any CPU
 		{6278C369-9593-4E93-A725-010717E7FC10}.Deploys|Any CPU.Build.0 = Deploy|Any CPU
-		{6278C369-9593-4E93-A725-010717E7FC10}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6278C369-9593-4E93-A725-010717E7FC10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6278C369-9593-4E93-A725-010717E7FC10}.Release|Any CPU.ActiveCfg = Test|Any CPU
+		{6278C369-9593-4E93-A725-010717E7FC10}.Release|Any CPU.Build.0 = Test|Any CPU
 		{6278C369-9593-4E93-A725-010717E7FC10}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{6278C369-9593-4E93-A725-010717E7FC10}.Test|Any CPU.Build.0 = Test|Any CPU
 		{4F104507-DC9D-41F2-AFA4-3262C31007BE}.Debug|Any CPU.ActiveCfg = Test|Any CPU
@@ -294,10 +294,10 @@ Global
 		{07B00FDB-0426-4FAA-8C5E-DACDF7D03EDC} = {EA910CEE-7C65-4583-8023-3447FED3E854}
 		{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192} = {444AAEB8-BD13-4C6D-A906-984CAA695393}
 		{5030F9B8-D21E-456D-8A92-F92567D11104} = {DEECC213-180D-4C4E-A44B-5785F1C0FB73}
-		{8A5E73F6-2093-4669-9C09-BEAB033BE56C} = {DEECC213-180D-4C4E-A44B-5785F1C0FB73}
+		{8A5E73F6-2093-4669-9C09-BEAB033BE56C} = {EA910CEE-7C65-4583-8023-3447FED3E854}
 		{1B82F962-5D04-42B6-8D18-7AA8E8FB615F} = {D80D7CE8-68F4-4C7A-85C8-91179E86FA66}
 		{DDF44401-F193-46B8-BA6C-A3DE88BAED46} = {DEECC213-180D-4C4E-A44B-5785F1C0FB73}
-		{7B0C3D12-296A-438D-B0EA-B049A0D6D3C1} = {DEECC213-180D-4C4E-A44B-5785F1C0FB73}
+		{7B0C3D12-296A-438D-B0EA-B049A0D6D3C1} = {EA910CEE-7C65-4583-8023-3447FED3E854}
 		{B84FBD50-0B10-4C25-8430-680FC6FC3FEA} = {444AAEB8-BD13-4C6D-A906-984CAA695393}
 		{835064F0-3C4F-4646-B17A-632C192CCE3B} = {444AAEB8-BD13-4C6D-A906-984CAA695393}
 		{E4E1ED5C-4D75-47C7-A0A4-F57F65C252B4} = {07B00FDB-0426-4FAA-8C5E-DACDF7D03EDC}

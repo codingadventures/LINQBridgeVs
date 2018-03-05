@@ -85,9 +85,9 @@
     <Compile Include="DynamicObjectSourceTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Src\Logging\Bridgevs.Logging.csproj">
+    <ProjectReference Include="..\..\..\Src\Logging\BridgeVs.Logging.csproj">
       <Project>{0B546762-C8C0-45C6-BC42-C5D91D510351}</Project>
-      <Name>Bridgevs.Logging</Name>
+      <Name>BridgeVs.Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\AnotherModel.Test\AnotherModel.UnitTest.csproj">
       <Project>{7B0C3D12-296A-438D-B0EA-B049A0D6D3C1}</Project>
@@ -97,7 +97,7 @@
       <Project>{8A5E73F6-2093-4669-9C09-BEAB033BE56C}</Project>
       <Name>Model.UnitTest</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Src\LINQBridgeVs\DynamicCore\BridgeVs.DynamicCore.csproj">
+    <ProjectReference Include="..\..\..\Src\DynamicCore\BridgeVs.DynamicCore.csproj">
       <Project>{b84fbd50-0b10-4c25-8430-680fc6fc3fea}</Project>
       <Name>BridgeVs.DynamicCore</Name>
     </ProjectReference>
