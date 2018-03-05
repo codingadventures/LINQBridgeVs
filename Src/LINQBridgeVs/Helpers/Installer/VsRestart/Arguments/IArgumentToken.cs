@@ -1,4 +1,4 @@
-﻿namespace MidnightDevelopers.VisualStudio.VsRestart.Arguments
+﻿namespace BridgeVs.Helper.Installer.VsRestart.Arguments
 {
     internal interface IArgumentToken
     {

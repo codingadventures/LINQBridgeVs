@@ -23,13 +23,13 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using BridgeVs.Logging;
 using System;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using BridgeVs.Logging;
 
-namespace Grapple.Serialization
+namespace BridgeVs.Grapple.Serialization
 {
     /// <summary>
     /// Default Binary Serializer. It uses the BinaryFormatter and it expects the types to be marked as Serializable

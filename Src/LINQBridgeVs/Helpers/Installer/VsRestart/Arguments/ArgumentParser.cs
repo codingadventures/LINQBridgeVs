@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace MidnightDevelopers.VisualStudio.VsRestart.Arguments
+namespace BridgeVs.Helper.Installer.VsRestart.Arguments
 {
     internal class ArgumentParser
     {

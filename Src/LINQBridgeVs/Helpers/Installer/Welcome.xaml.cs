@@ -1,12 +1,12 @@
-﻿using EnvDTE;
-using FirstTimeConfigurator.VsRestart;
-using MahApps.Metro.Controls;
-using MahApps.Metro.Controls.Dialogs;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
+using BridgeVs.Helper.Installer.VsRestart;
+using EnvDTE;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 
-namespace BridgeVs
+namespace BridgeVs.Helper.Installer
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

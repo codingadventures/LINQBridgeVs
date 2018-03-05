@@ -26,12 +26,11 @@
 using System;
 using System.Collections;
 using System.Linq;
-using Grapple.Contracts;
-using Grapple.Serialization;
+using BridgeVs.Grapple.Contracts;
+using BridgeVs.Grapple.Serialization;
 
-namespace Grapple.Grapple
+namespace BridgeVs.Grapple.Grapple
 {
-
     internal class BinaryGrapple : IGrapple
     {
         #region [ IGrapple Methods ]

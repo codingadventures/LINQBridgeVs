@@ -27,7 +27,7 @@ using BridgeVs.DynamicCore;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using Microsoft.Win32;
 
-namespace BridgeVs.DynamicVisualizer.V15
+namespace LINQBridgeVs.DynamicVisualizer.V15
 {
     /// <inheritdoc />
     /// <summary>

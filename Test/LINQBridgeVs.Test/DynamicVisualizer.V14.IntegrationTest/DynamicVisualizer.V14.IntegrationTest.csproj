@@ -78,13 +78,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Src\LINQBridgeVs\DynamicCore\DynamicCore.csproj">
+    <ProjectReference Include="..\..\..\Src\LINQBridgeVs\DynamicCore\BridgeVs.DynamicCore.csproj">
       <Project>{B84FBD50-0B10-4C25-8430-680FC6FC3FEA}</Project>
-      <Name>DynamicCore</Name>
+      <Name>BridgeVs.DynamicCore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Src\LINQBridgeVs\DynamicVisualizer.V14\DynamicVisualizer.V14.csproj">
+    <ProjectReference Include="..\..\..\Src\LINQBridgeVs\DynamicVisualizer.V14\BridgeVs.DynamicVisualizer.V14.csproj">
       <Project>{0beb30c9-243b-4192-8633-423b9322c587}</Project>
-      <Name>DynamicVisualizer.V14</Name>
+      <Name>BridgeVs.DynamicVisualizer.V14</Name>
     </ProjectReference>
     <ProjectReference Include="..\Model.Test\Model.UnitTest.csproj">
       <Project>{8a5e73f6-2093-4669-9c09-beab033be56c}</Project>

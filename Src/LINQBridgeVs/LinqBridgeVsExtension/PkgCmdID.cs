@@ -1,6 +1,4 @@
-﻿// PkgCmdID.cs
-// MUST match PkgCmdID.h
-#region License
+﻿#region License
 // Copyright (c) 2013 - 2018 Giovanni Campo
 //
 // Permission is hereby granted, free of charge, to any person
@@ -24,6 +22,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
+
 namespace BridgeVs.Extension
 {
     internal static class PkgCmdIdList

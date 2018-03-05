@@ -30,7 +30,7 @@ using System.Runtime.Serialization.Formatters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
 
-namespace Grapple.Serialization
+namespace BridgeVs.Grapple.Serialization
 {
     internal class JsonSerializer : SerializationHandler
     {

@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 Giovanni Campo
+// Copyright (c) 2013 - 2018 Giovanni Campo
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -28,9 +28,8 @@ using System;
 using System.Linq;
 using Mono.Cecil;
 
-namespace SInject.Reflection
+namespace BridgeVs.SInject.Reflection
 { 
-
     internal static class TypeReferenceExt
     {
         private static MethodReference _CloneMethodWithDeclaringType(MethodDefinition methodDef, TypeReference declaringTypeRef)

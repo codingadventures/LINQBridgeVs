@@ -26,7 +26,7 @@
 using System;
 using System.IO;
 
-namespace Grapple.Serialization
+namespace BridgeVs.Grapple.Serialization
 {
     /// <summary>
     /// 

@@ -24,6 +24,8 @@
 #endregion
 
 
+using BridgeVs.SInject;
+
 namespace SInject.Console
 {
     class Program

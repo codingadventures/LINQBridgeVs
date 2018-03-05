@@ -1,6 +1,6 @@
 ﻿using System.Management;
 
-namespace MidnightDevelopers.VisualStudio.VsRestart.Arguments
+namespace BridgeVs.Helper.Installer.VsRestart.Arguments
 {
     internal static class ProcessArgumentsProvider
     {

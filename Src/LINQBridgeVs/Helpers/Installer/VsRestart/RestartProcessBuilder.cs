@@ -1,8 +1,8 @@
-﻿using MidnightDevelopers.VisualStudio.VsRestart.Arguments;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
+using BridgeVs.Helper.Installer.VsRestart.Arguments;
 
-namespace FirstTimeConfigurator.VsRestart
+namespace BridgeVs.Helper.Installer.VsRestart
 {
     internal class RestartProcessBuilder
     {

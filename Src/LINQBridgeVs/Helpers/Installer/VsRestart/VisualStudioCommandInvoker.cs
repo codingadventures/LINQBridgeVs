@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Linq;
 using System.Text;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
@@ -8,7 +6,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Process = System.Diagnostics.Process;
 using ProcessStartInfo = System.Diagnostics.ProcessStartInfo;
 
-namespace FirstTimeConfigurator.VsRestart
+namespace BridgeVs.Helper.Installer.VsRestart
 {
     internal class VisualStudioCommandInvoker
     {

@@ -32,12 +32,12 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
+using BridgeVs.Grapple.Contracts;
+using BridgeVs.Grapple.Extensions;
+using BridgeVs.Grapple.Grapple;
 using BridgeVs.Logging;
-using Grapple.Contracts;
-using Grapple.Extensions;
-using Grapple.Grapple;
 
-namespace Grapple
+namespace BridgeVs.Grapple
 {
     /// <summary>
     /// 

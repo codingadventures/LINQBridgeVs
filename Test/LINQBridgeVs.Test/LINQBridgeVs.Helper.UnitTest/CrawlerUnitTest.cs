@@ -2,11 +2,11 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using BridgeVs.Logging;
 using BridgeVs.Helper.Dependency;
+using BridgeVs.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace BridgeVs.Helper.UnitTest
+namespace LINQBridgeVs.Helper.UnitTest
 {
     [TestClass]
     [DeploymentItem(@"CsProj\Model.UnitTest.xml")]

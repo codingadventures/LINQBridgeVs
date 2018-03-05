@@ -29,9 +29,9 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
 using BridgeVs.Logging;
-using Grapple;
 using BridgeVs.DynamicCore.Helper;
 using BridgeVs.DynamicCore.Template;
+using BridgeVs.Grapple;
 
 namespace BridgeVs.DynamicCore
 {

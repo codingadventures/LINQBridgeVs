@@ -201,9 +201,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Src\..\Src\LINQBridgeVs\LINQBridgeVsExtension\BridgeVs.csproj">
+    <ProjectReference Include="..\..\..\Src\LINQBridgeVs\LINQBridgeVsExtension\BridgeVs.Extension.csproj">
       <Project>{1b82f962-5d04-42b6-8d18-7aa8e8fb615f}</Project>
-      <Name>BridgeVs</Name>
+      <Name>BridgeVs.Extension</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

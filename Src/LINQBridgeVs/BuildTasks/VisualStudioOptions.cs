@@ -24,12 +24,10 @@
 #endregion
 
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
-using System.IO;
 
-namespace BridgeVs.VisualStudio
+namespace BridgeVs.Build
 {
     internal class Settings
     {
@@ -89,8 +87,8 @@ namespace BridgeVs.VisualStudio
                     "15.0", new Settings
                     {
                         InstallationPaths = Vs2017Path1,
-                        Assembly = typeof(DynamicVisualizer.V15.Settings).Assembly,
-                        AssemblyLocation = typeof(DynamicVisualizer.V15.Settings).Assembly.Location,
+                        Assembly = typeof(LINQBridgeVs.DynamicVisualizer.V15.Settings).Assembly,
+                        AssemblyLocation = typeof(LINQBridgeVs.DynamicVisualizer.V15.Settings).Assembly.Location,
                         MsBuildVersion = "v15.0"
                     }
                 }

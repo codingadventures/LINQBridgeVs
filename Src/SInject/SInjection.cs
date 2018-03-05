@@ -23,7 +23,6 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -34,9 +33,9 @@ using System.Threading;
 using BridgeVs.Logging;
 using Mono.Cecil;
 using Mono.Cecil.Pdb;
-using SInject.Reflection;
+using BridgeVs.SInject.Reflection;
 
-namespace SInject
+namespace BridgeVs.SInject
 {
     /// <summary>
     /// Type of serialization to enable

@@ -35,8 +35,6 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using BridgeVs.Logging;
-using BridgeVs.TypeMapper;
-using BridgeVs.VisualStudio;
 using Microsoft.Win32;
 
 namespace BridgeVs.Helper.Configuration

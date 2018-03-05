@@ -35,12 +35,11 @@ namespace BridgeVs.Logging
 {
     public static class Log
     {
-
         private static string _applicationName;
         private static readonly string LocalApplicationData =
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
-        private static readonly MailAddress MailAddressFrom = new MailAddress("linqbridge@gmail.com", "No Reply Log");
+        private static readonly MailAddress MailAddressFrom = new MailAddress("linqbridgevs@gmail.com", "No Reply Log");
         private static string _logGzipFileName;
 
         private static string _moduleName;

@@ -26,7 +26,7 @@
 
 using System;
 
-namespace Grapple.Serialization
+namespace BridgeVs.Grapple.Serialization
 {
     internal static class FactorySerializer
     {

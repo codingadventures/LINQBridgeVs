@@ -23,7 +23,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using BridgeVs.Extension;
+using BridgeVs.Extension.Package;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -36,14 +36,14 @@ namespace LINQBridgeVsExtension.UnitTests
         [TestCategory("Integration")]
         public void CreateInstance()
         {
-            var package = new LINQBridgeVsPackage();
+            var package = new BridgeVsPackage();
         }
 
         [TestMethod]
         [TestCategory("Integration")]
         public void IsIVsPackage()
         {
-            var package = new LINQBridgeVsPackage();
+            var package = new BridgeVsPackage();
             Assert.IsNotNull(package as IVsPackage, "The object does not implement IVsPackage");
         }
     }

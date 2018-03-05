@@ -27,7 +27,7 @@ using System.IO;
 using BridgeVs.DynamicCore;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 
-namespace BridgeVs.DynamicVisualizer.V15
+namespace LINQBridgeVs.DynamicVisualizer.V15
 {  
     public class DynamicDebuggerVisualizerObjectSourceV15 : VisualizerObjectSource 
     {

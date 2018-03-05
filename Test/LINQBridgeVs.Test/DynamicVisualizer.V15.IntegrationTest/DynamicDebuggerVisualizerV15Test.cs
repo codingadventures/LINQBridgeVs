@@ -30,7 +30,7 @@ using System.IO;
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
 using BridgeVs.DynamicCore;
-using BridgeVs.DynamicVisualizer.V15;
+using LINQBridgeVs.DynamicVisualizer.V15;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Win32;

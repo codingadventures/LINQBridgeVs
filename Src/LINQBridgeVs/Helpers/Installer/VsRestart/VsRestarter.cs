@@ -1,12 +1,8 @@
-﻿using EnvDTE;
-using MidnightDevelopers.VisualStudio.VsRestart.Arguments;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using BridgeVs.Helper.Installer.VsRestart.Arguments;
+using EnvDTE;
 using Process = System.Diagnostics.Process;
-namespace FirstTimeConfigurator.VsRestart
+namespace BridgeVs.Helper.Installer.VsRestart
 {
     internal static class VsRestarter
     {

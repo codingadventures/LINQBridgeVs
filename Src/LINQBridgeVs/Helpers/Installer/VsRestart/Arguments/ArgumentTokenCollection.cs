@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace MidnightDevelopers.VisualStudio.VsRestart.Arguments
+namespace BridgeVs.Helper.Installer.VsRestart.Arguments
 {
     internal class ArgumentTokenCollection : IEnumerable<IArgumentToken>
     {

@@ -28,6 +28,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
+using BridgeVs.SInject;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace SInject.Test

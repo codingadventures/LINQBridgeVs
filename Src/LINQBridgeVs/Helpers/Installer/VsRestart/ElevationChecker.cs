@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace MidnightDevelopers.VisualStudio.VsRestart
+namespace BridgeVs.Helper.Installer.VsRestart
 {
     internal static class ElevationChecker
     {

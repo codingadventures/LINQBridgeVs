@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
-using BridgeVs.BuildTasks;
+using BridgeVs.Build.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model.UnitTest;
 
-namespace BuildTasks.UnitTest
+namespace BridgeVs.Build.UnitTest
 {
     [TestClass]
     public class MapperBuildTaskTest
@@ -21,18 +21,15 @@ namespace BuildTasks.UnitTest
         [TestCategory("UnitTest")]
         public void MapperBuildTaskTest_V11_Should_Succeed()
         {
-
             var mapper = new MapperBuildTask
             {
                 Assembly = _assemblyModel.Location,
                 VisualStudioVer = "11.0"
             };
 
-
             var result = mapper.Execute();
 
             Assert.IsTrue(result, "Mapper Build Task Execute return false.");
-
         }
     }
 }

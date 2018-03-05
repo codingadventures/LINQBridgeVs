@@ -28,10 +28,9 @@ using System.Collections;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
-using BridgeVs.Logging;
-using EnvDTE;
 using BridgeVs.Helper;
 using BridgeVs.Helper.Configuration;
+using EnvDTE;
 using Project = EnvDTE.Project;
 
 namespace BridgeVs.Extension

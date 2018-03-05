@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
-using BridgeVs.BuildTasks;
+using BridgeVs.Build.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model.UnitTest;
 
-namespace BuildTasks.UnitTest
+namespace BridgeVs.Build.UnitTest
 {
     [TestClass]
     public class SInjectionBuildTaskTest
