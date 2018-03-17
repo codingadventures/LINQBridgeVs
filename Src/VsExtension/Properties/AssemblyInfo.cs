@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 Giovanni Campo
+// Copyright (c) 2013 - 2018 Giovanni Campo
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -24,6 +24,7 @@
 #endregion
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Resources;
 using System.Runtime.CompilerServices;
@@ -54,10 +55,11 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.4.*")]
+[assembly: AssemblyFileVersion("1.0.*")]
 
 
 [assembly: InternalsVisibleTo("LINQBridgeVsExtension.IntegrationTests, PublicKey=0024000004800000940000000602000000240000525341310004000001000100f575ceee4c0b7992660f21a6c2a09c93eac56d9dad2f20caa2d48bf5d904c9b2af5800ba01cae7b37299bff9486a8b97047959c3fbe16de730cf3397f4bafaefc745dba1ce34cedf27698f2dc96159eaa27eef4093f6c35236f30239a4841b864ea734ed3582478cc4214d76497ceb974ac920f35043de0913a149d1107bd3a1")]
 [assembly: InternalsVisibleTo("LINQBridgeVsExtension.UnitTests, PublicKey=0024000004800000940000000602000000240000525341310004000001000100f575ceee4c0b7992660f21a6c2a09c93eac56d9dad2f20caa2d48bf5d904c9b2af5800ba01cae7b37299bff9486a8b97047959c3fbe16de730cf3397f4bafaefc745dba1ce34cedf27698f2dc96159eaa27eef4093f6c35236f30239a4841b864ea734ed3582478cc4214d76497ceb974ac920f35043de0913a149d1107bd3a1")]
 [assembly: Guid("2016fd5d-79e9-4823-b927-cb796f7b411a")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1017:MarkAssembliesWithComVisible")]

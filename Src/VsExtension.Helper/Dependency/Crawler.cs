@@ -44,23 +44,23 @@ namespace BridgeVs.Helper.Dependency
         /// <param name="csvbProjectName">Name of the CS or VB project.</param>
         /// <param name="solutionName">Name of the solution.</param>
         /// <returns></returns>
-        public static IEnumerable<Project> FindProjectDependencies(string csvbProjectName, string solutionName)
+        public static IEnumerable<Dependency> FindDependencies(string csvbProjectName, string solutionName)
         {
             if (string.IsNullOrEmpty(csvbProjectName))
             {
                 Log.Write("BridgeVs.Helper.Dependency.Crawler: csvbProjectName is null or empty");
-                return Enumerable.Empty<Project>();
+                return Enumerable.Empty<Dependency>();
             }
 
-            var namespaceManager = new XmlNamespaceManager(new NameTable());
+            XmlNamespaceManager namespaceManager = new XmlNamespaceManager(new NameTable());
             namespaceManager.AddNamespace("aw", MsbuildNamespace);
 
 
-            var loadedProject =
+            Project loadedProject =
                 ProjectCollection.GlobalProjectCollection.LoadedProjects
                 .FirstOrDefault(p => CompareProjectFileName(p, csvbProjectName))
                 ??
-                new Microsoft.Build.Evaluation.Project(csvbProjectName);
+                new Project(csvbProjectName);
 
             return
                 from proj in loadedProject.Items
@@ -73,7 +73,7 @@ namespace BridgeVs.Helper.Dependency
                 let assemblyName = referenceProjectXDocument.XPathSelectElement("/aw:Project/aw:PropertyGroup/aw:AssemblyName", namespaceManager)?.Value
                 let outputType = referenceProjectXDocument.XPathSelectElement("/aw:Project/aw:PropertyGroup/aw:OutputType", namespaceManager)?.Value
                 let outputPath = referenceProjectXDocument.XPathSelectElement("/aw:Project/aw:PropertyGroup/aw:OutputPath", namespaceManager)?.Value
-                select new Project
+                select new Dependency
                 {
                     DependencyType =
                         proj.ItemType.Equals("Reference") ? DependencyType.AssemblyReference : DependencyType.ProjectReference,
@@ -83,13 +83,13 @@ namespace BridgeVs.Helper.Dependency
                 };
         }
 
-        private static readonly Func<Microsoft.Build.Evaluation.Project, string, bool> CompareProjectFileName =
+        private static readonly Func<Project, string, bool> CompareProjectFileName =
             (project, projectToCompare) =>
             {
                 if (project == null) return false;
 
-                var proj1FileName = Path.GetFileName(project.FullPath);
-                var proj2FileName = Path.GetFileName(projectToCompare);
+                string proj1FileName = Path.GetFileName(project.FullPath);
+                string proj2FileName = Path.GetFileName(projectToCompare);
 
                 return
                     !string.IsNullOrEmpty(proj1FileName)

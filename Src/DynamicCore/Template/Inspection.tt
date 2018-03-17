@@ -24,6 +24,6 @@ void Main()
 {
     Truck truck = new Truck("LINQBridgeVsTruck");
 	truck.WaitDelivery("<#= _typeName #>").Wait();
-    var @object = truck.UnLoad<<#=_typeToRetrieveFullName#>>();
+    var @object = truck.UnLoadCargo<<#=_typeToRetrieveFullName#>>();
     @object.Dump("<#=_typeToRetrieveFullName#>", 2);
 }

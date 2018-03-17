@@ -25,6 +25,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
@@ -35,33 +36,34 @@ using Project = EnvDTE.Project;
 
 namespace BridgeVs.Extension
 {
-    public class LINQBridgeVsExtension
+    public class BridgeVsExtension
     {
         #region [ Private Properties ]
         private readonly DTE _application;
         #endregion
 
-        public LINQBridgeVsExtension(DTE app)
+        public BridgeVsExtension(DTE app)
         {
-            _application = app; 
+            _application = app;
         }
+
         private static bool IsSupported(string uniqueName)
         {
             return
                 uniqueName.EndsWith(".csproj", StringComparison.InvariantCultureIgnoreCase) || uniqueName.EndsWith(".vbproj", StringComparison.InvariantCultureIgnoreCase);
         }
 
-        private Project SelectedProject
+        private IEnumerable<Project> AllProjects
         {
             get
             {
-                var items = _application.ActiveSolutionProjects as IEnumerable;
+                IEnumerable items = _application.ActiveSolutionProjects as IEnumerable;
+                if (items == null)
+                    return Enumerable.Empty<Project>();
 
-                var project = items?.OfType<Project>().FirstOrDefault();
-                if (project == null || !IsSupported(project.UniqueName))
-                    return null;
-
-                return project;
+                return from project in items.OfType<Project>()
+                       where IsSupported(project.UniqueName)
+                       select project;
             }
         }
 
@@ -76,33 +78,22 @@ namespace BridgeVs.Extension
                 return _solutionName;
             }
         }
-
-        private string SelectedAssemblyName => SelectedProject.Properties.Item("AssemblyName").Value.ToString();
-
-        private string SelectedProjectOutputPath
-        {
-            get
-            {
-                var path = SelectedProject.Properties.Item("FullPath").Value.ToString();
-                var outputPath = SelectedProject.ConfigurationManager.ActiveConfiguration.Properties.Item("OutputPath").Value.ToString();
-                var fileName = SelectedProject.Properties.Item("OutputFileName").Value.ToString();
-                return Path.Combine(path, outputPath, fileName);
-            }
-        }
-
+        
         public void Execute(CommandAction action)
         {
-            if (SelectedProject == null)
+            List<Project> projects = AllProjects.ToList();
+
+            if (projects.Count == 0)
                 return;
 
-            BridgeTrigger.Execute(new BridgeTrigger.ExecuteParams(action, SelectedProject.FullName, SolutionName, SelectedAssemblyName, SelectedProjectOutputPath));
+           BridgeCommand.ActivateBridgeVsOnSolution(projects, SolutionName, _application.Version, _application.Edition);
         }
 
         public void UpdateCommand(MenuCommand cmd, CommandAction action)
         {
-            var states = GetStatus(action);
+            CommandStates states = GetStatus(action);
             cmd.Visible = (CommandStates.Visible & states) != 0;
-            cmd.Enabled = (CommandStates.Enabled & states) != 0 && PackageConfigurator.IsLINQBridgeVsConfigured;
+            cmd.Enabled = (CommandStates.Enabled & states) != 0 && PackageConfigurator.IsBridgeVsConfigured(_application.Version);
         }
 
         private CommandStates GetStatus(CommandAction action)
@@ -112,15 +103,13 @@ namespace BridgeVs.Extension
 
         private int GetMultiStatus()
         {
-            var result = 0;
+            int result = 0;
+            bool isBridgeVsEnabled = BridgeCommand.IsBridgeVsEnabled(SolutionName, _application.Version);
 
-            if (SelectedProject == null)
-                return result;
-
-            if (PackageConfigurator.IsBridgeDisabled(SelectedAssemblyName, SolutionName))
+            if (isBridgeVsEnabled)
                 result |= 1;
 
-            if (PackageConfigurator.IsBridgeEnabled(SelectedAssemblyName, SolutionName))
+            if (!isBridgeVsEnabled)
                 result |= 2;
 
             return result;
@@ -131,12 +120,13 @@ namespace BridgeVs.Extension
             if (status == 0)
                 return CommandStates.None;
 
-            var result = ((action == CommandAction.Disable ? status >> 1 : status) & 1) != 0;
+            bool result = ((action == CommandAction.Disable ? status >> 1 : status) & 1) != 0;
 
             if (result)
                 return CommandStates.Enabled | CommandStates.Visible;
 
             return CommandStates.None;
         }
+
     }
 }

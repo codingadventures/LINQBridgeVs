@@ -61,6 +61,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VsExtension", "VsExtension"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dynamic Visualizers", "Dynamic Visualizers", "{444AAEB8-BD13-4C6D-A906-984CAA695393}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.Locations", "BridgeVs.Locations\BridgeVs.Locations.csproj", "{BC10F93A-5DA2-44F8-AE5E-5603CB46B548}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -285,6 +287,16 @@ Global
 		{4F104507-DC9D-41F2-AFA4-3262C31007BE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4F104507-DC9D-41F2-AFA4-3262C31007BE}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{4F104507-DC9D-41F2-AFA4-3262C31007BE}.Test|Any CPU.Build.0 = Test|Any CPU
+		{BC10F93A-5DA2-44F8-AE5E-5603CB46B548}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC10F93A-5DA2-44F8-AE5E-5603CB46B548}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC10F93A-5DA2-44F8-AE5E-5603CB46B548}.Deploy|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC10F93A-5DA2-44F8-AE5E-5603CB46B548}.Deploy|Any CPU.Build.0 = Debug|Any CPU
+		{BC10F93A-5DA2-44F8-AE5E-5603CB46B548}.Deploys|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC10F93A-5DA2-44F8-AE5E-5603CB46B548}.Deploys|Any CPU.Build.0 = Debug|Any CPU
+		{BC10F93A-5DA2-44F8-AE5E-5603CB46B548}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC10F93A-5DA2-44F8-AE5E-5603CB46B548}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC10F93A-5DA2-44F8-AE5E-5603CB46B548}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{BC10F93A-5DA2-44F8-AE5E-5603CB46B548}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

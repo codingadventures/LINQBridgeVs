@@ -27,27 +27,31 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace BridgeVs.Helper
+namespace BridgeVs.Locations
 {
     /// <summary>
     /// This static class is a container for all the folders needed in the extension
     /// </summary>
-    public static class Locations
+    public static class CommonFolderPaths
     {
+        private const string CustomAfterTargets = @"Targets\Custom.After.Microsoft.Common.targets";
+        private const string CustomBeforeTargets = @"Targets\Custom.Before.Microsoft.Common.targets";
+
         private static readonly string SpecialWindowsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
         public static readonly string ProgramFilesFolderPath = Environment.GetEnvironmentVariable("PROGRAMFILES");
 
         public static string InstallFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
-
+        public static readonly string Documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        public static readonly string LinqPadQueryFolder = Path.Combine(Documents, "LINQPad Queries");
         public static readonly string LinqPad4DestinationFolder = Path.Combine(ProgramFilesFolderPath, "LINQPad4");
-        public static string LinqPad5DestinationFolder = Path.Combine(ProgramFilesFolderPath, "LINQPad5");
+        public static readonly string LinqPad5DestinationFolder = Path.Combine(ProgramFilesFolderPath, "LINQPad5");
 
-        public static readonly string CustomAfterTargetFileNamePath = Path.Combine(InstallFolder, Resources.CustomAfterTargets);
-        public static readonly string CustomAfterTargetFileName = Path.GetFileName(Resources.CustomAfterTargets);
+        public static readonly string CustomAfterTargetFileNamePath = Path.Combine(InstallFolder, CustomAfterTargets);
+        public static readonly string CustomAfterTargetFileName = Path.GetFileName(CustomAfterTargets);
 
-        public static readonly string CustomBeforeTargetFileNamePath = Path.Combine(InstallFolder, Resources.CustomBeforeTargets);
-        public static readonly string CustomBeforeTargetFileName = Path.GetFileName(Resources.CustomBeforeTargets);
+        public static readonly string CustomBeforeTargetFileNamePath = Path.Combine(InstallFolder, CustomBeforeTargets);
+        public static readonly string CustomBeforeTargetFileName = Path.GetFileName(CustomBeforeTargets);
 
         public static readonly string MsBuildPath = Path.Combine(ProgramFilesFolderPath, "MSBuild");
 
@@ -65,7 +69,7 @@ namespace BridgeVs.Helper
 
         public static readonly string MicrosoftCommonTargetX64FileNamePath = Path.Combine(DotNet40Framework64Path, "Microsoft.Common.targets");
 
-        static Locations()
+        static CommonFolderPaths()
         {
             
         }

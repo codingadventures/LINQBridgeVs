@@ -61,38 +61,11 @@ namespace BridgeVs.Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Targets\Custom.After.Microsoft.Common.targets.
-        /// </summary>
-        internal static string CustomAfterTargets {
-            get {
-                return ResourceManager.GetString("CustomAfterTargets", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Targets\Custom.Before.Microsoft.Common.targets.
-        /// </summary>
-        internal static string CustomBeforeTargets {
-            get {
-                return ResourceManager.GetString("CustomBeforeTargets", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Software\LINQBridgeVs\{0}\Solutions\{1}.
         /// </summary>
         internal static string EnabledProjectsRegistryKey {
             get {
                 return ResourceManager.GetString("EnabledProjectsRegistryKey", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Software\LINQBridgeVs\.
-        /// </summary>
-        internal static string LINQPadInstallationPath {
-            get {
-                return ResourceManager.GetString("LINQPadInstallationPath", resourceCulture);
             }
         }
         
@@ -120,42 +93,6 @@ namespace BridgeVs.Helper {
         internal static string SkipMessage {
             get {
                 return ResourceManager.GetString("SkipMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to \Visual Studio 2012\Visualizers\.
-        /// </summary>
-        internal static string VS2012Path1 {
-            get {
-                return ResourceManager.GetString("VS2012Path1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to \Visual Studio 2013\Visualizers\.
-        /// </summary>
-        internal static string VS2013Path1 {
-            get {
-                return ResourceManager.GetString("VS2013Path1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to \Visual Studio 2015\Visualizers\.
-        /// </summary>
-        internal static string VS2015Path1 {
-            get {
-                return ResourceManager.GetString("VS2015Path1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to \Visual Studio 2017\Visualizers\.
-        /// </summary>
-        internal static string VS2017Path1 {
-            get {
-                return ResourceManager.GetString("VS2017Path1", resourceCulture);
             }
         }
     }

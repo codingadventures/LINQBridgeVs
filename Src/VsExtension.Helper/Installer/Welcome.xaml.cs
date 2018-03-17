@@ -8,16 +8,15 @@ using MahApps.Metro.Controls.Dialogs;
 
 namespace BridgeVs.Helper.Installer
 {
+    /// <inheritdoc />
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class Welcome : MetroWindow, System.IDisposable
+    public partial class Welcome :  System.IDisposable
     {
         private readonly LinkedList<MetroTabItem> Tabs;
-        private LinkedListNode<MetroTabItem> _currentTab;
+        private readonly LinkedListNode<MetroTabItem> _currentTab;
         private volatile DTE _dte;
-
-       
 
         public Welcome()
         {

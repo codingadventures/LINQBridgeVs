@@ -132,10 +132,7 @@
   <data name="LINQPadExe" xml:space="preserve">
     <value>LINQPad.exe</value>
   </data>
-  <data name="LINQPadQuery" xml:space="preserve">
-    <value>LINQPad Queries\LINQBridge</value>
-  </data>
   <data name="VisualizerName" xml:space="preserve">
-    <value>LINQBridge Visualizer</value>
+    <value>BridgeVs Visualizer</value>
   </data>
 </root>

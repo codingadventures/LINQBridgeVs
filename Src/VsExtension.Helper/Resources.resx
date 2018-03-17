@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CustomAfterTargets" xml:space="preserve">
-    <value>Targets\Custom.After.Microsoft.Common.targets</value>
-  </data>
   <data name="EnabledProjectsRegistryKey" xml:space="preserve">
     <value>Software\LINQBridgeVs\{0}\Solutions\{1}</value>
   </data>
@@ -129,25 +126,7 @@
   <data name="ProductVersion" xml:space="preserve">
     <value>Software\LINQBridgeVs\{0}</value>
   </data>
-  <data name="CustomBeforeTargets" xml:space="preserve">
-    <value>Targets\Custom.Before.Microsoft.Common.targets</value>
-  </data>
   <data name="SkipMessage" xml:space="preserve">
     <value>If you skip the configuration you won't be able to use LINQBridgeVs. Are you sure?</value>
-  </data>
-  <data name="VS2012Path1" xml:space="preserve">
-    <value>\Visual Studio 2012\Visualizers\</value>
-  </data>
-  <data name="VS2013Path1" xml:space="preserve">
-    <value>\Visual Studio 2013\Visualizers\</value>
-  </data>
-  <data name="VS2015Path1" xml:space="preserve">
-    <value>\Visual Studio 2015\Visualizers\</value>
-  </data>
-  <data name="VS2017Path1" xml:space="preserve">
-    <value>\Visual Studio 2017\Visualizers\</value>
-  </data>
-  <data name="LINQPadInstallationPath" xml:space="preserve">
-    <value>Software\LINQBridgeVs\</value>
   </data>
 </root>

@@ -40,6 +40,7 @@ using BridgeVs.DynamicCore.Forms;
 using BridgeVs.DynamicCore.Helper;
 using BridgeVs.DynamicCore.Properties;
 using BridgeVs.DynamicCore.Template;
+using BridgeVs.Locations;
 using Microsoft.Win32;
 using Message = BridgeVs.DynamicCore.Template.Message;
 
@@ -52,29 +53,14 @@ namespace BridgeVs.DynamicCore
     public class DynamicDebuggerVisualizer
     {
         private static IFileSystem _fileSystem;
-
         internal static IFileSystem FileSystem
         {
-            get { return _fileSystem ?? (_fileSystem = new FileSystem()); }
-            set { _fileSystem = value; }
-        }
-
-        private static readonly string MyDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        private const string LINQPadInstallationPathRegistryValue = "LINQPadInstallationPath";
-        private static string LINQPadInstallationPath
-        {
-            get
-            {
-                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(LINQPadInstallationPathRegistryValue))
-                {
-                    return key?.GetValue(LINQPadInstallationPathRegistryValue)?.ToString();
-                }
-            }
+            get => _fileSystem ?? (_fileSystem = new FileSystem());
+            set => _fileSystem = value;
         }
 
         #region [ Consts ]
         private const UInt32 WmKeydown = 0x0100;
-        private const UInt32 WmSetFocus = 0x0007;
         private const int VkF5 = 0x74;
         private const int SwShownormal = 1;
         #endregion
@@ -108,18 +94,9 @@ namespace BridgeVs.DynamicCore
                 Log.Write("Entered in DeployLinqScript");
                 // Log.Write("Message: {0}", message);
 
-                string dstScriptPath = Path.Combine(MyDocuments, Resources.LINQPadQuery);
-                Log.Write("dstScriptPath: {0}", dstScriptPath);
+                string dstScriptPath = Path.Combine(CommonFolderPaths.LinqPadQueryFolder, "BridgeVs");
 
-                if (!FileSystem.Directory.Exists(dstScriptPath))
-                {
-                    DirectorySecurity sec = new DirectorySecurity();
-                    // Using this instead of the "Everyone" string means we work on non-English systems.
-                    SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
-                    sec.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
-                    FileSystem.Directory.CreateDirectory(dstScriptPath, sec);
-                    Log.Write(string.Format("Directory Created: {0}", dstScriptPath));
-                }
+                Log.Write("dstScriptPath: {0}", dstScriptPath);
 
                 string dst = Path.Combine(dstScriptPath, string.Format(message.FileName, message.TypeFullName));
                 Log.Write("dst: {0}", dst);
@@ -132,7 +109,6 @@ namespace BridgeVs.DynamicCore
                 string linqQueryText = linqQuery.TransformText();
 
                 Log.Write("LinqQuery file Transformed");
-
 
                 using (Stream memoryStream = FileSystem.File.Open(dst, FileMode.Create))
                 using (StreamWriter streamWriter = new StreamWriter(memoryStream))
@@ -171,7 +147,6 @@ namespace BridgeVs.DynamicCore
             Log.Write("Message deserialized");
             Log.Write($"Message content /n {message}");
 
-
             Type type = Type.GetType(message.AssemblyQualifiedName);
 
             string location = GetAssemblyLocation(type, vsVersion);
@@ -183,13 +158,13 @@ namespace BridgeVs.DynamicCore
             DeployLinqScript(message);
             Log.Write("LinqQuery Successfully deployed");
 
-            string linqQueryfileName = Path.Combine(MyDocuments, Resources.LINQPadQuery, message.FileName);
+            string linqQueryfileName = Path.Combine(CommonFolderPaths.LinqPadQueryFolder,"BridgeVs", message.FileName);
 
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 WindowStyle = ProcessWindowStyle.Normal,
                 FileName = Resources.LINQPadExe,
-                WorkingDirectory = LINQPadInstallationPath,
+                WorkingDirectory = CommonRegistryConfigurations.LINQPadInstallationPath,
                 Arguments = linqQueryfileName + " " + Resources.LINQPadCommands
             };
 
@@ -198,9 +173,15 @@ namespace BridgeVs.DynamicCore
             try
             {
                 Process process = Process.Start(startInfo);
-                if (process != null) process.WaitForInputIdle(-1);
+                if (process != null)
+                {
+                    process.WaitForInputIdle(-1);
+                    process.Dispose();
+                }
 
-                SendInputToLINQPad();
+                process = Process.GetProcessesByName("LINQPad").FirstOrDefault(p => CommonRegistryConfigurations.LINQPadVersion.Equals(p.MainWindowTitle));
+
+                SendInputToProcess(process);
 
                 Log.Write("LINQPad Successfully started");
             }
@@ -223,7 +204,7 @@ namespace BridgeVs.DynamicCore
         /// <returns></returns>
         private static string GetAssemblyLocation(Type @type, string vsVersion)
         {
-            string registryKeyPath = string.Format(@"Software\LINQBridgeVs\{0}\Solutions", vsVersion);
+            string registryKeyPath = $@"Software\LINQBridgeVs\{vsVersion}\Solutions";
 
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey(registryKeyPath))
             {
@@ -236,9 +217,7 @@ namespace BridgeVs.DynamicCore
                     {
                         RegistryKey subKey = registryKey.OpenSubKey(value);
 
-                        if (subKey == null) continue;
-
-                        string name = subKey.GetValueNames().FirstOrDefault(p =>
+                        string name = subKey?.GetValueNames().FirstOrDefault(p =>
                         {
                             if (!@type.IsGenericType)
                                 return p == @type.Assembly.GetName().Name;
@@ -252,7 +231,7 @@ namespace BridgeVs.DynamicCore
 
                         if (string.IsNullOrEmpty(name)) continue;
 
-                        string assemblyLoc = (string) subKey.GetValue(name + "_location");
+                        string assemblyLoc = (string)subKey.GetValue(name + "_location");
 
                         Log.Write("Assembly Location Found: ", assemblyLoc);
 
@@ -268,31 +247,29 @@ namespace BridgeVs.DynamicCore
         /// <summary>
         /// Sends the input to LINQPad. Simulates key inputs to run a linqscript (F5)
         /// </summary>
-        private static void SendInputToLINQPad()
+        private static void SendInputToProcess(Process process)
         {
             try
             {
-                Process linqPadProcess = Process.GetProcessesByName("LINQPad")[0];
-
-                while (linqPadProcess.MainWindowHandle == IntPtr.Zero)
+                int index = 0;
+                while (process.MainWindowHandle == IntPtr.Zero || index < 3)
                 {
                     // Discard cached information about the process
                     // because MainWindowHandle might be cached.
-                    int index = 0;
+
                     Log.Write("Waiting MainWindowHandle... - Iteration: {0}", ++index);
-                    linqPadProcess.Refresh();
+                    process.Refresh();
+                    index++;
                     Thread.Sleep(10);
                 }
 
-                ShowWindowAsync(linqPadProcess.MainWindowHandle, SwShownormal);
-                Log.Write("LINQPad ShowWindowAsync {0}", linqPadProcess.MainWindowHandle);
+                ShowWindowAsync(process.MainWindowHandle, SwShownormal);
+                Log.Write("LINQPad ShowWindowAsync {0}", process.MainWindowHandle);
 
-                SetForegroundWindow(linqPadProcess.MainWindowHandle);
-                Log.Write("LINQPad SetForegroundWindow {0}", linqPadProcess.MainWindowHandle);
-                Thread.Sleep(20);
-                PostMessage(linqPadProcess.MainWindowHandle, WmSetFocus, VkF5, 0);
-                Thread.Sleep(20);
-                PostMessage(linqPadProcess.MainWindowHandle, WmKeydown, VkF5, 0);
+                SetForegroundWindow(process.MainWindowHandle);
+
+                PostMessage(process.MainWindowHandle, WmKeydown, VkF5, 0);
+
                 Log.Write("LINQPad PostMessage {0}", VkF5);
             }
             catch (Exception e)
@@ -311,7 +288,7 @@ namespace BridgeVs.DynamicCore
         private static extern bool SetForegroundWindow(IntPtr hwnd);
 
         [DllImport("user32.dll")]
-        static extern bool PostMessage(IntPtr hWnd, UInt32 msg, int wParam, int lParam);
+        private static extern bool PostMessage(IntPtr hWnd, UInt32 msg, int wParam, int lParam);
         #endregion
     }
 }

@@ -75,7 +75,7 @@ namespace BridgeVs.DynamicCore.Template
             
             #line default
             #line hidden
-            this.Write("\").Wait();\r\n    var @object = truck.UnLoad<");
+            this.Write("\").Wait();\r\n    var @object = truck.UnLoadCargo<");
             
             #line 27 "C:\Users\Thanos\Documents\LINQBridgeVs\Src\DynamicCore\Template\Inspection.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_typeToRetrieveFullName));

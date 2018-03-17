@@ -52,13 +52,7 @@ namespace BridgeVs.Grapple
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
                 Resource.ProductName);
 
-        private string TruckPosition
-        {
-            get
-            {
-                return Path.Combine(DefaultBaseFolder, _truckName);
-            }
-        }
+        private string TruckPosition => Path.Combine(DefaultBaseFolder, _truckName);
 
         /// <summary>
         /// 
@@ -144,7 +138,7 @@ namespace BridgeVs.Grapple
         /// <returns></returns>
         public IEnumerable<T> UnLoadCargo<T>()
         {
-            Log.Write("Unstuffing Cargo of Type {0}", typeof(T).FullName);
+            Log.Write("UnLoading Cargo of Type {0}", typeof(T).FullName);
 
             var typeCodeName = typeof(T);
             return (from i in _container.Keys

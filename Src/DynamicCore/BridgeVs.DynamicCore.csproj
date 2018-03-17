@@ -106,6 +106,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BridgeVs.Locations\BridgeVs.Locations.csproj">
+      <Project>{bc10f93a-5da2-44f8-ae5e-5603cb46b548}</Project>
+      <Name>BridgeVs.Locations</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Grapple\BridgeVs.Grapple.csproj">
       <Project>{79c0c9ed-d22c-4855-97c1-f6bd0127a531}</Project>
       <Name>BridgeVs.Grapple</Name>

@@ -6,7 +6,7 @@ namespace BridgeVs.Extension.Helper.UnitTest
     [TestClass]
     public class ProjectUnitTest
     {
-        readonly Project _projectSample = new Project();
+        readonly Dependency _projectSample = new Dependency();
 
         [TestMethod]
         [TestCategory("UnitTest")]

@@ -25,8 +25,6 @@
 
 using System;
 using System.ComponentModel.Design;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Windows;
@@ -34,6 +32,7 @@ using BridgeVs.Helper;
 using BridgeVs.Helper.Configuration;
 using BridgeVs.Helper.Forms;
 using BridgeVs.Helper.Installer;
+using BridgeVs.Logging;
 using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
@@ -61,18 +60,14 @@ namespace BridgeVs.Extension.Package
     [ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string)]
     [ProvideAutoLoad(VSConstants.UICONTEXT.EmptySolution_string)]
     [Guid(GuidList.GuidBridgeVsExtensionPkgString)]
-    [assembly: SuppressMessage("Microsoft.Design", "CA1017:MarkAssembliesWithComVisible")]
     public sealed class BridgeVsPackage : Microsoft.VisualStudio.Shell.Package
     {
         private DTE _dte;
+        private DTEEvents _dteEvents;
 
-        public static bool IsElevated
-        {
-            get
-            {
-                return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
-            }
-        }
+        //if this is not null means vs has to restart
+        private Welcome _welcomePage;
+        public static bool IsElevated => new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
 
         #region Package Members
 
@@ -83,31 +78,33 @@ namespace BridgeVs.Extension.Package
         /// </summary>
         protected override void Initialize()
         {
-            Stopwatch watch = new Stopwatch();
-            watch.Start();
             base.Initialize();
 
             _dte = (DTE)GetService(typeof(SDTE));
 
-            var bridge = new LINQBridgeVsExtension(_dte);
-            bool isLinqBridgeVsConfigured = PackageConfigurator.IsLINQBridgeVsConfigured;
+            _dteEvents = _dte.Events.DTEEvents;
+
+            _dteEvents.OnStartupComplete += _dteEvents_OnStartupComplete;
+
+            BridgeVsExtension bridge = new BridgeVsExtension(_dte);
+            bool isLinqBridgeVsConfigured = PackageConfigurator.IsBridgeVsConfigured(_dte.Version);
 
             // Add our command handlers for menu(commands must exist in the.vsct file)
-            var mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
+            OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (null == mcs) return;
 
             // Create the command for the menu item.
-            var enableCommand = new CommandID(GuidList.GuidBridgeVsExtensionCmdSet, (int)PkgCmdIdList.CmdIdEnableBridge);
-            var menuItemEnable = new OleMenuCommand((s, e) => bridge.Execute(CommandAction.Enable), enableCommand);
+            CommandID enableCommand = new CommandID(GuidList.GuidBridgeVsExtensionCmdSet, (int)PkgCmdIdList.CmdIdEnableBridge);
+            OleMenuCommand menuItemEnable = new OleMenuCommand((s, e) => bridge.Execute(CommandAction.Enable), enableCommand);
             menuItemEnable.BeforeQueryStatus += (s, e) => bridge.UpdateCommand(menuItemEnable, CommandAction.Enable);
 
-            var disableCommand = new CommandID(GuidList.GuidBridgeVsExtensionCmdSet,
+            CommandID disableCommand = new CommandID(GuidList.GuidBridgeVsExtensionCmdSet,
                 (int)PkgCmdIdList.CmdIdDisableBridge);
-            var menuItemDisable = new OleMenuCommand((s, e) => bridge.Execute(CommandAction.Disable), disableCommand);
+            OleMenuCommand menuItemDisable = new OleMenuCommand((s, e) => bridge.Execute(CommandAction.Disable), disableCommand);
             menuItemDisable.BeforeQueryStatus += (s, e) => bridge.UpdateCommand(menuItemDisable, CommandAction.Disable);
 
-            var aboutCommand = new CommandID(GuidList.GuidBridgeVsExtensionCmdSet, (int)PkgCmdIdList.CmdIdAbout);
-            var menuItemAbout = new OleMenuCommand((s, e) => { var about = new About(); about.ShowDialog(); }, aboutCommand);
+            CommandID aboutCommand = new CommandID(GuidList.GuidBridgeVsExtensionCmdSet, (int)PkgCmdIdList.CmdIdAbout);
+            OleMenuCommand menuItemAbout = new OleMenuCommand((s, e) => { About about = new About(); about.ShowDialog(); }, aboutCommand);
 
             mcs.AddCommand(menuItemEnable);
             mcs.AddCommand(menuItemDisable);
@@ -115,38 +112,42 @@ namespace BridgeVs.Extension.Package
 
             try
             {
-             //   Log.Configure("LINQBridgeVs", "Extensions");
-                 
+                Log.Configure("LINQBridgeVs", "Extensions");
+
                 //if first time user 
-                if (PackageConfigurator.IsLINQBridgeVsConfigured)
+                if (isLinqBridgeVsConfigured)
                 {
                     return;
                 }
 
                 if (!IsElevated)
                 {
+                    // ReSharper disable once ConditionIsAlwaysTrueOrFalse
                     if (Application.ResourceAssembly == null)
+                        // ReSharper disable once HeuristicUnreachableCode
                         Application.ResourceAssembly = typeof(Welcome).Assembly;
 
-                    Welcome welcomePage = new Welcome(_dte);
-                    welcomePage.Show();
+                    _welcomePage = new Welcome(_dte);
                 }
                 else
                 {
                     if (!PackageConfigurator.Install(_dte.Version, _dte.Edition))
                     {
-                        MessageBox.Show("LINQBridgeVs configuration wasn't successful. Please restart Visual Studio");
+                        MessageBox.Show("LINQBridgeVs wasn't successfully configured. Please restart Visual Studio");
                     }
                 }
             }
             catch (Exception e)
             {
-                //Log.Write(e, "OnStartupComplete Error...");
+                Log.Write(e, "OnStartupComplete Error...");
             }
-            watch.Stop();
-            var mill = watch.ElapsedMilliseconds;
         }
-         
+
+        private void _dteEvents_OnStartupComplete()
+        {
+            _welcomePage?.Show();
+        }
+
         #endregion
     }
 }

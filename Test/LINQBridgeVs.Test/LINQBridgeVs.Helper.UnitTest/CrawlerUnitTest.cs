@@ -26,7 +26,7 @@ namespace BridgeVs.Extension.Helper.UnitTest
         [TestCategory("UnitTest")]
         public void Crawler_Should_Return_One_Project_Dependency()
         {
-            var projects = Crawler.FindProjectDependencies(CsProject, @"..\..\BridgeVs.sln").ToList();
+            var projects = Crawler.FindDependencies(CsProject, @"..\..\BridgeVs.sln").ToList();
 
             //Assert
             var containsAnotherModel = projects.Any(p => p.AssemblyName.Equals("AnotherModel.UnitTest") && p.DependencyType == DependencyType.ProjectReference);
@@ -38,7 +38,7 @@ namespace BridgeVs.Extension.Helper.UnitTest
         [TestCategory("UnitTest")]
         public void Crawler_Should_Not_Return_Any_Assembly_Reference()
         {
-            var projects = Crawler.FindProjectDependencies(CsProject, @"..\..\BridgeVs.sln").ToList();
+            var projects = Crawler.FindDependencies(CsProject, @"..\..\BridgeVs.sln").ToList();
 
             var noAssemblyDependencyTypes = projects.All(p => p.DependencyType != DependencyType.AssemblyReference);
 
@@ -51,7 +51,7 @@ namespace BridgeVs.Extension.Helper.UnitTest
         {
             Log.Configure("UnitTest","CrawlerUnitTest");
 
-            var projects = Crawler.FindProjectDependencies(string.Empty, string.Empty).ToList();
+            var projects = Crawler.FindDependencies(string.Empty, string.Empty).ToList();
 
             Assert.IsTrue(projects.Count == 0, "Error! no projects should be loaded");
         }

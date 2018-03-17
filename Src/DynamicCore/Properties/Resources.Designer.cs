@@ -106,16 +106,7 @@ namespace BridgeVs.DynamicCore.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to LINQPad Queries\LINQBridge.
-        /// </summary>
-        internal static string LINQPadQuery {
-            get {
-                return ResourceManager.GetString("LINQPadQuery", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to LINQBridge Visualizer.
+        ///   Looks up a localized string similar to BridgeVs Visualizer.
         /// </summary>
         internal static string VisualizerName {
             get {

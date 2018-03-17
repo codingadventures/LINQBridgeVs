@@ -35,7 +35,7 @@ namespace BridgeVs.Helper.Dependency
     }
 
     [Serializable]
-    public class Project
+    public class Dependency
     {
         public DependencyType DependencyType { get; set; }
 

@@ -9,13 +9,24 @@
     </BuildDependsOn>
   </PropertyGroup>
 
-  <UsingTask TaskName="SInjectionBuildTask" AssemblyFile="$([MSBuild]::Unescape('$(InstallFolderPath)'))\BridgeVs.BuildTasks.dll" />
-  <UsingTask TaskName="MapperBuildTask" AssemblyFile="$([MSBuild]::Unescape('$(InstallFolderPath)'))\BridgeVs.BuildTasks.dll" />
-  <UsingTask TaskName="CleanBuildTask" AssemblyFile="$([MSBuild]::Unescape('$(InstallFolderPath)'))\BridgeVs.BuildTasks.dll" />
+  <PropertyGroup>
+    <CleanDependsOn>
+      $(CleanDependsOn);
+      LINQBridgeAfterClean;
+    </CleanDependsOn>
+  </PropertyGroup>
+
+  <UsingTask TaskName="SInjectionBuildTask" AssemblyFile="$([MSBuild]::Unescape('$(InstallFolderPath)'))\BridgeVs.Build.dll" />
+  <UsingTask TaskName="MapperBuildTask" AssemblyFile="$([MSBuild]::Unescape('$(InstallFolderPath)'))\BridgeVs.Build.dll" />
+  <UsingTask TaskName="CleanBuildTask" AssemblyFile="$([MSBuild]::Unescape('$(InstallFolderPath)'))\BridgeVs.Build.dll" />
 
   <Target Name="LINQBridgeAfterBuild" DependsOnTargets="CoreCompile" Condition="'$(IsProjectEnabled)' == 'True'">
     <SInjectionBuildTask Assembly="@(MainAssembly->'%(FullPath)')" Snk="$(MSBuildProjectDirectory)\$(AssemblyOriginatorKeyFile)"  />
     <MapperBuildTask Assembly="@(MainAssembly->'%(FullPath)')"   VisualStudioVer="$(VisualStudioVersion)"   />
+  </Target>
+
+  <Target Name="LINQBridgeAfterClean" DependsOnTargets="AfterClean" Condition="'$(IsProjectEnabled)' == 'True'" >
+    <CleanBuildTask Assembly="$(AssemblyName)" VisualStudioVer="$(VisualStudioVersion)"/>
   </Target>
 
   <Target Name="Information">
@@ -25,7 +36,7 @@
     <Message Text="Is Project Enabled: $(IsProjectEnabled)" Importance="high" />
     <Message Text="Install Folder Path: $(InstallFolderPath)" Importance="high" />
     <Message Text="Solution Name: $(SolutionName)" Importance="high" />
-    <!---->
+
     <Message Text="Registry value $(registry:HKEY_CURRENT_USER\Software\LINQBridgeVs@InstallFolderPath)"/>
   </Target>
 </Project>
