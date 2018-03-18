@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 - 2018 Giovanni Campo
+// Copyright (c) 2013 - 2018 Coding Adventures
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -35,7 +35,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("BridgeVs.DynamicCore")]
-[assembly: AssemblyCopyright("Copyright © Giovanni Campo 2013")]
+[assembly: AssemblyCopyright("Copyright © Coding Adventures 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

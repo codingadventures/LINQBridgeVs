@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("LINQBridgeVs Visualizer")]
 [assembly: AssemblyDescription("LINQBridgeVs Visualizer")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Giovanni Campo")]
+[assembly: AssemblyCompany("Coding Adventures")]
 [assembly: AssemblyProduct("LINQBridgeVs Visualizer")]
-[assembly: AssemblyCopyright("Copyright © Giovanni Campo 2013 - 2018")]
+[assembly: AssemblyCopyright("Copyright © Coding Adventures 2013 - 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

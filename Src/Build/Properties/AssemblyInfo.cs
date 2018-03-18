@@ -1,6 +1,6 @@
 ﻿
 #region License
-// Copyright (c) 2013 Giovanni Campo
+// Copyright (c) 2013 Coding Adventures
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -35,9 +35,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("BridgeVs.Build")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Giovanni Campo")]
+[assembly: AssemblyCompany("Coding Adventures")]
 [assembly: AssemblyProduct("BridgeVs.Build")]
-[assembly: AssemblyCopyright("Copyright © Giovanni Campo 2013")]
+[assembly: AssemblyCopyright("Copyright © Coding Adventures 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

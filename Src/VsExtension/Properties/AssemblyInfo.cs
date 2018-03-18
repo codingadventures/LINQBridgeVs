@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 - 2018 Giovanni Campo
+// Copyright (c) 2013 - 2018 Coding Adventures
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -36,9 +36,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("BridgeVs.Extension")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Giovanni Campo")]
+[assembly: AssemblyCompany("Coding Adventures")]
 [assembly: AssemblyProduct("BridgeVs")]
-[assembly: AssemblyCopyright("Copyright © Giovanni Campo 2013 - 2018")]
+[assembly: AssemblyCopyright("Copyright © Coding Adventures 2013 - 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]   
 [assembly: ComVisible(false)]     

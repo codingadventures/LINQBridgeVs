@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("BridgeVs.Logging")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Giovanni Campo")]
+[assembly: AssemblyCompany("Coding Adventures")]
 [assembly: AssemblyProduct("BridgeVs.Logging")]
-[assembly: AssemblyCopyright("Copyright © Giovanni Campo 2013")]
+[assembly: AssemblyCopyright("Copyright © Coding Adventures 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

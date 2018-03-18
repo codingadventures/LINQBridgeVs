@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("BridgeVs.Extension.Helper.UnitTest")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Giovanni Campo")]
+[assembly: AssemblyCompany("Coding Adventures")]
 [assembly: AssemblyProduct("BridgeVs.Extension.Helper.UnitTest")]
-[assembly: AssemblyCopyright("Copyright © Giovanni Campo 2013 - 2018")]
+[assembly: AssemblyCopyright("Copyright © Coding Adventures 2013 - 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -93,7 +93,7 @@ namespace BridgeVs.Helper.Forms
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(237, 29);
             this.label3.TabIndex = 4;
-            this.label3.Text = "Giovanni Campo";
+            this.label3.Text = "Coding Adventures";
             // 
             // label4
             // 

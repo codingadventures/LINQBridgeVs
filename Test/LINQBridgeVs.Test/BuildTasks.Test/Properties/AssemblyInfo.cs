@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("BridgeVs.Build.UnitTest")]
-[assembly: AssemblyCopyright("Giovanni Campo Copyright © 2013 - 2018")]
+[assembly: AssemblyCopyright("Coding Adventures Copyright © 2013 - 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
