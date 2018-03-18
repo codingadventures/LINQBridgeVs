@@ -85,8 +85,7 @@ namespace DynamicVisualizer.V12.IntegrationTest
 
             using (var key = Registry.CurrentUser.CreateSubKey(DynamicDebuggerVisualizerV12.TestRegistryKey))
             {
-                if (key != null)
-                    key.SetValue("Test", true);
+                key?.SetValue("Test", true);
             }
 
             if (Directory.Exists(LINQPadScriptFolder))
