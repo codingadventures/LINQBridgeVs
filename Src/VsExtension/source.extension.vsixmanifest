@@ -4,7 +4,7 @@
         <Identity Id="LINQBridgeVS.Coding Adventures.93d93bed-e4dc-42a8-bfe2-a0b7676a45b2" Version="1.4.1" Language="en-US" Publisher="Coding Adventures" />
         <DisplayName>LINQBridgeVs Debugger Visualizer</DisplayName>
         <Description xml:space="preserve">Bridge between a Visual Studio debugging session and LINQPad (http://www.linqpad.net). When enabled on a selection of VB/C# projects, it creates a Custom Debugger Visualizer mapping to all the complex types and making the magnifier glass available for all of them.</Description>
-        <License>License.txt</License>
+        <License>Resources\License.txt</License>
         <GettingStartedGuide>https://github.com/codingadventures/LINQBridgeVs</GettingStartedGuide>
         <Icon>Resources\LINQBridge.ico</Icon>
         <PreviewImage>Resources\LINQBridgeLogo.png</PreviewImage>

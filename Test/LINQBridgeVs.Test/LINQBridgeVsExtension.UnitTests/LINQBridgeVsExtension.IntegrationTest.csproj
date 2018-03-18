@@ -159,7 +159,6 @@
   </Target>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\..\Src\packages\Microsoft.VisualStudio.SDK.EmbedInteropTypes.15.0.16\build\Microsoft.VisualStudio.SDK.EmbedInteropTypes.targets" Condition="Exists('..\..\..\Src\packages\Microsoft.VisualStudio.SDK.EmbedInteropTypes.15.0.16\build\Microsoft.VisualStudio.SDK.EmbedInteropTypes.targets')" />
-  <Import Project="..\..\..\Src\packages\Microsoft.VisualStudio.Threading.Analyzers.15.6.44\build\Microsoft.VisualStudio.Threading.Analyzers.targets" Condition="Exists('..\..\..\Src\packages\Microsoft.VisualStudio.Threading.Analyzers.15.6.44\build\Microsoft.VisualStudio.Threading.Analyzers.targets')" />
   <Import Project="..\..\..\Src\packages\Microsoft.VSSDK.BuildTools.15.5.100\build\Microsoft.VSSDK.BuildTools.targets" Condition="Exists('..\..\..\Src\packages\Microsoft.VSSDK.BuildTools.15.5.100\build\Microsoft.VSSDK.BuildTools.targets')" />
   <ItemGroup>
     <Compile Include="PackageTest.cs" />
