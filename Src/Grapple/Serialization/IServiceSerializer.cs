@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 Giovanni Campo
+// Copyright (c) 2013 Coding Adventures
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -26,7 +26,7 @@
 using System;
 using System.IO;
 
-namespace Grapple.Serialization
+namespace BridgeVs.Grapple.Serialization
 {
     /// <summary>
     /// 

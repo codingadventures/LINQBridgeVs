@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 - 2018 Giovanni Campo
+// Copyright (c) 2013 - 2018 Coding Adventures
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -31,16 +31,15 @@ using System.Net.Mail;
 using System.Security.AccessControl;
 using System.Security.Principal;
 
-namespace Bridge.Logging
+namespace BridgeVs.Logging
 {
     public static class Log
     {
-
         private static string _applicationName;
         private static readonly string LocalApplicationData =
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
-        private static readonly MailAddress MailAddressFrom = new MailAddress("linqbridge@gmail.com", "No Reply Log");
+        private static readonly MailAddress MailAddressFrom = new MailAddress("linqbridgevs@gmail.com", "No Reply Log");
         private static string _logGzipFileName;
 
         private static string _moduleName;
@@ -131,8 +130,10 @@ namespace Bridge.Logging
         public static void Write(string msg, params object[] args)
         {
             if (string.IsNullOrEmpty(_applicationName))
-                throw new Exception("The Log is to be configured first. Call the Configure() method and pass the name of the application!");
-
+            {
+                _applicationName = "LINQBridgeVs";
+                //throw new Exception("The Log is to be configured first. Call the Configure() method and pass the name of the application!");
+            }
             try
             {
                 InternalWrite(msg, args);

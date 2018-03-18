@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
 using AnotherModel.UnitTest;
-using LINQBridgeVs.DynamicCore.Helper;
+using BridgeVs.DynamicCore.Helper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model.UnitTest;
 

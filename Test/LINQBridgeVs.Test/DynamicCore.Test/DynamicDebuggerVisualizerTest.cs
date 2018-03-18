@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
-using Bridge.Logging;
-using LINQBridgeVs.DynamicCore;
-using LINQBridgeVs.DynamicCore.Template;
+using BridgeVs.Logging;
+using BridgeVs.DynamicCore;
+using BridgeVs.DynamicCore.Template;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model.UnitTest;
 
@@ -15,12 +15,12 @@ namespace DynamicCore.UnitTest
     public class DynamicDebuggerVisualizerTest
     {
         private readonly Message _message = new Message
-                                                {
-                                                    FileName = DateTime.Now.ToShortDateString().Replace("/", ""),
-                                                    TypeFullName = typeof(CustomType1).FullName,
-                                                    TypeNamespace = typeof(CustomType1).Namespace,
-                                                    TypeName = typeof(CustomType1).Name
-                                                };
+        {
+            FileName = DateTime.Now.ToShortDateString().Replace("/", ""),
+            TypeFullName = typeof(CustomType1).FullName,
+            TypeNamespace = typeof(CustomType1).Namespace,
+            TypeName = typeof(CustomType1).Name
+        };
 
        
         private static IFileSystem _fileSystem;

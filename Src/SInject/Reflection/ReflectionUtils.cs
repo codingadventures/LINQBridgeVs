@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 Giovanni Campo
+// Copyright (c) 2013 - 2018 Coding Adventures
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -31,7 +31,7 @@ using Mono.Cecil;
 using Mono.Cecil.Cil;
 using MethodAttributes = Mono.Cecil.MethodAttributes;
 
-namespace SInject.Reflection
+namespace BridgeVs.SInject.Reflection
 {
     internal static class ReflectionUtils
     {
@@ -88,7 +88,6 @@ namespace SInject.Reflection
             var par1 = new ParameterDefinition(serializableContructor.Parameters[0].Name, serializableContructor.Parameters[0].Attributes, serializationInfo);
             var par2 = new ParameterDefinition(serializableContructor.Parameters[1].Name, serializableContructor.Parameters[1].Attributes, streamingContext);
 
-
             serializationConstr.Parameters.Add(par1);
             serializationConstr.Parameters.Add(par2);
 
@@ -117,22 +116,17 @@ namespace SInject.Reflection
                 return false;
 
             if (value == null)
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
 
             // Not as good as the .NET 4 version of this function, but should be good enough
             if (!Enum.IsDefined(variable.GetType(), value))
             {
-                throw new ArgumentException(string.Format(
-                    "Enumeration type mismatch.  The flag is of type '{0}', was expecting '{1}'.",
-                    value.GetType(), variable.GetType()));
+                throw new ArgumentException($"Enumeration type mismatch.  The flag is of type '{value.GetType()}', was expecting '{variable.GetType()}'.");
             }
 
             var num = Convert.ToUInt64(value);
             return ((Convert.ToUInt64(variable) & num) == num);
-
         }
-
     }
 #endif
 }
-//}

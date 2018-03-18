@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 - 2018 Giovanni Campo
+// Copyright (c) 2013 - 2018 Coding Adventures
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -29,8 +29,8 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
-using LINQBridgeVs.DynamicCore;
-using LINQBridgeVs.DynamicVisualizer.V12;
+using BridgeVs.DynamicCore;
+using BridgeVs.DynamicVisualizer.V12;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Win32;

@@ -2,11 +2,11 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Bridge.Logging;
-using LINQBridgeVs.Helper.Dependency;
+using BridgeVs.Helper.Dependency;
+using BridgeVs.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LINQBridgeVs.Helper.UnitTest
+namespace BridgeVs.Extension.Helper.UnitTest
 {
     [TestClass]
     [DeploymentItem(@"CsProj\Model.UnitTest.xml")]
@@ -26,7 +26,7 @@ namespace LINQBridgeVs.Helper.UnitTest
         [TestCategory("UnitTest")]
         public void Crawler_Should_Return_One_Project_Dependency()
         {
-            var projects = Crawler.FindProjectDependencies(CsProject, @"..\..\LINQBridgeVs.sln").ToList();
+            var projects = Crawler.FindDependencies(CsProject, @"..\..\BridgeVs.sln").ToList();
 
             //Assert
             var containsAnotherModel = projects.Any(p => p.AssemblyName.Equals("AnotherModel.UnitTest") && p.DependencyType == DependencyType.ProjectReference);
@@ -38,8 +38,7 @@ namespace LINQBridgeVs.Helper.UnitTest
         [TestCategory("UnitTest")]
         public void Crawler_Should_Not_Return_Any_Assembly_Reference()
         {
-            var projects = Crawler.FindProjectDependencies(CsProject, @"..\..\LINQBridgeVs.sln").ToList();
-
+            var projects = Crawler.FindDependencies(CsProject, @"..\..\BridgeVs.sln").ToList();
 
             var noAssemblyDependencyTypes = projects.All(p => p.DependencyType != DependencyType.AssemblyReference);
 
@@ -52,8 +51,7 @@ namespace LINQBridgeVs.Helper.UnitTest
         {
             Log.Configure("UnitTest","CrawlerUnitTest");
 
-            var projects = Crawler.FindProjectDependencies(string.Empty, string.Empty).ToList();
-
+            var projects = Crawler.FindDependencies(string.Empty, string.Empty).ToList();
 
             Assert.IsTrue(projects.Count == 0, "Error! no projects should be loaded");
         }
@@ -67,6 +65,5 @@ namespace LINQBridgeVs.Helper.UnitTest
 
             Assert.IsFalse(result,"Error! Passing a null project should return false");
         }
-
     }
 }

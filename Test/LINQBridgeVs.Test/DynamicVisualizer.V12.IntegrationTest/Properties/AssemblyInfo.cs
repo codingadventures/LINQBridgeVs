@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("DynamicVisualizer.V12.IntegrationTest")]
-[assembly: AssemblyCopyright("Copyright © Giovanni Campo 2014")]
+[assembly: AssemblyCopyright("Copyright © Coding Adventures 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 Giovanni Campo
+// Copyright (c) 2013 Coding Adventures
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -26,12 +26,11 @@
 using System;
 using System.Collections;
 using System.Linq;
-using Grapple.Contracts;
-using Grapple.Serialization;
+using BridgeVs.Grapple.Contracts;
+using BridgeVs.Grapple.Serialization;
 
-namespace Grapple.Grapple
+namespace BridgeVs.Grapple.Grapple
 {
-
     internal class BinaryGrapple : IGrapple
     {
         #region [ IGrapple Methods ]

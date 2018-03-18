@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 - 2018 Giovanni Campo
+// Copyright (c) 2013 - 2018 Coding Adventures
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -23,7 +23,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using LINQBridgeVs.Extension;
+using BridgeVs.Extension.Package;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -36,14 +36,14 @@ namespace LINQBridgeVsExtension.UnitTests
         [TestCategory("Integration")]
         public void CreateInstance()
         {
-            var package = new LINQBridgeVsPackage();
+            var package = new BridgeVsPackage();
         }
 
         [TestMethod]
         [TestCategory("Integration")]
         public void IsIVsPackage()
         {
-            var package = new LINQBridgeVsPackage();
+            var package = new BridgeVsPackage();
             Assert.IsNotNull(package as IVsPackage, "The object does not implement IVsPackage");
         }
     }

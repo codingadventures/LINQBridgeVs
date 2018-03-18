@@ -2,7 +2,7 @@
 using System.IO;
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
-using LINQBridgeVs.DynamicCore.Helper;
+using BridgeVs.DynamicCore.Helper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DynamicCore.UnitTest.Helper

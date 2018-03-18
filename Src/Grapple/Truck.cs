@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 - 2018 Giovanni Campo
+// Copyright (c) 2013 - 2018 Coding Adventures
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -32,12 +32,12 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
-using Bridge.Logging;
-using Grapple.Contracts;
-using Grapple.Extensions;
-using Grapple.Grapple;
+using BridgeVs.Grapple.Contracts;
+using BridgeVs.Grapple.Extensions;
+using BridgeVs.Grapple.Grapple;
+using BridgeVs.Logging;
 
-namespace Grapple
+namespace BridgeVs.Grapple
 {
     /// <summary>
     /// 
@@ -52,13 +52,7 @@ namespace Grapple
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
                 Resource.ProductName);
 
-        private string TruckPosition
-        {
-            get
-            {
-                return Path.Combine(DefaultBaseFolder, _truckName);
-            }
-        }
+        private string TruckPosition => Path.Combine(DefaultBaseFolder, _truckName);
 
         /// <summary>
         /// 
@@ -144,7 +138,7 @@ namespace Grapple
         /// <returns></returns>
         public IEnumerable<T> UnLoadCargo<T>()
         {
-            Log.Write("Unstuffing Cargo of Type {0}", typeof(T).FullName);
+            Log.Write("UnLoading Cargo of Type {0}", typeof(T).FullName);
 
             var typeCodeName = typeof(T);
             return (from i in _container.Keys

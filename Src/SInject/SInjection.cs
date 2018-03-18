@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 - 2018 Giovanni Campo
+// Copyright (c) 2013 - 2018 Coding Adventures
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -23,7 +23,6 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -31,12 +30,12 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-using Bridge.Logging;
+using BridgeVs.Logging;
 using Mono.Cecil;
 using Mono.Cecil.Pdb;
-using SInject.Reflection;
+using BridgeVs.SInject.Reflection;
 
-namespace SInject
+namespace BridgeVs.SInject
 {
     /// <summary>
     /// Type of serialization to enable

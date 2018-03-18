@@ -47,16 +47,17 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.DebuggerVisualizers, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\VS2017\Microsoft.VisualStudio.DebuggerVisualizers.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.IO.Abstractions">
-      <HintPath>..\..\..\Src\packages\System.IO.Abstractions.2.0.0.116\lib\net40\System.IO.Abstractions.dll</HintPath>
+    <Reference Include="System.IO.Abstractions, Version=2.1.0.178, Culture=neutral, PublicKeyToken=96bf224d23c43e59, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Src\packages\System.IO.Abstractions.2.1.0.178\lib\net40\System.IO.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="System.IO.Abstractions.TestingHelpers">
-      <HintPath>..\..\..\Src\packages\System.IO.Abstractions.TestingHelpers.2.0.0.116\lib\net40\System.IO.Abstractions.TestingHelpers.dll</HintPath>
+    <Reference Include="TestingHelpers, Version=2.1.0.178, Culture=neutral, PublicKeyToken=96bf224d23c43e59, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Src\packages\System.IO.Abstractions.TestingHelpers.2.1.0.178\lib\net40\TestingHelpers.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Choose>
@@ -76,13 +77,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Src\LINQBridgeVs\DynamicCore\DynamicCore.csproj">
+    <ProjectReference Include="..\..\..\Src\DynamicCore\BridgeVs.DynamicCore.csproj">
       <Project>{B84FBD50-0B10-4C25-8430-680FC6FC3FEA}</Project>
-      <Name>DynamicCore</Name>
+      <Name>BridgeVs.DynamicCore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Src\LINQBridgeVs\DynamicVisualizer.V15\DynamicVisualizer.V15.csproj">
+    <ProjectReference Include="..\..\..\Src\DynamicVisualizer.V15\BridgeVs.DynamicVisualizer.V15.csproj">
       <Project>{6278c369-9593-4e93-a725-010717e7fc10}</Project>
-      <Name>DynamicVisualizer.V15</Name>
+      <Name>BridgeVs.DynamicVisualizer.V15</Name>
     </ProjectReference>
     <ProjectReference Include="..\Model.Test\Model.UnitTest.csproj">
       <Project>{8a5e73f6-2093-4669-9c09-beab033be56c}</Project>
