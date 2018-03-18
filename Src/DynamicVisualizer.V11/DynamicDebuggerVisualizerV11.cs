@@ -23,39 +23,32 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System.IO;
+using System.Windows.Forms;
 using BridgeVs.DynamicCore;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using Microsoft.Win32;
 
 namespace BridgeVs.DynamicVisualizer.V11
 {
+    /// <inheritdoc />
     /// <summary>
-    /// 
     /// </summary>
     public class DynamicDebuggerVisualizerV11 : DialogDebuggerVisualizer
     {
         internal const string VsReferencedVersion = "11.0";
-        internal const string TestRegistryKey = @"Software\LINQBridgeVs\11.0\Test";
 
         protected override void Show(IDialogVisualizerService windowService, IVisualizerObjectProvider objectProvider)
         {
-            var dynamicDebuggerVisualizer = new DynamicDebuggerVisualizer();
-            var dataStream = objectProvider.GetData();
+            DynamicDebuggerVisualizer dynamicDebuggerVisualizer = new DynamicDebuggerVisualizer();
+            Stream dataStream = objectProvider.GetData();
 
             if (dataStream.Length == 0) return;
 
-            var formToShow = dynamicDebuggerVisualizer.ShowLINQPad(dataStream, VsReferencedVersion);
-
-            if (!IsTest())
-                windowService.ShowDialog(formToShow);
-        }
-
-        private static bool IsTest()
-        {
-            using (var key = Registry.CurrentUser.OpenSubKey(TestRegistryKey))
-            {
-                return key != null;
-            }
+            Form formToShow = dynamicDebuggerVisualizer.ShowLINQPad(dataStream, VsReferencedVersion);
+#if !TEST
+            windowService.ShowDialog(formToShow);
+#endif
         }
     }
 

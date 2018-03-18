@@ -31,8 +31,6 @@ using System.IO.Abstractions;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Security.AccessControl;
-using System.Security.Principal;
 using System.Threading;
 using System.Windows.Forms;
 using BridgeVs.Logging;
@@ -227,7 +225,6 @@ namespace BridgeVs.DynamicCore
 
                         return assemblyLoc;
                     }
-
                 }
             }
             Log.Write("Assembly Location Found None");

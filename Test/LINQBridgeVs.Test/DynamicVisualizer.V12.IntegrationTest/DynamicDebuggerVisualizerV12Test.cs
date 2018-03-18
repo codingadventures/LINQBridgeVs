@@ -53,7 +53,7 @@ namespace DynamicVisualizer.V12.IntegrationTest
                         proc.Kill();
                     }
                 }
-                catch (Exception ex)
+                catch
                 {
                     //do nothing
                 }
@@ -79,11 +79,6 @@ namespace DynamicVisualizer.V12.IntegrationTest
                 key.SetValue(typeof(DynamicDebuggerVisualizerV12Test).Assembly.GetName().Name, new[] { "True", typeof(DynamicDebuggerVisualizerV12Test).Assembly.Location });
                 key.SetValue(typeof(VisualizationTestClass).Assembly.GetName().Name, new[] { "True", typeof(VisualizationTestClass).Assembly.Location });
             }
-
-            //using (RegistryKey key = Registry.CurrentUser.CreateSubKey(DynamicDebuggerVisualizerV12.TestRegistryKey))
-            //{
-            //    key?.SetValue("Test", true);
-            //}
 
             if (!Directory.Exists(CommonFolderPaths.LinqPadQueryFolder))
                 Directory.CreateDirectory(CommonFolderPaths.LinqPadQueryFolder);

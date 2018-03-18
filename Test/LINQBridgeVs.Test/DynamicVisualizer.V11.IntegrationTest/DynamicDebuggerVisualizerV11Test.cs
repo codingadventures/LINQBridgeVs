@@ -1,9 +1,34 @@
-﻿using System;
+﻿#region License
+// Copyright (c) 2013 - 2018 Coding Adventures
+//
+// Permission is hereby granted, free of charge, to any person
+// obtaining a copy of this software and associated documentation
+// files (the "Software"), to deal in the Software without
+// restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the
+// Software is furnished to do so, subject to the following
+// conditions:
+//
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+// WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+// OTHER DEALINGS IN THE SOFTWARE.
+#endregion
+
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using BridgeVs.DynamicVisualizer.V11;
+using BridgeVs.Locations;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Win32;
@@ -20,12 +45,12 @@ namespace DynamicVisualizer.V11.IntegrationTest
             {
                 try
                 {
-                    foreach (var proc in Process.GetProcessesByName(processName))
+                    foreach (Process proc in Process.GetProcessesByName(processName))
                     {
                         proc.Kill();
                     }
                 }
-                catch (Exception ex)
+                catch 
                 {
                     //do nothin
                 }
@@ -34,27 +59,18 @@ namespace DynamicVisualizer.V11.IntegrationTest
 
         private const string SolutionRegistryKey = @"Software\LINQBridgeVs\11.0\Solutions\LINQBridgeVsTestSolution";
     
-        private static readonly string LINQPadScriptFolder =
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "LINQPad Queries");
-
         [ClassInitialize]
         public static void Init(TestContext ctx)
         {
-            using (var key = Registry.CurrentUser.CreateSubKey(SolutionRegistryKey))
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(SolutionRegistryKey))
             {
                 if (key == null) return;
                 key.SetValue(typeof(DynamicDebuggerVisualizerV11Test).Assembly.GetName().Name, new[] { "True", typeof(DynamicDebuggerVisualizerV11Test).Assembly.Location });
                 key.SetValue(typeof(VisualizationTestClass).Assembly.GetName().Name, new[] { "True", typeof(VisualizationTestClass).Assembly.Location });
             }
 
-            using (var key = Registry.CurrentUser.CreateSubKey(DynamicDebuggerVisualizerV11.TestRegistryKey))
-            {
-                if (key != null)
-                    key.SetValue("Test", true);
-            }
-
-            if (Directory.Exists(LINQPadScriptFolder))
-                Directory.Delete(LINQPadScriptFolder, true);
+            if (!Directory.Exists(CommonFolderPaths.LinqPadQueryFolder))
+                Directory.CreateDirectory(CommonFolderPaths.LinqPadQueryFolder);
         }
 
         [TestInitialize]
@@ -67,10 +83,10 @@ namespace DynamicVisualizer.V11.IntegrationTest
         [TestCategory("Integration")]
         public void ShowVisualizerWithLinqQueryTest()
         {
-            var query = from i in Enumerable.Range(1, 10)
+            IEnumerable<int> query = from i in Enumerable.Range(1, 10)
                         select i;
 
-            var myHost = new VisualizerDevelopmentHost(query, typeof(DynamicDebuggerVisualizerV11), typeof(DynamicDebuggerVisualizerObjectSourceV11));
+            VisualizerDevelopmentHost myHost = new VisualizerDevelopmentHost(query, typeof(DynamicDebuggerVisualizerV11), typeof(DynamicDebuggerVisualizerObjectSourceV11));
             myHost.ShowVisualizer();
         }
 
@@ -78,13 +94,13 @@ namespace DynamicVisualizer.V11.IntegrationTest
         [TestCategory("Integration")]
         public void ShowVisualizerWithLinqQueryAndCustomTypeTest()
         {
-            var enumerable = new List<VisualizationTestClass>
+            List<VisualizationTestClass> enumerable = new List<VisualizationTestClass>
             {
                 new VisualizationTestClass{CustomType1 = new CustomType1{IntField2 = 1, SField1 = "Hello"}},
                 new VisualizationTestClass{CustomType1 = new CustomType1{IntField2 = 2, SField1 = "World"}},
                 new VisualizationTestClass{CustomType1 = new CustomType1{IntField2 = 3, SField1 = "!"}},
             };
-            var myHost = new VisualizerDevelopmentHost(enumerable, typeof(DynamicDebuggerVisualizerV11), typeof(DynamicDebuggerVisualizerObjectSourceV11));
+            VisualizerDevelopmentHost myHost = new VisualizerDevelopmentHost(enumerable, typeof(DynamicDebuggerVisualizerV11), typeof(DynamicDebuggerVisualizerObjectSourceV11));
 
             myHost.ShowVisualizer();
         }
@@ -92,9 +108,7 @@ namespace DynamicVisualizer.V11.IntegrationTest
         [ClassCleanup]
         public static void ClassDispose()
         {
-            Registry.CurrentUser.DeleteSubKey(DynamicDebuggerVisualizerV11.TestRegistryKey);
             ProcessKiller.Kill("LINQPad");
         }
-
     }
 }

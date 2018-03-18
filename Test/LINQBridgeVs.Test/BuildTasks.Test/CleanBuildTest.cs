@@ -36,7 +36,7 @@ namespace BridgeVs.Build.UnitTest
             string visualizerAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(vsVersion, _assemblyModel.Location);
             string targetInstallationPath = VisualStudioOptions.GetInstallationPath(vsVersion);
             string visualizerFullPath = Path.Combine(targetInstallationPath, visualizerAssemblyName);
-            string visualizerPdbFullPath = Path.GetFileNameWithoutExtension(visualizerFullPath) + ".pdb";
+            string visualizerPdbFullPath = visualizerFullPath.Replace(".dll", ".pdb");
             CreateDllAndPdb(visualizerFullPath, visualizerPdbFullPath);
 
 
@@ -62,9 +62,8 @@ namespace BridgeVs.Build.UnitTest
             string visualizerAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(vsVersion, _assemblyModel.Location);
             string targetInstallationPath = VisualStudioOptions.GetInstallationPath(vsVersion);
             string visualizerFullPath = Path.Combine(targetInstallationPath, visualizerAssemblyName);
-            string visualizerPdbFullPath = Path.GetFileNameWithoutExtension(visualizerFullPath) + ".pdb";
+            string visualizerPdbFullPath = visualizerFullPath.Replace(".dll",".pdb");
             CreateDllAndPdb(visualizerFullPath, visualizerPdbFullPath);
-
 
             CleanBuildTask cleanBuildTask = new CleanBuildTask
             {
@@ -87,7 +86,7 @@ namespace BridgeVs.Build.UnitTest
             string visualizerAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(vsVersion, _assemblyModel.Location);
             string targetInstallationPath = VisualStudioOptions.GetInstallationPath(vsVersion);
             string visualizerFullPath = Path.Combine(targetInstallationPath, visualizerAssemblyName);
-            string visualizerPdbFullPath = Path.GetFileNameWithoutExtension(visualizerFullPath) + ".pdb";
+            string visualizerPdbFullPath = visualizerFullPath.Replace(".dll", ".pdb");
             CreateDllAndPdb(visualizerFullPath, visualizerPdbFullPath);
 
 
@@ -112,7 +111,7 @@ namespace BridgeVs.Build.UnitTest
             string visualizerAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(vsVersion, _assemblyModel.Location);
             string targetInstallationPath = VisualStudioOptions.GetInstallationPath(vsVersion);
             string visualizerFullPath = Path.Combine(targetInstallationPath, visualizerAssemblyName);
-            string visualizerPdbFullPath = Path.GetFileNameWithoutExtension(visualizerFullPath) + ".pdb";
+            string visualizerPdbFullPath = visualizerFullPath.Replace(".dll", ".pdb");
 
             CreateDllAndPdb(visualizerFullPath, visualizerPdbFullPath);
 

@@ -22,7 +22,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;TEST</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -62,6 +62,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Src\BridgeVs.Locations\BridgeVs.Locations.csproj">
+      <Project>{BC10F93A-5DA2-44F8-AE5E-5603CB46B548}</Project>
+      <Name>BridgeVs.Locations</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model.Test\Model.UnitTest.csproj">
       <Project>{8A5E73F6-2093-4669-9C09-BEAB033BE56C}</Project>
       <Name>Model.UnitTest</Name>
