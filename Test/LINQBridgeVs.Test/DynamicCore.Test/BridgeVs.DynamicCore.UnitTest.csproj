@@ -67,6 +67,10 @@
     <Compile Include="DynamicObjectSourceTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Src\BridgeVs.Locations\BridgeVs.Locations.csproj">
+      <Project>{BC10F93A-5DA2-44F8-AE5E-5603CB46B548}</Project>
+      <Name>BridgeVs.Locations</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Src\Logging\BridgeVs.Logging.csproj">
       <Project>{0B546762-C8C0-45C6-BC42-C5D91D510351}</Project>
       <Name>BridgeVs.Logging</Name>

@@ -26,7 +26,7 @@ namespace BridgeVs.Build.UnitTest
                 Assembly = _assemblyModel.Location
             };
 
-            var result = sInjectionBuildTask.Execute();
+            bool result = sInjectionBuildTask.Execute();
 
             Assert.IsTrue(result, "SInjection Build Task Execute return false.");
         }

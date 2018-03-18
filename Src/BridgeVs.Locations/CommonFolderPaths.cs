@@ -39,7 +39,7 @@ namespace BridgeVs.Locations
 
         private static readonly string SpecialWindowsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
 
-        public static readonly string ProgramFilesFolderPath = Environment.GetEnvironmentVariable("PROGRAMFILES");
+        public static readonly string ProgramFilesFolderPath = Environment.GetEnvironmentVariable("ProgramFiles(x86)");
 
         public static readonly string VisualStudio2017Path = Path.Combine(ProgramFilesFolderPath, @"Microsoft Visual Studio\2017");
         public static readonly string VisualStudio2017EntPath = Path.Combine(ProgramFilesFolderPath, VisualStudio2017Path, "enterprise");
@@ -54,7 +54,8 @@ namespace BridgeVs.Locations
 
         public static readonly string Documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-        public static readonly string LinqPadQueryFolder = Path.Combine(Documents, "LINQPad Queries");
+        public static readonly string LinqPadQueryFolder = Path.Combine(Documents, "LINQPad Queries", "BridgeVs");
+
         public static readonly string LinqPad4DestinationFolder = Path.Combine(ProgramFilesFolderPath, "LINQPad4");
         public static readonly string LinqPad5DestinationFolder = Path.Combine(ProgramFilesFolderPath, "LINQPad5");
 

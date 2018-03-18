@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BridgeVs.Build.TypeMapper;
@@ -25,14 +26,14 @@ namespace BridgeVs.Build.UnitTest
         [TestCategory("UnitTest")]
         public void Visualizer_MapType_Should_Create_DegguberVisualizerAttribute_OfType_This_In_Target_Assembly()
         {
-            var debuggerVisualizerTargetName = Path.Combine(_thisAssemblyDirectoryName, "TestA.dll");
-            var visualizerLocation = typeof(DynamicDebuggerVisualizerObjectSourceV11).Assembly.Location;
-            var injector = new VisualizerAttributeInjector(visualizerLocation);
+            string debuggerVisualizerTargetName = Path.Combine(_thisAssemblyDirectoryName, "TestA.dll");
+            string visualizerLocation = typeof(DynamicDebuggerVisualizerObjectSourceV11).Assembly.Location;
+            VisualizerAttributeInjector injector = new VisualizerAttributeInjector(visualizerLocation);
             injector.MapType(GetType());
             injector.SaveDebuggerVisualizer(debuggerVisualizerTargetName);
 
-            var generatedAssembly = AssemblyDefinition.ReadAssembly(debuggerVisualizerTargetName);
-            var mappedTypeNames = generatedAssembly
+            AssemblyDefinition generatedAssembly = AssemblyDefinition.ReadAssembly(debuggerVisualizerTargetName);
+            IEnumerable<object> mappedTypeNames = generatedAssembly
                 .CustomAttributes
                 .SelectMany(p =>
                     p.Properties.Where(n => n.Name.Equals("TargetTypeName"))
@@ -45,14 +46,14 @@ namespace BridgeVs.Build.UnitTest
         [TestCategory("UnitTest")]
         public void Visualizer_MapType_Should_Create_DegguberVisualizerAttribute_OfType_IList_In_Target_Assembly()
         {
-            var debuggerVisualizerTargetName = Path.Combine(_thisAssemblyDirectoryName, "TestB.dll");
-            var visualizerLocation = typeof(DynamicDebuggerVisualizerObjectSourceV11).Assembly.Location;
-            var injector = new VisualizerAttributeInjector(visualizerLocation);
+            string debuggerVisualizerTargetName = Path.Combine(_thisAssemblyDirectoryName, "TestB.dll");
+            string visualizerLocation = typeof(DynamicDebuggerVisualizerObjectSourceV11).Assembly.Location;
+            VisualizerAttributeInjector injector = new VisualizerAttributeInjector(visualizerLocation);
             injector.MapType(typeof(IList<>));
             injector.SaveDebuggerVisualizer(debuggerVisualizerTargetName);
 
-            var generatedAssembly = AssemblyDefinition.ReadAssembly(debuggerVisualizerTargetName);
-            var mappedTypeNames = generatedAssembly
+            AssemblyDefinition generatedAssembly = AssemblyDefinition.ReadAssembly(debuggerVisualizerTargetName);
+            IEnumerable<object> mappedTypeNames = generatedAssembly
                 .CustomAttributes
                 .SelectMany(p =>
                     p.Properties.Where(n => n.Name.Equals("TargetTypeName"))
@@ -66,27 +67,27 @@ namespace BridgeVs.Build.UnitTest
         [TestCategory("UnitTest")]
         public void Visualizer_MapTypeFromAssembly_Should_Map_All_Types()
         {
-            var debuggerVisualizerTargetName = Path.Combine(_thisAssemblyDirectoryName, "TestC.dll");
-            var visualizerLocation = typeof(DynamicDebuggerVisualizerObjectSourceV11).Assembly.Location;
-            var injector = new VisualizerAttributeInjector(visualizerLocation);
+            string debuggerVisualizerTargetName = Path.Combine(_thisAssemblyDirectoryName, "TestC.dll");
+            string visualizerLocation = typeof(DynamicDebuggerVisualizerObjectSourceV11).Assembly.Location;
+            VisualizerAttributeInjector injector = new VisualizerAttributeInjector(visualizerLocation);
 
             injector.MapTypesFromAssembly(_thisAssemblyLocation);
             injector.SaveDebuggerVisualizer(debuggerVisualizerTargetName);
 
-            var generatedAssembly = AssemblyDefinition.ReadAssembly(debuggerVisualizerTargetName);
-            var currentAssemblytypes = 
+            AssemblyDefinition generatedAssembly = AssemblyDefinition.ReadAssembly(debuggerVisualizerTargetName);
+            IEnumerable<Type> currentAssemblytypes = 
                 GetType()
                 .Assembly
                 .GetTypes()
                 .Where(typeDef => typeDef.IsPublic && !typeDef.IsInterface && !typeDef.IsAbstract);
 
-            var mappedTypeNames = generatedAssembly
+            IEnumerable<string> mappedTypeNames = generatedAssembly
                 .CustomAttributes
                 .SelectMany(p =>
                     p.Properties.Where(n => n.Name.Equals("TargetTypeName"))
                     .Select(l => l.Argument.Value.ToString()));
 
-            var allTypesArePresent = currentAssemblytypes
+            bool allTypesArePresent = currentAssemblytypes
                 .All(type =>
                     mappedTypeNames.Any(mappedType => mappedType.Equals(type.AssemblyQualifiedName)));
 

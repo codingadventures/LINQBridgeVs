@@ -23,7 +23,11 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
+using System.IO;
+using System.Windows.Forms;
 using BridgeVs.DynamicCore;
+using BridgeVs.Logging;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using Microsoft.Win32;
 
@@ -35,31 +39,27 @@ namespace BridgeVs.DynamicVisualizer.V12
     public class DynamicDebuggerVisualizerV12 : DialogDebuggerVisualizer
     {
         internal const string VsReferencedVersion = "12.0";
-        internal const string TestRegistryKey = @"Software\LINQBridgeVs\12.0\Test";
-
-        internal static bool IsTest
-        {
-            get
-            {
-                using (var key = Registry.CurrentUser.OpenSubKey(TestRegistryKey))
-                {
-                    return key != null;
-                }
-            }
-        }
-
 
         protected override void Show(IDialogVisualizerService windowService, IVisualizerObjectProvider objectProvider)
         {
-            var dynamicDebuggerVisualizer = new DynamicDebuggerVisualizer();
-            var dataStream = objectProvider.GetData();
+            Log.Configure("LINQBridgeVs", "DynamicDebuggerVisualizerV12");
 
-            if (dataStream.Length == 0) return;
+            try
+            {
+                DynamicDebuggerVisualizer dynamicDebuggerVisualizer = new DynamicDebuggerVisualizer();
+                Stream dataStream = objectProvider.GetData();
 
-            var formToShow = dynamicDebuggerVisualizer.ShowLINQPad(dataStream, VsReferencedVersion);
+                if (dataStream.Length == 0) return;
 
-            if (!IsTest)
+                Form formToShow = dynamicDebuggerVisualizer.ShowLINQPad(dataStream, VsReferencedVersion);
+#if !TEST
                 windowService.ShowDialog(formToShow);
+#endif
+            }
+            catch (Exception exception)
+            {
+                Log.Write(exception, "Error during LINQPad execution");
+            }
         }
 
 

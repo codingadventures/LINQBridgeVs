@@ -24,16 +24,16 @@ namespace BridgeVs.Build.UnitTest
         public void Mapper_Build_Test_V11_Should_Succeed()
         {
             const string vsVersion = "11.0";
-            var targetAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(vsVersion, _assemblyModel.Location);
-            var targetInstallationPath = VisualStudioOptions.GetInstallationPath(vsVersion);
+            string targetAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(vsVersion, _assemblyModel.Location);
+            string targetInstallationPath = VisualStudioOptions.GetInstallationPath(vsVersion);
 
-            var mapper = new MapperBuildTask
+            MapperBuildTask mapper = new MapperBuildTask
             {
                 Assembly = _assemblyModel.Location,
                 VisualStudioVer = vsVersion
             };
 
-            var result = mapper.Execute();
+            bool result = mapper.Execute();
 
             Assert.IsTrue(result, "Mapper Build Task Execute return false.");
             Assert.IsTrue(File.Exists(Path.Combine(targetInstallationPath,targetAssemblyName)));
@@ -46,16 +46,16 @@ namespace BridgeVs.Build.UnitTest
         public void Mapper_Build_Test_V12_Should_Succeed()
         {
             const string vsVersion = "12.0";
-            var targetAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(vsVersion, _assemblyModel.Location);
-            var targetInstallationPath = VisualStudioOptions.GetInstallationPath(vsVersion);
+            string targetAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(vsVersion, _assemblyModel.Location);
+            string targetInstallationPath = VisualStudioOptions.GetInstallationPath(vsVersion);
 
-            var mapper = new MapperBuildTask
+            MapperBuildTask mapper = new MapperBuildTask
             {
                 Assembly = _assemblyModel.Location,
                 VisualStudioVer = vsVersion
             };
 
-            var result = mapper.Execute();
+            bool result = mapper.Execute();
 
             Assert.IsTrue(result, "Mapper Build Task Execute return false.");
             Assert.IsTrue(File.Exists(Path.Combine(targetInstallationPath, targetAssemblyName)));
@@ -67,16 +67,16 @@ namespace BridgeVs.Build.UnitTest
         public void Mapper_Build_Test_V14_Should_Succeed()
         {
             const string vsVersion = "14.0";
-            var targetAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(vsVersion, _assemblyModel.Location);
-            var targetInstallationPath = VisualStudioOptions.GetInstallationPath(vsVersion);
+            string targetAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(vsVersion, _assemblyModel.Location);
+            string targetInstallationPath = VisualStudioOptions.GetInstallationPath(vsVersion);
 
-            var mapper = new MapperBuildTask
+            MapperBuildTask mapper = new MapperBuildTask
             {
                 Assembly = _assemblyModel.Location,
                 VisualStudioVer = vsVersion
             };
 
-            var result = mapper.Execute();
+            bool result = mapper.Execute();
 
             Assert.IsTrue(result, "Mapper Build Task Execute return false.");
             Assert.IsTrue(File.Exists(Path.Combine(targetInstallationPath, targetAssemblyName)));
@@ -88,16 +88,16 @@ namespace BridgeVs.Build.UnitTest
         public void Mapper_Build_Test_V15_Should_Succeed()
         {
             const string vsVersion = "15.0";
-            var targetAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(vsVersion, _assemblyModel.Location);
-            var targetInstallationPath = VisualStudioOptions.GetInstallationPath(vsVersion);
+            string targetAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(vsVersion, _assemblyModel.Location);
+            string targetInstallationPath = VisualStudioOptions.GetInstallationPath(vsVersion);
 
-            var mapper = new MapperBuildTask
+            MapperBuildTask mapper = new MapperBuildTask
             {
                 Assembly = _assemblyModel.Location,
                 VisualStudioVer = vsVersion
             };
 
-            var result = mapper.Execute();
+            bool result = mapper.Execute();
 
             Assert.IsTrue(result, "Mapper Build Task Execute return false.");
             Assert.IsTrue(File.Exists(Path.Combine(targetInstallationPath, targetAssemblyName)));

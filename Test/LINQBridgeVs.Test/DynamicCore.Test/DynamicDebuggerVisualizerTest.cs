@@ -8,6 +8,7 @@ using BridgeVs.DynamicCore;
 using BridgeVs.DynamicCore.Template;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model.UnitTest;
+using BridgeVs.Locations;
 
 namespace DynamicCore.UnitTest
 {
@@ -43,18 +44,14 @@ namespace DynamicCore.UnitTest
         {
             Log.Configure("UnitTest", "DynamicDebuggerVisualizerUnitTest");
 
-            var cVisualizerObjectSource = new DynamicDebuggerVisualizer(_fileSystem);
+            DynamicDebuggerVisualizer cVisualizerObjectSource = new DynamicDebuggerVisualizer(_fileSystem);
             cVisualizerObjectSource.DeployLinqScript(_message);
 
+            string dstScriptPath = CommonFolderPaths.LinqPadQueryFolder;
 
-            var dstScriptPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                                             "LINQPad Queries", "LINQBridge");
-
-            var fileNamePath = Path.Combine(dstScriptPath, string.Format(_message.FileName, _message.TypeFullName));
+            string fileNamePath = Path.Combine(dstScriptPath, string.Format(_message.FileName, _message.TypeFullName));
 
             Assert.IsTrue(_fileSystem.File.Exists(fileNamePath));
-
         }
     }
-
 }

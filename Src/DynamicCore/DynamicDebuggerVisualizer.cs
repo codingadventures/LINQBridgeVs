@@ -94,7 +94,7 @@ namespace BridgeVs.DynamicCore
                 Log.Write("Entered in DeployLinqScript");
                 // Log.Write("Message: {0}", message);
 
-                string dstScriptPath = Path.Combine(CommonFolderPaths.LinqPadQueryFolder, "BridgeVs");
+                string dstScriptPath = CommonFolderPaths.LinqPadQueryFolder;
 
                 Log.Write("dstScriptPath: {0}", dstScriptPath);
 
@@ -135,8 +135,6 @@ namespace BridgeVs.DynamicCore
         /// <returns></returns>
         public Form ShowLINQPad(Stream inData, string vsVersion)
         {
-            Log.Configure("LINQBridgeVs", "DynamicCore");
-
             Log.Write("ShowVisualizer Started...");
 
             Log.Write("Vs Targeted Version ", vsVersion);
@@ -158,7 +156,7 @@ namespace BridgeVs.DynamicCore
             DeployLinqScript(message);
             Log.Write("LinqQuery Successfully deployed");
 
-            string linqQueryfileName = Path.Combine(CommonFolderPaths.LinqPadQueryFolder,"BridgeVs", message.FileName);
+            string linqQueryfileName = Path.Combine(CommonFolderPaths.LinqPadQueryFolder, "BridgeVs", message.FileName);
 
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
@@ -170,26 +168,18 @@ namespace BridgeVs.DynamicCore
 
             Log.Write("About to start LINQPad with these parameters: {0}, {1}", startInfo.FileName, startInfo.Arguments);
 
-            try
+            Process process = Process.Start(startInfo);
+            if (process != null)
             {
-                Process process = Process.Start(startInfo);
-                if (process != null)
-                {
-                    process.WaitForInputIdle(-1);
-                    process.Dispose();
-                }
-
-                process = Process.GetProcessesByName("LINQPad").FirstOrDefault(p => CommonRegistryConfigurations.LINQPadVersion.Equals(p.MainWindowTitle));
-
-                SendInputToProcess(process);
-
-                Log.Write("LINQPad Successfully started");
+                process.WaitForInputIdle(-1);
+                process.Dispose();
             }
-            catch (Exception e)
-            {
-                Log.Write(e, "Error during LINQPad execution");
-                throw;
-            }
+
+            process = Process.GetProcessesByName("LINQPad").FirstOrDefault(p => CommonRegistryConfigurations.LINQPadVersion.Equals(p.MainWindowTitle));
+
+            SendInputToProcess(process);
+
+            Log.Write("LINQPad Successfully started");
 
             return new TemporaryForm();
         }

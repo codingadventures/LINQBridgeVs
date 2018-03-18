@@ -62,6 +62,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Src\BridgeVs.Locations\BridgeVs.Locations.csproj">
+      <Project>{BC10F93A-5DA2-44F8-AE5E-5603CB46B548}</Project>
+      <Name>BridgeVs.Locations</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Src\DynamicCore\BridgeVs.DynamicCore.csproj">
       <Project>{B84FBD50-0B10-4C25-8430-680FC6FC3FEA}</Project>
       <Name>BridgeVs.DynamicCore</Name>

@@ -251,7 +251,7 @@ namespace BridgeVs.Helper.Configuration
 
         private static void CreateLinqPadQueryFolder()
         {
-            string dstScriptPath = Path.Combine(CommonFolderPaths.LinqPadQueryFolder, "BridgeVs");
+            string dstScriptPath = CommonFolderPaths.LinqPadQueryFolder;
 
             if (Directory.Exists(dstScriptPath)) return;
 
