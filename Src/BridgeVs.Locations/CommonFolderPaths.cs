@@ -38,11 +38,22 @@ namespace BridgeVs.Locations
         private const string CustomBeforeTargets = @"Targets\Custom.Before.Microsoft.Common.targets";
 
         private static readonly string SpecialWindowsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
+
         public static readonly string ProgramFilesFolderPath = Environment.GetEnvironmentVariable("PROGRAMFILES");
+
+        public static readonly string VisualStudio2017Path = Path.Combine(ProgramFilesFolderPath, @"Microsoft Visual Studio\2017");
+        public static readonly string VisualStudio2017EntPath = Path.Combine(ProgramFilesFolderPath, VisualStudio2017Path, "enterprise");
+        public static readonly string VisualStudio2017CommPath = Path.Combine(ProgramFilesFolderPath, VisualStudio2017Path, "community");
+        public static readonly string VisualStudio2017ProPath = Path.Combine(ProgramFilesFolderPath, VisualStudio2017Path, "professional");
+
+        public static readonly string VisualStudio2015Path = Path.Combine(ProgramFilesFolderPath, @"Microsoft Visual Studio 14.0");
+        public static readonly string VisualStudio2013Path = Path.Combine(ProgramFilesFolderPath, @"Microsoft Visual Studio 12.0");
+        public static readonly string VisualStudio2012Path = Path.Combine(ProgramFilesFolderPath, @"Microsoft Visual Studio 11.0");
 
         public static string InstallFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
         public static readonly string Documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
         public static readonly string LinqPadQueryFolder = Path.Combine(Documents, "LINQPad Queries");
         public static readonly string LinqPad4DestinationFolder = Path.Combine(ProgramFilesFolderPath, "LINQPad4");
         public static readonly string LinqPad5DestinationFolder = Path.Combine(ProgramFilesFolderPath, "LINQPad5");
@@ -55,7 +66,7 @@ namespace BridgeVs.Locations
 
         public static readonly string MsBuildPath = Path.Combine(ProgramFilesFolderPath, "MSBuild");
 
-        public static readonly string MsBuildPath2017 = Path.Combine(ProgramFilesFolderPath, @"Microsoft Visual Studio\2017\{0}\MSBuild");
+        public static readonly string MsBuildPath2017 = Path.Combine(ProgramFilesFolderPath, $@"{VisualStudio2017Path}\{0}\MSBuild");
 
         public static readonly string DotNet40FrameworkPath = Path.Combine(SpecialWindowsFolderPath, @"Microsoft.NET\Framework\v4.0.30319");
 
@@ -69,9 +80,11 @@ namespace BridgeVs.Locations
 
         public static readonly string MicrosoftCommonTargetX64FileNamePath = Path.Combine(DotNet40Framework64Path, "Microsoft.Common.targets");
 
+        public static readonly string CommonReferenceAssembliesPath = @"Common7\IDE\ReferenceAssemblies\v2.0";
+
         static CommonFolderPaths()
         {
-            
+
         }
     }
 }

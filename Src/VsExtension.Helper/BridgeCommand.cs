@@ -55,13 +55,13 @@ namespace BridgeVs.Helper
 
             //now create a general solution flag to mark the current solution as activated
             string keyPath = string.Format(PackageConfigurator.GetRegistryKey(EnabledProjectsRegistryKey, vsVersion, solutionName));
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(keyPath))
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(keyPath, true))
             {
                 key?.SetValue(SolutionEnabled, "True", RegistryValueKind.String);
             }
         }
 
-        public static bool IsBridgeVsEnabled(string solutionName, string vsVersion)
+        public static bool IsSolutionEnabled(string solutionName, string vsVersion)
         {
             string keyPath = string.Format(PackageConfigurator.GetRegistryKey(EnabledProjectsRegistryKey, vsVersion, solutionName));
 

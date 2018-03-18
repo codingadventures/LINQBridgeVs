@@ -3,7 +3,7 @@
 namespace BridgeVs.Helper
 {
     [Flags]
-    public enum CommandStates
+    public enum CommandStates : int
     {
         None = 0,
         Visible = 0x01,

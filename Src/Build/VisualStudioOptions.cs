@@ -25,7 +25,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
+using BridgeVs.Locations;
 
 namespace BridgeVs.Build
 {
@@ -38,6 +40,8 @@ namespace BridgeVs.Build
         public string AssemblyLocation;
 
         public string MsBuildVersion;
+
+        public List<string> CommonReferenceAssembliesLocation;
     }
 
     public static class VisualStudioOptions
@@ -61,8 +65,8 @@ namespace BridgeVs.Build
                         InstallationPaths = Vs2012Path1,
                         AssemblyLocation = typeof(DynamicVisualizer.V11.Settings).Assembly.Location,
                         Assembly = typeof(DynamicVisualizer.V11.Settings).Assembly,
-                        MsBuildVersion = "v4.0"
-
+                        MsBuildVersion = "v4.0",
+                        CommonReferenceAssembliesLocation =new List<string> { Path.Combine(CommonFolderPaths.VisualStudio2012Path, CommonFolderPaths.CommonReferenceAssembliesPath)}
                     }
                 },
                 {
@@ -71,7 +75,8 @@ namespace BridgeVs.Build
                         InstallationPaths = Vs2013Path1,
                         AssemblyLocation = typeof(DynamicVisualizer.V12.Settings).Assembly.Location,
                         Assembly = typeof(DynamicVisualizer.V12.Settings).Assembly,
-                        MsBuildVersion = "v12.0"
+                        MsBuildVersion = "v12.0",
+                        CommonReferenceAssembliesLocation =new List<string> {  Path.Combine(CommonFolderPaths.VisualStudio2013Path, CommonFolderPaths.CommonReferenceAssembliesPath)}
                     }
                 },
                 {
@@ -80,7 +85,8 @@ namespace BridgeVs.Build
                         InstallationPaths = Vs2015Path1,
                         AssemblyLocation =typeof(DynamicVisualizer.V14.Settings).Assembly.Location,
                         Assembly = typeof(DynamicVisualizer.V14.Settings).Assembly,
-                        MsBuildVersion = "v14.0"
+                        MsBuildVersion = "v14.0",
+                        CommonReferenceAssembliesLocation = new List<string> { Path.Combine(CommonFolderPaths.VisualStudio2015Path, CommonFolderPaths.CommonReferenceAssembliesPath)}
                     }
                 },
                 {
@@ -89,7 +95,8 @@ namespace BridgeVs.Build
                         InstallationPaths = Vs2017Path1,
                         Assembly = typeof(LINQBridgeVs.DynamicVisualizer.V15.Settings).Assembly,
                         AssemblyLocation = typeof(LINQBridgeVs.DynamicVisualizer.V15.Settings).Assembly.Location,
-                        MsBuildVersion = "v15.0"
+                        MsBuildVersion = "v15.0",
+                        CommonReferenceAssembliesLocation =new List<string> {  Path.Combine(CommonFolderPaths.VisualStudio2017CommPath, CommonFolderPaths.CommonReferenceAssembliesPath), Path.Combine(CommonFolderPaths.VisualStudio2017EntPath, CommonFolderPaths.CommonReferenceAssembliesPath), Path.Combine(CommonFolderPaths.VisualStudio2017ProPath, CommonFolderPaths.CommonReferenceAssembliesPath)}
                     }
                 }
             };
@@ -115,6 +122,13 @@ namespace BridgeVs.Build
             CheckVersion(visualStudioVersion);
 
             return VisualStudioPaths[visualStudioVersion].InstallationPaths;
+        }
+
+        public static List<string> GetCommonReferenceAssembliesPath(string visualStudioVersion)
+        {
+            CheckVersion(visualStudioVersion);
+
+            return VisualStudioPaths[visualStudioVersion].CommonReferenceAssembliesLocation;
         }
     }
 }

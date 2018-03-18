@@ -152,7 +152,10 @@ namespace BridgeVs.Build.Tasks
                     typeof(System.IO.Abstractions.DirectoryBase).Assembly.Location
                 });
 
-            merge.SetSearchDirectories(new[] { Path.GetDirectoryName(GetType().Assembly.Location) });
+            string searchDirectory = VisualStudioOptions.GetCommonReferenceAssembliesPath(VisualStudioVer).FirstOrDefault(Directory.Exists);
+
+            merge.SetSearchDirectories(new[] { Path.GetDirectoryName(GetType().Assembly.Location), searchDirectory });
+
             merge.Merge();
 
             //delete the temporary visualizer to avoid it dangles in the output folder (Debug/Release)
@@ -189,7 +192,10 @@ namespace BridgeVs.Build.Tasks
                     typeof(System.IO.Abstractions.DirectoryBase).Assembly.Location
                 });
 
-            merge.SetSearchDirectories(new[] { Path.GetDirectoryName(GetType().Assembly.Location) });
+            string searchDirectory = VisualStudioOptions.GetCommonReferenceAssembliesPath(VisualStudioVer).FirstOrDefault(Directory.Exists);
+
+            merge.SetSearchDirectories(new[] { Path.GetDirectoryName(GetType().Assembly.Location), searchDirectory });
+
             merge.Merge();
         }
         /// <summary>

@@ -57,11 +57,11 @@ namespace BridgeVs.Extension
         {
             get
             {
-                IEnumerable items = _application.ActiveSolutionProjects as IEnumerable;
-                if (items == null)
+                Projects projects = _application.Solution.Projects;
+                if (projects == null)
                     return Enumerable.Empty<Project>();
 
-                return from project in items.OfType<Project>()
+                return from project in projects.Cast<Project>()
                        where IsSupported(project.UniqueName)
                        select project;
             }
@@ -78,7 +78,7 @@ namespace BridgeVs.Extension
                 return _solutionName;
             }
         }
-        
+
         public void Execute(CommandAction action)
         {
             List<Project> projects = AllProjects.ToList();
@@ -86,47 +86,60 @@ namespace BridgeVs.Extension
             if (projects.Count == 0)
                 return;
 
-           BridgeCommand.ActivateBridgeVsOnSolution(projects, SolutionName, _application.Version, _application.Edition);
+            BridgeCommand.ActivateBridgeVsOnSolution(projects, SolutionName, _application.Version, _application.Edition);
         }
 
         public void UpdateCommand(MenuCommand cmd, CommandAction action)
         {
             CommandStates states = GetStatus(action);
-            cmd.Visible = (CommandStates.Visible & states) != 0;
-            cmd.Enabled = (CommandStates.Enabled & states) != 0 && PackageConfigurator.IsBridgeVsConfigured(_application.Version);
+            cmd.Visible = (CommandStates.Visible & states) == CommandStates.Visible;
+            cmd.Enabled = (CommandStates.Enabled & states) == CommandStates.Enabled;
         }
 
         private CommandStates GetStatus(CommandAction action)
         {
-            return GetCommandStatus(GetMultiStatus(), action);
-        }
+            CommandStates result = CommandStates.Visible;
 
-        private int GetMultiStatus()
-        {
-            int result = 0;
-            bool isBridgeVsEnabled = BridgeCommand.IsBridgeVsEnabled(SolutionName, _application.Version);
+            bool isBridgeVsConfigured = PackageConfigurator.IsBridgeVsConfigured(_application.Version);
 
-            if (isBridgeVsEnabled)
-                result |= 1;
+            if (!isBridgeVsConfigured)
+                return result; //just show it as visible
 
-            if (!isBridgeVsEnabled)
-                result |= 2;
+            bool isSolutionEnabled = BridgeCommand.IsSolutionEnabled(SolutionName, _application.Version);
+
+            if (isSolutionEnabled && action == CommandAction.Disable || !isSolutionEnabled && action == CommandAction.Enable)
+                result |= CommandStates.Enabled;
 
             return result;
         }
 
-        private static CommandStates GetCommandStatus(int status, CommandAction action)
+        private CommandStates GetMultiStatus()
         {
-            if (status == 0)
-                return CommandStates.None;
+            CommandStates result = CommandStates.Visible;
 
-            bool result = ((action == CommandAction.Disable ? status >> 1 : status) & 1) != 0;
+            bool isBridgeVsConfigured = PackageConfigurator.IsBridgeVsConfigured(_application.Version);
+            bool isSolutionEnabled = BridgeCommand.IsSolutionEnabled(SolutionName, _application.Version);
+            //if (isBridgeVsEnabled)
+            //    result |= CommandStates.Visible;
 
-            if (result)
-                return CommandStates.Enabled | CommandStates.Visible;
+            if (isBridgeVsConfigured && isSolutionEnabled)
+                result |= CommandStates.Enabled;
 
-            return CommandStates.None;
+            return result;
         }
+
+        //private static CommandStates GetCommandStatus(CommandStates status, CommandAction action)
+        //{
+        //    if (status == CommandStates.None)
+        //        return CommandStates.None;
+
+        //    bool result = ((action == CommandAction.Disable ? status >> 1 : status) & 1) != 0;
+
+        //    if (result)
+        //        return CommandStates.Enabled | CommandStates.Visible;
+
+        //    return CommandStates.None;
+        //}
 
     }
 }
