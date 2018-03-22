@@ -64,7 +64,6 @@ for the user running the debugger (IIS_IUSRS if a WebSite).
 
 *Visual Studio:* 2013
 
-[logo]: https://raw.github.com/nbasakuragi/LINQBridgeVs/master/Src/LINQBridgeVs/LinqBridgeVsExtension/Resources/LINQBridgeLogo.png "LINQBridge"
+[logo]: https://raw.github.com/codingadventures/LINQBridgeVs/master/Src/VsExtension/LINQBridgeLogo.png "LINQBridge"
 
-[resharper]: https://raw.github.com/nbasakuragi/LINQBridgeVs/master/Src/LINQBridgeVs/LinqBridgeVsExtension/Resources/resharperLogo.png "Resharper"
 
