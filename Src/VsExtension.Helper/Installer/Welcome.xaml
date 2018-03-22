@@ -6,7 +6,7 @@
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         mc:Ignorable="d"               
         Closing="MetroWindow_Closing"
-        Title="LINQBridgeVs Setup" Icon="/Resources/LINQBridge.ico" IconScalingMode="ScaleDownLargerFrame"
+        Title="LINQBridgeVs Setup" Icon="/LINQBridge.ico" IconScalingMode="ScaleDownLargerFrame"
                        ShowMaxRestoreButton="False" 
                        ShowMinButton="False" 
                        ShowCloseButton="False"  
@@ -47,9 +47,13 @@
     </Controls:MetroWindow.LeftWindowCommands>-->
 
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="605*"/>
+        </Grid.ColumnDefinitions>
 
-        <Controls:MetroTabControl Margin="0,0,0,52.5" TabStripPlacement="Left"  Controls:TabControlHelper.Underlined="None">
-          <!--  <Controls:MetroTabItem Name="hdrReady" Header="Ready" Width="150px" Padding="10px 10px 0 0" Controls:ControlsHelper.HeaderFontSize="18">
+        <Controls:MetroTabControl Margin="0,0,0,52.5" TabStripPlacement="Left"  Controls:TabControlHelper.Underlined="None" Grid.ColumnSpan="2">
+            <!--  <Controls:MetroTabItem Name="hdrReady" Header="Ready" Width="150px" Padding="10px 10px 0 0" Controls:ControlsHelper.HeaderFontSize="18">
                 <Grid Margin="10,0,10,10">
                     <TextBlock HorizontalAlignment="Left" Margin="9,10,0,0" VerticalAlignment="Top" Height="40"><Run FontWeight="Bold" FontSize="20" Text="Welcome to LINQBridgeVs Setup Wizard"/><Run FontWeight="Bold" FontSize="20" Text="!"/></TextBlock>
                     <TextBlock HorizontalAlignment="Left" Margin="10,85,0,0" TextWrapping="Wrap" VerticalAlignment="Top" >
@@ -68,7 +72,7 @@
                         <Controls:ProgressRing Name="prgInstallProgress" IsActive="True" EllipseDiameterScale="0.7" Height="80" Margin="151,20,163,20" Width="80"></Controls:ProgressRing>
                     </Grid>-->
                     <Grid Name="grdPrerequisites" Visibility="Visible">
-                        <TextBlock x:Name="txtNotAdmin" HorizontalAlignment="Left" Margin="9,55,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="443" Height="57" ><Run Text="Visual Studio "/><Run Text="needs to "/><Run Text="run "/><Run Text="with high privileges"/><Run Text=" "/><Run Text="to correctly setup LINQBridgeVs"/><Run Text="."/><Run Text=" "/><Run Text="This is needed only once. "/><Run Text="P"/><Run Text="lease click on 'Restart As Administrator'"/><Run Text=" or 'Cancel' to quit."/></TextBlock>
+                        <TextBlock x:Name="txtNotAdmin" HorizontalAlignment="Left" Margin="9,55,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="443" Height="99" FontSize="14" ><Run Text="Visual Studio "/><Run Text="needs to "/><Run Text="run "/><Run Text="with high privileges"/><Run Text=" "/><Run Text="to correctly setup LINQBridgeVs"/><Run Text="."/><Run Text=" "/><Run Text="This is needed only once. "/><Run/><LineBreak/><Run/><LineBreak/><Run Text="P"/><Run Text="lease click on "/><Run FontWeight="Bold" Text="'Restart As Administrator' "/><Run Text="or "/><Run FontWeight="Bold" Text="'Cancel'"/><Run Text=" to quit."/></TextBlock>
                     </Grid>
                 </Grid>
             </Controls:MetroTabItem>
@@ -81,8 +85,8 @@
             </Controls:MetroTabItem>-->
             <Controls:MetroTabItem Header="" VerticalAlignment="Stretch" Focusable="False" Controls:ControlsHelper.HeaderFontSize="18" Margin="0,0,0,-78"></Controls:MetroTabItem>
         </Controls:MetroTabControl>
-        <Image HorizontalAlignment="Left" Height="84"  VerticalAlignment="Top" Width="147" Source="/Resources/LINQBridgeLogo.png" Margin="10,10,0,0"/>
-        <Grid Margin="0,220,0,0.5" Background="LightGray">
+        <Image HorizontalAlignment="Left" Height="84"  VerticalAlignment="Top" Width="147" Source="/LINQBridgeLogo.png" Margin="2,10,0,0" Grid.Column="1"/>
+        <Grid Margin="0,220,0,0.5" Background="LightGray" Grid.ColumnSpan="2">
             <Button Name="btnRestart" Content="Restart as Administrator" HorizontalAlignment="Right" VerticalAlignment="Top" Width="166" Click="btnRestart_Click" Margin="0,10,91,0"/>
             <Button x:Name="btnSkip" Content="Cancel" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Width="76" Command="ApplicationCommands.Close"/>
             <!--<Button Content="Next" Name="btnNext" HorizontalAlignment="Left" Margin="414,10,0,0" VerticalAlignment="Top" Width="74" Click="BtnNext_Click" Height="28"/>-->

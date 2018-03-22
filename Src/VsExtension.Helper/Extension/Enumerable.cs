@@ -32,7 +32,7 @@ namespace BridgeVs.Helper.Extension
     {
         public static void ForEach<T>(this IEnumerable<T> sequence, Action<T> action)
         {
-            foreach (var item in sequence)
+            foreach (T item in sequence)
                 action(item);
         }
     }

@@ -8,15 +8,15 @@ namespace BridgeVs.Helper.Installer.VsRestart
     {
         internal static void Restart(this DTE dte)
         {
-            var currentProcess = Process.GetCurrentProcess();
+            Process currentProcess = Process.GetCurrentProcess();
 
-            var parser = new ArgumentParser(dte.CommandLineArguments);
+            ArgumentParser parser = new ArgumentParser(dte.CommandLineArguments);
 
-            var builder = new RestartProcessBuilder()
+            RestartProcessBuilder builder = new RestartProcessBuilder()
                 .WithDevenv(currentProcess.MainModule.FileName)
                 .WithArguments(parser.GetArguments());
 
-            var openedItem = dte.GetOpenedItem();
+            OpenedItem openedItem = dte.GetOpenedItem();
             if (openedItem != OpenedItem.None)
             {
                 if (openedItem.IsSolution)
@@ -33,7 +33,7 @@ namespace BridgeVs.Helper.Installer.VsRestart
 
 
             const string commandName = "File.Exit";
-            var closeCommand = dte.Commands.Item(commandName);
+            Command closeCommand = dte.Commands.Item(commandName);
 
             CommandEvents closeCommandEvents = null;
             if (closeCommand != null)
@@ -42,7 +42,7 @@ namespace BridgeVs.Helper.Installer.VsRestart
             }
 
             // Install the handler
-            var handler = new VisualStudioCommandInvoker(dte.Events.DTEEvents, closeCommandEvents, builder.Build());
+            VisualStudioCommandInvoker handler = new VisualStudioCommandInvoker(dte.Events.DTEEvents, closeCommandEvents, builder.Build());
 
             if (closeCommand != null && closeCommand.IsAvailable)
             {
@@ -65,7 +65,7 @@ namespace BridgeVs.Helper.Installer.VsRestart
                     Array activeProjects = (Array)dte.ActiveSolutionProjects;
                     if (activeProjects != null && activeProjects.Length > 0)
                     {
-                        var currentOpenedProject = (Project)activeProjects.GetValue(0);
+                        Project currentOpenedProject = (Project)activeProjects.GetValue(0);
                         if (currentOpenedProject != null)
                         {
                             return new OpenedItem(currentOpenedProject.FullName, false);

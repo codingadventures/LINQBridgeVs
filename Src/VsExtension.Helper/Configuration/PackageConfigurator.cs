@@ -24,7 +24,9 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Security.AccessControl;
 using System.Security.Principal;
@@ -41,7 +43,6 @@ namespace BridgeVs.Helper.Configuration
         private static readonly string CurrentAssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
         private const string VersionRegistryValue = "LINQBridgeVsVersion";
-        private const string ConfiguredRegistryValue = "IsBridgeVsConfigured";
         private const string InstallFolderPathRegistryValue = "InstallFolderPath";
         private const string LinqPad5 = "LINQPad 5";
         private const string LinqPad4 = "LINQPad 4";
@@ -137,6 +138,16 @@ namespace BridgeVs.Helper.Configuration
             }
         }
 
+        private static string GetInstallationFolder(string vsVersion)
+        {
+            //Set in the registry the installer location if it is has changed
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(GetRegistryKey(Resources.ProductRegistryKey, vsVersion)))
+            {
+                object value = key?.GetValue(InstallFolderPathRegistryValue);
+                return value?.ToString();
+            }
+        }
+
         public static string GetRegistryKey(string key, params object[] argStrings)
         {
             return string.Format(key, argStrings);
@@ -191,22 +202,16 @@ namespace BridgeVs.Helper.Configuration
         {
             if (InstalledExtensionVersion(visualStudioVersion) != CurrentAssemblyVersion)
             {
-                Log.Write("New LINQBridgeVs Extensions. Previous Version {0}. Current Version {1}", InstalledExtensionVersion(visualStudioVersion), CurrentAssemblyVersion);
+                Log.Write("New LINQBridgeVs Extensions. Previous Version {0}. Current Version {1}",
+                    InstalledExtensionVersion(visualStudioVersion), CurrentAssemblyVersion);
                 return false;
             }
 
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(GetRegistryKey(Resources.ProductVersion, visualStudioVersion)))
-            {
-                return key != null && Convert.ToBoolean(key.GetValue(ConfiguredRegistryValue));
-            }
+            string installationFolder = GetInstallationFolder(visualStudioVersion);
+
+            return !string.IsNullOrEmpty(installationFolder) && installationFolder == CommonFolderPaths.InstallFolder;
         }
-        private static void MarkBridgeVsAsInstalled(string vsVersion)
-        {
-            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(GetRegistryKey(Resources.ProductVersion, vsVersion)))
-            {
-                key?.SetValue(ConfiguredRegistryValue, true);
-            }
-        }
+
         private static void SetBridgeVsAssemblyVersion(string vsVersion)
         {
             using (RegistryKey key = Registry.CurrentUser.CreateSubKey(GetRegistryKey(Resources.ProductVersion, vsVersion)))
@@ -238,7 +243,7 @@ namespace BridgeVs.Helper.Configuration
 
                 SetEnvironment(vsVersion, vsEdition);
 
-                MarkBridgeVsAsInstalled(vsVersion);
+                DeleteExistingVisualizers(vsVersion);
 
                 return true;
             }
@@ -246,6 +251,37 @@ namespace BridgeVs.Helper.Configuration
             {
                 Log.Write(e, "Error Configuring LINQBridgeVs");
                 return false;
+            }
+        }
+
+        private static void DeleteExistingVisualizers(string vsVersion)
+        {
+            string debuggerVisualizerTargetFolder = string.Empty;
+            switch (vsVersion)
+            {
+                case "11.0":
+                    debuggerVisualizerTargetFolder = CommonFolderPaths.Vs2012DebuggerVisualizerDestinationFolder;
+                    break;
+                case "12.0":
+                    debuggerVisualizerTargetFolder = CommonFolderPaths.Vs2013DebuggerVisualizerDestinationFolder;
+                    break;
+                case "14.0":
+                    debuggerVisualizerTargetFolder = CommonFolderPaths.Vs2015DebuggerVisualizerDestinationFolder;
+                    break;
+                case "15.0":
+                    debuggerVisualizerTargetFolder = CommonFolderPaths.Vs2017DebuggerVisualizerDestinationFolder;
+                    break;
+            }
+
+            IEnumerable<string> visualizers = from file in Directory.EnumerateFiles(debuggerVisualizerTargetFolder)
+                                              where !string.IsNullOrEmpty(file)
+                                              let extension = Path.GetExtension(file)
+                                              where extension.Equals(".dll") || extension.Equals(".pdb")
+                                              select file;
+
+            foreach (string visualizer in visualizers)
+            {
+                File.Delete(visualizer);
             }
         }
 

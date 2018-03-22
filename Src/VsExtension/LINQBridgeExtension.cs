@@ -6,7 +6,7 @@
 // files (the "Software"), to deal in the Software without
 // restriction, including without limitation the rights to use,
 // copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the
+// copies of the Software, and to permit psticlersons to whom the
 // Software is furnished to do so, subject to the following
 // conditions:
 //
@@ -24,7 +24,6 @@
 #endregion
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
@@ -38,9 +37,7 @@ namespace BridgeVs.Extension
 {
     public class BridgeVsExtension
     {
-        #region [ Private Properties ]
         private readonly DTE _application;
-        #endregion
 
         public BridgeVsExtension(DTE app)
         {
@@ -66,18 +63,8 @@ namespace BridgeVs.Extension
                        select project;
             }
         }
-
-        private string _solutionName;
-        private string SolutionName
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_solutionName))
-                    _solutionName = Path.GetFileNameWithoutExtension(_application.Solution.FileName);
-
-                return _solutionName;
-            }
-        }
+        
+        private string SolutionName => Path.GetFileNameWithoutExtension(_application.Solution.FileName);
 
         public void Execute(CommandAction action)
         {
@@ -86,7 +73,7 @@ namespace BridgeVs.Extension
             if (projects.Count == 0)
                 return;
 
-            BridgeCommand.ActivateBridgeVsOnSolution(projects, SolutionName, _application.Version, _application.Edition);
+            BridgeCommand.ActivateBridgeVsOnSolution(action, projects, SolutionName, _application.Version, _application.Edition);
         }
 
         public void UpdateCommand(MenuCommand cmd, CommandAction action)
@@ -112,34 +99,5 @@ namespace BridgeVs.Extension
 
             return result;
         }
-
-        private CommandStates GetMultiStatus()
-        {
-            CommandStates result = CommandStates.Visible;
-
-            bool isBridgeVsConfigured = PackageConfigurator.IsBridgeVsConfigured(_application.Version);
-            bool isSolutionEnabled = BridgeCommand.IsSolutionEnabled(SolutionName, _application.Version);
-            //if (isBridgeVsEnabled)
-            //    result |= CommandStates.Visible;
-
-            if (isBridgeVsConfigured && isSolutionEnabled)
-                result |= CommandStates.Enabled;
-
-            return result;
-        }
-
-        //private static CommandStates GetCommandStatus(CommandStates status, CommandAction action)
-        //{
-        //    if (status == CommandStates.None)
-        //        return CommandStates.None;
-
-        //    bool result = ((action == CommandAction.Disable ? status >> 1 : status) & 1) != 0;
-
-        //    if (result)
-        //        return CommandStates.Enabled | CommandStates.Visible;
-
-        //    return CommandStates.None;
-        //}
-
     }
 }

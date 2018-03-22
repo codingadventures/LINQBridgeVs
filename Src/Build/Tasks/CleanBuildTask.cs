@@ -34,7 +34,7 @@ namespace BridgeVs.Build.Tasks
         public bool Execute()
         {
             string visualizerAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(VisualStudioVer, Assembly);
-            string targetInstallationPath = VisualStudioOptions.GetInstallationPath(VisualStudioVer);
+            string targetInstallationPath = VisualStudioOptions.GetVisualizerDestinationFolder(VisualStudioVer);
 
             string visualizerFullPath = Path.Combine(targetInstallationPath, visualizerAssemblyName);
 

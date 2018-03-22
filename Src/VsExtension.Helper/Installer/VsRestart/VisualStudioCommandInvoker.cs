@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Text;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
@@ -55,7 +56,7 @@ namespace BridgeVs.Helper.Installer.VsRestart
             catch (Exception ex)
             {
                 result = ProcessExecutionResult.Exception;
-                var winex = ex as System.ComponentModel.Win32Exception;
+                Win32Exception winex = ex as System.ComponentModel.Win32Exception;
 
                 // User has denied auth through UAC
                 if (winex != null && winex.NativeErrorCode == 1223)

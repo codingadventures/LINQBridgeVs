@@ -58,6 +58,10 @@
       <Project>{b84fbd50-0b10-4c25-8430-680fc6fc3fea}</Project>
       <Name>BridgeVs.DynamicCore</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Logging\BridgeVs.Logging.csproj">
+      <Project>{0B546762-C8C0-45C6-BC42-C5D91D510351}</Project>
+      <Name>BridgeVs.Logging</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- <Target Name="AfterBuild" Condition=" '$(Configuration)' == 'Deploy' ">

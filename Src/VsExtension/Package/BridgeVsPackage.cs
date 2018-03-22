@@ -139,7 +139,8 @@ namespace BridgeVs.Extension.Package
             }
             catch (Exception e)
             {
-                Log.Write(e, "OnStartupComplete Error...");
+                Log.Write(e, "Initialize Error...");
+                MessageBox.Show("LINQBridgeVs wasn't successfully configured. Please restart Visual Studio");
             }
         }
 

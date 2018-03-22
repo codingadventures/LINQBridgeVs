@@ -50,7 +50,7 @@ namespace BridgeVs.Build.UnitTest
         {
             const string vsVersion = "11.0";
             string targetAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(vsVersion, _assemblyModel.Location);
-            string targetInstallationPath = VisualStudioOptions.GetInstallationPath(vsVersion);
+            string targetInstallationPath = VisualStudioOptions.GetVisualizerDestinationFolder(vsVersion);
 
             MapperBuildTask mapper = new MapperBuildTask
             {
@@ -72,7 +72,7 @@ namespace BridgeVs.Build.UnitTest
         {
             const string vsVersion = "12.0";
             string targetAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(vsVersion, _assemblyModel.Location);
-            string targetInstallationPath = VisualStudioOptions.GetInstallationPath(vsVersion);
+            string targetInstallationPath = VisualStudioOptions.GetVisualizerDestinationFolder(vsVersion);
 
             MapperBuildTask mapper = new MapperBuildTask
             {
@@ -93,7 +93,7 @@ namespace BridgeVs.Build.UnitTest
         {
             const string vsVersion = "14.0";
             string targetAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(vsVersion, _assemblyModel.Location);
-            string targetInstallationPath = VisualStudioOptions.GetInstallationPath(vsVersion);
+            string targetInstallationPath = VisualStudioOptions.GetVisualizerDestinationFolder(vsVersion);
 
             MapperBuildTask mapper = new MapperBuildTask
             {
@@ -114,7 +114,7 @@ namespace BridgeVs.Build.UnitTest
         {
             const string vsVersion = "15.0";
             string targetAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(vsVersion, _assemblyModel.Location);
-            string targetInstallationPath = VisualStudioOptions.GetInstallationPath(vsVersion);
+            string targetInstallationPath = VisualStudioOptions.GetVisualizerDestinationFolder(vsVersion);
 
             MapperBuildTask mapper = new MapperBuildTask
             {

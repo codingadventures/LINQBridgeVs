@@ -23,10 +23,10 @@ namespace BridgeVs.Helper.Installer.VsRestart.Arguments
 
         public void Replace<TArgument>(IArgumentToken target) where TArgument : class, IArgumentToken
         {
-            var source = _arguments.OfType<TArgument>().FirstOrDefault();
+            TArgument source = _arguments.OfType<TArgument>().FirstOrDefault();
             if (source != null)
             {
-                var index = _arguments.IndexOf(source);
+                int index = _arguments.IndexOf(source);
                 if (index >= 0)
                 {
                     _arguments[index] = target;
@@ -49,7 +49,7 @@ namespace BridgeVs.Helper.Installer.VsRestart.Arguments
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            using (var enumerator = GetEnumerator())
+            using (IEnumerator<IArgumentToken> enumerator = GetEnumerator())
             {
                 if (enumerator.MoveNext())
                 {

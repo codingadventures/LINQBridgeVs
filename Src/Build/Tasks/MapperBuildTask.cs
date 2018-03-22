@@ -72,7 +72,7 @@ namespace BridgeVs.Build.Tasks
 
                 //this is where the current assembly being built is saved
                 string currentBuildingFolder = Path.GetDirectoryName(Assembly);
-                string targetInstallationPath = VisualStudioOptions.GetInstallationPath(VisualStudioVer);
+                string targetInstallationPath = VisualStudioOptions.GetVisualizerDestinationFolder(VisualStudioVer);
 
                 Log.Write("Installation Path {0}", targetInstallationPath);
 
@@ -135,7 +135,9 @@ namespace BridgeVs.Build.Tasks
             ILMerge merge = new ILMerge()
             {
                 OutputFile = targetDotNetAssemblyVisualizerFilePath,
+#if DEBUG
                 DebugInfo = true,
+#endif
                 TargetKind = ILMerge.Kind.SameAsPrimaryAssembly,
                 Closed = false
             };
@@ -175,7 +177,9 @@ namespace BridgeVs.Build.Tasks
             ILMerge merge = new ILMerge()
             {
                 OutputFile = customVisualizerTargetInstallationPath,
+#if DEBUG
                 DebugInfo = true,
+#endif
                 TargetKind = ILMerge.Kind.SameAsPrimaryAssembly,
                 Closed = false
             };

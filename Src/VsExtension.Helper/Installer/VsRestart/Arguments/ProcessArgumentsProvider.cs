@@ -19,7 +19,7 @@ namespace BridgeVs.Helper.Installer.VsRestart.Arguments
                     return ArgumentTokenCollection.Empty;
                 }
 
-                using (var enumerator = retObjectCollection.GetEnumerator())
+                using (ManagementObjectCollection.ManagementObjectEnumerator enumerator = retObjectCollection.GetEnumerator())
                 {
                     if (enumerator.MoveNext())
                     {
@@ -27,7 +27,7 @@ namespace BridgeVs.Helper.Installer.VsRestart.Arguments
                     }
                 }
 
-                var parser = new ArgumentParser(commandLine);
+                ArgumentParser parser = new ArgumentParser(commandLine);
                 return parser.GetArguments();
             }
             finally

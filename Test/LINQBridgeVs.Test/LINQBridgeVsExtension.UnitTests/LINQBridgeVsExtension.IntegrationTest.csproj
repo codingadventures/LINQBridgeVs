@@ -64,6 +64,7 @@
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <Private>False</Private>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="Microsoft.VisualStudio.Shell.15.0">
       <HintPath>..\..\..\Src\packages\Microsoft.VisualStudio.Shell.15.0.15.6.27413\lib\net45\Microsoft.VisualStudio.Shell.15.0.dll</HintPath>
       <Private>True</Private>

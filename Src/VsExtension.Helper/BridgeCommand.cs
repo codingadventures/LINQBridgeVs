@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using BridgeVs.Helper.Configuration;
 using BridgeVs.Helper.Dependency;
 using BridgeVs.Helper.Extension;
@@ -25,7 +26,7 @@ namespace BridgeVs.Helper
             }
         }
 
-        private static void DisableProject(string assemblyPath, string assemblyName, string solutionName, string vsVersion)
+        private static void DisableProject(string assemblyName, string solutionName, string vsVersion)
         {
             string keyPath = string.Format(PackageConfigurator.GetRegistryKey(EnabledProjectsRegistryKey, vsVersion, solutionName));
 
@@ -36,7 +37,7 @@ namespace BridgeVs.Helper
             }
         }
 
-        public static void ActivateBridgeVsOnSolution(List<Project> projects, string solutionName, string vsVersion,
+        public static void ActivateBridgeVsOnSolution(CommandAction action, List<Project> projects, string solutionName, string vsVersion,
             string vsEdition)
         {
             //enable each individual project by mapping the assembly name and location to a registry entry
@@ -48,7 +49,7 @@ namespace BridgeVs.Helper
                 string projectOutputPath = Path.Combine(path, outputPath, fileName);
 
                 string assemblyName = project.Properties.Item("AssemblyName").Value.ToString();
-                var executeParams = new ExecuteParams( CommandAction.Enable , project.FullName, solutionName, assemblyName,
+                ExecuteParams executeParams = new ExecuteParams(action, project.FullName, solutionName, assemblyName,
                     projectOutputPath, vsVersion, vsEdition);
                 Execute(executeParams);
             }
@@ -57,8 +58,13 @@ namespace BridgeVs.Helper
             string keyPath = string.Format(PackageConfigurator.GetRegistryKey(EnabledProjectsRegistryKey, vsVersion, solutionName));
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey(keyPath, true))
             {
-                key?.SetValue(SolutionEnabled, "True", RegistryValueKind.String);
+                key?.SetValue(SolutionEnabled, action == CommandAction.Enable ? "True" : "False", RegistryValueKind.String);
             }
+
+            string result = action == CommandAction.Enable ? "Bridged" : "Un-Bridged";
+            string userAction = action == CommandAction.Enable ? "Please rebuild your solution." : string.Empty;
+            string message = $@"Solution {solutionName} has been {result}. {userAction}";
+            MessageBox.Show(message);
         }
 
         public static bool IsSolutionEnabled(string solutionName, string vsVersion)
@@ -75,16 +81,15 @@ namespace BridgeVs.Helper
 
         private static void Execute(ExecuteParams executeParams)
         {
-            if (executeParams.Action == CommandAction.Enable)
+            switch (executeParams.Action)
             {
-                EnableProject(executeParams.ProjectOutput, executeParams.AssemblyName, executeParams.SolutionName,
-                    executeParams.VsVersion);
-            }
-
-            if (executeParams.Action == CommandAction.Disable)
-            {
-                DisableProject(executeParams.ProjectOutput, executeParams.AssemblyName, executeParams.SolutionName,
-                    executeParams.VsVersion);
+                case CommandAction.Enable:
+                    EnableProject(executeParams.ProjectOutput, executeParams.AssemblyName, executeParams.SolutionName,
+                        executeParams.VsVersion);
+                    break;
+                case CommandAction.Disable:
+                    DisableProject(executeParams.AssemblyName, executeParams.SolutionName, executeParams.VsVersion);
+                    break;
             }
         }
     }

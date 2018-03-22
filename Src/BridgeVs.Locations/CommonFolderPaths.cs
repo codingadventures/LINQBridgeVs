@@ -83,6 +83,11 @@ namespace BridgeVs.Locations
 
         public static readonly string CommonReferenceAssembliesPath = @"Common7\IDE\ReferenceAssemblies\v2.0";
 
+        public static readonly string Vs2012DebuggerVisualizerDestinationFolder = Documents + @"\Visual Studio 2012\Visualizers\";
+        public static readonly string Vs2013DebuggerVisualizerDestinationFolder = Documents + @"\Visual Studio 2013\Visualizers\";
+        public static readonly string Vs2015DebuggerVisualizerDestinationFolder = Documents + @"\Visual Studio 2015\Visualizers\";
+        public static readonly string Vs2017DebuggerVisualizerDestinationFolder = Documents + @"\Visual Studio 2017\Visualizers\";
+
         static CommonFolderPaths()
         {
 

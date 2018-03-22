@@ -154,7 +154,7 @@ namespace BridgeVs.DynamicCore
             DeployLinqScript(message);
             Log.Write("LinqQuery Successfully deployed");
 
-            string linqQueryfileName = Path.Combine(CommonFolderPaths.LinqPadQueryFolder, "BridgeVs", message.FileName);
+            string linqQueryfileName = Path.Combine(CommonFolderPaths.LinqPadQueryFolder, message.FileName);
 
             ProcessStartInfo startInfo = new ProcessStartInfo
             {

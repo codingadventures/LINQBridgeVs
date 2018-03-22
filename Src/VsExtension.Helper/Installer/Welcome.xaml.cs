@@ -8,7 +8,6 @@ using MahApps.Metro.Controls.Dialogs;
 
 namespace BridgeVs.Helper.Installer
 {
-    /// <inheritdoc />
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -91,7 +90,7 @@ namespace BridgeVs.Helper.Installer
             {
                 return;
             }
-            var mySettings = new MetroDialogSettings()
+            MetroDialogSettings mySettings = new MetroDialogSettings()
             {
                 AffirmativeButtonText = "Quit",
                 NegativeButtonText = "Cancel",
@@ -99,7 +98,7 @@ namespace BridgeVs.Helper.Installer
                 AnimateHide = false
             };
 
-            var result = await this.ShowMessageAsync("Quit Wizard?",
+            MessageDialogResult result = await this.ShowMessageAsync("Quit Wizard?",
                                                   BridgeVs.Helper.Resources.SkipMessage,
                                                   MessageDialogStyle.AffirmativeAndNegative, mySettings);
 

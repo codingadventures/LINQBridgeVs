@@ -11,8 +11,8 @@ namespace BridgeVs.Helper.Forms
         {
             InitializeComponent();
 
-            var assembly = Assembly.GetExecutingAssembly();
-            var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
             VersionLabel.Text = fvi.ProductVersion;
             GitHubLinkLabel.LinkClicked += LinkedLabelClicked;
             //LogoPictureBox.Image = Images.LINQBridgeLogo;

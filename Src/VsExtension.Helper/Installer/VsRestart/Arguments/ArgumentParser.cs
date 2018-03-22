@@ -16,7 +16,7 @@ namespace BridgeVs.Helper.Installer.VsRestart.Arguments
         public ArgumentTokenCollection GetArguments()
         {
             ArgumentTokenCollection result = new ArgumentTokenCollection();
-            foreach (var argument in GetArgumentTokens())
+            foreach (IArgumentToken argument in GetArgumentTokens())
             {
                 result.Add(argument);
             }
@@ -32,9 +32,9 @@ namespace BridgeVs.Helper.Installer.VsRestart.Arguments
             RegexOptions options = RegexOptions.None;
             Regex regex = new Regex("(?<match>[^\\s\"]+)|(?<match>\"[^\"]*\")", options);
 
-            var arguments = (regex.Matches(_arguments).Cast<Match>().Where(m => m.Groups["match"].Success).Select(m => m.Groups["match"].Value)).ToList();
+            List<string> arguments = (regex.Matches(_arguments).Cast<Match>().Where(m => m.Groups["match"].Success).Select(m => m.Groups["match"].Value)).ToList();
 
-            foreach (var argument in arguments)
+            foreach (string argument in arguments)
             {
                 if (argument.ToLower().Contains(".sln"))
                     yield return new SolutionArgumentToken(argument);

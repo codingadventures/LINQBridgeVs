@@ -23,9 +23,11 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
 using System.IO;
 using System.Windows.Forms;
 using BridgeVs.DynamicCore;
+using BridgeVs.Logging;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using Microsoft.Win32;
 
@@ -40,16 +42,25 @@ namespace BridgeVs.DynamicVisualizer.V14
         
         protected override void Show(IDialogVisualizerService windowService, IVisualizerObjectProvider objectProvider)
         {
-            DynamicDebuggerVisualizer dynamicDebuggerVisualizer = new DynamicDebuggerVisualizer();
-            Stream dataStream = objectProvider.GetData();
+            Log.Configure("LINQBridgeVs", "DynamicDebuggerVisualizerV14");
+            try
+            {
+                DynamicDebuggerVisualizer dynamicDebuggerVisualizer = new DynamicDebuggerVisualizer();
+                Stream dataStream = objectProvider.GetData();
 
-            if (dataStream.Length == 0) return;
+                if (dataStream.Length == 0)
+                    return;
 
-            Form formToShow = dynamicDebuggerVisualizer.ShowLINQPad(dataStream, VsReferencedVersion);
+                Form formToShow = dynamicDebuggerVisualizer.ShowLINQPad(dataStream, VsReferencedVersion);
 
 #if !TEST
-            windowService.ShowDialog(formToShow);
+                windowService.ShowDialog(formToShow);
 #endif
+            }
+            catch (Exception exception)
+            {
+                Log.Write(exception, "Error during LINQPad execution");
+            }
         }
     }
 }
