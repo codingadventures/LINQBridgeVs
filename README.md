@@ -10,9 +10,9 @@ What's LINQBridgeVs?
 
 LINQBridgeVs is a Visual Studio Extension compatible with Visual Studio 2012/2013/2015/2017.
 It is a bridge between a Visual Studio debugging session and [LINQPad] (http://www.linqpad.net).
-When enabled on a solution containing VB/C# projects, it creates at build time Custom Debugger Visualizer 
+When enabled on a solution containing VB/C# projects, it creates at compile time, a Custom Debugger Visualizer 
 mapping to all the public complex types and making the magnifier glass 
-available for all of them. By clicking on the magnifier glass on an object instance, it will be transmitted over a
+available for all of them. By clicking on the magnifier glass on an object instance, this will be transmitted over a
 bus and read back by LINQPad.
 
 ## Getting Started
@@ -23,7 +23,7 @@ when a solution is loaded, called "BridgeVs". There are two options available:
 *  Bridge Solution
 *  Un-Bridge Solution
 
-Bridging a solution will enable all of the public types of every projects to be exported to [LINQPad](http://www.linqpad.net) at runtime. 
+Bridging a solution will enable all of the public types of every projects in the solution to be exported to [LINQPad](http://www.linqpad.net) at runtime. 
 
 Rebuild your solution, run it, set a breakpoint and hover the mouse pointer
 on any object instance and the magnifier glass will appear. 
