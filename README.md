@@ -1,12 +1,10 @@
-![alt text][logo]
-==========
+# LINQBridgeVs
 
 [![Join the chat at https://gitter.im/nbasakuragi/LINQBridgeVs](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/nbasakuragi/LINQBridgeVs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 [![Build status](https://ci.appveyor.com/api/projects/status/ibasbqbycm33plpi?svg=true)](https://ci.appveyor.com/project/nbasakuragi/linqbridgevs)
- 
-What's LINQBridgeVs?
------------------
+[![GitHubIssues](https://img.shields.io/github/issues/codingadventures/LINQBridgevs.svg)](https://github.com/codingadventures/LINQBridgeVs/issues)
+
+[![](https://img.shields.io/github/downloads/codingadventures/LINQBridgeVs/total.svg)](https://github.com/codingadventures/LINQBridgeVs/releases)
 
 LINQBridgeVs is a Visual Studio Extension compatible with Visual Studio 2012/2013/2015/2017.
 It is a bridge between a Visual Studio debugging session and [LINQPad](http://www.linqpad.net).
@@ -145,11 +143,11 @@ For each class, *Class1, Class2, Class3* it is needed a global assembly attribut
 
 I have used several community open source projects to make this extension. So if you like LINQBridgeVs I recommend checking out the following:
 
-* [JSON.NET](https://github.com/JamesNK/Newtonsoft.Json) is an awesome serializer. It has become part of the .NET Framework and it is used by millions worlwide, now it has become the standard. LINQBridgeVs mainly uses the BinaryFormatter but in case it fails it falls back on JSON.NET.
-* [VsRestart](https://github.com/ilmax/vs-restart) is an extension that restart Visual Studio under Administrator privileges. Unfortunately the project seems abandoned and the extension works only with Visual Studio 2013. However but code proved to be working with any version really.
-* [MahApps](https://github.com/MahApps/MahApps.Metro) which was the first open source project to make WPF truly modern.
-* [LINQPad](http://www.linqpad.net) super useful  scratch pad for C#, VB, F#, SQL. Without it this extension wouldn't exist.
-* [Mono.Cecil](http://www.mono-project.com/docs/tools+libraries/libraries/Mono.Cecil/) very famous and useful AOP library designed, written and maintaned by JB Evain to generate and inspect programs and libraries in the ECMA CIL format.
-* [ILMerge](https://github.com/Microsoft/ILMerge) is a utility that merges multiple .NET assemblies into a single assembly.
+- [JSON.NET](https://github.com/JamesNK/Newtonsoft.Json) is an awesome serializer. It has become part of the .NET Framework and it is used by millions worlwide, now it has become the standard. LINQBridgeVs mainly uses the BinaryFormatter but in case it fails it falls back on JSON.NET.
+- [VsRestart](https://github.com/ilmax/vs-restart) is an extension that restart Visual Studio under Administrator privileges. Unfortunately the project seems abandoned and the extension works only with Visual Studio 2013. However but code proved to be working with any version really.
+- [MahApps](https://github.com/MahApps/MahApps.Metro) which was the first open source project to make WPF truly modern.
+- [LINQPad](http://www.linqpad.net) super useful  scratch pad for C#, VB, F#, SQL. Without it this extension wouldn't exist.
+- [Mono.Cecil](http://www.mono-project.com/docs/tools+libraries/libraries/Mono.Cecil/) very famous and useful AOP library designed, written and maintaned by JB Evain to generate and inspect programs and libraries in the ECMA CIL format.
+- [ILMerge](https://github.com/Microsoft/ILMerge) is a utility that merges multiple .NET assemblies into a single assembly.
 
 [logo]: https://raw.github.com/codingadventures/LINQBridgeVs/master/Src/VsExtension/LINQBridgeLogo.png "LINQBridge"
