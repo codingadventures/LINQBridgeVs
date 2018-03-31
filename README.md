@@ -28,7 +28,7 @@ LINQBridgeVs is compatible with any Visual Studio edition from 2012 to 2017. It 
 
 ## Troubleshooting
 
-If after bridging and rebuilding your solution the magnifier glass still does not appear, make sure that in this folder _"C:\Users\youruser\Documents\Visual Studio 201**x**\Visualizers"_ there is/are assemblies with this name template "***AssemblyName**.Visualizer.V1**x**.dll*" (where x is the version number of Visual Studio). 
+If after bridging and rebuilding your solution the magnifier glass still does not appear, make sure that in this folder _"C:\Users\youruser\Documents\Visual Studio 201**x**\Visualizers"_ there is/are assemblies with this name template "_**AssemblyName**.Visualizer.V1**x**.dll_" (where x is the version number of Visual Studio). 
 If the folder does not contain any assembly then please check the log files here *C:\Users\youruser\AppData\Local\LINQBridgeVs* and send them with [a new bug](https://github.com/codingadventures/LINQBridgeVs/issues/new).
 
 Do not keep two instances of two different versions of LINQPad running (e.g. LINQPad 4 and LINQPad 5) at the same time. If you do so, the data will be automatically sent to the lower version of LINQPad. 
