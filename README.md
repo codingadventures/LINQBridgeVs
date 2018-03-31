@@ -38,7 +38,8 @@ Do not keep two instances of two different version of LINQPad running (e.g. LINQ
 Unfortunately an installer is not available yet, therefore Visual Studio needs to be configured in order to run the extension. This is done only once by the extension itself. 
 Only for the first time, Visual Studio must be run with Administrator privileges, if not a form will appear asking to restart Visual Studio: 
 <br><br>
- ![vsrestartimage]{.classname}
+
+<img src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/VsRestart.PNG?raw=true" width="700">
 
 Once Visual Studio is restarted as Administrator, the configuration will complete and the form will never appear again. 
 
@@ -148,14 +149,6 @@ I have used several community open source projects to make this extension. So if
 * [ILMerge](https://github.com/Microsoft/ILMerge) is a utility that merges multiple .NET assemblies into a single assembly.
 
 [logo]: https://raw.github.com/codingadventures/LINQBridgeVs/master/Src/VsExtension/LINQBridgeLogo.png "LINQBridge"
-[vsrestartimage]:https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/VsRestart.PNG?raw=true(=250x)
+[vsrestartimage]:
 [Example]:https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/Example.gif?raw=true
 [registry]:https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/Registry.PNG?raw=true
-<style type="text/css">
-    .classname{
-        width: 500px;
-        display: block;
-    margin-left: auto;
-    margin-right: auto;
-    }
-</style>
