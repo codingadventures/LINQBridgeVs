@@ -34,9 +34,9 @@ namespace BridgeVs.Build.Util
         [DebuggerStepThrough]
         public static void ForEach<T>(this IEnumerable<T> @t, Action<T> action) where T : class
         {
-            foreach (var element in @t)
+            foreach (T element in @t)
             {
-                var el = element; //Avoiding enclosures
+                T el = element; //Avoiding enclosures
                 action(el);
             }
         }

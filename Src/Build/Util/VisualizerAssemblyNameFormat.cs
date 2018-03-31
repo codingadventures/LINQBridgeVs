@@ -47,7 +47,7 @@ namespace BridgeVs.Build.Util
                 throw new ArgumentException(@"The passed visual studio version is not correct", nameof(vsVersion));
             }
 
-            var versionNumber = vsVersion.Split('.')[0];
+            string versionNumber = vsVersion.Split('.')[0];
             return $"{Path.GetFileNameWithoutExtension(assembly)}.Visualizer.V{versionNumber}.dll";
         }
 

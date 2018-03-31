@@ -94,13 +94,13 @@ namespace BridgeVs.Build.TypeMapper
         {
             _debuggerVisualizerAssembly.MainModule.TryGetTypeReference(SystemType, out TypeReference systemTypeReference);
 
-            var debuggerVisualizerAttributeTypeReference = _debuggerVisualizerAssembly.MainModule.GetType(SystemDiagnosticsDebuggerVisualizerAttribute, true);
+            TypeReference debuggerVisualizerAttributeTypeReference = _debuggerVisualizerAssembly.MainModule.GetType(SystemDiagnosticsDebuggerVisualizerAttribute, true);
 
-            var customDebuggerVisualizerTypeReference = _debuggerVisualizerAssembly
+            TypeDefinition customDebuggerVisualizerTypeReference = _debuggerVisualizerAssembly
                 .MainModule
                 .Types
                 .SingleOrDefault(definition => BaseTypeFilter(definition, "DialogDebuggerVisualizer"));
-            var customDebuggerVisualizerObjectSourceTypeReference = _debuggerVisualizerAssembly
+            TypeDefinition customDebuggerVisualizerObjectSourceTypeReference = _debuggerVisualizerAssembly
                 .MainModule
                 .Types
                 .SingleOrDefault(definition => BaseTypeFilter(definition, "VisualizerObjectSource"));
@@ -115,7 +115,7 @@ namespace BridgeVs.Build.TypeMapper
             _visualizerObjectSourceCustomAttributeArgument = new CustomAttributeArgument(systemTypeReference, customDebuggerVisualizerObjectSourceTypeReference);
 
 
-            var assemblyDescriptionAttribute = _debuggerVisualizerAssembly.CustomAttributes.FirstOrDefault(p => p.AttributeType.FullName.Equals(SystemReflectionAssemblyDescriptionAttribute));
+            CustomAttribute assemblyDescriptionAttribute = _debuggerVisualizerAssembly.CustomAttributes.FirstOrDefault(p => p.AttributeType.FullName.Equals(SystemReflectionAssemblyDescriptionAttribute));
 
             if (assemblyDescriptionAttribute != null)
                 _assemblyDescriptionAttributeValue = assemblyDescriptionAttribute.ConstructorArguments[0].Value.ToString();
@@ -126,7 +126,7 @@ namespace BridgeVs.Build.TypeMapper
 
         private void MapType(TypeReference typeReference)
         {
-            var scope = string.Empty;
+            string scope = string.Empty;
 
             switch (typeReference.Scope.MetadataScopeType)
             {
@@ -136,20 +136,20 @@ namespace BridgeVs.Build.TypeMapper
                 case MetadataScopeType.ModuleReference:
                     break;
                 case MetadataScopeType.ModuleDefinition:
-                    var moduleDefinition = typeReference.Scope as ModuleDefinition;
+                    ModuleDefinition moduleDefinition = typeReference.Scope as ModuleDefinition;
                     if (moduleDefinition != null) scope = FromCILToTypeName(typeReference.FullName) + ", " + moduleDefinition.Assembly;
                     break;
                 default:
                     throw new Exception($"Assembly Scope Null. Check assembly {typeReference.FullName}");
             }
 
-            var customAttribute = new CustomAttribute(_debuggerVisualizerAssembly.MainModule.Import(_debuggerVisualizerAttributeCtor));
+            CustomAttribute customAttribute = new CustomAttribute(_debuggerVisualizerAssembly.MainModule.Import(_debuggerVisualizerAttributeCtor));
 
-            var targetType = new CustomAttributeArgument(_debuggerVisualizerAssembly.MainModule.TypeSystem.String, scope);
-            var descriptionType = new CustomAttributeArgument(_debuggerVisualizerAssembly.MainModule.TypeSystem.String, _assemblyDescriptionAttributeValue);
+            CustomAttributeArgument targetType = new CustomAttributeArgument(_debuggerVisualizerAssembly.MainModule.TypeSystem.String, scope);
+            CustomAttributeArgument descriptionType = new CustomAttributeArgument(_debuggerVisualizerAssembly.MainModule.TypeSystem.String, _assemblyDescriptionAttributeValue);
 
-            var targetTypeProperty = new CustomAttributeNamedArgument("TargetTypeName", targetType);
-            var descriptionTypeProperty = new CustomAttributeNamedArgument("Description", descriptionType);
+            CustomAttributeNamedArgument targetTypeProperty = new CustomAttributeNamedArgument("TargetTypeName", targetType);
+            CustomAttributeNamedArgument descriptionTypeProperty = new CustomAttributeNamedArgument("Description", descriptionType);
 
             customAttribute.ConstructorArguments.Add(_customDebuggerVisualizerAttributeArgument);
             customAttribute.ConstructorArguments.Add(_visualizerObjectSourceCustomAttributeArgument);
@@ -166,7 +166,7 @@ namespace BridgeVs.Build.TypeMapper
         /// <param name="type">The type.</param>
         public void MapType(Type type)
         {
-            var typeReference = _debuggerVisualizerAssembly.MainModule.Import(type);
+            TypeReference typeReference = _debuggerVisualizerAssembly.MainModule.Import(type);
 
             MapType(typeReference);
         }
@@ -180,7 +180,7 @@ namespace BridgeVs.Build.TypeMapper
             if (!File.Exists(assemblyToMapTypesFromLocation))
                 throw new FileNotFoundException($"Assembly doesn't exist at location {assemblyToMapTypesFromLocation}");
 
-            var assemblyDefinition = AssemblyDefinition.ReadAssembly(assemblyToMapTypesFromLocation, GetReaderParameters(assemblyToMapTypesFromLocation));
+            AssemblyDefinition assemblyDefinition = AssemblyDefinition.ReadAssembly(assemblyToMapTypesFromLocation, GetReaderParameters(assemblyToMapTypesFromLocation));
 
             assemblyDefinition
                .MainModule
@@ -196,10 +196,10 @@ namespace BridgeVs.Build.TypeMapper
         /// <param name="references">The Assembly references</param>
         public void SaveDebuggerVisualizer(string debuggerVisualizerDst, IEnumerable<string> references = null)
         {
-            var success = false;
+            bool success = false;
             const int maxCount = 3;
-            var i = 0;
-            var fileName = Path.GetFileNameWithoutExtension(debuggerVisualizerDst);
+            int i = 0;
+            string fileName = Path.GetFileNameWithoutExtension(debuggerVisualizerDst);
 
             //I would have used a goto....can't forget my professor's quote: "Each GOTO can be superseeded by a Repeat Until...God bless Pascal!"
             while (!success && i++ < maxCount)
@@ -228,15 +228,15 @@ namespace BridgeVs.Build.TypeMapper
         
         private static ReaderParameters GetReaderParameters(string assemblyPath)
         {
-            var assemblyResolver = new DefaultAssemblyResolver();
-            var assemblyLocation = Path.GetDirectoryName(assemblyPath);
+            DefaultAssemblyResolver assemblyResolver = new DefaultAssemblyResolver();
+            string assemblyLocation = Path.GetDirectoryName(assemblyPath);
             assemblyResolver.AddSearchDirectory(assemblyLocation);
 
-            var readerParameters = new ReaderParameters { AssemblyResolver = assemblyResolver };
+            ReaderParameters readerParameters = new ReaderParameters { AssemblyResolver = assemblyResolver };
 
-            var pdbName = Path.ChangeExtension(assemblyPath, "pdb");
+            string pdbName = Path.ChangeExtension(assemblyPath, "pdb");
             if (!File.Exists(pdbName)) return readerParameters;
-            var symbolReaderProvider = new PdbReaderProvider();
+            PdbReaderProvider symbolReaderProvider = new PdbReaderProvider();
             readerParameters.SymbolReaderProvider = symbolReaderProvider;
             readerParameters.ReadSymbols = true;
 

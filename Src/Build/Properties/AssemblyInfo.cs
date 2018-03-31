@@ -1,6 +1,5 @@
-﻿
-#region License
-// Copyright (c) 2013 Coding Adventures
+﻿#region License
+// Copyright (c) 2013 - 2018 Coding Adventures
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -37,7 +36,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Coding Adventures")]
 [assembly: AssemblyProduct("BridgeVs.Build")]
-[assembly: AssemblyCopyright("Copyright © Coding Adventures 2013")]
+[assembly: AssemblyCopyright("Copyright © Coding Adventures 2013 - 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
