@@ -3,7 +3,6 @@
 [![Join the chat at https://gitter.im/nbasakuragi/LINQBridgeVs](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/nbasakuragi/LINQBridgeVs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build status](https://ci.appveyor.com/api/projects/status/ibasbqbycm33plpi?svg=true)](https://ci.appveyor.com/project/nbasakuragi/linqbridgevs)
 [![GitHubIssues](https://img.shields.io/github/issues/codingadventures/LINQBridgevs.svg)](https://github.com/codingadventures/LINQBridgeVs/issues)
-
 [![](https://img.shields.io/github/downloads/codingadventures/LINQBridgeVs/total.svg)](https://github.com/codingadventures/LINQBridgeVs/releases)
 
 LINQBridgeVs is a Visual Studio Extension compatible with Visual Studio 2012/2013/2015/2017.
