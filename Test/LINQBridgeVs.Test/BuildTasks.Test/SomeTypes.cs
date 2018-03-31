@@ -1,4 +1,4 @@
-﻿namespace BridgeVs.Build.UnitTest
+﻿namespace BridgeVs.Build.IntegrationTest
 {
     public class TypeA { }
     public class TypeB { }

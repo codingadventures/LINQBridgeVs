@@ -5,7 +5,7 @@ using BridgeVs.Build.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model.UnitTest;
 
-namespace BridgeVs.Build.UnitTest
+namespace BridgeVs.Build.IntegrationTest
 {
     [TestClass]
     public class CleanBuildTest
@@ -29,7 +29,7 @@ namespace BridgeVs.Build.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("UnitTest")]
+        [TestCategory("IntegrationTest")]
         public void Clean_BuildTask_Test_V11_Should_Succeed()
         {
             const string vsVersion = "11.0";
@@ -55,7 +55,7 @@ namespace BridgeVs.Build.UnitTest
 
 
         [TestMethod]
-        [TestCategory("UnitTest")]
+        [TestCategory("IntegrationTest")]
         public void Clean_BuildTask_Test_V12_Should_Succeed()
         {
             const string vsVersion = "12.0";
@@ -79,7 +79,7 @@ namespace BridgeVs.Build.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("UnitTest")]
+        [TestCategory("IntegrationTest")]
         public void Clean_BuildTask_Test_V14_Should_Succeed()
         {
             const string vsVersion = "14.0";
@@ -104,7 +104,7 @@ namespace BridgeVs.Build.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("UnitTest")]
+        [TestCategory("IntegrationTest")]
         public void Clean_BuildTask_Test_V15_Should_Succeed()
         {
             const string vsVersion = "15.0";

@@ -23,14 +23,13 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System.Reflection;
+using System.IO;
 using BridgeVs.Build.Tasks;
 using BridgeVs.Build.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model.UnitTest;
-using System.IO;
 
-namespace BridgeVs.Build.UnitTest
+namespace BridgeVs.Build.IntegrationTest
 {
     [TestClass]
     public class MapperBuildTest
@@ -97,7 +96,7 @@ namespace BridgeVs.Build.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("UnitTest")]
+        [TestCategory("IntegrationTest")]
         public void Mapper_Build_Test_V11_Should_Succeed()
         {
             MapperBuildTask mapper = new MapperBuildTask
@@ -114,7 +113,7 @@ namespace BridgeVs.Build.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("UnitTest")]
+        [TestCategory("IntegrationTest")]
         public void Mapper_Build_Test_V12_Should_Succeed()
         {
             MapperBuildTask mapper = new MapperBuildTask
@@ -130,7 +129,7 @@ namespace BridgeVs.Build.UnitTest
             Assert.IsTrue(File.Exists(Path.Combine(TargetInstallationPath(VsVersion12), DotNetAssemblyName(VsVersion12))), $"DotNet Debugger Visualizer {DotNetAssemblyName(VsVersion12)} hasn't been created ");
         }
         [TestMethod]
-        [TestCategory("UnitTest")]
+        [TestCategory("IntegrationTest")]
         public void Mapper_Build_Test_V14_Should_Succeed()
         {
             MapperBuildTask mapper = new MapperBuildTask
@@ -147,7 +146,7 @@ namespace BridgeVs.Build.UnitTest
             Assert.IsTrue(File.Exists(Path.Combine(TargetInstallationPath(VsVersion14), DotNetAssemblyName(VsVersion14))), $"DotNet Debugger Visualizer {DotNetAssemblyName(VsVersion14)} hasn't been created ");
         }
         [TestMethod]
-        [TestCategory("UnitTest")]
+        [TestCategory("IntegrationTest")]
         public void Mapper_Build_Test_V15_Should_Succeed()
         {
             MapperBuildTask mapper = new MapperBuildTask

@@ -3,7 +3,7 @@ using BridgeVs.Build.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model.UnitTest;
 
-namespace BridgeVs.Build.UnitTest
+namespace BridgeVs.Build.IntegrationTest
 {
     [TestClass]
     public class SInjectionBuildTest

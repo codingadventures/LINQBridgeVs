@@ -7,7 +7,7 @@ using BridgeVs.DynamicVisualizer.V11;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mono.Cecil;
 
-namespace BridgeVs.Build.UnitTest
+namespace BridgeVs.Build.IntegrationTest
 {
     [TestClass]
     public class VisualizerAttributeInjectorTest
@@ -23,7 +23,7 @@ namespace BridgeVs.Build.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("UnitTest")]
+        [TestCategory("IntegrationTest")]
         public void Visualizer_MapType_Should_Create_DegguberVisualizerAttribute_OfType_This_In_Target_Assembly()
         {
             string debuggerVisualizerTargetName = Path.Combine(_thisAssemblyDirectoryName, "TestA.dll");
@@ -43,7 +43,7 @@ namespace BridgeVs.Build.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("UnitTest")]
+        [TestCategory("IntegrationTest")]
         public void Visualizer_MapType_Should_Create_DegguberVisualizerAttribute_OfType_IList_In_Target_Assembly()
         {
             string debuggerVisualizerTargetName = Path.Combine(_thisAssemblyDirectoryName, "TestB.dll");
@@ -64,7 +64,7 @@ namespace BridgeVs.Build.UnitTest
 
 
         [TestMethod]
-        [TestCategory("UnitTest")]
+        [TestCategory("IntegrationTest")]
         public void Visualizer_MapTypeFromAssembly_Should_Map_All_Types()
         {
             string debuggerVisualizerTargetName = Path.Combine(_thisAssemblyDirectoryName, "TestC.dll");
