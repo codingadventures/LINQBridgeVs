@@ -13,8 +13,7 @@ It is a bridge between a Visual Studio debugging session and [LINQPad](http://ww
 When enabled on a solution containing C#, VB, ASP.NET or MVC projects, it creates at compile time a Custom Debugger Visualizer assembly
 mapping to all the public complex types and making the magnifier glass available for all of them. By clicking on the magnifier glass on an object instance, this will be transmitted over a
 bus and 'Dumped' out by LINQPad.
-
-
+<br><br>
 ## Getting Started
 
 Once the extension is installed a new menu will be available in the Visual Studio Menu Bar, only visible
@@ -31,15 +30,18 @@ If the folder does not contain any assembly then please check the log files here
 
 Do not keep two instances of two different version of LINQPad running (e.g. LINQPad 4 and LINQPad 5) at the same time. If you do so, the data will be automatically sent to the lower version of LINQPad. 
 <br><br>
-![Example]
+<p align="center">
+    <img src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/Example.gif?raw=true" width="1000" />
+</p>
 
 ## Configuration
 
 Unfortunately an installer is not available yet, therefore Visual Studio needs to be configured in order to run the extension. This is done only once by the extension itself. 
 Only for the first time, Visual Studio must be run with Administrator privileges, if not a form will appear asking to restart Visual Studio: 
 <br><br>
-
-<img src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/VsRestart.PNG?raw=true" width="700">
+<p align="center">
+    <img src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/VsRestart.PNG?raw=true" width="700" />
+</p>
 
 Once Visual Studio is restarted as Administrator, the configuration will complete and the form will never appear again. 
 
@@ -71,7 +73,9 @@ This extension uses custom build Targets in order to avoid the modification of e
 
 When a solution is *Bridged*, every projects in it is essentially flagged. Configuration values are stored in the Windows Registry at this location ***\HKEY_CURRENT_USER\Software\LINQBridgeVs***
 
-![registry]{.classname}
+<p align="center">
+    <img src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/Registry.PNG?raw=true" width="700" />
+</p>
 
  For each flagged project the custom tasks that extend the MsBuild engine mentioned earlier, perform some operation on the corresponding generated assembly. These tasks are: 
 
@@ -149,6 +153,3 @@ I have used several community open source projects to make this extension. So if
 * [ILMerge](https://github.com/Microsoft/ILMerge) is a utility that merges multiple .NET assemblies into a single assembly.
 
 [logo]: https://raw.github.com/codingadventures/LINQBridgeVs/master/Src/VsExtension/LINQBridgeLogo.png "LINQBridge"
-[vsrestartimage]:
-[Example]:https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/Example.gif?raw=true
-[registry]:https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/Registry.PNG?raw=true
