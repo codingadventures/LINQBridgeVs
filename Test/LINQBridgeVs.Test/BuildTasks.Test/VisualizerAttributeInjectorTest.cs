@@ -39,7 +39,7 @@ namespace BridgeVs.Build.UnitTest
                     p.Properties.Where(n => n.Name.Equals("TargetTypeName"))
                     .Select(l => l.Argument.Value));
 
-            Assert.IsTrue(mappedTypeNames.Contains(GetType().AssemblyQualifiedName), "Mapping was not succesful");
+            Assert.IsTrue(mappedTypeNames.Contains(GetType().AssemblyQualifiedName), "Mapping was not successful");
         }
 
         [TestMethod]
@@ -59,7 +59,7 @@ namespace BridgeVs.Build.UnitTest
                     p.Properties.Where(n => n.Name.Equals("TargetTypeName"))
                     .Select(l => l.Argument.Value));
 
-            Assert.IsTrue(mappedTypeNames.Contains(typeof(IList<>).AssemblyQualifiedName), "Mapping was not succesful");
+            Assert.IsTrue(mappedTypeNames.Contains(typeof(IList<>).AssemblyQualifiedName), "Mapping was not successful");
         }
 
 
