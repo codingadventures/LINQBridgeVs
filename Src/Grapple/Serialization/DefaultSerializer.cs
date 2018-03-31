@@ -75,7 +75,7 @@ namespace BridgeVs.Grapple.Serialization
             byte[] retValue;
             try
             {
-                using (var stream = new MemoryStream())
+                using (MemoryStream stream = new MemoryStream())
                 {
                     _formatter.Serialize(stream, objToSerialize);
                     retValue = new byte[stream.Length];
@@ -121,7 +121,7 @@ namespace BridgeVs.Grapple.Serialization
             T retValue;
             try
             {
-                using (var stream = new MemoryStream(objToDeserialize))
+                using (MemoryStream stream = new MemoryStream(objToDeserialize))
                 {
                     retValue = (T)_formatter.Deserialize(stream);
                 }
@@ -146,7 +146,7 @@ namespace BridgeVs.Grapple.Serialization
             object @object;
             try
             {
-                using (var stream = new MemoryStream(objToDeserialize))
+                using (MemoryStream stream = new MemoryStream(objToDeserialize))
                 {
                     @object = _formatter.Deserialize(stream);
                 }

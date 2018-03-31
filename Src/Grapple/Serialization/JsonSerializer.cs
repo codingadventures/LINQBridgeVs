@@ -47,7 +47,7 @@ namespace BridgeVs.Grapple.Serialization
 
         public override void Serialize<T>(Stream aStream, T objToSerialize)
         {
-            using (var sw = new BsonWriter(aStream))
+            using (BsonWriter sw = new BsonWriter(aStream))
             {
                 _jsonSerializer.Serialize(sw, objToSerialize);
             }
@@ -55,8 +55,8 @@ namespace BridgeVs.Grapple.Serialization
 
         public override byte[] Serialize<T>(T objToSerialize)
         {
-            using (var stream = new MemoryStream())
-            using (var sw = new BsonWriter(stream))
+            using (MemoryStream stream = new MemoryStream())
+            using (BsonWriter sw = new BsonWriter(stream))
             {
                 _jsonSerializer.Serialize(sw, objToSerialize);
                 return stream.ToArray();
@@ -65,7 +65,7 @@ namespace BridgeVs.Grapple.Serialization
 
         public override T Deserialize<T>(Stream aStream)
         {
-            using (var reader = new BsonReader(aStream))
+            using (BsonReader reader = new BsonReader(aStream))
             {
                 return _jsonSerializer.Deserialize<T>(reader);
             }
@@ -73,8 +73,8 @@ namespace BridgeVs.Grapple.Serialization
 
         public override T Deserialize<T>(byte[] objToDeserialize)
         {
-            using (var stream = new MemoryStream(objToDeserialize))
-            using (var br = new BsonReader(stream))
+            using (MemoryStream stream = new MemoryStream(objToDeserialize))
+            using (BsonReader br = new BsonReader(stream))
             {
                 br.ReadRootValueAsArray = IsCollectionType(typeof (T));
                 return _jsonSerializer.Deserialize<T>(br);
@@ -85,8 +85,8 @@ namespace BridgeVs.Grapple.Serialization
         public override object Deserialize(byte[] objToDeserialize, Type type = null)
         {
 
-            using (var stream = new MemoryStream(objToDeserialize))
-            using (var sw = new BsonReader(stream))
+            using (MemoryStream stream = new MemoryStream(objToDeserialize))
+            using (BsonReader sw = new BsonReader(stream))
             {
                 return @type != null ? _jsonSerializer.Deserialize(sw, type) : _jsonSerializer.Deserialize(sw);
             }

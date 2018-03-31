@@ -6,8 +6,8 @@
     <ProjectGuid>{FF6A46A1-7FB5-4649-9465-1E0B6EA074ED}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Grapple.UnitTest</RootNamespace>
-    <AssemblyName>Grapple.UnitTest</AssemblyName>
+    <RootNamespace>BridgeVs.Grapple.UnitTest</RootNamespace>
+    <AssemblyName>BridgeVs.Grapple.UnitTest</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -29,7 +29,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Test|AnyCPU' ">
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-	<DebugSymbols>true</DebugSymbols>
+    <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Test\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -64,9 +64,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bridge.Grapple\Grapple.csproj">
+    <ProjectReference Include="..\..\Src\Grapple\BridgeVs.Grapple.csproj">
       <Project>{79c0c9ed-d22c-4855-97c1-f6bd0127a531}</Project>
-      <Name>Grapple</Name>
+      <Name>BridgeVs.Grapple</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

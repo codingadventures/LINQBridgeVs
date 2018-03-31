@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 Giovanni Campo
+// Copyright (c) 2013 - 2018 Coding Adventures
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -31,37 +31,31 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Grapple.UnitTest
+namespace BridgeVs.Grapple.UnitTest
 {
-
     [TestClass]
     public class PerformanceTest
     {
-
         private static readonly ConcurrentBag<BinaryTestModel> BinaryTestModels = new ConcurrentBag<BinaryTestModel>( );
         private static readonly ConcurrentBag<BsonTestModel> BsonTestModels = new ConcurrentBag<BsonTestModel>( );
-        private static readonly object O = new object();
         [ClassInitialize]
         public static void Init(TestContext ctx)
         {
 
-            var upper = Math.Pow(10, 3);
+            double upper = Math.Pow(10, 3);
             const int i = 0;
             Parallel.For(i, (int)upper, index => BinaryTestModels.Add(new BinaryTestModel()));
             Parallel.For(i, (int)upper, index => BsonTestModels.Add(new BsonTestModel()));
-
-            
-
         }
 
         [TestMethod]
         public void BinaryStressTest()
         {
-            var b = new Truck("MAN");
+            Truck b = new Truck("MAN");
 
-            var upper = Math.Pow(10, 3);
+            double upper = Math.Pow(10, 3);
 
-            var sw = new Stopwatch();
+            Stopwatch sw = new Stopwatch();
 
             sw.Start();
              
@@ -69,7 +63,7 @@ namespace Grapple.UnitTest
             
             sw.Stop();
 
-            var secondElapsedToAdd = sw.ElapsedMilliseconds;
+            long secondElapsedToAdd = sw.ElapsedMilliseconds;
 
             Trace.WriteLine(string.Format("Put on the Channel {1} items. Time Elapsed: {0}", secondElapsedToAdd, upper));
             sw.Reset();
@@ -78,26 +72,25 @@ namespace Grapple.UnitTest
             b.DeliverTo("Dad");
             sw.Stop();
 
-            var secondElapsedToBroadcast = sw.ElapsedMilliseconds ;
+            long secondElapsedToBroadcast = sw.ElapsedMilliseconds ;
 
             Trace.WriteLine(string.Format("Broadcast on the Channel {1} items. Time Elapsed: {0}", secondElapsedToBroadcast, upper));
 
-            var elem = b.UnStuffCargo<List<BinaryTestModel>>().First();
+            List<BinaryTestModel> elem = b.UnLoadCargo<List<BinaryTestModel>>().First();
 
             Assert.AreEqual(elem.Count(), 1000, "Not every elements have been broadcasted");
             Assert.IsTrue(secondElapsedToAdd < 5000, "Add took more than 5 second. Review the logic, performance must be 10000 elems in less than 5 sec");
             Assert.IsTrue(secondElapsedToBroadcast < 3000, "Broadcast took more than 3 second. Review the logic, performance must be 10000 elems in less than 5 sec");
-
         }
         
         [TestMethod]
         public void BsonStressTest()
         {
-            var b = new Truck("MAN");
+            Truck b = new Truck("MAN");
 
-            var upper = Math.Pow(10, 3);
+            double upper = Math.Pow(10, 3);
 
-            var sw = new Stopwatch();
+            Stopwatch sw = new Stopwatch();
 
             sw.Start();
              
@@ -105,7 +98,7 @@ namespace Grapple.UnitTest
             
             sw.Stop();
 
-            var secondElapsedToAdd = sw.ElapsedMilliseconds ;
+            long secondElapsedToAdd = sw.ElapsedMilliseconds ;
 
             Trace.WriteLine(string.Format("Put on the Channel {1} items. Time Elapsed: {0}", secondElapsedToAdd, upper));
             sw.Reset();
@@ -114,17 +107,16 @@ namespace Grapple.UnitTest
             b.DeliverTo("Mom");
             sw.Stop();
 
-            var secondElapsedToBroadcast = sw.ElapsedMilliseconds;
+            long secondElapsedToBroadcast = sw.ElapsedMilliseconds;
 
             Trace.WriteLine(string.Format("Broadcast on the Channel {1} items. Time Elapsed: {0}", secondElapsedToBroadcast, upper));
             b.WaitDelivery("Mom").Wait();
 
-            var elem = b.UnStuffCargo<List<BsonTestModel>>().First();
+            var elem = b.UnLoadCargo<List<BsonTestModel>>().First();
 
             Assert.AreEqual(elem.Count(), 1000, "Not every elements have been broadcasted");
             Assert.IsTrue(secondElapsedToAdd < 5000, "Add took more than 5 second. Review the logic, performance must be 10000 elems in less than 5 sec");
             Assert.IsTrue(secondElapsedToBroadcast < 3000, "Broadcast took more than 3 second. Review the logic, performance must be 10000 elems in less than 5 sec");
-
         }
     }
 }

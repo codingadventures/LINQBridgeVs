@@ -38,12 +38,12 @@ namespace BridgeVs.Grapple.Extensions
         public static T MergeLeft<T, TK, TV>(this T me, params IDictionary<TK, TV>[] others)
             where T : IDictionary<TK, TV>, new()
         {
-            var newMap = new T();
-            var dictionaryList = (new List<IDictionary<TK, TV>> {me})
+            T newMap = new T();
+            IEnumerable<KeyValuePair<TK, TV>> dictionaryList = (new List<IDictionary<TK, TV>> {me})
                 .Concat(others)
                 .SelectMany(src => src);
 
-            foreach (var p in dictionaryList)
+            foreach (KeyValuePair<TK, TV> p in dictionaryList)
                 newMap[p.Key] = p.Value;
 
             return newMap;

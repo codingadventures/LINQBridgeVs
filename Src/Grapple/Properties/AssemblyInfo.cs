@@ -34,4 +34,4 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("2018.1.*")]
 [assembly: AssemblyFileVersion("2018.01")]
-[assembly: InternalsVisibleTo(assemblyName: "Grapple.UnitTest")]
+[assembly: InternalsVisibleTo("BridgeVs.Grapple.UnitTest")]

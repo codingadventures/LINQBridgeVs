@@ -39,19 +39,19 @@ namespace BridgeVs.SInject.Reflection
                 return methodDef;
             }
 
-            var methodRef = new MethodReference(methodDef.Name, methodDef.ReturnType, declaringTypeRef)
+            MethodReference methodRef = new MethodReference(methodDef.Name, methodDef.ReturnType, declaringTypeRef)
             {
                 CallingConvention = methodDef.CallingConvention,
                 HasThis = methodDef.HasThis,
                 ExplicitThis = methodDef.ExplicitThis
             };
 
-            foreach (var paramDef in methodDef.Parameters)
+            foreach (ParameterDefinition paramDef in methodDef.Parameters)
             {
                 methodRef.Parameters.Add(new ParameterDefinition(paramDef.Name, paramDef.Attributes, declaringTypeRef.Module.Import(paramDef.ParameterType)));
             }
 
-            foreach (var genParamDef in methodDef.GenericParameters)
+            foreach (GenericParameter genParamDef in methodDef.GenericParameters)
             {
                 methodRef.GenericParameters.Add(new GenericParameter(genParamDef.Name, methodRef));
             }
@@ -76,7 +76,7 @@ namespace BridgeVs.SInject.Reflection
 
         public static FieldReference ReferenceField(this TypeReference typeRef, Func<FieldDefinition, bool> fieldSelector)
         {
-            var fieldDef = typeRef.Resolve().Fields.FirstOrDefault(fieldSelector);
+            FieldDefinition fieldDef = typeRef.Resolve().Fields.FirstOrDefault(fieldSelector);
             if (!typeRef.IsGenericInstance || fieldDef == null)
             {
                 return fieldDef;
@@ -92,7 +92,7 @@ namespace BridgeVs.SInject.Reflection
 
         private static MethodReference ReferencePropertyGetter(this TypeReference typeRef, Func<PropertyDefinition, bool> propertySelector)
         {
-            var propDef = typeRef.Resolve().Properties.FirstOrDefault(propertySelector);
+            PropertyDefinition propDef = typeRef.Resolve().Properties.FirstOrDefault(propertySelector);
             if (propDef == null || propDef.GetMethod == null)
             {
                 return null;
@@ -108,7 +108,7 @@ namespace BridgeVs.SInject.Reflection
 
         private static MethodReference ReferencePropertySetter(this TypeReference typeRef, Func<PropertyDefinition, bool> propertySelector)
         {
-            var propDef = typeRef.Resolve().Properties.FirstOrDefault(propertySelector);
+            PropertyDefinition propDef = typeRef.Resolve().Properties.FirstOrDefault(propertySelector);
             if (propDef == null || propDef.SetMethod == null)
             {
                 return null;

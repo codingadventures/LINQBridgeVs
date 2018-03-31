@@ -103,12 +103,16 @@ namespace BridgeVs.Extension.Package
             OleMenuCommand menuItemDisable = new OleMenuCommand((s, e) => bridge.Execute(CommandAction.Disable), disableCommand);
             menuItemDisable.BeforeQueryStatus += (s, e) => bridge.UpdateCommand(menuItemDisable, CommandAction.Disable);
 
-            CommandID aboutCommand = new CommandID(GuidList.GuidBridgeVsExtensionCmdSet, (int)PkgCmdIdList.CmdIdAbout);
-            OleMenuCommand menuItemAbout = new OleMenuCommand((s, e) => { About about = new About(); about.ShowDialog(); }, aboutCommand);
+            CommandID gettingStarted = new CommandID(GuidList.GuidBridgeVsExtensionCmdSet, (int)PkgCmdIdList.CmdIdGettingStarted);
+            OleMenuCommand menuItemGettingStarted = new OleMenuCommand((s, e) => System.Diagnostics.Process.Start("https://github.com/codingadventures/LINQBridgeVs#getting-started"), gettingStarted);
+
+            CommandID sendFeedback = new CommandID(GuidList.GuidBridgeVsExtensionCmdSet, (int)PkgCmdIdList.CmdIdFeedback);
+            OleMenuCommand menuItemSendFeedback = new OleMenuCommand((s, e) => System.Diagnostics.Process.Start("https://github.com/codingadventures/LINQBridgeVs/issues"), sendFeedback);
 
             mcs.AddCommand(menuItemEnable);
             mcs.AddCommand(menuItemDisable);
-            mcs.AddCommand(menuItemAbout);
+            mcs.AddCommand(menuItemGettingStarted);
+            mcs.AddCommand(menuItemSendFeedback);
 
             try
             {
@@ -131,10 +135,9 @@ namespace BridgeVs.Extension.Package
                 }
                 else
                 {
-                    if (!PackageConfigurator.Install(_dte.Version, _dte.Edition))
-                    {
-                        MessageBox.Show("LINQBridgeVs wasn't successfully configured. Please restart Visual Studio");
-                    }
+                    MessageBox.Show(!PackageConfigurator.Install(_dte.Version, _dte.Edition)
+                        ? "LINQBridgeVs wasn't successfully configured. Please restart Visual Studio"
+                        : "LINQBridgeVs has been successfully configured.");
                 }
             }
             catch (Exception e)
@@ -148,7 +151,6 @@ namespace BridgeVs.Extension.Package
         {
             _welcomePage?.Show();
         }
-
         #endregion
     }
 }

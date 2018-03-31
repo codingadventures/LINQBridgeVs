@@ -81,9 +81,9 @@ namespace BridgeVs.Grapple
         public void LoadCargo<T>(T item)
         {
             Log.Write("Loading Cargo");
-            var serializedType = _grapple.Grab(item);
+            Tuple<Type, byte[]> serializedType = _grapple.Grab(item);
 
-            var typeCodeName = serializedType.Item1;
+            Type typeCodeName = serializedType.Item1;
             //If the type is already in and the same object has not been already added then add to the internal map
             if (!_container.ContainsKey(typeCodeName))
                 _container.Add(typeCodeName, new List<byte[]> { serializedType.Item2 });
@@ -104,9 +104,9 @@ namespace BridgeVs.Grapple
 
             try
             {
-                var buffer = _grapple.Grab(_container);
+                Tuple<Type, byte[]> buffer = _grapple.Grab(_container);
 
-                using (var ipcMappedFile = MemoryMappedFile.CreateFromFile(
+                using (MemoryMappedFile ipcMappedFile = MemoryMappedFile.CreateFromFile(
                     new FileStream(Path.Combine(TruckPosition, address), FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite)
                     , _truckName + address
                     , buffer.Item2.Length
@@ -115,7 +115,7 @@ namespace BridgeVs.Grapple
                     , HandleInheritability.Inheritable
                     , false))
                 {
-                    using (var stream = ipcMappedFile.CreateViewStream(0, 0, MemoryMappedFileAccess.ReadWrite))
+                    using (MemoryMappedViewStream stream = ipcMappedFile.CreateViewStream(0, 0, MemoryMappedFileAccess.ReadWrite))
                     {
                         stream.Write(buffer.Item2, 0, buffer.Item2.Length);
                     }
@@ -140,7 +140,7 @@ namespace BridgeVs.Grapple
         {
             Log.Write("UnLoading Cargo of Type {0}", typeof(T).FullName);
 
-            var typeCodeName = typeof(T);
+            Type typeCodeName = typeof(T);
             return (from i in _container.Keys
                     where typeCodeName.IsAssignableFrom(i)
                     let objects = _container[i]
@@ -197,7 +197,7 @@ namespace BridgeVs.Grapple
 
             try
             {
-                var buffer = InternalCollect(address);
+                byte[] buffer = InternalCollect(address);
 
                 if (buffer.Length == 0)
                 {
@@ -220,14 +220,14 @@ namespace BridgeVs.Grapple
 
         private byte[] InternalCollect(string address)
         {
-            var filePath = Path.Combine(TruckPosition, address);
+            string filePath = Path.Combine(TruckPosition, address);
             if (!File.Exists(filePath)) return new byte[0];
 
-            using (var ipcMappedFile = MemoryMappedFile.CreateFromFile(filePath, FileMode.Open))
+            using (MemoryMappedFile ipcMappedFile = MemoryMappedFile.CreateFromFile(filePath, FileMode.Open))
             {
-                using (var stream = ipcMappedFile.CreateViewStream(0, 0, MemoryMappedFileAccess.ReadWrite))
+                using (MemoryMappedViewStream stream = ipcMappedFile.CreateViewStream(0, 0, MemoryMappedFileAccess.ReadWrite))
                 {
-                    var @byte = new byte[stream.Length];
+                    byte[] @byte = new byte[stream.Length];
                     stream.Read(@byte, 0, (int)stream.Length);
                     return @byte;
                 }
@@ -240,9 +240,9 @@ namespace BridgeVs.Grapple
 
             if (Directory.Exists(address)) return;
 
-            var sec = new DirectorySecurity();
+            DirectorySecurity sec = new DirectorySecurity();
             // Using this instead of the "Everyone" string means we work on non-English systems.
-            var everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+            SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
             sec.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
             Directory.CreateDirectory(address, sec);
 

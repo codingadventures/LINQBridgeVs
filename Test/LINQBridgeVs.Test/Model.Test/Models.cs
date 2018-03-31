@@ -10,10 +10,12 @@ namespace Model.UnitTest
         public string SField1;
         public int IntField2;
         public List<AnotherModelTest> AnotherModelList;
+        public IEnumerable<string> AnotherEnumerable;
 
         public CustomType1()
         {
             AnotherModelList = new List<AnotherModelTest> { new AnotherModelTest() };
+            AnotherEnumerable = new List<string> {"String1", "String2"};
         }
     }
 

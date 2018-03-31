@@ -47,9 +47,9 @@ namespace BridgeVs.SInject.Reflection
         /// <param name="this">The TypeDefinition.</param>
         public static void AddDefaultConstructor(this TypeDefinition @this)
         {
-            var baseType = @this.BaseType;
+            TypeReference baseType = @this.BaseType;
 
-            var isDefaultConstructorToBeAdded =
+            bool isDefaultConstructorToBeAdded =
                @this
                .BaseType
                .Resolve()
@@ -61,14 +61,14 @@ namespace BridgeVs.SInject.Reflection
 
             if (@this.Module == null) return;
 
-            var findCtor = new Func<MethodDefinition, bool>(definition =>
+            Func<MethodDefinition, bool> findCtor = new Func<MethodDefinition, bool>(definition =>
                                                            definition.Name.Equals(".ctor") &&
                                                            definition.Parameters.Count == 2 &&
                                                            definition.Parameters.Any(
                                                                par =>
                                                                par.Name.Equals("info") || par.Name.Equals("context")));
 
-            var isDefaultConstructorAlreadyDefined = @this.Methods.Any(findCtor);
+            bool isDefaultConstructorAlreadyDefined = @this.Methods.Any(findCtor);
 
             if (isDefaultConstructorAlreadyDefined) return;
 
@@ -76,17 +76,17 @@ namespace BridgeVs.SInject.Reflection
                 MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName |
                 MethodAttributes.RTSpecialName;
 
-            var serializableContructor = baseType.ReferenceMethod(findCtor);
+            MethodReference serializableContructor = baseType.ReferenceMethod(findCtor);
 
             if (serializableContructor==null) return;
 
-            var serializationInfo = @this.Module.Import(serializableContructor.Parameters[0].ParameterType);
+            TypeReference serializationInfo = @this.Module.Import(serializableContructor.Parameters[0].ParameterType);
 
-            var streamingContext = @this.Module.Import(serializableContructor.Parameters[1].ParameterType);
+            TypeReference streamingContext = @this.Module.Import(serializableContructor.Parameters[1].ParameterType);
 
-            var serializationConstr = new MethodDefinition(".ctor", methodAttributes, @this.Module.TypeSystem.Void);
-            var par1 = new ParameterDefinition(serializableContructor.Parameters[0].Name, serializableContructor.Parameters[0].Attributes, serializationInfo);
-            var par2 = new ParameterDefinition(serializableContructor.Parameters[1].Name, serializableContructor.Parameters[1].Attributes, streamingContext);
+            MethodDefinition serializationConstr = new MethodDefinition(".ctor", methodAttributes, @this.Module.TypeSystem.Void);
+            ParameterDefinition par1 = new ParameterDefinition(serializableContructor.Parameters[0].Name, serializableContructor.Parameters[0].Attributes, serializationInfo);
+            ParameterDefinition par2 = new ParameterDefinition(serializableContructor.Parameters[1].Name, serializableContructor.Parameters[1].Attributes, streamingContext);
 
             serializationConstr.Parameters.Add(par1);
             serializationConstr.Parameters.Add(par2);
@@ -124,7 +124,7 @@ namespace BridgeVs.SInject.Reflection
                 throw new ArgumentException($"Enumeration type mismatch.  The flag is of type '{value.GetType()}', was expecting '{variable.GetType()}'.");
             }
 
-            var num = Convert.ToUInt64(value);
+            ulong num = Convert.ToUInt64(value);
             return ((Convert.ToUInt64(variable) & num) == num);
         }
     }

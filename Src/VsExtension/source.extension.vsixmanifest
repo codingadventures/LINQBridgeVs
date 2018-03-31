@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="LINQBridgeVS.Coding Adventures.93d93bed-e4dc-42a8-bfe2-a0b7676a45b2" Version="1.4.2" Language="en-US" Publisher="Coding Adventures" />
-        <DisplayName>LINQBridgeVs Debugger Visualizer</DisplayName>
+        <Identity Id="BridgeVS.Coding Adventures.93d93bed-e4dc-42a8-bfe2-a0b7676a45b2" Version="1.4.3" Language="en-US" Publisher="Coding Adventures" />
+        <DisplayName>BridgeVs Debugger Visualizer</DisplayName>
         <Description xml:space="preserve">Bridge between a Visual Studio debugging session and LINQPad (http://www.linqpad.net). When enabled on a selection of VB/C# projects, it creates a Custom Debugger Visualizer mapping to all the complex types and making the magnifier glass available for all of them.</Description>
         <MoreInfo>https://github.com/codingadventures/LINQBridgeVs#getting-started</MoreInfo>
         <License>License.txt</License>

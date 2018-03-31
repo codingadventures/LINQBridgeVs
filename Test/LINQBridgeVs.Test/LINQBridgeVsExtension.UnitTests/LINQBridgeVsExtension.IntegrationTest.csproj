@@ -168,11 +168,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Key.snk" />
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
+   <ItemGroup>
     <ProjectReference Include="..\..\..\Src\VsExtension\BridgeVs.Extension.csproj">
       <Project>{1b82f962-5d04-42b6-8d18-7aa8e8fb615f}</Project>
       <Name>BridgeVs.Extension</Name>

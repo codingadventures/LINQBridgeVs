@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 Giovanni Campo
+// Copyright (c) 2013 - 2018 Coding Adventures
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -27,7 +27,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Grapple.UnitTest
+namespace BridgeVs.Grapple.UnitTest
 {
     [TestClass]
     public class MultipleTypeTest
@@ -37,15 +37,15 @@ namespace Grapple.UnitTest
         [TestInitialize]
         public void Init()
         {
-            var bus = new Truck("GlobeTrotter");
+            Truck bus = new Truck("GlobeTrotter");
 
-            var intList = new List<int> { 123, 12, 312, 312, 3 };
+            List<int> intList = new List<int> { 123, 12, 312, 312, 3 };
             bus.LoadCargo(intList);
 
-            var stringList = new List<string> { "asdasd", "asdasd123123" };
+            List<string> stringList = new List<string> { "asdasd", "asdasd123123" };
             bus.LoadCargo(stringList);
 
-            var linkedList = new LinkedList<string>();
+            LinkedList<string> linkedList = new LinkedList<string>();
             linkedList.AddFirst(new LinkedListNode<string>("Hello"));
             linkedList.AddLast(new LinkedListNode<string>("World!"));
             bus.LoadCargo(linkedList);
@@ -59,10 +59,10 @@ namespace Grapple.UnitTest
         {
             
 
-            var bus = new Truck("GlobeTrotter");
+            Truck bus = new Truck("GlobeTrotter");
             bus.WaitDelivery("Mom").Wait() ;
 
-            var ret = bus.UnStuffCargo<List<string>>().First();
+            List<string> ret = bus.UnLoadCargo<List<string>>().First();
             Assert.IsNotNull(ret);
             Assert.IsTrue(ret.Count == 2);
         }
@@ -70,10 +70,10 @@ namespace Grapple.UnitTest
         [TestMethod]
         public void Verify_List_Int_Is_Not_Null_And_Has_5_Elements()
         {
-            var bus = new Truck("GlobeTrotter");
+            Truck bus = new Truck("GlobeTrotter");
             bus.WaitDelivery("Mom").Wait();
 
-            var ret = bus.UnStuffCargo<List<int>>().First();
+            List<int> ret = bus.UnLoadCargo<List<int>>().First();
             Assert.IsNotNull(ret);
             Assert.IsTrue(ret.Count == 5);
 
@@ -83,9 +83,9 @@ namespace Grapple.UnitTest
         [TestMethod]
         public void Verify_LinekdList_String_Is_Not_Null_And_Has_2_Elements()
         {
-            var bus = new Truck("GlobeTrotter");
+            Truck bus = new Truck("GlobeTrotter");
             bus.WaitDelivery("Mom").Wait();
-            var ret = bus.UnStuffCargo<LinkedList<string>>().First();
+            LinkedList<string> ret = bus.UnLoadCargo<LinkedList<string>>().First();
             Assert.IsNotNull(ret);
             Assert.IsTrue(ret.Count == 2);
         }

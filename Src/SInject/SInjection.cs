@@ -84,12 +84,7 @@ namespace BridgeVs.SInject
 
         private const string Marker = "SInjected";
         private readonly string _snkCertificatePath;
-        //private static readonly List<string> ExcludedAssemblies = new List<string>
-        //{
-        //    "Moq.dll",
-        //    "Newtonsoft.dll",
-        //};
-
+  
         /// <summary>
         /// 
         /// </summary>
@@ -97,8 +92,8 @@ namespace BridgeVs.SInject
         {
             get
             {
-                var assembly = Assembly.GetExecutingAssembly();
-                var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+                Assembly assembly = Assembly.GetExecutingAssembly();
+                FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
                 return fvi.FileVersion;
             }
         }
@@ -113,14 +108,9 @@ namespace BridgeVs.SInject
                 return _snkFileExists.Value;
             }
         }
+ 
+        private string PdbName => Path.ChangeExtension(_assemblyLocation, "pdb");
 
-        private string PdbName
-        {
-            get
-            {
-                return Path.ChangeExtension(_assemblyLocation, "pdb");
-            }
-        }
         #endregion
 
         #region [ Constructor ]
@@ -143,10 +133,9 @@ namespace BridgeVs.SInject
             //  if (IsAssemblyInExcludedList(Path.GetFileName(assemblyLocation))) return;
 
             if (!File.Exists(assemblyLocation))
-                throw new Exception(string.Format("Assembly at location {0} doesn't exist", assemblyLocation));
+                throw new Exception($"Assembly at location {assemblyLocation} doesn't exist");
 
-            _assemblyDefinition = AssemblyDefinition.ReadAssembly(assemblyLocation,
-                                                                  GetReaderParameters());
+            _assemblyDefinition = AssemblyDefinition.ReadAssembly(assemblyLocation, GetReaderParameters());
         }
         #endregion
 
@@ -159,12 +148,6 @@ namespace BridgeVs.SInject
         /// <exception cref="System.Exception"></exception>
         public void Patch(SerializationTypes types)
         {
-            //if (IsAssemblyInExcludedList(Path.GetFileName(_assemblyLocation)))
-            //{
-            //    Log.Write("Assembly excluded");
-            //    return;
-            //}
-
             if (CheckIfAlreadySinjected())
             {
                 Log.Write("Assembly already Sinjected");
@@ -172,7 +155,7 @@ namespace BridgeVs.SInject
                 return;
             }
 
-            var typeToInjects = GetTypesToInject().ToList();
+            List<TypeDefinition> typeToInjects = GetTypesToInject().ToList();
 
             InjectSerialization(typeToInjects);
 
@@ -184,12 +167,6 @@ namespace BridgeVs.SInject
 
             Log.Write("Assembly {0} has been correctly Injected", _assemblyDefinition.FullName);
         }
-
-        //private static bool IsAssemblyInExcludedList(string assemblyName)
-        //{
-        //    return false;
-        //}
-
 
         /// <summary>
         /// Gets the serializable types in the current assembly.
@@ -205,9 +182,6 @@ namespace BridgeVs.SInject
                .Select(definition => definition.FullName);
         }
 
-
-
-
         #endregion
 
         #region [ Private Methods ]
@@ -217,7 +191,7 @@ namespace BridgeVs.SInject
             if (typeToInjects.Count == 0)
                 return;
 
-            foreach (var typeInAssembly in typeToInjects)
+            foreach (TypeDefinition typeInAssembly in typeToInjects)
             {
                 try
                 {
@@ -230,13 +204,10 @@ namespace BridgeVs.SInject
                     //This disable the serialization of non serializable property belonging to Microsoft framework
                     //it acts directly on the backing field of the prop marking it as NonSerialized.
                     SetNonSerializedFields(typeInAssembly);
-
-                    //  if (types.HasFlag(SerializationTypes.DataContractSerialization))
-                    //TODO: Inject DataMemberAttribute
                 }
                 catch (Exception e)
                 {
-                    Log.Write(e, string.Format("Type {0} wasn't marked as Serializable", typeInAssembly.FullName));
+                    Log.Write(e, $"Type {typeInAssembly.FullName} wasn't marked as Serializable");
                 }
             }
         }
@@ -266,16 +237,16 @@ namespace BridgeVs.SInject
         {
             try
             {
-                var stringType = _assemblyDefinition.MainModule.TypeSystem.String;
-                var corlib = (AssemblyNameReference)_assemblyDefinition.MainModule.TypeSystem.Corlib;
-                var system = _assemblyDefinition.MainModule.AssemblyResolver.Resolve(new AssemblyNameReference("System", corlib.Version)
+                TypeReference stringType = _assemblyDefinition.MainModule.TypeSystem.String;
+                AssemblyNameReference corlib = (AssemblyNameReference)_assemblyDefinition.MainModule.TypeSystem.Corlib;
+                AssemblyDefinition system = _assemblyDefinition.MainModule.AssemblyResolver.Resolve(new AssemblyNameReference("System", corlib.Version)
                 {
                     PublicKeyToken = corlib.PublicKeyToken,
                 });
-                var generatedCodeAttribute = system.MainModule.GetType("System.CodeDom.Compiler.GeneratedCodeAttribute");
-                var generatedCodeCtor = generatedCodeAttribute.Methods.First(m => m.IsConstructor && m.Parameters.Count == 2);
+                TypeDefinition generatedCodeAttribute = system.MainModule.GetType("System.CodeDom.Compiler.GeneratedCodeAttribute");
+                MethodDefinition generatedCodeCtor = generatedCodeAttribute.Methods.First(m => m.IsConstructor && m.Parameters.Count == 2);
 
-                var result = new CustomAttribute(_assemblyDefinition.MainModule.Import(generatedCodeCtor));
+                CustomAttribute result = new CustomAttribute(_assemblyDefinition.MainModule.Import(generatedCodeCtor));
                 result.ConstructorArguments.Add(new CustomAttributeArgument(stringType, Marker));
                 result.ConstructorArguments.Add(new CustomAttributeArgument(stringType, SInjectVersion));
 
@@ -304,15 +275,15 @@ namespace BridgeVs.SInject
 
         private ReaderParameters GetReaderParameters()
         {
-            var assemblyResolver = new DefaultAssemblyResolver();
-            var assemblyLocation = Path.GetDirectoryName(_assemblyLocation);
+            DefaultAssemblyResolver assemblyResolver = new DefaultAssemblyResolver();
+            string assemblyLocation = Path.GetDirectoryName(_assemblyLocation);
             assemblyResolver.AddSearchDirectory(assemblyLocation);
 
-            var readerParameters = new ReaderParameters { AssemblyResolver = assemblyResolver };
+            ReaderParameters readerParameters = new ReaderParameters { AssemblyResolver = assemblyResolver };
 
             if (!File.Exists(PdbName)) return readerParameters;
 
-            var symbolReaderProvider = new PdbReaderProvider();
+            PdbReaderProvider symbolReaderProvider = new PdbReaderProvider();
             readerParameters.SymbolReaderProvider = symbolReaderProvider;
             readerParameters.ReadSymbols = _mode == PatchMode.Debug;
             readerParameters.ReadingMode = ReadingMode.Deferred;
@@ -322,7 +293,7 @@ namespace BridgeVs.SInject
 
         private WriterParameters GetWriterParameters()
         {
-            var writerParameters = new WriterParameters();
+            WriterParameters writerParameters = new WriterParameters();
 
             if (_mode == PatchMode.Debug && File.Exists(PdbName))
             {
@@ -332,7 +303,7 @@ namespace BridgeVs.SInject
 
             if (string.IsNullOrEmpty(_snkCertificatePath) || !SnkFileExists) return writerParameters;
 
-            using (var file = File.OpenRead(_snkCertificatePath))
+            using (FileStream file = File.OpenRead(_snkCertificatePath))
             {
                 writerParameters.StrongNameKeyPair = new StrongNameKeyPair(file);
 
@@ -343,29 +314,33 @@ namespace BridgeVs.SInject
 
         private static void SetNonSerializedFields(TypeDefinition typeDefinition)
         {
-            var fields = typeDefinition.Fields
+            IEnumerable<FieldDefinition> fields = typeDefinition.Fields
                .Where(field =>
                {
-                   var fieldType = field.FieldType.Resolve();
-                   return fieldType != null && !fieldType.IsSerializable && IsSystemAssembly(fieldType.FullName) && !fieldType.IsPrimitive;
+                   TypeDefinition fieldType = field.FieldType.Resolve();
+                   return fieldType != null 
+                          && !fieldType.IsInterface //is interface is not checked by the FormatterService
+                          && !fieldType.IsSerializable 
+                          && IsSystemAssembly(fieldType.FullName) 
+                          && !fieldType.IsPrimitive;
                });
 
-            foreach (var fieldDefinition in fields)
+            foreach (FieldDefinition fieldDefinition in fields)
                 fieldDefinition.IsNotSerialized = true;
         }
 
 
         private void InjectAssemblyReferences()
         {
-            var currentPath = Path.GetDirectoryName(_assemblyLocation);
+            string currentPath = Path.GetDirectoryName(_assemblyLocation);
 
             _assemblyDefinition.MainModule.AssemblyReferences.Where(reference => !IsSystemAssembly(reference.FullName)).ToList().ForEach(
                 reference =>
                 {
                     if (currentPath == null) return;
-                    var fileName = Path.Combine(currentPath, reference.Name + ".dll");
+                    string fileName = Path.Combine(currentPath, reference.Name + ".dll");
                     if (!File.Exists(fileName)) return;
-                    var sinjection = new SInjection(fileName);
+                    SInjection sinjection = new SInjection(fileName);
                     sinjection.Patch(SerializationTypes.BinarySerialization);
                 });
 
@@ -381,7 +356,7 @@ namespace BridgeVs.SInject
                 _assemblyDefinition.Name.PublicKey = new byte[0];
                 _assemblyDefinition.MainModule.Attributes &= ~ModuleAttributes.StrongNameSigned;
             }
-            for (var i = 0; i < retry; i++)
+            for (int i = 0; i < retry; i++)
             {
                 try
                 {
@@ -391,7 +366,7 @@ namespace BridgeVs.SInject
                 }
                 catch (Exception e)
                 {
-                    Log.Write(e, string.Format("Error Saving Assembly {0} - Attempt #{1}", _assemblyLocation, i));
+                    Log.Write(e, $"Error Saving Assembly {_assemblyLocation} - Attempt #{i}");
 
                     Thread.Sleep(125);
 

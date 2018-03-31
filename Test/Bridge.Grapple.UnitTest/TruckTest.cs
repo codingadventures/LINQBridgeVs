@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 Giovanni Campo
+// Copyright (c) 2013 -2018 Coding Adventures
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -28,10 +28,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using Grapple.Contracts;
+using BridgeVs.Grapple.Contracts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Grapple.UnitTest
+namespace BridgeVs.Grapple.UnitTest
 {
     internal class NonSerializableClass
     {
@@ -54,7 +54,7 @@ namespace Grapple.UnitTest
         [TestMethod]
         public void TruckConstructorTest()
         {
-            var b = _truck;
+            ITruck b = _truck;
 
             Assert.IsNotNull(b, "Error initializing the object with the Default Instance (See Singleton)");
             Assert.IsInstanceOfType(b, typeof(Truck));
@@ -69,7 +69,7 @@ namespace Grapple.UnitTest
             _truck.LoadCargo(test);
             _truck.LoadCargo(test);
 
-            var objects = _truck.UnStuffCargo<string>();
+            IEnumerable<string> objects = _truck.UnLoadCargo<string>();
 
             Assert.IsNotNull(objects);
             IEnumerable<string> enumerable = objects as IList<string> ?? objects.ToList();
@@ -91,10 +91,10 @@ namespace Grapple.UnitTest
         {
             _truck.LoadCargo(KeyValues);
 
-            var retValue = _truck.UnStuffCargo<Dictionary<string, List<int>>>();
+            IEnumerable<Dictionary<string, List<int>>> retValue = _truck.UnLoadCargo<Dictionary<string, List<int>>>();
 
             Assert.IsNotNull(retValue);
-            var enumerable = retValue as IList<Dictionary<string, List<int>>> ?? retValue.ToList();
+            IList<Dictionary<string, List<int>>> enumerable = retValue as IList<Dictionary<string, List<int>>> ?? retValue.ToList();
 
             Assert.IsTrue(enumerable.Count() == 1);
             Assert.AreNotSame(enumerable.First(), KeyValues);
@@ -107,7 +107,7 @@ namespace Grapple.UnitTest
             _truck.LoadCargo(new NonSerializableClass());
             _truck.DeliverTo("MaybeMom");
             _truck.WaitDelivery("MaybeMom").Wait();
-            var nonSerializableClass = _truck.UnStuffCargo<NonSerializableClass>().FirstOrDefault();
+            NonSerializableClass nonSerializableClass = _truck.UnLoadCargo<NonSerializableClass>().FirstOrDefault();
 
             Assert.AreEqual("I'm Not Serializable", nonSerializableClass.AString);
         }
@@ -118,20 +118,20 @@ namespace Grapple.UnitTest
             _truck.LoadCargo(new NonSerializableClass());
             _truck.DeliverTo("MaybeMom");
             _truck.WaitDelivery("MaybeMom").Wait();
-            var nonSerializableClass = (NonSerializableClass)_truck.UnStuffCargo(typeof(NonSerializableClass)).FirstOrDefault();
+            NonSerializableClass nonSerializableClass = (NonSerializableClass)_truck.UnLoadCargo(typeof(NonSerializableClass)).FirstOrDefault();
             Assert.AreEqual("I'm Not Serializable", nonSerializableClass.AString);
         }
 
         [TestMethod]
         public void AddIteratorTypeSelectWhereIteratorOfIntShouldSerialize()
         {
-            var r = from i in Enumerable.Range(0, 100)
+            IEnumerable<int> r = from i in Enumerable.Range(0, 100)
                     select i;
             _truck.LoadCargo(r);
             _truck.LoadCargo(r.GetType());
             _truck.DeliverTo("Mom");
             _truck.WaitDelivery("Mom").Wait();
-            var res = _truck.UnStuffCargo<IEnumerable<int>>().FirstOrDefault();
+            IEnumerable<int> res = _truck.UnLoadCargo<IEnumerable<int>>().FirstOrDefault();
 
             Assert.IsNotNull(res);
             Assert.IsInstanceOfType(res, typeof(IEnumerable<int>));
@@ -142,14 +142,14 @@ namespace Grapple.UnitTest
         public void AddIteratorTypeSelectWhereIteratorOfCustomStructShouldSerialize()
         {
 
-            var r = from i in Enumerable.Range(0, 100)
+            IEnumerable<BinaryTestStruct> r = from i in Enumerable.Range(0, 100)
                     select new BinaryTestStruct { Type = i.ToString(CultureInfo.InvariantCulture) };
 
             _truck.LoadCargo(r);
             _truck.LoadCargo(r.GetType());
             _truck.DeliverTo("Mom");
             _truck.WaitDelivery("Mom").Wait();
-            var res = _truck.UnStuffCargo<IEnumerable<BinaryTestStruct>>().FirstOrDefault();
+            IEnumerable<BinaryTestStruct> res = _truck.UnLoadCargo<IEnumerable<BinaryTestStruct>>().FirstOrDefault();
 
             Assert.IsNotNull(res);
             Assert.IsInstanceOfType(res, typeof(IEnumerable<BinaryTestStruct>));
@@ -160,14 +160,14 @@ namespace Grapple.UnitTest
         public void AddIteratorTypeSelectWhereIteratorOfObjectShouldSerialize()
         {
 
-            var r = from i in Enumerable.Range(0, 100)
+            IEnumerable<BinaryTestStruct> r = from i in Enumerable.Range(0, 100)
                     select new BinaryTestStruct { Type = i.ToString(CultureInfo.InvariantCulture) };
 
             _truck.LoadCargo((object)r);
 
             _truck.DeliverTo("Mom");
             _truck.WaitDelivery("Mom").Wait();
-            var res = _truck.UnStuffCargo<IEnumerable<BinaryTestStruct>>().FirstOrDefault();
+            IEnumerable<BinaryTestStruct> res = _truck.UnLoadCargo<IEnumerable<BinaryTestStruct>>().FirstOrDefault();
 
             Assert.IsNotNull(res);
             Assert.IsInstanceOfType(res, typeof(IEnumerable<BinaryTestStruct>));
@@ -177,7 +177,7 @@ namespace Grapple.UnitTest
         [TestMethod]
         public void WaitForNotExistingTruckWaitForAtLeast5000Milliseconds()
         {
-            var stopWatch = new Stopwatch();
+            Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
             _truck.WaitDelivery("SomeRandomAddressToWaitFor").Wait();
             stopWatch.Stop();

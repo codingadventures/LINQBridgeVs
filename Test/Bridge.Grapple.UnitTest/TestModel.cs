@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 Giovanni Campo
+// Copyright (c) 2013 Coding Adventures
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -27,7 +27,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace Grapple.UnitTest
+namespace BridgeVs.Grapple.UnitTest
 {
     [Serializable]
     public class BinaryTestModel
@@ -40,7 +40,7 @@ namespace Grapple.UnitTest
         public BinaryTestModel()
         {
             BinaryTestStruct = new BinaryTestStruct { Type = Ints.GetType().FullName };
-            for (var i = 0; i < 100; i++)
+            for (int i = 0; i < 100; i++)
             {
                 Ints.Add(Random.Next(0, int.MaxValue));
                 Dictionary.Add(i.ToString(CultureInfo.InvariantCulture), Ints[i].ToString(CultureInfo.InvariantCulture));
@@ -65,7 +65,7 @@ namespace Grapple.UnitTest
         public BsonTestModel()
         {
             BinaryTestStruct = new BinaryTestStruct { Type = Ints.GetType().FullName };
-            for (var i = 0; i < 100; i++)
+            for (int i = 0; i < 100; i++)
             {
                 Ints.Add(Random.Next(0, int.MaxValue));
                 Dictionary.Add(i.ToString(CultureInfo.InvariantCulture), Ints[i].ToString(CultureInfo.InvariantCulture));

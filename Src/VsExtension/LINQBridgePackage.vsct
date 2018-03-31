@@ -21,8 +21,6 @@
   <Extern href="vsshlids.h" />
 
 
-
-
   <!--The Commands section is where we the commands, menus and menu groups are defined.
       This section uses a Guid to identify the package that provides the command defined inside it. -->
   <Commands package="guidBridge_VSExtensionPkg">
@@ -44,8 +42,15 @@
         <Parent guid="guidSHLMainMenu" id="IDG_VS_MM_TOOLSADDINS" />
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>LINQBridge Vs</ButtonText>
+          <ButtonText>Bridge Vs</ButtonText>
           <CommandName>BridgeVs</CommandName>
+        </Strings>
+      </Menu>
+      <Menu guid="guidTopLevelMenuCmdSet" id="HelpMenu" priority="0x800" type="Menu">
+        <Parent guid="guidTopLevelMenuCmdSet" id="MyMenuGroup" />
+        <Strings>
+          <ButtonText>Help</ButtonText>
+          <CommandName>Help</CommandName>
         </Strings>
       </Menu>
     </Menus>
@@ -53,18 +58,11 @@
 
       <Group guid="guidTopLevelMenuCmdSet" id="MyMenuGroup" priority="0x0600">
         <Parent guid="guidTopLevelMenuCmdSet" id="LINQBridge" />
-
-      </Group>
-      <Group guid="guidTopLevelMenuCmdSet" id="FeedbackGroup" priority="0x0800">
-        <Parent guid="guidTopLevelMenuCmdSet" id="LINQBridge" />
-
       </Group>
 
-      <Group guid="guidTopLevelMenuCmdSet" id="AboutGroup" priority="0x0800">
-        <Parent guid="guidTopLevelMenuCmdSet" id="LINQBridge" />
-
+      <Group guid="guidTopLevelMenuCmdSet" id="HelpGroup" priority="0x0800">
+        <Parent guid="guidTopLevelMenuCmdSet" id="HelpMenu" />
       </Group>
-     
 
     </Groups>
 
@@ -93,21 +91,28 @@
           <ButtonText>Un-Bridge Solution</ButtonText>
         </Strings>
       </Button>
-
-      <Button guid="guidTopLevelMenuCmdSet" id="CmdIdFeedback" priority="0x0102" type="Button">
-        <Parent guid="guidTopLevelMenuCmdSet" id="FeedbackGroup" />
+      <!--<Button guid="guidTopLevelMenuCmdSet" id="CmdIdHelp" priority="0x0103" type="Button">
+        <Parent guid="guidTopLevelMenuCmdSet" id="HelpGroup" />
         <Strings>
-          <ButtonText>Send Feedback...</ButtonText>
+          <ButtonText>Help</ButtonText>
+        </Strings>
+      </Button>-->
+
+      <Button guid="guidTopLevelMenuCmdSet" id="CmdIdStarted" priority="0x0001" type="Button">
+        <Parent guid="guidTopLevelMenuCmdSet" id="HelpGroup" />
+        <Strings>
+          <ButtonText>Getting Started</ButtonText>
         </Strings>
       </Button>
 
-      <Button guid="guidTopLevelMenuCmdSet" id="CmdIdAbout" priority="0x0103" type="Button">
-        <Parent guid="guidTopLevelMenuCmdSet" id="AboutGroup" />
-
+      <Button guid="guidTopLevelMenuCmdSet" id="CmdIdFeedback" priority="0x0010" type="Button">
+        <Parent guid="guidTopLevelMenuCmdSet" id="HelpGroup" />
         <Strings>
-          <ButtonText>About</ButtonText>
+          <ButtonText>Send Feedback</ButtonText>
         </Strings>
       </Button>
+      
+
       <!--<Button guid="guidLINQBridgeVsPackageCmdSet" id="cmdidToolWindow1Command" priority="0x0100" type="Button">
         <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1" />
         <Icon guid="guidImages1" id="bmpPic1" />
@@ -129,6 +134,15 @@
 
   </Commands>
 
+  <!--<CommandPlacements>
+    --><!--Here we place two commands inside the empty menu group we created in the Groups section.--><!--
+    <CommandPlacement guid="guidTopLevelMenuCmdSet" id="CmdIdStarted" priority="0x100">
+      <Parent guid="guidTopLevelMenuCmdSet" id="HelpGroup"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidTopLevelMenuCmdSet" id="CmdIdFeedback" priority="0x200">
+      <Parent guid="guidTopLevelMenuCmdSet" id="HelpGroup"/>
+    </CommandPlacement>
+  </CommandPlacements>-->
 
   <VisibilityConstraints>
     <VisibilityItem guid="guidTopLevelMenuCmdSet" id="CmdIdEnableBridge" context="UICONTEXT_SolutionExistsAndNotBuildingAndNotDebugging" />
@@ -146,12 +160,14 @@
 
       <IDSymbol name="MyMenuGroup" value="0x1020" />
       <IDSymbol name="LINQBridge" value="0x1021" />
-      <IDSymbol name="FeedbackGroup" value="0x1022" />
-      <IDSymbol name="AboutGroup" value="0x1023" />
+
+      <IDSymbol name="HelpMenu" value="0x1100" />
+      <IDSymbol name="HelpGroup" value="0x1150" />
+
       <IDSymbol name="CmdIdEnableBridge" value="0x0100" />
       <IDSymbol name="CmdIdDisableBridge" value="0x0101" />
-      <IDSymbol name="CmdIdFeedback" value="0x0102" />
-      <IDSymbol name="CmdIdAbout" value="0x0103" />
+      <IDSymbol name="CmdIdFeedback" value="0x0105" />
+      <IDSymbol name="CmdIdStarted" value="0x0106" />
     </GuidSymbol>
   
   </Symbols>

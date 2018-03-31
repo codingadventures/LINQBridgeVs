@@ -32,8 +32,8 @@ namespace BridgeVs.Grapple.Serialization
     {
         public static IServiceSerializer CreateServiceSerializer(Type @type)
         {
-            var defaultSerializer = new DefaultSerializer();
-            var jsonSerializer = new JsonSerializer();
+            DefaultSerializer defaultSerializer = new DefaultSerializer();
+            JsonSerializer jsonSerializer = new JsonSerializer();
 
             defaultSerializer.SetSuccessor(jsonSerializer);
 
