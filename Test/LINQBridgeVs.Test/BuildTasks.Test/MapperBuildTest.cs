@@ -35,99 +35,133 @@ namespace BridgeVs.Build.UnitTest
     [TestClass]
     public class MapperBuildTest
     {
-        private static Assembly _assemblyModel;
+        private const string VsVersion11 = "11.0";
+        private const string VsVersion12 = "12.0";
+        private const string VsVersion14 = "14.0";
+        private const string VsVersion15 = "15.0";
+
+        private static string AssemblyModelLocation => typeof(CustomType1).Assembly.Location;
+
+        private static string TargetAssemblyName(string vsVersion)
+        {
+            return VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(vsVersion, AssemblyModelLocation);
+        }
+
+        private static string TargetInstallationPath(string vsVersion)
+        {
+            return VisualStudioOptions.GetVisualizerDestinationFolder(vsVersion);
+        }
+
+        private static string DotNetAssemblyName(string vsVersion)
+        {
+           return VisualizerAssemblyNameFormat.GetDotNetVisualizerName(vsVersion);
+        }
 
         [ClassInitialize]
         public static void Init(TestContext context)
         {
-            _assemblyModel = typeof(CustomType1).Assembly;
+            if (!Directory.Exists(TargetInstallationPath(VsVersion11)))
+            {
+                Directory.CreateDirectory(TargetInstallationPath(VsVersion11));
+            }
 
+            if (!Directory.Exists(TargetInstallationPath(VsVersion12)))
+            {
+                Directory.CreateDirectory(TargetInstallationPath(VsVersion12));
+            }
+
+            if (!Directory.Exists(TargetInstallationPath(VsVersion14)))
+            {
+                Directory.CreateDirectory(TargetInstallationPath(VsVersion14));
+            }
+
+            if (!Directory.Exists(TargetInstallationPath(VsVersion15)))
+            {
+                Directory.CreateDirectory(TargetInstallationPath(VsVersion15));
+            }
+        }
+
+        [ClassCleanup]
+        public static void Cleanup()
+        {
+            //delete the visualizers
+            File.Delete(Path.Combine(TargetInstallationPath(VsVersion11), TargetAssemblyName(VsVersion11)));
+            File.Delete(Path.Combine(TargetInstallationPath(VsVersion12), TargetAssemblyName(VsVersion12)));
+            File.Delete(Path.Combine(TargetInstallationPath(VsVersion14), TargetAssemblyName(VsVersion14)));
+            File.Delete(Path.Combine(TargetInstallationPath(VsVersion15), TargetAssemblyName(VsVersion15)));
+
+            File.Delete(Path.Combine(TargetInstallationPath(VsVersion11), DotNetAssemblyName(VsVersion11)));
+            File.Delete(Path.Combine(TargetInstallationPath(VsVersion12), DotNetAssemblyName(VsVersion12)));
+            File.Delete(Path.Combine(TargetInstallationPath(VsVersion14), DotNetAssemblyName(VsVersion14)));
+            File.Delete(Path.Combine(TargetInstallationPath(VsVersion15), DotNetAssemblyName(VsVersion15)));
         }
 
         [TestMethod]
         [TestCategory("UnitTest")]
         public void Mapper_Build_Test_V11_Should_Succeed()
         {
-            const string vsVersion = "11.0";
-            string targetAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(vsVersion, _assemblyModel.Location);
-            string targetInstallationPath = VisualStudioOptions.GetVisualizerDestinationFolder(vsVersion);
-
             MapperBuildTask mapper = new MapperBuildTask
             {
-                Assembly = _assemblyModel.Location,
-                VisualStudioVer = vsVersion
+                Assembly = AssemblyModelLocation,
+                VisualStudioVer = VsVersion11
             };
 
             bool result = mapper.Execute();
 
             Assert.IsTrue(result, "Mapper Build Task Execute return false.");
-            Assert.IsTrue(File.Exists(Path.Combine(targetInstallationPath,targetAssemblyName)));
-
-            File.Delete(Path.Combine(targetInstallationPath, targetAssemblyName));
+            Assert.IsTrue(File.Exists(Path.Combine(TargetInstallationPath(VsVersion11), TargetAssemblyName(VsVersion11))), $"Custom Debugger Visualizer {TargetAssemblyName(VsVersion11)} hasn't been created");
+            Assert.IsTrue(File.Exists(Path.Combine(TargetInstallationPath(VsVersion11), DotNetAssemblyName(VsVersion11))), $"DotNet Debugger Visualizer {DotNetAssemblyName(VsVersion11)} hasn't been created ");
         }
 
         [TestMethod]
         [TestCategory("UnitTest")]
         public void Mapper_Build_Test_V12_Should_Succeed()
         {
-            const string vsVersion = "12.0";
-            string targetAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(vsVersion, _assemblyModel.Location);
-            string targetInstallationPath = VisualStudioOptions.GetVisualizerDestinationFolder(vsVersion);
-
             MapperBuildTask mapper = new MapperBuildTask
             {
-                Assembly = _assemblyModel.Location,
-                VisualStudioVer = vsVersion
+                Assembly = AssemblyModelLocation,
+                VisualStudioVer = VsVersion12
             };
 
             bool result = mapper.Execute();
 
             Assert.IsTrue(result, "Mapper Build Task Execute return false.");
-            Assert.IsTrue(File.Exists(Path.Combine(targetInstallationPath, targetAssemblyName)));
-
-            File.Delete(Path.Combine(targetInstallationPath, targetAssemblyName));
+            Assert.IsTrue(File.Exists(Path.Combine(TargetInstallationPath(VsVersion12), TargetAssemblyName(VsVersion12))), $"Custom Debugger Visualizer {TargetAssemblyName(VsVersion12)} hasn't been created");
+            Assert.IsTrue(File.Exists(Path.Combine(TargetInstallationPath(VsVersion12), DotNetAssemblyName(VsVersion12))), $"DotNet Debugger Visualizer {DotNetAssemblyName(VsVersion12)} hasn't been created ");
         }
         [TestMethod]
         [TestCategory("UnitTest")]
         public void Mapper_Build_Test_V14_Should_Succeed()
         {
-            const string vsVersion = "14.0";
-            string targetAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(vsVersion, _assemblyModel.Location);
-            string targetInstallationPath = VisualStudioOptions.GetVisualizerDestinationFolder(vsVersion);
-
             MapperBuildTask mapper = new MapperBuildTask
             {
-                Assembly = _assemblyModel.Location,
-                VisualStudioVer = vsVersion
+                Assembly = AssemblyModelLocation,
+                VisualStudioVer = VsVersion14
             };
 
             bool result = mapper.Execute();
 
             Assert.IsTrue(result, "Mapper Build Task Execute return false.");
-            Assert.IsTrue(File.Exists(Path.Combine(targetInstallationPath, targetAssemblyName)));
 
-            File.Delete(Path.Combine(targetInstallationPath, targetAssemblyName));
+            Assert.IsTrue(File.Exists(Path.Combine(TargetInstallationPath(VsVersion14), TargetAssemblyName(VsVersion14))), $"Custom Debugger Visualizer {TargetAssemblyName(VsVersion14)} hasn't been created");
+            Assert.IsTrue(File.Exists(Path.Combine(TargetInstallationPath(VsVersion14), DotNetAssemblyName(VsVersion14))), $"DotNet Debugger Visualizer {DotNetAssemblyName(VsVersion14)} hasn't been created ");
         }
         [TestMethod]
         [TestCategory("UnitTest")]
         public void Mapper_Build_Test_V15_Should_Succeed()
         {
-            const string vsVersion = "15.0";
-            string targetAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(vsVersion, _assemblyModel.Location);
-            string targetInstallationPath = VisualStudioOptions.GetVisualizerDestinationFolder(vsVersion);
-
             MapperBuildTask mapper = new MapperBuildTask
             {
-                Assembly = _assemblyModel.Location,
-                VisualStudioVer = vsVersion
+                Assembly = AssemblyModelLocation,
+                VisualStudioVer = VsVersion15
             };
 
             bool result = mapper.Execute();
 
             Assert.IsTrue(result, "Mapper Build Task Execute return false.");
-            Assert.IsTrue(File.Exists(Path.Combine(targetInstallationPath, targetAssemblyName)));
 
-            File.Delete(Path.Combine(targetInstallationPath, targetAssemblyName));
+            Assert.IsTrue(File.Exists(Path.Combine(TargetInstallationPath(VsVersion15), TargetAssemblyName(VsVersion15))), $"Custom Debugger Visualizer {TargetAssemblyName(VsVersion15)} hasn't been created");
+            Assert.IsTrue(File.Exists(Path.Combine(TargetInstallationPath(VsVersion15), DotNetAssemblyName(VsVersion15))), $"DotNet Debugger Visualizer {DotNetAssemblyName(VsVersion15)} hasn't been created ");
         }
     }
 }
