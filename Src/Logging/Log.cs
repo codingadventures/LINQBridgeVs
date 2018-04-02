@@ -24,6 +24,7 @@
 #endregion
 
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
@@ -36,43 +37,35 @@ namespace BridgeVs.Logging
     public static class Log
     {
         private static string _applicationName;
-        private static readonly string LocalApplicationData =
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        private static readonly string LocalApplicationData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
-        private static readonly MailAddress MailAddressFrom = new MailAddress("linqbridgevs@gmail.com", "No Reply Log");
-        private static string _logGzipFileName;
-
-        private static string _moduleName;
         private static string _logsDir;
         private static string _logTxtFilePath;
-        private static SmtpClient _smtpClient;
 
-        public static void Configure(string applicationName, string moduleName, SmtpClient smtpClient = null)
+        [Conditional("DEBUG")]
+        public static void Configure(string applicationName, string moduleName)
         {
             if (string.IsNullOrEmpty(applicationName))
                 throw new ArgumentNullException(nameof(applicationName), "Name of the application must not be null!");
 
             _applicationName = applicationName;
-            _moduleName = moduleName;
 
-            var logTxtFileName = string.Concat(moduleName, ".txt");
+            string logTxtFileName = string.Concat(moduleName, ".txt");
 
-            _logGzipFileName = string.Concat(_applicationName, ".gz");
             _logsDir = Path.Combine(LocalApplicationData, _applicationName);
 
             _logTxtFilePath = Path.Combine(_logsDir, logTxtFileName);
-
-            _smtpClient = smtpClient;
         }
 
+        [Conditional("DEBUG")]
         public static void Write(Exception ex, string context = null)
         {
             try
             {
-                var text = string.Concat(ex.GetType().Name, ": ", ex.Message, "\r\n", ex.StackTrace ?? "");
+                string text = string.Concat(ex.GetType().Name, ": ", ex.Message, "\r\n", ex.StackTrace ?? "");
                 if (ex.InnerException != null)
                 {
-                    var text2 = text;
+                    string text2 = text;
                     text = string.Concat(text2, "\r\nINNER: ", ex.InnerException.GetType().Name, ex.InnerException.Message, (ex.InnerException.StackTrace ?? "").Replace("\n", "\n  "));
                 }
                 if (!string.IsNullOrEmpty(context))
@@ -88,6 +81,7 @@ namespace BridgeVs.Logging
             }
         }
 
+        [Conditional("DEBUG")]
         private static void InternalWrite(string msg, params object[] args)
         {
 
@@ -95,9 +89,9 @@ namespace BridgeVs.Logging
             {
                 try
                 {
-                    var sec = new DirectorySecurity();
+                    DirectorySecurity sec = new DirectorySecurity();
                     // Using this instead of the "Everyone" string means we work on non-English systems.
-                    var everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+                    SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
                     sec.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
                     Directory.CreateDirectory(_logsDir, sec);
                 }
@@ -127,6 +121,7 @@ namespace BridgeVs.Logging
         /// <param name="msg">A composite format string (see Remarks) that contains text intermixed with zero or more format items, which correspond to objects in the <paramref name="args"/> array.</param><param name="args">An object array that contains zero or more objects to format. </param>
 
 
+        [Conditional("DEBUG")]
         public static void Write(string msg, params object[] args)
         {
             if (string.IsNullOrEmpty(_applicationName))
@@ -144,6 +139,7 @@ namespace BridgeVs.Logging
             }
         }
 
+        [Conditional("DEBUG")]
         public static void WriteIf(bool condition, string msg, params object[] args)
         {
             if (!condition) return;

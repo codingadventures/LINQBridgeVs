@@ -65,9 +65,8 @@ namespace BridgeVs.Grapple
 
         internal Truck(string truckName, IGrapple grapple)
         {
-            Log.Configure("Grapple", string.Empty);
+            Log.Write($"Setting Up the Truck {truckName}");
 
-            Log.Write("Setting Up the Truck {0}", truckName);
             _truckName = truckName;
             _grapple = grapple;
             CreateDeliveryFolder(TruckPosition);
@@ -100,7 +99,7 @@ namespace BridgeVs.Grapple
         /// <returns></returns>
         public bool DeliverTo(string address)
         {
-            Log.Write("Delivering Cargo to {0}", address);
+            Log.Write($"Delivering Cargo to {address}");
 
             try
             {
@@ -120,7 +119,7 @@ namespace BridgeVs.Grapple
                         stream.Write(buffer.Item2, 0, buffer.Item2.Length);
                     }
                 }
-                Log.Write("Cargo Successfully Delivered {0}", address);
+                Log.Write($"Cargo Successfully Delivered {address}");
 
                 return true;
             }

@@ -89,6 +89,7 @@ namespace BridgeVs.DynamicCore
             catch (Exception e)
             {
                 Log.Write(e, "Error in BroadCastData");
+                throw;
             }
         }
 

@@ -67,6 +67,7 @@ namespace BridgeVs.Extension.Package
 
         //if this is not null means vs has to restart
         private Welcome _welcomePage;
+        private bool? _installationResult;
         public static bool IsElevated => new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
 
         #region Package Members
@@ -135,9 +136,7 @@ namespace BridgeVs.Extension.Package
                 }
                 else
                 {
-                    MessageBox.Show(!PackageConfigurator.Install(_dte.Version, _dte.Edition)
-                        ? "LINQBridgeVs wasn't successfully configured. Please restart Visual Studio"
-                        : "LINQBridgeVs has been successfully configured.");
+                    _installationResult = PackageConfigurator.Install(_dte.Version, _dte.Edition);
                 }
             }
             catch (Exception e)
@@ -150,6 +149,12 @@ namespace BridgeVs.Extension.Package
         private void _dteEvents_OnStartupComplete()
         {
             _welcomePage?.Show();
+            if (_installationResult == null)
+                return;
+
+             MessageBox.Show(_installationResult.Value
+                ? "LINQBridgeVs has been successfully configured."
+                : "LINQBridgeVs wasn't successfully configured. Please restart Visual Studio");
         }
         #endregion
     }

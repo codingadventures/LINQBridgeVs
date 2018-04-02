@@ -31,44 +31,7 @@ namespace BridgeVs.Helper.Installer
         {
             _dte = dte;
         }
-
-        //private async void BtnNext_Click(object sender, RoutedEventArgs e)
-        //{
-        //    SetNextTab();
-        //    if (_currentTab.Value.Name == "hdrSteady")
-        //    {
-        //        if (!IsElevated)
-        //        {
-        //            grdPrerequisites.Visibility = Visibility.Visible;
-        //            grdInstallation.Visibility = Visibility.Hidden;
-        //            btnNext.IsEnabled = false;
-        //        }
-        //        else
-        //        {
-        //            grdPrerequisites.Visibility = Visibility.Hidden;
-        //            grdInstallation.Visibility = Visibility.Visible;
-        //            await Task.Run(() => Install());
-        //            prgInstallProgress.IsActive = false;
-        //            SetNextTab();
-        //            btnNext.Visibility = Visibility.Hidden;
-        //            btnSkip.Content = "Finish";
-        //        }
-        //    }
-
-        //    if (_currentTab.Value.Name == "hdrReady")
-        //    {
-        //        this.Close();
-        //    }
-        //}
-
-        //private void SetNextTab()
-        //{
-        //    _currentTab.Value.Focusable = false;
-        //    _currentTab = _currentTab.Next ?? _currentTab.List.First;
-        //    _currentTab.Value.Focusable = true;
-        //    _currentTab.Value.Focus();
-        //}
-       
+        
         private void btnRestart_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
