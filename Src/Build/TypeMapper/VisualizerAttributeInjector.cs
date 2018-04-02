@@ -59,20 +59,29 @@ namespace BridgeVs.Build.TypeMapper
         #region [ Fields ]
 
         private readonly AssemblyDefinition _debuggerVisualizerAssembly;
-        private readonly WriterParameters _writerParameters = new WriterParameters { WriteSymbols = true, SymbolWriterProvider = new PdbWriterProvider() };
+        private readonly WriterParameters _writerParameters = new WriterParameters
+        {
+#if DEBUG
+            WriteSymbols = true,
+#elif DEPLOY
+            WriteSymbols = false,
+#endif
+            SymbolWriterProvider = new PdbWriterProvider()
+
+        };
         private MethodDefinition _debuggerVisualizerAttributeCtor;
         private CustomAttributeArgument _customDebuggerVisualizerAttributeArgument;
         private CustomAttributeArgument _visualizerObjectSourceCustomAttributeArgument;
-        #endregion
+#endregion
 
-        #region [ Constants ]
+#region [ Constants ]
         private const string SystemType = "System.Type";
         private const string SystemDiagnosticsDebuggerVisualizerAttribute = "System.Diagnostics.DebuggerVisualizerAttribute";
 
         private const string SystemReflectionAssemblyDescriptionAttribute = "System.Reflection.AssemblyDescriptionAttribute";
-        #endregion
+#endregion
 
-        #endregion
+#endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VisualizerAttributeInjector"/> class.
@@ -225,7 +234,7 @@ namespace BridgeVs.Build.TypeMapper
         {
             references.ForEach(reference => File.Copy(reference, location, true));
         }
-        
+
         private static ReaderParameters GetReaderParameters(string assemblyPath)
         {
             DefaultAssemblyResolver assemblyResolver = new DefaultAssemblyResolver();

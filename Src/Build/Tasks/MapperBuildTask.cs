@@ -135,8 +135,8 @@ namespace BridgeVs.Build.Tasks
             ILMerge merge = new ILMerge()
             {
                 OutputFile = targetDotNetAssemblyVisualizerFilePath,
-#if DEBUG
-                DebugInfo = true,
+#if DEPLOY
+                DebugInfo = false,
 #endif
                 TargetKind = ILMerge.Kind.SameAsPrimaryAssembly,
                 Closed = false
@@ -177,8 +177,8 @@ namespace BridgeVs.Build.Tasks
             ILMerge merge = new ILMerge()
             {
                 OutputFile = customVisualizerTargetInstallationPath,
-#if DEBUG
-                DebugInfo = true,
+#if DEPLOY
+                DebugInfo = false,
 #endif
                 TargetKind = ILMerge.Kind.SameAsPrimaryAssembly,
                 Closed = false

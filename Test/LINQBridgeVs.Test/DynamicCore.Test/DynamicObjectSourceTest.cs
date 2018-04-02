@@ -21,14 +21,14 @@ namespace DynamicCore.UnitTest
         [TestCategory("UnitTest")]
         public void BroadCastData_SkipWhileIteratorShouldSucceed()
         {
-            var r = TestQuery.SkipWhile(i => i < 45);
+            var r = TestQuery.SkipWhile(i => i < 45).ToList();
 
             var message = DeserializeMessage(r);
 
 
-            Assert.AreEqual(message.FileName, "IEnumerable(Int32).linq");
-            Assert.AreEqual(message.TypeFullName, "System.Collections.Generic.IEnumerable<System.Int32>");
-            Assert.AreEqual(message.TypeName, "IEnumerableInt32");
+            Assert.AreEqual(message.FileName, "List(Int32).linq");
+            Assert.AreEqual(message.TypeFullName, "System.Collections.Generic.List<System.Int32>");
+            Assert.AreEqual(message.TypeName, "ListInt32");
             Assert.AreEqual(message.TypeNamespace, "System.Collections.Generic");
         }
 
@@ -36,13 +36,13 @@ namespace DynamicCore.UnitTest
         [TestCategory("UnitTest")]
         public void BroadCastData_OfTypeIteratorShouldSucceed()
         {
-            var r = TestQuery.OfType<short>();
+            var r = TestQuery.OfType<short>().ToList(); ;
 
             var message = DeserializeMessage(r);
 
-            Assert.AreEqual(message.FileName, "IEnumerable(Int16).linq");
-            Assert.AreEqual(message.TypeFullName, "System.Collections.Generic.IEnumerable<System.Int16>");
-            Assert.AreEqual(message.TypeName, "IEnumerableInt16");
+            Assert.AreEqual(message.FileName, "List(Int16).linq");
+            Assert.AreEqual(message.TypeFullName, "System.Collections.Generic.List<System.Int16>");
+            Assert.AreEqual(message.TypeName, "ListInt16");
             Assert.AreEqual(message.TypeNamespace, "System.Collections.Generic");
         }
 
