@@ -1,4 +1,4 @@
-# LINQBridgeVs [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=LINQBridgeVs&url=https://github.com/codingadventures/LINQBridgeVs&hashtags=VisualStudio,LINQPad,csharp,developers)
+# LINQBridgeVs [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=@linqbridgevs&url=https://github.com/codingadventures/LINQBridgeVs&hashtags=VisualStudio,LINQPad,csharp,developers)
 
 [![Join the chat at https://gitter.im/nbasakuragi/LINQBridgeVs](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/nbasakuragi/LINQBridgeVs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build status](https://ci.appveyor.com/api/projects/status/ibasbqbycm33plpi?svg=true)](https://ci.appveyor.com/project/nbasakuragi/linqbridgevs)
