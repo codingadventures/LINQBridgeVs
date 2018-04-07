@@ -101,7 +101,6 @@ namespace BridgeVs.DynamicCore
 
                 List<string> refAssemblies = new List<string>();
                 refAssemblies.AddRange(message.ReferencedAssemblies);
-                refAssemblies.Add(this.GetType().Assembly.Location);
                 Inspection linqQuery = new Inspection(refAssemblies, message.TypeFullName, message.TypeNamespace, message.TypeName);
                 string linqQueryText = linqQuery.TransformText();
 

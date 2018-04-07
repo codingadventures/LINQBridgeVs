@@ -154,10 +154,9 @@ namespace BridgeVs.SInject
             {
                 Log.Write("Assembly already Sinjected");
 
-                return;
+                return true;
             }
 #endif
-
             List<TypeDefinition> typeToInjects = GetTypesToInject().ToList();
 
             InjectSerialization(typeToInjects);
@@ -169,7 +168,6 @@ namespace BridgeVs.SInject
                     ? "Assembly {0} has been correctly Injected" 
                     : "Assembly {0} was not correctly Injected",
                 _assemblyDefinition.FullName);
-
             return success;
         }
 

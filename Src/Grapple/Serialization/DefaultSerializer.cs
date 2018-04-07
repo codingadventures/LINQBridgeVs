@@ -126,8 +126,9 @@ namespace BridgeVs.Grapple.Serialization
                     retValue = (T)_formatter.Deserialize(stream);
                 }
             }
-            catch (SerializationException)
+            catch (SerializationException serializationException)
             {
+                Log.Write(serializationException);
                 retValue = Successor.Deserialize<T>(objToDeserialize);
             }
 
