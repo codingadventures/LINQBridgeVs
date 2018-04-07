@@ -54,8 +54,7 @@ namespace BridgeVs.SInject.Reflection
                .BaseType
                .Resolve()
                .Interfaces
-               .Any(reference => reference.FullName == typeof(ISerializable).FullName);
-
+               .Any(reference => reference.InterfaceType.FullName == typeof(ISerializable).FullName);
 
             if (!isDefaultConstructorToBeAdded) return;
 

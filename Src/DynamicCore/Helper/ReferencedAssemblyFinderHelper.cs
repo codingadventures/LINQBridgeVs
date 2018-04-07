@@ -33,15 +33,15 @@ namespace BridgeVs.DynamicCore.Helper
     {
         internal static List<string> GetReferencedAssemblies(this Type @type, string originalTypeLocation)
         {
-            var returnList = new List<string>();
+            List<string> returnList = new List<string>();
             if (@type == null) return returnList;
 
             try
             {
                 if (@type.IsGenericType)
                 {
-                    var genericTypes = @type.GetGenericArguments();
-                    foreach (var genericType in genericTypes)
+                    Type[] genericTypes = @type.GetGenericArguments();
+                    foreach (Type genericType in genericTypes)
                     {
                         Log.Write("Generic Type Found {0}: ", genericType);
 
@@ -57,7 +57,7 @@ namespace BridgeVs.DynamicCore.Helper
                         !string.IsNullOrEmpty(originalTypeLocation) &&
                         !@type.Assembly.Location.Equals(originalTypeLocation), "No Referenced Assemblies");
 
-                    var referencedAssemblyPaths = @type.Assembly.GetReferencedAssembliesPath(originalTypeLocation);
+                    IEnumerable<string> referencedAssemblyPaths = @type.Assembly.GetReferencedAssembliesPath(originalTypeLocation);
 
                     returnList.AddRange(referencedAssemblyPaths);
                 }

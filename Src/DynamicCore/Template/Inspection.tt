@@ -11,7 +11,6 @@
   <Namespace>System.Xml.Linq</Namespace>
   <Namespace>BridgeVs.Grapple</Namespace>
   <Namespace><#= _typeNamespace #></Namespace>
-  <Reference><#= this.GetType().Assembly.Location #></Reference>
   <# foreach(var elem in this._assemblies){
     if (!elem.Contains("mscorlib")) {
   #>

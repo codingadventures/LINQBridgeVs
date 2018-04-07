@@ -29,7 +29,7 @@
     <CleanBuildTask Assembly="$(AssemblyName)" VisualStudioVer="$(VisualStudioVersion)"/>
   </Target>
 
-  <Target Name="Information">
+  <!--<Target Name="Information">
     <Message Text="Assembly Name: $(VisualStudioVersion)" Importance="high" />
     <Message Text="Visual Studio Version: $(VisualStudioVersion)" Importance="high" />
     <Message Text="Product Base Registry Path: $(ProductBaseRegistryPath)" Importance="high" />
@@ -38,5 +38,5 @@
     <Message Text="Solution Name: $(SolutionName)" Importance="high" />
 
     <Message Text="Registry value $(registry:HKEY_CURRENT_USER\Software\LINQBridgeVs@InstallFolderPath)"/>
-  </Target>
+  </Target>-->
 </Project>

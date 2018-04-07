@@ -46,9 +46,9 @@ namespace BridgeVs.DynamicCore.Helper
         public static IEnumerable<string> GetReferencedAssembliesPath(this _Assembly assembly, string location, bool includeSystemAssemblies = false)
         {
             Log.Write("GetReferencedAssembliesPath Started - Parameters assembly: {0}, includeSystemAssemblies: {1}", assembly.ToString(), includeSystemAssemblies);
-            var retPaths = new List<string>();
+            List<string> retPaths = new List<string>();
 
-            var referencedAssemblies = assembly.GetReferencedAssemblies()
+            List<string> referencedAssemblies = assembly.GetReferencedAssemblies()
                                                .Where(name => includeSystemAssemblies || !IsSystemAssembly(name.Name))
                                                .Select(name => name.Name)
                                                .ToList();
@@ -58,7 +58,7 @@ namespace BridgeVs.DynamicCore.Helper
 
             Log.Write($"Current Assembly is at location {assembly.Location}");
 
-            var currentAssemblyPath = string.Empty;
+            string currentAssemblyPath = string.Empty;
             try
             {
                 currentAssemblyPath = FileSystem.Path.GetDirectoryName(location);
@@ -74,14 +74,13 @@ namespace BridgeVs.DynamicCore.Helper
 
             Log.Write("currentAssemblyPath: {0}", currentAssemblyPath);
 
-
             referencedAssemblies
                 .ForEach(s =>
-                             {
-                                 Log.Write("Assembly {0} Located in {1} References Assembly {2} ", assembly.GetName().Name, assembly.Location, s);
-                                 retPaths.Add(FindPath(s, currentAssemblyPath));
-                             });
-
+                {
+                    Log.Write("Assembly {0} Located in {1} References Assembly {2} ", assembly.GetName().Name,
+                        assembly.Location, s);
+                    retPaths.Add(FindPath(s, currentAssemblyPath));
+                });
 
             return retPaths.Where(s => !string.IsNullOrEmpty(s));
         }
@@ -96,7 +95,7 @@ namespace BridgeVs.DynamicCore.Helper
 
                 Log.Write("SearchPattern: {0} in folder {1}", string.Format(SearchPattern, fileToSearch), rootPath);
                 depth++;
-                var file = FileSystem.Directory
+                string file = FileSystem.Directory
                     .EnumerateFiles(rootPath, string.Format(SearchPattern, fileToSearch), SearchOption.AllDirectories)
                     .AsParallel()
                     .OrderByDescending(info => FileSystem.FileInfo.FromFileName(info).LastAccessTime)
@@ -104,7 +103,7 @@ namespace BridgeVs.DynamicCore.Helper
 
                 if (file == null)
                 {
-                    var parent = FileSystem.DirectoryInfo.FromDirectoryName(rootPath).Parent;
+                    DirectoryInfoBase parent = FileSystem.DirectoryInfo.FromDirectoryName(rootPath).Parent;
                     return parent != null ? FindPath(fileToSearch, parent.FullName, depth) : string.Empty;
                 }
 

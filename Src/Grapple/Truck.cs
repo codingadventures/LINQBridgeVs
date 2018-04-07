@@ -239,11 +239,7 @@ namespace BridgeVs.Grapple
 
             if (Directory.Exists(address)) return;
 
-            DirectorySecurity sec = new DirectorySecurity();
-            // Using this instead of the "Everyone" string means we work on non-English systems.
-            SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
-            sec.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
-            Directory.CreateDirectory(address, sec);
+            Directory.CreateDirectory(address);
 
             Log.Write("Folder Successfully Created");
         }

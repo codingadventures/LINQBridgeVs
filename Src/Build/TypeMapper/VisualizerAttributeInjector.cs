@@ -72,16 +72,16 @@ namespace BridgeVs.Build.TypeMapper
         private MethodDefinition _debuggerVisualizerAttributeCtor;
         private CustomAttributeArgument _customDebuggerVisualizerAttributeArgument;
         private CustomAttributeArgument _visualizerObjectSourceCustomAttributeArgument;
-#endregion
+        #endregion
 
-#region [ Constants ]
+        #region [ Constants ]
         private const string SystemType = "System.Type";
         private const string SystemDiagnosticsDebuggerVisualizerAttribute = "System.Diagnostics.DebuggerVisualizerAttribute";
 
         private const string SystemReflectionAssemblyDescriptionAttribute = "System.Reflection.AssemblyDescriptionAttribute";
-#endregion
+        #endregion
 
-#endregion
+        #endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VisualizerAttributeInjector"/> class.
@@ -102,8 +102,8 @@ namespace BridgeVs.Build.TypeMapper
         private void InitializeDebuggerAssembly()
         {
             _debuggerVisualizerAssembly.MainModule.TryGetTypeReference(SystemType, out TypeReference systemTypeReference);
-
-            TypeReference debuggerVisualizerAttributeTypeReference = _debuggerVisualizerAssembly.MainModule.GetType(SystemDiagnosticsDebuggerVisualizerAttribute, true);
+            IMetadataScope scope = _debuggerVisualizerAssembly.MainModule.TypeSystem.CoreLibrary;
+            TypeReference debuggerVisualizerAttributeTypeReference = new TypeReference("System.Diagnostics", "DebuggerVisualizerAttribute", _debuggerVisualizerAssembly.MainModule, scope);
 
             TypeDefinition customDebuggerVisualizerTypeReference = _debuggerVisualizerAssembly
                 .MainModule
@@ -238,10 +238,15 @@ namespace BridgeVs.Build.TypeMapper
         private static ReaderParameters GetReaderParameters(string assemblyPath)
         {
             DefaultAssemblyResolver assemblyResolver = new DefaultAssemblyResolver();
+
             string assemblyLocation = Path.GetDirectoryName(assemblyPath);
             assemblyResolver.AddSearchDirectory(assemblyLocation);
 
-            ReaderParameters readerParameters = new ReaderParameters { AssemblyResolver = assemblyResolver };
+            ReaderParameters readerParameters = new ReaderParameters
+            {
+                AssemblyResolver = assemblyResolver,
+                ReadingMode = ReadingMode.Immediate
+            };
 
             string pdbName = Path.ChangeExtension(assemblyPath, "pdb");
             if (!File.Exists(pdbName)) return readerParameters;

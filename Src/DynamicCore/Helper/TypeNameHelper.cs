@@ -74,21 +74,21 @@ namespace BridgeVs.DynamicCore.Helper
                 return fullName ? type.FullName : type.Name;
             }
 
-            var anonymousTypeName = GetAnonymousTypeName(type);
+            string anonymousTypeName = GetAnonymousTypeName(type);
            
             // replace `2 with <type1, type2="">
-            var regex = new Regex("`[0-9]+");
-            var evaluator = new GenericsMatchEvaluator(type.GetGenericArguments(), fullName);
+            Regex regex = new Regex("`[0-9]+");
+            GenericsMatchEvaluator evaluator = new GenericsMatchEvaluator(type.GetGenericArguments(), fullName);
 
             // Remove [[fullName1, ..., fullNameX]]
-            var name = fullName ? type.FullName : type.Name;
-            var start = name.IndexOf("[[", StringComparison.Ordinal);
-            var end = name.LastIndexOf("]]", StringComparison.Ordinal);
+            string name = fullName ? type.FullName : type.Name;
+            int start = name.IndexOf("[[", StringComparison.Ordinal);
+            int end = name.LastIndexOf("]]", StringComparison.Ordinal);
             if (start > 0 && end > 0)
             {
                 name = name.Substring(0, start) + name.Substring(end + 2);
             }
-            var retName = regex.Replace(name, evaluator.Evaluate);
+            string retName = regex.Replace(name, evaluator.Evaluate);
             
             return anonymousTypeName.Length != 0 ? retName.Replace(anonymousTypeName,"AnonymousType") : retName;
         }
@@ -97,22 +97,22 @@ namespace BridgeVs.DynamicCore.Helper
         {
             if (type == null) return string.Empty;
 
-            var genericTypes = type.GetGenericArguments();
+            Type[] genericTypes = type.GetGenericArguments();
 
-            foreach (var genericType in genericTypes)
+            foreach (Type genericType in genericTypes)
             {
-                var  anonymousTypeName = GetAnonymousTypeName(genericType);
+                string  anonymousTypeName = GetAnonymousTypeName(genericType);
                 if (anonymousTypeName.Length > 0) return anonymousTypeName;
             }
 
             //leaf
-            var hasCompilerGeneratedAttribute = type.GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Any();
-            var nameContainsAnonymousType = type.FullName.Contains("AnonymousType");
-            var isAnonymousType = hasCompilerGeneratedAttribute && nameContainsAnonymousType;
+            bool hasCompilerGeneratedAttribute = type.GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Any();
+            bool nameContainsAnonymousType = type.FullName.Contains("AnonymousType");
+            bool isAnonymousType = hasCompilerGeneratedAttribute && nameContainsAnonymousType;
 
             if (!isAnonymousType) return string.Empty;
          
-            var hasMoreGenericParams = @type.GetGenericArguments().Length != 0;
+            bool hasMoreGenericParams = @type.GetGenericArguments().Length != 0;
             return hasMoreGenericParams ? @type.Name.Split('`')[0] : @type.Name;
         }
 
@@ -120,15 +120,15 @@ namespace BridgeVs.DynamicCore.Helper
         {
             if (type == null) return false;
 
-            var hasCompilerGeneratedAttribute = type.GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Any();
-            var nameContainsAnonymousType = type.FullName.Contains("AnonymousType");
-            var isAnonymousType = hasCompilerGeneratedAttribute && nameContainsAnonymousType;
+            bool hasCompilerGeneratedAttribute = type.GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Any();
+            bool nameContainsAnonymousType = type.FullName.Contains("AnonymousType");
+            bool isAnonymousType = hasCompilerGeneratedAttribute && nameContainsAnonymousType;
 
             if (isAnonymousType) return true;
 
-            var genericTypes = type.GetGenericArguments();
+            Type[] genericTypes = type.GetGenericArguments();
 
-            foreach (var genericType in genericTypes)
+            foreach (Type genericType in genericTypes)
             {
                 isAnonymousType = IsAnonymousType(genericType);
                 if (isAnonymousType) break;
@@ -151,14 +151,14 @@ namespace BridgeVs.DynamicCore.Helper
 
             public string Evaluate(Match match)
             {
-                var numberOfParameters = int.Parse(match.Value.Substring(1), CultureInfo.InvariantCulture);
+                int numberOfParameters = int.Parse(match.Value.Substring(1), CultureInfo.InvariantCulture);
 
-                var sb = new StringBuilder();
+                StringBuilder sb = new StringBuilder();
 
                 // matched "`N" is replaced by "<type1, ...,="" typen="">"
                 sb.Append("<");
 
-                for (var i = 0; i < numberOfParameters; i++)
+                for (int i = 0; i < numberOfParameters; i++)
                 {
                     if (i > 0)
                     {

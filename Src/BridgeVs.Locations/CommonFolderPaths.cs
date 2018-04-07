@@ -55,6 +55,7 @@ namespace BridgeVs.Locations
         public static readonly string Documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
         public static readonly string LinqPadQueryFolder = Path.Combine(Documents, "LINQPad Queries", "BridgeVs");
+        public static readonly string LinqPadPluginFolder = Path.Combine(Documents, "LINQPad Plugins");
 
         public static readonly string LinqPad4DestinationFolder = Path.Combine(ProgramFilesFolderPath, "LINQPad4");
         public static readonly string LinqPad5DestinationFolder = Path.Combine(ProgramFilesFolderPath, "LINQPad5");

@@ -4,7 +4,9 @@ namespace BridgeVs.Locations
 {
     public class CommonRegistryConfigurations
     {
+        // ReSharper disable once InconsistentNaming
         private const string LINQPadInstallationPathRegistryValue = "LINQPadInstallationPath";
+        // ReSharper disable once InconsistentNaming
         private const string LINQPadVersionPathRegistryValue = "LINQPadVersion";
 
         // ReSharper disable once InconsistentNaming

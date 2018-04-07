@@ -47,6 +47,16 @@ namespace BridgeVs.Helper.Configuration
         private const string LinqPad5 = "LINQPad 5";
         private const string LinqPad4 = "LINQPad 4";
 
+        public static List<string> Dependencies => new List<string>
+        {
+            "BridgeVs.DynamicCore.dll",
+            "BridgeVs.Grapple.dll",
+            "BridgeVs.Locations.dll",
+            "BridgeVs.Logging.dll",
+            "Newtonsoft.Json.dll",
+            "System.IO.Abstractions.dll"
+        };
+
         #region [ Private Methods ]
 
         private static string InstalledExtensionVersion(string vsVersion)
@@ -64,6 +74,7 @@ namespace BridgeVs.Helper.Configuration
 
         }
 
+        // ReSharper disable once InconsistentNaming
         private static bool IsLINQPadInstalled()
         {
             if (Directory.Exists(CommonFolderPaths.LinqPad5DestinationFolder))
@@ -236,6 +247,8 @@ namespace BridgeVs.Helper.Configuration
 
                 CreateLinqPadQueryFolder();
 
+                CreateLinqPadPluginFolder();
+
                 //Always check if installation folder has changed
                 SetInstallationFolder(vsVersion);
 
@@ -244,6 +257,8 @@ namespace BridgeVs.Helper.Configuration
                 SetEnvironment(vsVersion, vsEdition);
 
                 DeleteExistingVisualizers(vsVersion);
+
+                DeployDependencies(vsVersion);
 
                 return true;
             }
@@ -254,7 +269,42 @@ namespace BridgeVs.Helper.Configuration
             }
         }
 
+        public static void DeployDependencies(string vsVersion)
+        {
+            string currentLocation = Path.GetDirectoryName(typeof(PackageConfigurator).Assembly.Location);
+            if (string.IsNullOrEmpty(currentLocation))
+                throw new Exception("Dll location is null");
+
+            string debuggerVisualizerTargetFolder = DebuggerVisualizerTargetFolder(vsVersion);
+            string linqPadPluginFolder = CommonFolderPaths.LinqPadPluginFolder;
+            foreach (string dependency in Dependencies)
+            {
+                string sourceFile = Path.Combine(currentLocation, dependency);
+                string targetFile = Path.Combine(debuggerVisualizerTargetFolder, dependency);
+                File.Copy(sourceFile, targetFile, true);
+
+                string targetFileLinqPadPluginFolder = Path.Combine(linqPadPluginFolder, dependency);
+                File.Copy(sourceFile, targetFileLinqPadPluginFolder, true);
+            }
+        }
+
         private static void DeleteExistingVisualizers(string vsVersion)
+        {
+            string debuggerVisualizerTargetFolder = DebuggerVisualizerTargetFolder(vsVersion);
+
+            IEnumerable<string> visualizers = from file in Directory.EnumerateFiles(debuggerVisualizerTargetFolder)
+                                              where !string.IsNullOrEmpty(file)
+                                              let extension = Path.GetExtension(file)
+                                              where extension.Equals(".dll") || extension.Equals(".pdb")
+                                              select file;
+
+            foreach (string visualizer in visualizers)
+            {
+                File.Delete(visualizer);
+            }
+        }
+
+        private static string DebuggerVisualizerTargetFolder(string vsVersion)
         {
             string debuggerVisualizerTargetFolder = string.Empty;
             switch (vsVersion)
@@ -273,21 +323,27 @@ namespace BridgeVs.Helper.Configuration
                     break;
             }
 
-            IEnumerable<string> visualizers = from file in Directory.EnumerateFiles(debuggerVisualizerTargetFolder)
-                                              where !string.IsNullOrEmpty(file)
-                                              let extension = Path.GetExtension(file)
-                                              where extension.Equals(".dll") || extension.Equals(".pdb")
-                                              select file;
-
-            foreach (string visualizer in visualizers)
-            {
-                File.Delete(visualizer);
-            }
+            return debuggerVisualizerTargetFolder;
         }
 
         private static void CreateLinqPadQueryFolder()
         {
             string dstScriptPath = CommonFolderPaths.LinqPadQueryFolder;
+
+            if (Directory.Exists(dstScriptPath)) return;
+
+            DirectorySecurity sec = new DirectorySecurity();
+            // Using this instead of the "Everyone" string means we work on non-English systems.
+            SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+            sec.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
+            Directory.CreateDirectory(dstScriptPath, sec);
+
+            Log.Write($"Directory Created: {dstScriptPath}");
+        }
+
+        private static void CreateLinqPadPluginFolder()
+        {
+            string dstScriptPath = CommonFolderPaths.LinqPadPluginFolder;
 
             if (Directory.Exists(dstScriptPath)) return;
 

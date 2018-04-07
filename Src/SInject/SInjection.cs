@@ -84,7 +84,7 @@ namespace BridgeVs.SInject
 
         private const string Marker = "SInjected";
         private readonly string _snkCertificatePath;
-  
+
         /// <summary>
         /// 
         /// </summary>
@@ -108,7 +108,7 @@ namespace BridgeVs.SInject
                 return _snkFileExists.Value;
             }
         }
- 
+
         private string PdbName => Path.ChangeExtension(_assemblyLocation, "pdb");
 
         #endregion
@@ -146,26 +146,31 @@ namespace BridgeVs.SInject
         /// </summary>
         /// <param name="types">The Serialization Type.</param>
         /// <exception cref="System.Exception"></exception>
-        public void Patch(SerializationTypes types)
+        public bool Patch(SerializationTypes types)
         {
-            if (CheckIfAlreadySinjected())
+            bool isAlreadySinjected = CheckIfAlreadySinjected();
+#if !DEBUG
+            if (isAlreadySinjected)
             {
                 Log.Write("Assembly already Sinjected");
 
                 return;
             }
+#endif
 
             List<TypeDefinition> typeToInjects = GetTypesToInject().ToList();
 
             InjectSerialization(typeToInjects);
 
-            //InjectAssemblyReferences();
-
             AddSinjectionAttribute();
 
-            WriteAssembly();
+            bool success = WriteAssembly();
+            Log.Write(success 
+                    ? "Assembly {0} has been correctly Injected" 
+                    : "Assembly {0} was not correctly Injected",
+                _assemblyDefinition.FullName);
 
-            Log.Write("Assembly {0} has been correctly Injected", _assemblyDefinition.FullName);
+            return success;
         }
 
         /// <summary>
@@ -238,15 +243,20 @@ namespace BridgeVs.SInject
             try
             {
                 TypeReference stringType = _assemblyDefinition.MainModule.TypeSystem.String;
-                AssemblyNameReference corlib = (AssemblyNameReference)_assemblyDefinition.MainModule.TypeSystem.Corlib;
-                AssemblyDefinition system = _assemblyDefinition.MainModule.AssemblyResolver.Resolve(new AssemblyNameReference("System", corlib.Version)
-                {
-                    PublicKeyToken = corlib.PublicKeyToken,
-                });
+                AssemblyNameReference corlib = (AssemblyNameReference)_assemblyDefinition.MainModule.TypeSystem.CoreLibrary;
+
+                AssemblyDefinition system =
+                    _assemblyDefinition.MainModule.AssemblyResolver.Resolve(
+                        new AssemblyNameReference("System", corlib.Version)
+                        {
+                            PublicKeyToken = corlib.PublicKeyToken,
+                        });
+
                 TypeDefinition generatedCodeAttribute = system.MainModule.GetType("System.CodeDom.Compiler.GeneratedCodeAttribute");
+
                 MethodDefinition generatedCodeCtor = generatedCodeAttribute.Methods.First(m => m.IsConstructor && m.Parameters.Count == 2);
 
-                CustomAttribute result = new CustomAttribute(_assemblyDefinition.MainModule.Import(generatedCodeCtor));
+                CustomAttribute result = new CustomAttribute(_assemblyDefinition.MainModule.ImportReference(generatedCodeCtor));
                 result.ConstructorArguments.Add(new CustomAttributeArgument(stringType, Marker));
                 result.ConstructorArguments.Add(new CustomAttributeArgument(stringType, SInjectVersion));
 
@@ -279,14 +289,20 @@ namespace BridgeVs.SInject
             string assemblyLocation = Path.GetDirectoryName(_assemblyLocation);
             assemblyResolver.AddSearchDirectory(assemblyLocation);
 
-            ReaderParameters readerParameters = new ReaderParameters { AssemblyResolver = assemblyResolver };
+            ReaderParameters readerParameters = new ReaderParameters
+            {
+                AssemblyResolver = assemblyResolver,
+#if DEBUG
+                InMemory = true,
+#endif
+                ReadingMode = ReadingMode.Immediate
+            };
 
-            if (!File.Exists(PdbName)) return readerParameters;
+            if (!File.Exists(PdbName))
+                return readerParameters;
 
             PdbReaderProvider symbolReaderProvider = new PdbReaderProvider();
             readerParameters.SymbolReaderProvider = symbolReaderProvider;
-            readerParameters.ReadSymbols = _mode == PatchMode.Debug;
-            readerParameters.ReadingMode = ReadingMode.Deferred;
 
             return readerParameters;
         }
@@ -318,10 +334,10 @@ namespace BridgeVs.SInject
                .Where(field =>
                {
                    TypeDefinition fieldType = field.FieldType.Resolve();
-                   return fieldType != null 
+                   return fieldType != null
                           && !fieldType.IsInterface //is interface is not checked by the FormatterService
-                          && !fieldType.IsSerializable 
-                          && IsSystemAssembly(fieldType.FullName) 
+                          && !fieldType.IsSerializable
+                          && IsSystemAssembly(fieldType.FullName)
                           && !fieldType.IsPrimitive;
                });
 
@@ -329,24 +345,7 @@ namespace BridgeVs.SInject
                 fieldDefinition.IsNotSerialized = true;
         }
 
-
-        private void InjectAssemblyReferences()
-        {
-            string currentPath = Path.GetDirectoryName(_assemblyLocation);
-
-            _assemblyDefinition.MainModule.AssemblyReferences.Where(reference => !IsSystemAssembly(reference.FullName)).ToList().ForEach(
-                reference =>
-                {
-                    if (currentPath == null) return;
-                    string fileName = Path.Combine(currentPath, reference.Name + ".dll");
-                    if (!File.Exists(fileName)) return;
-                    SInjection sinjection = new SInjection(fileName);
-                    sinjection.Patch(SerializationTypes.BinarySerialization);
-                });
-
-        }
-
-        private void WriteAssembly()
+        private bool WriteAssembly()
         {
             const int retry = 3;
 
@@ -362,20 +361,18 @@ namespace BridgeVs.SInject
                 {
                     _assemblyDefinition.Write(_assemblyLocation, GetWriterParameters());
 
-                    break;
+                    return true;
                 }
                 catch (Exception e)
                 {
                     Log.Write(e, $"Error Saving Assembly {_assemblyLocation} - Attempt #{i}");
 
-                    Thread.Sleep(125);
-
+                    Thread.Sleep(25);
                 }
-
             }
 
+            return false;
         }
         #endregion
-
     }
 }

@@ -23,7 +23,6 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-
 using System;
 using System.IO;
 using System.Reflection;
@@ -37,24 +36,18 @@ namespace SInject.Test
     public class SerializationTest
     {
         private static Assembly _modelAssembly;
-
+        private static bool _patchResult;
         private static string SinjectTestModelPath
         {
             get
             {
-                var testModelDll = Path.Combine("Temp", "SInject.Test.Model.dll");
-                var currentLocation = Path.GetDirectoryName((typeof(SerializationTest).Assembly.Location));
-                if (currentLocation == null) return string.Empty;
-                var parentDirectory = Directory.GetParent(currentLocation).FullName;
-#if NET35 || NET20
-               
-                var path = Path.Combine(Directory.GetParent(parentDirectory).FullName, testModelDll);
-#else
-                var path = Path.Combine(parentDirectory, testModelDll);
-#endif
+                string testModelDll = Path.Combine("Temp", "SInject.Test.Model.dll");
+                string currentLocation = Path.GetDirectoryName((typeof(SerializationTest).Assembly.Location));
+                if (currentLocation == null)
+                    return string.Empty;
+                string parentDirectory = Directory.GetParent(currentLocation).FullName;
 
-
-                return path;
+                return Path.Combine(parentDirectory, testModelDll);
             }
         }
         /// <summary>
@@ -64,14 +57,13 @@ namespace SInject.Test
         [ClassInitialize]
         public static void Init(TestContext testContext)
         {
-            var sInjection = new SInjection(SinjectTestModelPath);
-            sInjection.Patch(SerializationTypes.BinarySerialization);
+            SInjection sInjection = new SInjection(SinjectTestModelPath);
+            _patchResult = sInjection.Patch(SerializationTypes.BinarySerialization);
             AppDomain.CurrentDomain.AssemblyResolve += HandleAssemblyResolve;
             _modelAssembly = AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName(SinjectTestModelPath));
-
-
         }
-        static Assembly HandleAssemblyResolve(object sender, ResolveEventArgs args)
+
+        private static Assembly HandleAssemblyResolve(object sender, ResolveEventArgs args)
         {
             return args.Name.Contains("SInject.Test.Model") ? AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName(SinjectTestModelPath)) : null;
         }
@@ -90,29 +82,32 @@ namespace SInject.Test
         [TestMethod]
         public void Not_Serializable_Inerhits_Dictionary_Should_Serialize_After_Patching()
         {
-            var f = new BinaryFormatter();
+            BinaryFormatter f = new BinaryFormatter();
 
-            using (var stream = new MemoryStream())
+            using (MemoryStream stream = new MemoryStream())
             {
                 f.Serialize(stream, _notSerializableInerhitsDictionary);
                 stream.Position = 0;
-                var obj = f.Deserialize(stream);
+                object obj = f.Deserialize(stream);
 
+                Assert.IsTrue(_patchResult, "Assembly has not been patched correctly");
                 Assert.IsNotNull(obj, "Object hasn't been serialized");
                 Assert.IsTrue(obj.GetType() == _notSerializableInerhitsDictionary.GetType(), "Object is not of the same type");
+
             }
         }
 
         [TestMethod]
         public void Not_Serializable_Object_Should_Serialize_After_Patching()
         {
-            var f = new BinaryFormatter();
+            BinaryFormatter f = new BinaryFormatter();
 
-            using (var stream = new MemoryStream())
+            using (MemoryStream stream = new MemoryStream())
             {
                 f.Serialize(stream, _notSerializableObject);
                 stream.Position = 0;
-                var obj = f.Deserialize(stream);
+                object obj = f.Deserialize(stream);
+                Assert.IsTrue(_patchResult, "Assembly has not been patched correctly");
                 Assert.IsNotNull(obj, "Object hasn't been serialized");
                 Assert.IsTrue(obj.GetType() == _notSerializableObject.GetType(), "Object is not of the same type");
             }

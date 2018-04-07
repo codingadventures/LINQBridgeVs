@@ -31,7 +31,6 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Optimize>true</Optimize>
   </PropertyGroup>
-  
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
@@ -53,10 +52,6 @@
       <Project>{bc10f93a-5da2-44f8-ae5e-5603cb46b548}</Project>
       <Name>BridgeVs.Locations</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Grapple\BridgeVs.Grapple.csproj">
-      <Project>{79c0c9ed-d22c-4855-97c1-f6bd0127a531}</Project>
-      <Name>BridgeVs.Grapple</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Logging\BridgeVs.Logging.csproj">
       <Project>{0b546762-c8c0-45c6-bc42-c5d91d510351}</Project>
       <Name>BridgeVs.Logging</Name>
@@ -64,11 +59,6 @@
     <ProjectReference Include="..\SInject\BridgeVs.SInject.csproj">
       <Project>{cd851c2d-8b24-4d72-b2a1-149f7d27c2f1}</Project>
       <Name>BridgeVs.SInject</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DynamicCore\BridgeVs.DynamicCore.csproj">
-      <Project>{b84fbd50-0b10-4c25-8430-680fc6fc3fea}</Project>
-      <Name>BridgeVs.DynamicCore</Name>
-      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\DynamicVisualizer.V11\BridgeVs.DynamicVisualizer.V11.csproj">
       <Project>{c6798d16-89f5-4bff-8b62-2be6d4bbc192}</Project>
@@ -92,31 +82,19 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="ILMerge">
-      <HintPath>..\packages\ILMerge.2.14.1208\tools\ILMerge.exe</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Build.Framework" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.9.6.4\lib\net40\Mono.Cecil.dll</HintPath>
+    <Reference Include="Mono.Cecil, Version=0.10.0.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.10.0\lib\net40\Mono.Cecil.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.Cecil.Mdb, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.9.6.4\lib\net40\Mono.Cecil.Mdb.dll</HintPath>
+    <Reference Include="Mono.Cecil.Pdb, Version=0.10.0.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.10.0\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.Cecil.Pdb, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.9.6.4\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Rocks, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.9.6.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Mono.Cecil.Rocks, Version=0.10.0.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Mono.Cecil.0.10.0\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.IO.Abstractions, Version=2.1.0.178, Culture=neutral, PublicKeyToken=96bf224d23c43e59, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.IO.Abstractions.2.1.0.178\lib\net40\System.IO.Abstractions.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

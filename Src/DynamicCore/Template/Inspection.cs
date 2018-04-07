@@ -9,6 +9,11 @@
 // ------------------------------------------------------------------------------
 namespace BridgeVs.DynamicCore.Template
 {
+    using System.Linq;
+    using System.Text;
+    using System.Collections.Generic;
+    using System;
+    
     /// <summary>
     /// Class to produce the template output
     /// </summary>
@@ -32,16 +37,9 @@ namespace BridgeVs.DynamicCore.Template
             
             #line default
             #line hidden
-            this.Write("</Namespace>\r\n  <Reference>");
+            this.Write("</Namespace>\r\n  ");
             
             #line 14 "C:\Users\Thanos\Documents\LINQBridgeVs\Src\DynamicCore\Template\Inspection.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.GetType().Assembly.Location));
-            
-            #line default
-            #line hidden
-            this.Write("</Reference>\r\n  ");
-            
-            #line 15 "C:\Users\Thanos\Documents\LINQBridgeVs\Src\DynamicCore\Template\Inspection.tt"
  foreach(var elem in this._assemblies){
     if (!elem.Contains("mscorlib")) {
   
@@ -50,14 +48,14 @@ namespace BridgeVs.DynamicCore.Template
             #line hidden
             this.Write("  <Reference>");
             
-            #line 18 "C:\Users\Thanos\Documents\LINQBridgeVs\Src\DynamicCore\Template\Inspection.tt"
+            #line 17 "C:\Users\Thanos\Documents\LINQBridgeVs\Src\DynamicCore\Template\Inspection.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(elem));
             
             #line default
             #line hidden
             this.Write("</Reference>\r\n  ");
             
-            #line 19 "C:\Users\Thanos\Documents\LINQBridgeVs\Src\DynamicCore\Template\Inspection.tt"
+            #line 18 "C:\Users\Thanos\Documents\LINQBridgeVs\Src\DynamicCore\Template\Inspection.tt"
 }}
             
             #line default
@@ -65,21 +63,21 @@ namespace BridgeVs.DynamicCore.Template
             this.Write(" \r\n</Query>\r\n\r\n\r\nvoid Main()\r\n{\r\n    Truck truck = new Truck(\"LINQBridgeVsTruck\")" +
                     ";\r\n\ttruck.WaitDelivery(\"");
             
-            #line 26 "C:\Users\Thanos\Documents\LINQBridgeVs\Src\DynamicCore\Template\Inspection.tt"
+            #line 25 "C:\Users\Thanos\Documents\LINQBridgeVs\Src\DynamicCore\Template\Inspection.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_typeName));
             
             #line default
             #line hidden
             this.Write("\").Wait();\r\n    var @object = truck.UnLoadCargo<");
             
-            #line 27 "C:\Users\Thanos\Documents\LINQBridgeVs\Src\DynamicCore\Template\Inspection.tt"
+            #line 26 "C:\Users\Thanos\Documents\LINQBridgeVs\Src\DynamicCore\Template\Inspection.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_typeToRetrieveFullName));
             
             #line default
             #line hidden
             this.Write(">();\r\n    @object.Dump(\"");
             
-            #line 28 "C:\Users\Thanos\Documents\LINQBridgeVs\Src\DynamicCore\Template\Inspection.tt"
+            #line 27 "C:\Users\Thanos\Documents\LINQBridgeVs\Src\DynamicCore\Template\Inspection.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_typeToRetrieveFullName));
             
             #line default

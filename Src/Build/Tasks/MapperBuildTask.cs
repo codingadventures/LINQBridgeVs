@@ -31,7 +31,6 @@ using System.Linq;
 using BridgeVs.Build.TypeMapper;
 using BridgeVs.Build.Util;
 using BridgeVs.Logging;
-using ILMerging;
 using Microsoft.Build.Framework;
 
 namespace BridgeVs.Build.Tasks
@@ -87,7 +86,7 @@ namespace BridgeVs.Build.Tasks
                     CreateDotNetFrameworkVisualizer(currentBuildingFolder, targetInstallationPath, dynamicVisualizerSourceAssemblyPath);
                 }
 
-                CreateDebuggerVisualizer(currentBuildingFolder, targetInstallationPath, dynamicVisualizerSourceAssemblyPath);
+                CreateDebuggerVisualizer(targetInstallationPath, dynamicVisualizerSourceAssemblyPath);
 
                 return true;
             }
@@ -98,7 +97,7 @@ namespace BridgeVs.Build.Tasks
             }
         }
 
-        private void CreateDebuggerVisualizer(string currentBuildingFolder, string targetInstallationPath, string dynamicVisualizerSourceAssemblyPath)
+        private void CreateDebuggerVisualizer(string targetInstallationPath, string dynamicVisualizerSourceAssemblyPath)
         {
             Log.Write("Visualizer Assembly location {0}", dynamicVisualizerSourceAssemblyPath);
 
@@ -106,59 +105,24 @@ namespace BridgeVs.Build.Tasks
 
             attributeInjector.MapTypesFromAssembly(Assembly);
 
-            string temporaryVisualizerFilePath = Path.Combine(currentBuildingFolder, TargetVisualizerAssemblyName);
+            string targetInstallationFilePath = Path.Combine(targetInstallationPath, TargetVisualizerAssemblyName);
 
-            attributeInjector.SaveDebuggerVisualizer(temporaryVisualizerFilePath);
-
-            MergeVisualizerWithDependencies(targetInstallationPath, temporaryVisualizerFilePath);
-
+            attributeInjector.SaveDebuggerVisualizer(targetInstallationFilePath);
+             
             Log.Write("Assembly {0} Mapped", Assembly);
-
-            //deletes the temporary visualizer, this is no longer needed
-            File.Delete(temporaryVisualizerFilePath);
-            File.Delete(temporaryVisualizerFilePath.Replace(".dll", ".pdb"));
         }
 
         private void CreateDotNetFrameworkVisualizer(string targetFolder, string installationFolder, string sourceVisualizerAssemblyPath)
         {
             //this is the place where the mapped dot net visualizer will be saved and then read
             string sourceDotNetAssemblyVisualizerFilePath = Path.Combine(targetFolder, DotNetVisualizerAssemblyName);
-
-            //map dot net framework types only if the assembly does not exist
-            //it create such maps in the building folder
-            MapDotNetFrameworkTypes(sourceDotNetAssemblyVisualizerFilePath, sourceVisualizerAssemblyPath);
-
+           
             //this is the target location for the dot net visualizer
             string targetDotNetAssemblyVisualizerFilePath = Path.Combine(installationFolder, DotNetVisualizerAssemblyName);
 
-            //now dependencies needs to be merged
-            ILMerge merge = new ILMerge()
-            {
-                OutputFile = targetDotNetAssemblyVisualizerFilePath,
-#if DEPLOY
-                DebugInfo = false,
-#endif
-                TargetKind = ILMerge.Kind.SameAsPrimaryAssembly,
-                Closed = false
-            };
-
-            //the order of input assemblies does matter. the first assembly is used as a template (for assembly attributes also)
-            //for merging all the rest into it
-            merge.SetInputAssemblies(new[] {
-                    sourceDotNetAssemblyVisualizerFilePath, //we need to self reference it
-                    typeof(DynamicCore.DynamicDebuggerVisualizer).Assembly.Location,
-                    typeof(Newtonsoft.Json.DateFormatHandling).Assembly.Location,
-                    typeof(Grapple.Truck).Assembly.Location,
-                    typeof(Locations.CommonFolderPaths).Assembly.Location,
-                    typeof(Log).Assembly.Location,
-                    typeof(System.IO.Abstractions.DirectoryBase).Assembly.Location
-                });
-
-            string searchDirectory = VisualStudioOptions.GetCommonReferenceAssembliesPath(VisualStudioVer).FirstOrDefault(Directory.Exists);
-
-            merge.SetSearchDirectories(new[] { Path.GetDirectoryName(GetType().Assembly.Location), searchDirectory });
-
-            merge.Merge();
+            //map dot net framework types only if the assembly does not exist
+            //it create such maps in the building folder
+            MapDotNetFrameworkTypes(targetDotNetAssemblyVisualizerFilePath, sourceVisualizerAssemblyPath);
 
             //delete the temporary visualizer to avoid it dangles in the output folder (Debug/Release)
             File.Delete(sourceDotNetAssemblyVisualizerFilePath);
@@ -174,33 +138,33 @@ namespace BridgeVs.Build.Tasks
                 throw new ArgumentException("Installation Path and temporary path cannot be the same", nameof(temporaryVisualizerFilePath));
             }
 
-            ILMerge merge = new ILMerge()
-            {
-                OutputFile = customVisualizerTargetInstallationPath,
-#if DEPLOY
-                DebugInfo = false,
-#endif
-                TargetKind = ILMerge.Kind.SameAsPrimaryAssembly,
-                Closed = false
-            };
+//            ILMerge merge = new ILMerge()
+//            {
+//                OutputFile = customVisualizerTargetInstallationPath,
+//#if DEPLOY
+//                DebugInfo = false,
+//#endif
+//                TargetKind = ILMerge.Kind.SameAsPrimaryAssembly,
+//                Closed = false
+//            };
 
             //the order of input assemblies does matter. the first assembly is used as a template (for assembly attributes also)
             //for merging all the rest into it
-            merge.SetInputAssemblies(new[] {
-                    temporaryVisualizerFilePath,
-                    typeof(DynamicCore.DynamicDebuggerVisualizer).Assembly.Location,
-                    typeof(Newtonsoft.Json.DateFormatHandling).Assembly.Location,
-                    typeof(Grapple.Truck).Assembly.Location,
-                    typeof(Locations.CommonFolderPaths).Assembly.Location,
-                    typeof(Log).Assembly.Location,
-                    typeof(System.IO.Abstractions.DirectoryBase).Assembly.Location
-                });
+            //merge.SetInputAssemblies(new[] {
+            //        temporaryVisualizerFilePath,
+            //        typeof(DynamicCore.DynamicDebuggerVisualizer).Assembly.Location,
+            //        typeof(Newtonsoft.Json.DateFormatHandling).Assembly.Location,
+            //        typeof(Grapple.Truck).Assembly.Location,
+            //        typeof(Locations.CommonFolderPaths).Assembly.Location,
+            //        typeof(Log).Assembly.Location,
+            //        typeof(System.IO.Abstractions.DirectoryBase).Assembly.Location
+            //    });
 
-            string searchDirectory = VisualStudioOptions.GetCommonReferenceAssembliesPath(VisualStudioVer).FirstOrDefault(Directory.Exists);
+            //string searchDirectory = VisualStudioOptions.GetCommonReferenceAssembliesPath(VisualStudioVer).FirstOrDefault(Directory.Exists);
 
-            merge.SetSearchDirectories(new[] { Path.GetDirectoryName(GetType().Assembly.Location), searchDirectory });
+            //merge.SetSearchDirectories(new[] { Path.GetDirectoryName(GetType().Assembly.Location), searchDirectory });
 
-            merge.Merge();
+            //merge.Merge();
         }
         /// <summary>
         /// Maps the dot net framework types. If the file already exists for a given vs version it won't be

@@ -45,7 +45,7 @@ using Message = BridgeVs.DynamicCore.Template.Message;
 namespace BridgeVs.DynamicCore
 {
     /// <summary>
-    /// Core of Dynamic Visualizer. This class is used by all three (At the moment) DynamicVisualizerVx (for VS2010, VS2012, VS2013)
+    /// Core of Dynamic Visualizer. This class is used by all four DynamicVisualizerVx (for VS2012, VS2013, VS2015, VS2017)
     /// It opens LINQPad and create dynamically a linqscript.
     /// </summary>
     public class DynamicDebuggerVisualizer
@@ -100,9 +100,8 @@ namespace BridgeVs.DynamicCore
                 Log.Write("dst: {0}", dst);
 
                 List<string> refAssemblies = new List<string>();
-
                 refAssemblies.AddRange(message.ReferencedAssemblies);
-
+                refAssemblies.Add(this.GetType().Assembly.Location);
                 Inspection linqQuery = new Inspection(refAssemblies, message.TypeFullName, message.TypeNamespace, message.TypeName);
                 string linqQueryText = linqQuery.TransformText();
 
