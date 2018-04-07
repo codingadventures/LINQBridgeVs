@@ -6,6 +6,7 @@
 <#@ output extension=".linq" #>
 
 <Query Kind="Program">
+  <Namespace>System</Namespace>
   <Namespace>System.Dynamic</Namespace>
   <Namespace>System.Runtime.Serialization.Formatters</Namespace>
   <Namespace>System.Xml.Linq</Namespace>

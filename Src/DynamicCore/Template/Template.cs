@@ -36,7 +36,6 @@ namespace BridgeVs.DynamicCore.Template
         private readonly List<string> _assemblies;
         private readonly string _typeToRetrieveFullName;
         private readonly string _typeName;
-        private readonly string _currentLocation;
 
         public Inspection(List<string> assemblies, string typeToRetrieveFullName, string typeNamespace,string typeName)
         {
@@ -44,7 +43,6 @@ namespace BridgeVs.DynamicCore.Template
             _typeName = typeName;
             _assemblies = assemblies;
             _typeToRetrieveFullName = TypeNameHelper.RemoveSystemNamespaces(typeToRetrieveFullName);
-            _currentLocation = Path.GetDirectoryName(GetType().Assembly.Location);
         }
     }
 }
