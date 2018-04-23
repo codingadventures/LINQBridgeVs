@@ -137,34 +137,6 @@ namespace BridgeVs.Build.Tasks
             {
                 throw new ArgumentException("Installation Path and temporary path cannot be the same", nameof(temporaryVisualizerFilePath));
             }
-
-//            ILMerge merge = new ILMerge()
-//            {
-//                OutputFile = customVisualizerTargetInstallationPath,
-//#if DEPLOY
-//                DebugInfo = false,
-//#endif
-//                TargetKind = ILMerge.Kind.SameAsPrimaryAssembly,
-//                Closed = false
-//            };
-
-            //the order of input assemblies does matter. the first assembly is used as a template (for assembly attributes also)
-            //for merging all the rest into it
-            //merge.SetInputAssemblies(new[] {
-            //        temporaryVisualizerFilePath,
-            //        typeof(DynamicCore.DynamicDebuggerVisualizer).Assembly.Location,
-            //        typeof(Newtonsoft.Json.DateFormatHandling).Assembly.Location,
-            //        typeof(Grapple.Truck).Assembly.Location,
-            //        typeof(Locations.CommonFolderPaths).Assembly.Location,
-            //        typeof(Log).Assembly.Location,
-            //        typeof(System.IO.Abstractions.DirectoryBase).Assembly.Location
-            //    });
-
-            //string searchDirectory = VisualStudioOptions.GetCommonReferenceAssembliesPath(VisualStudioVer).FirstOrDefault(Directory.Exists);
-
-            //merge.SetSearchDirectories(new[] { Path.GetDirectoryName(GetType().Assembly.Location), searchDirectory });
-
-            //merge.Merge();
         }
         /// <summary>
         /// Maps the dot net framework types. If the file already exists for a given vs version it won't be

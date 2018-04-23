@@ -48,7 +48,7 @@ namespace BridgeVs.DynamicCore
                 Type targetType = GetInterfaceTypeIfIsIterator(target);
                 string targetTypeFullName = TypeNameHelper.GetDisplayName(targetType, true);
                 string targetTypeName = TypeNameHelper.GetDisplayName(targetType, false);
-                //I'm lazy I know it...
+                //I'm lazy I know...
                 Regex pattern1 = new Regex("[<]");
                 Regex pattern2 = new Regex("[>]");
                 Regex pattern3 = new Regex("[,]");
@@ -72,7 +72,8 @@ namespace BridgeVs.DynamicCore
                     TypeName = typeName.Trim(),
                     TypeFullName = targetTypeFullName,
                     TypeNamespace = targetType.Namespace,
-                    AssemblyQualifiedName = targetType.AssemblyQualifiedName
+                    AssemblyQualifiedName = targetType.AssemblyQualifiedName,
+                    AssemblyName = targetType.Assembly.GetName().Name
                 };
 
                 BinaryFormatter binaryFormatter = new BinaryFormatter();

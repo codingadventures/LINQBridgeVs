@@ -95,9 +95,13 @@ namespace BridgeVs.DynamicCore
                 string dstScriptPath = CommonFolderPaths.LinqPadQueryFolder;
 
                 Log.Write("dstScriptPath: {0}", dstScriptPath);
+                string targetFolder = Path.Combine(dstScriptPath, message.AssemblyName);
 
-                string dst = Path.Combine(dstScriptPath, string.Format(message.FileName, message.TypeFullName));
-                Log.Write("dst: {0}", dst);
+                if (!Directory.Exists(targetFolder))
+                    Directory.CreateDirectory(targetFolder);
+
+                string linqPadScriptPath = Path.Combine(targetFolder, message.FileName);
+                Log.Write("linqPadScriptPath: {0}", linqPadScriptPath);
 
                 List<string> refAssemblies = new List<string>();
                 refAssemblies.AddRange(message.ReferencedAssemblies);
@@ -106,7 +110,7 @@ namespace BridgeVs.DynamicCore
 
                 Log.Write("LinqQuery file Transformed");
 
-                using (Stream memoryStream = FileSystem.File.Open(dst, FileMode.Create))
+                using (Stream memoryStream = FileSystem.File.Open(linqPadScriptPath, FileMode.Create))
                 using (StreamWriter streamWriter = new StreamWriter(memoryStream))
                 {
                     streamWriter.Write(linqQueryText);
@@ -114,7 +118,6 @@ namespace BridgeVs.DynamicCore
                     memoryStream.Flush();
                 }
                 Log.Write("LinqQuery file Generated");
-
             }
             catch (Exception e)
             {
@@ -152,13 +155,13 @@ namespace BridgeVs.DynamicCore
             DeployLinqScript(message);
             Log.Write("LinqQuery Successfully deployed");
 
-            string linqQueryfileName = Path.Combine(CommonFolderPaths.LinqPadQueryFolder, message.FileName);
-
+            string linqQueryfileName = Path.Combine(CommonFolderPaths.LinqPadQueryFolder, message.AssemblyName, message.FileName);
+            string linqPadInstallationPath = CommonRegistryConfigurations.GetLINQPadInstallationPath(vsVersion);
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 WindowStyle = ProcessWindowStyle.Normal,
                 FileName = Resources.LINQPadExe,
-                WorkingDirectory = CommonRegistryConfigurations.LINQPadInstallationPath,
+                WorkingDirectory = linqPadInstallationPath,
                 Arguments = linqQueryfileName + " " + Resources.LINQPadCommands
             };
 
@@ -170,8 +173,10 @@ namespace BridgeVs.DynamicCore
                 process.WaitForInputIdle(-1);
                 process.Dispose();
             }
+            string linqPadExePath = Path.Combine(linqPadInstallationPath, Resources.LINQPadExe);
+            string linqPadVersion = FileVersionInfo.GetVersionInfo(linqPadExePath).FileDescription;
 
-            Process foundProcess = Process.GetProcessesByName("LINQPad").FirstOrDefault(p => CommonRegistryConfigurations.LINQPadVersion.Equals(p.MainWindowTitle));
+            Process foundProcess = Process.GetProcessesByName("LINQPad").FirstOrDefault(p => linqPadVersion.Equals(p.MainWindowTitle));
 
             SendInputToProcess(foundProcess ?? process);
 

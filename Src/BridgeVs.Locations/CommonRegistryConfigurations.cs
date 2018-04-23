@@ -10,40 +10,18 @@ namespace BridgeVs.Locations
         private const string LINQPadVersionPathRegistryValue = "LINQPadVersion";
 
         // ReSharper disable once InconsistentNaming
-        public static string LINQPadInstallationPath
+        public static string GetLINQPadInstallationPath(string vsVersion)
         {
-            get
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey($@"Software\LINQBridgeVs\{vsVersion}"))
             {
-                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\LINQBridgeVs\"))
-                {
-                    return key?.GetValue(LINQPadInstallationPathRegistryValue) as string;
-                }
-            }
-            set
-            {
-                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\LINQBridgeVs\"))
-                {
-                    key?.SetValue(LINQPadInstallationPathRegistryValue, value);
-                }
+                return key?.GetValue(LINQPadInstallationPathRegistryValue) as string;
             }
         }
-
-        // ReSharper disable once InconsistentNaming
-        public static string LINQPadVersion
+        public static void SetLINQPadInstallationPath(string vsVersion, string installationPath)
         {
-            get
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey($@"Software\LINQBridgeVs\{vsVersion}"))
             {
-                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\LINQBridgeVs\"))
-                {
-                    return key?.GetValue(LINQPadVersionPathRegistryValue) as string;
-                }
-            }
-            set
-            {
-                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\LINQBridgeVs\"))
-                {
-                    key?.SetValue(LINQPadVersionPathRegistryValue, value);
-                }
+                key?.SetValue(LINQPadInstallationPathRegistryValue, installationPath);
             }
         }
     }

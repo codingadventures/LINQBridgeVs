@@ -37,6 +37,8 @@ namespace BridgeVs.DynamicCore.Template
      
         public string TypeNamespace;
         public string AssemblyQualifiedName;
+        public string AssemblyName;
+
         public readonly List<string> ReferencedAssemblies;
 
         public Message()
@@ -46,14 +48,13 @@ namespace BridgeVs.DynamicCore.Template
 
         public override string ToString()
         {
-            return "FileName: " + FileName 
-                + Environment.NewLine 
-                + "TypeFullName: " + TypeFullName  
-                + Environment.NewLine 
-                + "TypeName: " + TypeName 
+            return "FileName: " + FileName
                 + Environment.NewLine
-                + "TypeNamespace: " + TypeNamespace 
-                + Environment.NewLine;
+                + "TypeFullName: " + TypeFullName
+                + Environment.NewLine
+                + "TypeName: " + TypeName
+                + Environment.NewLine
+                + "TypeNamespace: " + TypeNamespace;
         }
     }
 }

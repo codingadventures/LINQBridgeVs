@@ -75,18 +75,23 @@ namespace BridgeVs.Helper.Configuration
         }
 
         // ReSharper disable once InconsistentNaming
-        private static bool IsLINQPadInstalled()
+        private static bool IsLINQPadInstalled(string vsVersion)
         {
+            var currentInstalledVersionPath = CommonRegistryConfigurations.GetLINQPadInstallationPath(vsVersion);
+            var alreadyInstalled = !string.IsNullOrEmpty(currentInstalledVersionPath);
+
+            if (alreadyInstalled && Directory.Exists(currentInstalledVersionPath))
+                return true; 
+
+            //otherwise set it up manually
             if (Directory.Exists(CommonFolderPaths.LinqPad5DestinationFolder))
             {
-                CommonRegistryConfigurations.LINQPadInstallationPath = CommonFolderPaths.LinqPad5DestinationFolder;
-                CommonRegistryConfigurations.LINQPadVersion = LinqPad5;
+                CommonRegistryConfigurations.SetLINQPadInstallationPath(vsVersion, CommonFolderPaths.LinqPad5DestinationFolder);
                 return true;
             }
             if (Directory.Exists(CommonFolderPaths.LinqPad4DestinationFolder))
             {
-                CommonRegistryConfigurations.LINQPadInstallationPath = CommonFolderPaths.LinqPad4DestinationFolder;
-                CommonRegistryConfigurations.LINQPadVersion = LinqPad4;
+                CommonRegistryConfigurations.SetLINQPadInstallationPath(vsVersion, CommonFolderPaths.LinqPad4DestinationFolder);
                 return true;
             }
 
@@ -112,9 +117,8 @@ namespace BridgeVs.Helper.Configuration
                 if (string.IsNullOrEmpty(linqPadDirectoryName))
                     throw new Exception("LINQPad file name not correct");
 
-                CommonRegistryConfigurations.LINQPadInstallationPath = linqPadDirectoryName;
-                CommonRegistryConfigurations.LINQPadVersion = linqPadDirectoryName.Contains("LINQPad 5") ? LinqPad5 : LinqPad4;
-
+                CommonRegistryConfigurations.SetLINQPadInstallationPath(vsVersion, linqPadDirectoryName);
+               
                 return true;
             }
             openWebSite:
@@ -222,7 +226,6 @@ namespace BridgeVs.Helper.Configuration
 
             return !string.IsNullOrEmpty(installationFolder) && installationFolder == CommonFolderPaths.InstallFolder;
         }
-
         private static void SetBridgeVsAssemblyVersion(string vsVersion)
         {
             using (RegistryKey key = Registry.CurrentUser.CreateSubKey(GetRegistryKey(Resources.ProductVersion, vsVersion)))
@@ -236,7 +239,7 @@ namespace BridgeVs.Helper.Configuration
 
             try
             {
-                if (!IsLINQPadInstalled()) //ask the user to insert a custom location
+                if (!IsLINQPadInstalled(vsVersion)) //ask the user to insert a custom location
                 {
                     return false;
                 }
@@ -374,7 +377,7 @@ namespace BridgeVs.Helper.Configuration
             Log.Write($"Directory Created: {debuggerVisualizerTargetFolder}");
 
         }
-         
+
         private static void CreateGrappleFolder()
         {
             Log.Write("Creating folder for Delivery {0}", Path.GetFullPath(CommonFolderPaths.GrappleFolder));
@@ -386,7 +389,6 @@ namespace BridgeVs.Helper.Configuration
 
             Log.Write("Folder Successfully Created");
         }
-
         #endregion
     }
 }
