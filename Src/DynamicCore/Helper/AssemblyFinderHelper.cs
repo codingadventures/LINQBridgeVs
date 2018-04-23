@@ -66,7 +66,7 @@ namespace BridgeVs.DynamicCore.Helper
             catch (Exception exception)
             {
                 Log.Write(exception,
-                    $"GetDirectoryName of assembly: {assembly.FullName} failed. Path is wrong {assembly.Location}");
+                    $"GetDirectoryName of assembly: {assembly.FullName} failed. Path is wrong {location}");
             }
 
 

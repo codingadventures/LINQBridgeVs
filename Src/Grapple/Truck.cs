@@ -186,6 +186,11 @@ namespace BridgeVs.Grapple
                 });
                 throw ae.Flatten();
             }
+            catch (Exception exception)
+            {
+                Log.Write(exception, "Error Waiting Truck");
+                throw;
+            }
         }
 
         private void WaitForNextTruck(string address, int timeout)

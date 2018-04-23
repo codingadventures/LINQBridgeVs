@@ -66,7 +66,7 @@ namespace BridgeVs.DynamicCore
         #region [ Constructors ]
         public DynamicDebuggerVisualizer()
         {
-
+            AssemblyFinderHelper.FileSystem = FileSystem;
         }
 
         /// <summary>
@@ -171,9 +171,9 @@ namespace BridgeVs.DynamicCore
                 process.Dispose();
             }
 
-            process = Process.GetProcessesByName("LINQPad").FirstOrDefault(p => CommonRegistryConfigurations.LINQPadVersion.Equals(p.MainWindowTitle));
+            Process foundProcess = Process.GetProcessesByName("LINQPad").FirstOrDefault(p => CommonRegistryConfigurations.LINQPadVersion.Equals(p.MainWindowTitle));
 
-            SendInputToProcess(process);
+            SendInputToProcess(foundProcess ?? process);
 
             Log.Write("LINQPad Successfully started");
 
@@ -237,7 +237,7 @@ namespace BridgeVs.DynamicCore
             try
             {
                 int index = 0;
-                while (process.MainWindowHandle == IntPtr.Zero || index < 3)
+                while (process.MainWindowHandle == IntPtr.Zero && index < 3)
                 {
                     // Discard cached information about the process
                     // because MainWindowHandle might be cached.

@@ -32,6 +32,7 @@ using BridgeVs.Helper;
 using BridgeVs.Helper.Configuration;
 using BridgeVs.Helper.Forms;
 using BridgeVs.Helper.Installer;
+using BridgeVs.Helper.Settings;
 using BridgeVs.Logging;
 using EnvDTE;
 using Microsoft.VisualStudio;
@@ -60,6 +61,7 @@ namespace BridgeVs.Extension.Package
     [ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string)]
     [ProvideAutoLoad(VSConstants.UICONTEXT.EmptySolution_string)]
     [Guid(GuidList.GuidBridgeVsExtensionPkgString)]
+    [ProvideOptionPage(typeof(PackageSettings),"Bridge Vs", "General", 0, 0, true)]
     public sealed class BridgeVsPackage : Microsoft.VisualStudio.Shell.Package
     {
         private DTE _dte;

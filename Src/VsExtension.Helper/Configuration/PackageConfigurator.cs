@@ -249,6 +249,8 @@ namespace BridgeVs.Helper.Configuration
 
                 CreateLinqPadPluginFolder();
 
+                CreateVisualizerFolder(vsVersion);
+
                 //Always check if installation folder has changed
                 SetInstallationFolder(vsVersion);
 
@@ -354,6 +356,21 @@ namespace BridgeVs.Helper.Configuration
             Directory.CreateDirectory(dstScriptPath, sec);
 
             Log.Write($"Directory Created: {dstScriptPath}");
+        }
+
+        private static void CreateVisualizerFolder(string vsVersion)
+        {
+            string debuggerVisualizerTargetFolder = DebuggerVisualizerTargetFolder(vsVersion);
+            if (Directory.Exists(debuggerVisualizerTargetFolder)) return;
+
+            DirectorySecurity sec = new DirectorySecurity();
+            // Using this instead of the "Everyone" string means we work on non-English systems.
+            SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+            sec.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
+            Directory.CreateDirectory(debuggerVisualizerTargetFolder, sec);
+
+            Log.Write($"Directory Created: {debuggerVisualizerTargetFolder}");
+
         }
 
         #endregion
