@@ -63,12 +63,12 @@ namespace BridgeVs.Build.TypeMapper
         {
 #if DEBUG
             WriteSymbols = true,
+            SymbolWriterProvider = new PdbWriterProvider()
 #elif DEPLOY
             WriteSymbols = false,
 #endif
-            SymbolWriterProvider = new PdbWriterProvider()
-
         };
+
         private MethodDefinition _debuggerVisualizerAttributeCtor;
         private CustomAttributeArgument _customDebuggerVisualizerAttributeArgument;
         private CustomAttributeArgument _visualizerObjectSourceCustomAttributeArgument;
@@ -250,6 +250,7 @@ namespace BridgeVs.Build.TypeMapper
 
             string pdbName = Path.ChangeExtension(assemblyPath, "pdb");
             if (!File.Exists(pdbName)) return readerParameters;
+
             PdbReaderProvider symbolReaderProvider = new PdbReaderProvider();
             readerParameters.SymbolReaderProvider = symbolReaderProvider;
             readerParameters.ReadSymbols = true;
@@ -271,7 +272,7 @@ namespace BridgeVs.Build.TypeMapper
 
         public void Dispose()
         {
-
+            _debuggerVisualizerAssembly?.Dispose();
         }
     }
 }
