@@ -35,6 +35,7 @@ using System.Threading.Tasks;
 using BridgeVs.Grapple.Contracts;
 using BridgeVs.Grapple.Extensions;
 using BridgeVs.Grapple.Grapple;
+using BridgeVs.Locations;
 using BridgeVs.Logging;
 
 namespace BridgeVs.Grapple
@@ -48,11 +49,7 @@ namespace BridgeVs.Grapple
         private readonly IGrapple _grapple;
         private Dictionary<Type, List<byte[]>> _container = new Dictionary<Type, List<byte[]>>();
 
-        private static readonly string DefaultBaseFolder =
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-                Resource.ProductName);
-
-        private string TruckPosition => Path.Combine(DefaultBaseFolder, _truckName);
+        private string TruckPosition => Path.Combine(CommonFolderPaths.GrappleFolder, _truckName);
 
         /// <summary>
         /// 
@@ -69,7 +66,11 @@ namespace BridgeVs.Grapple
 
             _truckName = truckName;
             _grapple = grapple;
-            CreateDeliveryFolder(TruckPosition);
+
+            if (Directory.Exists(TruckPosition)) return;
+
+            //no need for security access
+            Directory.CreateDirectory(TruckPosition);
         }
 
         /// <summary>
@@ -236,17 +237,6 @@ namespace BridgeVs.Grapple
                     return @byte;
                 }
             }
-        }
-
-        private static void CreateDeliveryFolder(string address)
-        {
-            Log.Write("Creating folder for Delivery {0}", Path.GetFullPath(address));
-
-            if (Directory.Exists(address)) return;
-
-            Directory.CreateDirectory(address);
-
-            Log.Write("Folder Successfully Created");
         }
     }
 }

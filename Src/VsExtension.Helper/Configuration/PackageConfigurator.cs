@@ -251,6 +251,8 @@ namespace BridgeVs.Helper.Configuration
 
                 CreateVisualizerFolder(vsVersion);
 
+                CreateGrappleFolder();
+
                 //Always check if installation folder has changed
                 SetInstallationFolder(vsVersion);
 
@@ -371,6 +373,18 @@ namespace BridgeVs.Helper.Configuration
 
             Log.Write($"Directory Created: {debuggerVisualizerTargetFolder}");
 
+        }
+         
+        private static void CreateGrappleFolder()
+        {
+            Log.Write("Creating folder for Delivery {0}", Path.GetFullPath(CommonFolderPaths.GrappleFolder));
+
+            if (Directory.Exists(CommonFolderPaths.GrappleFolder)) return;
+
+            //no need for security access
+            Directory.CreateDirectory(CommonFolderPaths.GrappleFolder);
+
+            Log.Write("Folder Successfully Created");
         }
 
         #endregion
