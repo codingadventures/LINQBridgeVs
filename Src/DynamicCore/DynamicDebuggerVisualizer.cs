@@ -97,8 +97,8 @@ namespace BridgeVs.DynamicCore
                 Log.Write("dstScriptPath: {0}", dstScriptPath);
                 string targetFolder = Path.Combine(dstScriptPath, message.AssemblyName);
 
-                if (!Directory.Exists(targetFolder))
-                    Directory.CreateDirectory(targetFolder);
+                if (!FileSystem.Directory.Exists(targetFolder))
+                    FileSystem.Directory.CreateDirectory(targetFolder);
 
                 string linqPadScriptPath = Path.Combine(targetFolder, message.FileName);
                 Log.Write("linqPadScriptPath: {0}", linqPadScriptPath);

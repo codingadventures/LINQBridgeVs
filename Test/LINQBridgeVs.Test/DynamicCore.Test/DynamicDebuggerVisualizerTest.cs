@@ -20,7 +20,8 @@ namespace DynamicCore.UnitTest
             FileName = DateTime.Now.ToShortDateString().Replace("/", ""),
             TypeFullName = typeof(CustomType1).FullName,
             TypeNamespace = typeof(CustomType1).Namespace,
-            TypeName = typeof(CustomType1).Name
+            TypeName = typeof(CustomType1).Name,
+            AssemblyName = typeof(CustomType1).Assembly.GetName().Name
         };
 
        
@@ -49,7 +50,7 @@ namespace DynamicCore.UnitTest
 
             string dstScriptPath = CommonFolderPaths.LinqPadQueryFolder;
 
-            string fileNamePath = Path.Combine(dstScriptPath, string.Format(_message.FileName, _message.TypeFullName));
+            string fileNamePath = Path.Combine(dstScriptPath, _message.AssemblyName, _message.FileName);
 
             Assert.IsTrue(_fileSystem.File.Exists(fileNamePath));
         }
