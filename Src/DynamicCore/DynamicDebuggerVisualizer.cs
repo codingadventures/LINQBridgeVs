@@ -161,7 +161,7 @@ namespace BridgeVs.DynamicCore
             {
                 WindowStyle = ProcessWindowStyle.Normal,
                 FileName = Resources.LINQPadExe,
-                WorkingDirectory = linqPadInstallationPath,
+                WorkingDirectory = Path.GetFullPath(linqPadInstallationPath),
                 Arguments = linqQueryfileName + " " + Resources.LINQPadCommands
             };
 

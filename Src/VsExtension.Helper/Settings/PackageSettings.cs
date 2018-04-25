@@ -16,6 +16,8 @@ namespace BridgeVs.Helper.Settings
     [CLSCompliant(false), ComVisible(true)]
     public sealed class PackageSettings : DialogPage
     {
+
+        private const string ErrorMessage = "Please insert a valid path to LINQPad";
         [Category("LINQPad")]
         [DisplayName("Installation Path")]
         [Description("Sets the path to the LINQPad exe")]
@@ -34,25 +36,33 @@ namespace BridgeVs.Helper.Settings
                 var dte = (DTE)GetService(typeof(SDTE));
                 if (dte != null)
                 {
-                    if (string.IsNullOrEmpty(value))
-                    {
-                        MessageBox.Show("Please insert a valid path to LINQPad");
-                        return;
-                    }
-                    bool possiblePath = value.IndexOfAny(Path.GetInvalidPathChars()) == -1;
+                    bool isPathInValid = string.IsNullOrEmpty(value)
+                        || value.IndexOfAny(Path.GetInvalidPathChars()) != -1;
 
-                    if (!possiblePath)
+                    if (isPathInValid)
                     {
-                        MessageBox.Show("Please insert a valid path to LINQPad");
+                        MessageBox.Show(ErrorMessage);
                         return;
                     }
 
-                    if (!Directory.GetFiles(value, "*.exe", SearchOption.TopDirectoryOnly).Any( p=> p.Contains("LINQPad.exe")))
+                    //check the inserted path is a valid directory that contains linqpad.exe
+                    //if the inserted value is a file then check for its directory otherwise a directory
+                    //has been inserted
+                    var insertedDirectory = File.Exists(value) ? Path.GetDirectoryName(value) : value;
+
+                    var isInvalidDirectory =
+                        !Directory.Exists(insertedDirectory)
+                        || !Directory.GetFiles(insertedDirectory, "*.exe", SearchOption.TopDirectoryOnly)
+                             .Any(p => p.Contains("LINQPad.exe"));
+
+                    if (isInvalidDirectory)
                     {
-                        MessageBox.Show("Please insert a valid path to LINQPad");
+                        MessageBox.Show(ErrorMessage);
                         return;
                     }
-                    CommonRegistryConfigurations.SetLINQPadInstallationPath(dte.Version, value);
+
+                    string filterInsertedDirectory = Path.GetFullPath(insertedDirectory);  
+                    CommonRegistryConfigurations.SetLINQPadInstallationPath(dte.Version, filterInsertedDirectory);
                 }
             }
         }
