@@ -29,7 +29,7 @@ Run the solution, set a breakpoint and hover the mouse pointer on any object ins
 ## Compatibility
 
 LINQBridgeVs is compatible with any Visual Studio edition from 2012 to 2017. It works only for **.NET Framework 4.0 to 4.6.2**. There is no support for .NET Framework 3.5 downwards. LINQPad 4 and 5 are both supported.
-Due to a Visual Studio limitation, .NETCore does not support custom debugger visualizers (April 2018). There is a feature request in the Visual Studio [Uservoice](https://visualstudio.uservoice.com/forums/121579-visual-studio-ide/suggestions/33344638-custom-debugger-visualizer-for-net-core-apps-in-v).
+Due to a Visual Studio limitation, .NETCore does not support custom debugger visualizers (April 2018), hence this extension does not support it. There is a feature request in the Visual Studio [Uservoice](https://visualstudio.uservoice.com/forums/121579-visual-studio-ide/suggestions/33344638-custom-debugger-visualizer-for-net-core-apps-in-v).
 
 ## Troubleshooting
 
