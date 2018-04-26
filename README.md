@@ -21,21 +21,26 @@ Bridging a solution will extend the MsBuild process to create a custom debugger 
 Private and internal classes _are not_ included, hence the magnifier glass will not be available for them. 
 
 Run the solution, set a breakpoint and hover the mouse pointer on any object instance then the magnifier glass will appear inside the data tip. 
+<br>
+<p align="center">
+    <img src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/Example.gif?raw=true" width="1000" />
+</p>
 
 ## Compatibility
 
 LINQBridgeVs is compatible with any Visual Studio edition from 2012 to 2017. It works only for **.NET Framework 4.0 to 4.6.2**. There is no support for .NET Framework 3.5 downwards. LINQPad 4 and 5 are both supported.
+Due to a Visual Studio limitation, .NETCore does not support custom debugger visualizers (April 2018). There is a feature request in the Visual Studio [Uservoice](https://visualstudio.uservoice.com/forums/121579-visual-studio-ide/suggestions/33344638-custom-debugger-visualizer-for-net-core-apps-in-v).
 
 ## Troubleshooting
 
 If after bridging and rebuilding your solution the magnifier glass still does not appear, make sure that in this folder _"C:\Users\youruser\Documents\Visual Studio 201**x**\Visualizers"_ there is/are assemblies with this name template "_**AssemblyName**.Visualizer.V1**x**.dll_" (where x is the version number of Visual Studio). 
-If the folder does not contain any assembly then please open [a new bug](https://github.com/codingadventures/LINQBridgeVs/issues/new).
+If the folder does not contain any assembly then please open [a new bug](https://github.com/codingadventures/LINQBridgeVs/issues/new). There are a number of dependent assemblies required by the custom visualizer (_BridgeVs.DynamicCore.dll, BridgeVs.Grapple.dll, BridgeVs.Locations.dll, BridgeVs.Logging.dll, Newtonsoft.Json.dll, System.IO.Abstractions.dll_) which are copied in these two folders:
+* C:\Users\youruser\Documents\Visual Studio 201**x**\Visualizers
+* C:\Users\youruser\Documents\LINQPad Plugins
+
+Please do not delete these files. If they are delete accidentally, the extension must be re-installed.
 
 Do not keep two instances of two different versions of LINQPad running (e.g. LINQPad 4 and LINQPad 5) at the same time. If you do so, the data will be automatically sent to the lower version of LINQPad. 
-<br><br>
-<p align="center">
-    <img src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/Example.gif?raw=true" width="1000" />
-</p>
 
 ## Configuration
 
@@ -55,6 +60,15 @@ During this process two custom MsBuild Targets, [Custom.After.Microsoft.Common.t
 * Visual Studio 2012 - C:\Program Files (x86)\MSBuild\v4.0
 
 You can skip this process but you will not be able to use the extension until you complete the configuration.
+
+##BridgeVs Option Menu
+
+It is possible to change the LINQPad installation path at any time. Go to Tools->Options->BridgeVs:
+
+<p align="center">
+    <img src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/BridgeVsOption.PNG?raw=true" width="700" />
+</p>
+
 
 ## How it works
 
@@ -150,6 +164,5 @@ I have used several community open source projects to make this extension. So if
 - [JSON.NET](https://github.com/JamesNK/Newtonsoft.Json) is an awesome serializer. It has become part of the .NET Framework and it is used by millions worlwide, now it has become the standard. LINQBridgeVs mainly uses the BinaryFormatter, but should it fail, it uses JSON.NET as a fallback mechanism.
 - [VsRestart](https://github.com/ilmax/vs-restart) is an extension that restart Visual Studio under Administrator privileges. Unfortunately the project seems abandoned. The extension works only with Visual Studio 2013. However, code proved to be working with any Visual Studio version.
 - [MahApps](https://github.com/MahApps/MahApps.Metro) which was the first open source project to make WPF truly modern.
-- [ILMerge](https://github.com/Microsoft/ILMerge) is a utility that merges multiple .NET assemblies into a single assembly.
 
 [logo]: https://raw.github.com/codingadventures/LINQBridgeVs/master/Src/VsExtension/LINQBridgeLogo.png "LINQBridge"
