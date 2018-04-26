@@ -61,7 +61,7 @@ During this process two custom MsBuild Targets, [Custom.After.Microsoft.Common.t
 
 You can skip this process but you will not be able to use the extension until you complete the configuration.
 
-##BridgeVs Option Menu
+## BridgeVs Option Menu
 
 It is possible to change the LINQPad installation path at any time. Go to Tools->Options->BridgeVs:
 
