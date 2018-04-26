@@ -34,7 +34,7 @@ Due to a Visual Studio limitation, .NETCore does not support custom debugger vis
 ## Troubleshooting
 
 If after bridging and rebuilding your solution the magnifier glass still does not appear, make sure that in this folder _"C:\Users\youruser\Documents\Visual Studio 201**x**\Visualizers"_ there is/are assemblies with this name template "_**AssemblyName**.Visualizer.V1**x**.dll_" (where x is the version number of Visual Studio). 
-If the folder does not contain any assembly then please open [a new bug](https://github.com/codingadventures/LINQBridgeVs/issues/new). There are a number of dependent assemblies required by the custom visualizer (_BridgeVs.DynamicCore.dll, BridgeVs.Grapple.dll, BridgeVs.Locations.dll, BridgeVs.Logging.dll, Newtonsoft.Json.dll, System.IO.Abstractions.dll_) which are copied in these two folders:
+If the folder does not contain any assembly then please open [a new bug](https://github.com/codingadventures/LINQBridgeVs/issues/new). There are a number of dependent assemblies required by the custom visualizer (_BridgeVs.DynamicCore.dll, BridgeVs.Grapple.dll, BridgeVs.Locations.dll, BridgeVs.Logging.dll, Newtonsoft.Json.dll, System.IO.Abstractions.dll_) which are copied in these two folders during the first time configuration:
 * C:\Users\youruser\Documents\Visual Studio 201**x**\Visualizers
 * C:\Users\youruser\Documents\LINQPad Plugins
 
