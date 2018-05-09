@@ -70,10 +70,6 @@
       <Project>{8A5E73F6-2093-4669-9C09-BEAB033BE56C}</Project>
       <Name>Model.UnitTest</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Src\DynamicVisualizer.V11\BridgeVs.DynamicVisualizer.V11.csproj">
-      <Project>{C6798D16-89F5-4BFF-8B62-2BE6D4BBC192}</Project>
-      <Name>BridgeVs.DynamicVisualizer.V11</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

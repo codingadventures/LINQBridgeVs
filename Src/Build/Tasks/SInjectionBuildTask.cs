@@ -25,14 +25,17 @@
 
 using System;
 using System.IO;
+using BridgeVs.Locations;
 using BridgeVs.Logging;
-using BridgeVs.SInject;
 using Microsoft.Build.Framework;
 
 namespace BridgeVs.Build.Tasks
 {
     public class SInjectionBuildTask : ITask
     {
+        [Required]
+        public string VisualStudioVer { private get; set; }
+
         [Required]
         public string Assembly { get; set; }
 
@@ -41,7 +44,7 @@ namespace BridgeVs.Build.Tasks
 
         public bool Execute()
         {
-            Log.Configure("LINQBridgeVs","SinjectionBuildTask");
+            Log.Configure("LINQBridgeVs", "SinjectionBuildTask");
 
             try
             {
@@ -52,6 +55,10 @@ namespace BridgeVs.Build.Tasks
             catch (Exception e)
             {
                 Log.Write(e, @"Error Executing MSBuild Task SInjectionBuildTask ");
+
+                if (CommonRegistryConfigurations.IsErrorTrackingEnabled(VisualStudioVer))
+                    RavenWrapper.Instance.Capture(e, VisualStudioVer, message: "Error during Sinjection mapping");
+
                 return false;
             }
 

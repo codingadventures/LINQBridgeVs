@@ -25,11 +25,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using BridgeVs.Build.TypeMapper;
 using BridgeVs.Build.Util;
+using BridgeVs.Locations;
 using BridgeVs.Logging;
 using Microsoft.Build.Framework;
 
@@ -71,28 +71,30 @@ namespace BridgeVs.Build.Tasks
 
                 //this is where the current assembly being built is saved
                 string currentBuildingFolder = Path.GetDirectoryName(Assembly);
-                string targetInstallationPath = VisualStudioOptions.GetVisualizerDestinationFolder(VisualStudioVer);
+                string visualizerDestinationFolder = VisualStudioOptions.GetVisualizerDestinationFolder(VisualStudioVer);
 
-                Log.Write("Installation Path {0}", targetInstallationPath);
+                Log.Write($"Visualizer Destination Folder Path {visualizerDestinationFolder}");
 
-                //it gets the source path for the visualizer to use (usually from the extension directory)
-                //usually from the folder where the extension is installed (BridgeVs.DynamicVisualizer.V1x)
-                string dynamicVisualizerSourceAssemblyPath = VisualStudioOptions.GetVisualizerAssemblyLocation(VisualStudioVer);
+                string dynamicVisualizerSourceAssemblyPath = typeof(DynamicVisualizers.DynamicDebuggerVisualizer).Assembly.Location;
 
                 //if dot net visualizer exists already don't create it again
-                if (!File.Exists(Path.Combine(targetInstallationPath, DotNetVisualizerAssemblyName)))
+                if (!File.Exists(Path.Combine(visualizerDestinationFolder, DotNetVisualizerAssemblyName)))
                 {
                     //it creates a mapping for all of the .net types that are worth exporting
-                    CreateDotNetFrameworkVisualizer(currentBuildingFolder, targetInstallationPath, dynamicVisualizerSourceAssemblyPath);
+                    CreateDotNetFrameworkVisualizer(currentBuildingFolder, visualizerDestinationFolder, dynamicVisualizerSourceAssemblyPath);
                 }
 
-                CreateDebuggerVisualizer(targetInstallationPath, dynamicVisualizerSourceAssemblyPath);
+                CreateDebuggerVisualizer(visualizerDestinationFolder, dynamicVisualizerSourceAssemblyPath);
 
                 return true;
             }
             catch (Exception e)
             {
-                Log.Write(e, @"Error Executing MSBuild Task MapperBuildTask ");
+                Log.Write(e, @"Error Executing MSBuild Task MapperBuildTask");
+
+                if (CommonRegistryConfigurations.IsErrorTrackingEnabled(VisualStudioVer))
+                    RavenWrapper.Instance.Capture(e, VisualStudioVer, message: "Error during assembly mapping");
+
                 return false;
             }
         }
@@ -101,14 +103,14 @@ namespace BridgeVs.Build.Tasks
         {
             Log.Write("Visualizer Assembly location {0}", dynamicVisualizerSourceAssemblyPath);
 
-            VisualizerAttributeInjector attributeInjector = new VisualizerAttributeInjector(dynamicVisualizerSourceAssemblyPath);
+            VisualizerAttributeInjector attributeInjector = new VisualizerAttributeInjector(dynamicVisualizerSourceAssemblyPath, VisualStudioVer);
 
             attributeInjector.MapTypesFromAssembly(Assembly);
 
             string targetInstallationFilePath = Path.Combine(targetInstallationPath, TargetVisualizerAssemblyName);
 
             attributeInjector.SaveDebuggerVisualizer(targetInstallationFilePath);
-             
+
             Log.Write("Assembly {0} Mapped", Assembly);
         }
 
@@ -116,7 +118,7 @@ namespace BridgeVs.Build.Tasks
         {
             //this is the place where the mapped dot net visualizer will be saved and then read
             string sourceDotNetAssemblyVisualizerFilePath = Path.Combine(targetFolder, DotNetVisualizerAssemblyName);
-           
+
             //this is the target location for the dot net visualizer
             string targetDotNetAssemblyVisualizerFilePath = Path.Combine(installationFolder, DotNetVisualizerAssemblyName);
 
@@ -124,27 +126,18 @@ namespace BridgeVs.Build.Tasks
             //it create such maps in the building folder
             MapDotNetFrameworkTypes(targetDotNetAssemblyVisualizerFilePath, sourceVisualizerAssemblyPath);
 
-            //delete the temporary visualizer to avoid it dangles in the output folder (Debug/Release)
+            //delete the temporary visualizer to avoid it dangling in the output folder (Debug/Release)
             File.Delete(sourceDotNetAssemblyVisualizerFilePath);
-            File.Delete(sourceDotNetAssemblyVisualizerFilePath.Replace(".dll", "pdb"));
+            File.Delete(Path.ChangeExtension(sourceDotNetAssemblyVisualizerFilePath, "pdb"));
         }
 
-        private void MergeVisualizerWithDependencies(string visualizerInstallationPath, string temporaryVisualizerFilePath)
-        {
-            string customVisualizerTargetInstallationPath = Path.Combine(visualizerInstallationPath, TargetVisualizerAssemblyName);
-
-            if (customVisualizerTargetInstallationPath == temporaryVisualizerFilePath)
-            {
-                throw new ArgumentException("Installation Path and temporary path cannot be the same", nameof(temporaryVisualizerFilePath));
-            }
-        }
         /// <summary>
         /// Maps the dot net framework types. If the file already exists for a given vs version it won't be
         /// regenerated.
         /// </summary>
         /// <param name="targetFilePath">The target visualizer installation path.</param>
         /// <param name="sourceVisualizerAssemblyLocation">The source visualizer assembly location.</param>
-        public static void MapDotNetFrameworkTypes(string targetFilePath, string sourceVisualizerAssemblyLocation)
+        public void MapDotNetFrameworkTypes(string targetFilePath, string sourceVisualizerAssemblyLocation)
         {
             if (targetFilePath == null)
                 throw new ArgumentException(@"Target folder cannot be null", nameof(targetFilePath));
@@ -152,7 +145,7 @@ namespace BridgeVs.Build.Tasks
             if (string.IsNullOrEmpty(sourceVisualizerAssemblyLocation))
                 throw new ArgumentException(@"Visualizer Assembly Location cannot be null", nameof(sourceVisualizerAssemblyLocation));
 
-            VisualizerAttributeInjector visualizerInjector = new VisualizerAttributeInjector(sourceVisualizerAssemblyLocation);
+            VisualizerAttributeInjector visualizerInjector = new VisualizerAttributeInjector(sourceVisualizerAssemblyLocation, VisualStudioVer);
 
             //Map all the possible System  types
             IEnumerable<Type> systemLinqTypes = typeof(IOrderedEnumerable<>).Assembly

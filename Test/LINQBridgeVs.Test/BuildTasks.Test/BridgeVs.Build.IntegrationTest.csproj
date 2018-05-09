@@ -66,22 +66,6 @@
       <Project>{276f3935-e0ca-450f-a55f-aed56dc2024e}</Project>
       <Name>BridgeVs.Build</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Src\DynamicVisualizer.V11\BridgeVs.DynamicVisualizer.V11.csproj">
-      <Project>{c6798d16-89f5-4bff-8b62-2be6d4bbc192}</Project>
-      <Name>BridgeVs.DynamicVisualizer.V11</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Src\DynamicVisualizer.V12\BridgeVs.DynamicVisualizer.V12.csproj">
-      <Project>{835064f0-3c4f-4646-b17a-632c192cce3b}</Project>
-      <Name>BridgeVs.DynamicVisualizer.V12</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Src\DynamicVisualizer.V14\BridgeVs.DynamicVisualizer.V14.csproj">
-      <Project>{0beb30c9-243b-4192-8633-423b9322c587}</Project>
-      <Name>BridgeVs.DynamicVisualizer.V14</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Src\DynamicVisualizer.V15\BridgeVs.DynamicVisualizer.V15.csproj">
-      <Project>{6278c369-9593-4e93-a725-010717e7fc10}</Project>
-      <Name>BridgeVs.DynamicVisualizer.V15</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AnotherModel.Test\AnotherModel.UnitTest.csproj">
       <Project>{7b0c3d12-296a-438d-b0ea-b049a0d6d3c1}</Project>
       <Name>AnotherModel.UnitTest</Name>

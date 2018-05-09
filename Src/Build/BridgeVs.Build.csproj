@@ -38,51 +38,34 @@
     <AssemblyOriginatorKeyFile>..\LinqBridgeVsExtension\Key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="SInjection.cs" />
     <Compile Include="Tasks\CleanBuildTask.cs" />
     <Compile Include="Tasks\MapperBuildTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tasks\SInjectionBuildTask.cs" />
     <Compile Include="TypeMapper\VisualizerAttributeInjector.cs" />
     <Compile Include="Util\EnumerableExtension.cs" />
+    <Compile Include="Util\ReflectionUtils.cs" />
+    <Compile Include="Util\TypeReferenceExt.cs" />
     <Compile Include="Util\VisualizerAssemblyNameFormat.cs" />
-    <Compile Include="VisualStudioOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BridgeVs.Locations\BridgeVs.Locations.csproj">
       <Project>{bc10f93a-5da2-44f8-ae5e-5603cb46b548}</Project>
       <Name>BridgeVs.Locations</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DynamicVisualizer\BridgeVs.DynamicVisualizers.csproj">
+      <Project>{b84fbd50-0b10-4c25-8430-680fc6fc3fea}</Project>
+      <Name>BridgeVs.DynamicVisualizers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Logging\BridgeVs.Logging.csproj">
       <Project>{0b546762-c8c0-45c6-bc42-c5d91d510351}</Project>
       <Name>BridgeVs.Logging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SInject\BridgeVs.SInject.csproj">
-      <Project>{cd851c2d-8b24-4d72-b2a1-149f7d27c2f1}</Project>
-      <Name>BridgeVs.SInject</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DynamicVisualizer.V11\BridgeVs.DynamicVisualizer.V11.csproj">
-      <Project>{c6798d16-89f5-4bff-8b62-2be6d4bbc192}</Project>
-      <Name>BridgeVs.DynamicVisualizer.V11</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\DynamicVisualizer.V12\BridgeVs.DynamicVisualizer.V12.csproj">
-      <Project>{835064f0-3c4f-4646-b17a-632c192cce3b}</Project>
-      <Name>BridgeVs.DynamicVisualizer.V12</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\DynamicVisualizer.V14\BridgeVs.DynamicVisualizer.V14.csproj">
-      <Project>{0beb30c9-243b-4192-8633-423b9322c587}</Project>
-      <Name>BridgeVs.DynamicVisualizer.V14</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\DynamicVisualizer.V15\BridgeVs.DynamicVisualizer.V15.csproj">
-      <Project>{6278c369-9593-4e93-a725-010717e7fc10}</Project>
-      <Name>BridgeVs.DynamicVisualizer.V15</Name>
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Mono.Cecil, Version=0.10.0.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
       <HintPath>..\packages\Mono.Cecil.0.10.0\lib\net40\Mono.Cecil.dll</HintPath>
     </Reference>
@@ -93,11 +76,20 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Mono.Cecil.0.10.0\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpRaven, Version=2.3.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpRaven.2.3.2\lib\net40\SharpRaven.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

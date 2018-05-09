@@ -61,7 +61,7 @@ namespace BridgeVs.Extension.Package
     [ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string)]
     [ProvideAutoLoad(VSConstants.UICONTEXT.EmptySolution_string)]
     [Guid(GuidList.GuidBridgeVsExtensionPkgString)]
-    [ProvideOptionPage(typeof(PackageSettings),"Bridge Vs", "General", 0, 0, true)]
+    [ProvideOptionPage(typeof(PackageSettings), "Bridge Vs", "General", 0, 0, true)]
     public sealed class BridgeVsPackage : Microsoft.VisualStudio.Shell.Package
     {
         private DTE _dte;
@@ -144,7 +144,7 @@ namespace BridgeVs.Extension.Package
             catch (Exception e)
             {
                 Log.Write(e, "Initialize Error...");
-                MessageBox.Show("LINQBridgeVs wasn't successfully configured. Please restart Visual Studio");
+                MessageBox.Show($"LINQBridgeVs wasn't successfully configured. Please open a new issue on GitHub. Error: {e.Message}");
             }
         }
 
@@ -154,9 +154,9 @@ namespace BridgeVs.Extension.Package
             if (_installationResult == null)
                 return;
 
-             MessageBox.Show(_installationResult.Value
-                ? "LINQBridgeVs has been successfully configured."
-                : "LINQBridgeVs wasn't successfully configured. Please restart Visual Studio");
+            MessageBox.Show(_installationResult.Value
+               ? "LINQBridgeVs has been successfully configured."
+               : "LINQBridgeVs wasn't successfully configured. Please restart Visual Studio");
         }
         #endregion
     }

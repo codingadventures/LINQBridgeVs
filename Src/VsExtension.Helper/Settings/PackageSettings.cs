@@ -61,20 +61,35 @@ namespace BridgeVs.Helper.Settings
                         return;
                     }
 
-                    string filterInsertedDirectory = Path.GetFullPath(insertedDirectory);  
+                    string filterInsertedDirectory = Path.GetFullPath(insertedDirectory);
                     CommonRegistryConfigurations.SetLINQPadInstallationPath(dte.Version, filterInsertedDirectory);
                 }
             }
         }
 
-        //[Category("Feedback")]
-        //[DisplayName("Enable Error Reporting")]
-        //[Description("When enabled, Object Exporter will automatically send exception details to our servers. " +
-        //             "This will allow us to improve Object Exporter and keep it bug free.")]
-        //public bool ErrorReportingEnabled
-        //{
-        //    get { return _errorReportingEnabled; }
-        //    set { _errorReportingEnabled = value; }
-        //}
+        [Category("Feedback")]
+        [DisplayName("Enable Error Tracking")]
+        [Description("When enabled, LINQBridgeVs will automatically send exception details to a Sentry server. " +
+                     "This will allow the improvement of LINQBridgeVs and keep it bug free."+
+                     "for concern about privacy you can turn off this feature. Please refer to: [link] ")]
+        public bool ErrorTrackingEnabled
+        {
+            get
+            {
+                var dte = (DTE)GetService(typeof(SDTE));
+                if (dte != null)
+                    return CommonRegistryConfigurations.IsErrorTrackingEnabled(dte.Version);
+
+                return false;
+            }
+            set
+            {
+                var dte = (DTE)GetService(typeof(SDTE));
+                if (dte != null)
+                {
+                    CommonRegistryConfigurations.SetErrorTracking(dte.Version, value);
+                }
+            }
+        }
     }
 }

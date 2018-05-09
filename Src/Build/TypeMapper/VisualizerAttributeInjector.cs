@@ -42,23 +42,20 @@ namespace BridgeVs.Build.TypeMapper
     /// </summary>
     internal class VisualizerAttributeInjector : IDisposable
     {
-        #region [ Private Properties ]
-
-        private string _assemblyDescriptionAttributeValue;
-
-        #region [ Static Readonly Func ]
-
-        private static readonly Func<TypeDefinition, bool> AbstractTypesFilter
-            = typeDef => typeDef.IsPublic && !typeDef.IsInterface && !typeDef.IsAbstract;
-
-        private static readonly Func<TypeDefinition, string, bool> BaseTypeFilter
-            = (typeDef, toCompare) => typeDef.BaseType != null && typeDef.BaseType.Name.Contains(toCompare);
-
+        #region [ Constants ]
+        private const string SystemType = "System.Type";
+        private const string SystemDiagnosticsDebuggerVisualizerAttribute = "System.Diagnostics.DebuggerVisualizerAttribute";
+        private const string SystemReflectionAssemblyDescriptionAttribute = "System.Reflection.AssemblyDescriptionAttribute";
         #endregion
 
-        #region [ Fields ]
-
+        private string _assemblyDescriptionAttributeValue;
         private readonly AssemblyDefinition _debuggerVisualizerAssembly;
+        private MethodDefinition _debuggerVisualizerAttributeCtor;
+        private CustomAttributeArgument _customDebuggerVisualizerAttributeArgument;
+        private CustomAttributeArgument _visualizerObjectSourceCustomAttributeArgument;
+
+        private int _targetVsVersion;
+
         private readonly WriterParameters _writerParameters = new WriterParameters
         {
 #if DEBUG
@@ -69,26 +66,13 @@ namespace BridgeVs.Build.TypeMapper
 #endif
         };
 
-        private MethodDefinition _debuggerVisualizerAttributeCtor;
-        private CustomAttributeArgument _customDebuggerVisualizerAttributeArgument;
-        private CustomAttributeArgument _visualizerObjectSourceCustomAttributeArgument;
-        #endregion
-
-        #region [ Constants ]
-        private const string SystemType = "System.Type";
-        private const string SystemDiagnosticsDebuggerVisualizerAttribute = "System.Diagnostics.DebuggerVisualizerAttribute";
-
-        private const string SystemReflectionAssemblyDescriptionAttribute = "System.Reflection.AssemblyDescriptionAttribute";
-        #endregion
-
-        #endregion
-
+         
         /// <summary>
         /// Initializes a new instance of the <see cref="VisualizerAttributeInjector"/> class.
         /// </summary>
         /// <param name="targetVisualizerAssemblyPath">The assembly debugger visualizer location.</param>
         /// <exception cref="System.IO.FileNotFoundException"></exception>
-        public VisualizerAttributeInjector(string targetVisualizerAssemblyPath)
+        public VisualizerAttributeInjector(string targetVisualizerAssemblyPath, string targetVsVersion)
         {
             if (!File.Exists(targetVisualizerAssemblyPath))
                 throw new FileNotFoundException(
@@ -96,11 +80,24 @@ namespace BridgeVs.Build.TypeMapper
 
             _debuggerVisualizerAssembly = AssemblyDefinition.ReadAssembly(targetVisualizerAssemblyPath, GetReaderParameters(targetVisualizerAssemblyPath));
 
+            //usually vsVersion has this format 15.0 so I'm only interested in the first part
+            targetVsVersion = targetVsVersion.Split('.').FirstOrDefault();
+            int.TryParse(targetVsVersion, out int vsVersion);
+
+            if (vsVersion == 0)
+                throw new ArgumentException($"Visual Studio version is incorrect {_targetVsVersion}");
+
+            _targetVsVersion = vsVersion;
+
             InitializeDebuggerAssembly();
+            RemapAssembly();
         }
 
         private void InitializeDebuggerAssembly()
         {
+            bool baseTypeFilter(TypeDefinition typeDef, string toCompare) 
+                => typeDef.BaseType != null && typeDef.BaseType.Name.Contains(toCompare);
+
             _debuggerVisualizerAssembly.MainModule.TryGetTypeReference(SystemType, out TypeReference systemTypeReference);
             IMetadataScope scope = _debuggerVisualizerAssembly.MainModule.TypeSystem.CoreLibrary;
             TypeReference debuggerVisualizerAttributeTypeReference = new TypeReference("System.Diagnostics", "DebuggerVisualizerAttribute", _debuggerVisualizerAssembly.MainModule, scope);
@@ -108,11 +105,11 @@ namespace BridgeVs.Build.TypeMapper
             TypeDefinition customDebuggerVisualizerTypeReference = _debuggerVisualizerAssembly
                 .MainModule
                 .Types
-                .SingleOrDefault(definition => BaseTypeFilter(definition, "DialogDebuggerVisualizer"));
+                .SingleOrDefault(definition => baseTypeFilter(definition, "DialogDebuggerVisualizer"));
             TypeDefinition customDebuggerVisualizerObjectSourceTypeReference = _debuggerVisualizerAssembly
                 .MainModule
                 .Types
-                .SingleOrDefault(definition => BaseTypeFilter(definition, "VisualizerObjectSource"));
+                .SingleOrDefault(definition => baseTypeFilter(definition, "VisualizerObjectSource"));
 
             _debuggerVisualizerAttributeCtor = debuggerVisualizerAttributeTypeReference.Resolve().GetConstructors().SingleOrDefault(definition =>
                                                                        definition.Parameters.Count == 2 &&
@@ -123,14 +120,26 @@ namespace BridgeVs.Build.TypeMapper
             _customDebuggerVisualizerAttributeArgument = new CustomAttributeArgument(systemTypeReference, customDebuggerVisualizerTypeReference);
             _visualizerObjectSourceCustomAttributeArgument = new CustomAttributeArgument(systemTypeReference, customDebuggerVisualizerObjectSourceTypeReference);
 
-
             CustomAttribute assemblyDescriptionAttribute = _debuggerVisualizerAssembly.CustomAttributes.FirstOrDefault(p => p.AttributeType.FullName.Equals(SystemReflectionAssemblyDescriptionAttribute));
 
             if (assemblyDescriptionAttribute != null)
                 _assemblyDescriptionAttributeValue = assemblyDescriptionAttribute.ConstructorArguments[0].Value.ToString();
             else
-                throw new Exception(
-                    $"Assembly Description Attribute not set in the Assembly {_debuggerVisualizerAssembly}");
+                throw new Exception($"Assembly Description Attribute not set in the Assembly {_debuggerVisualizerAssembly}");
+        }
+
+        private void RemapAssembly()
+        {
+            var microsoftDebuggerVisualizerAssembly = _debuggerVisualizerAssembly.MainModule.AssemblyReferences.First(p => p.Name == "Microsoft.VisualStudio.DebuggerVisualizers");
+
+            if (microsoftDebuggerVisualizerAssembly.Version.Major == _targetVsVersion)
+                return;
+
+            _debuggerVisualizerAssembly.MainModule.AssemblyReferences.Remove(microsoftDebuggerVisualizerAssembly);
+           
+            microsoftDebuggerVisualizerAssembly.Version = new Version(_targetVsVersion, 0);
+
+            _debuggerVisualizerAssembly.MainModule.AssemblyReferences.Add(microsoftDebuggerVisualizerAssembly);
         }
 
         private void MapType(TypeReference typeReference)
@@ -152,7 +161,7 @@ namespace BridgeVs.Build.TypeMapper
                     throw new Exception($"Assembly Scope Null. Check assembly {typeReference.FullName}");
             }
 
-            CustomAttribute customAttribute = new CustomAttribute(_debuggerVisualizerAssembly.MainModule.Import(_debuggerVisualizerAttributeCtor));
+            CustomAttribute customAttribute = new CustomAttribute(_debuggerVisualizerAssembly.MainModule.ImportReference(_debuggerVisualizerAttributeCtor));
 
             CustomAttributeArgument targetType = new CustomAttributeArgument(_debuggerVisualizerAssembly.MainModule.TypeSystem.String, scope);
             CustomAttributeArgument descriptionType = new CustomAttributeArgument(_debuggerVisualizerAssembly.MainModule.TypeSystem.String, _assemblyDescriptionAttributeValue);
@@ -175,7 +184,7 @@ namespace BridgeVs.Build.TypeMapper
         /// <param name="type">The type.</param>
         public void MapType(Type type)
         {
-            TypeReference typeReference = _debuggerVisualizerAssembly.MainModule.Import(type);
+            TypeReference typeReference = _debuggerVisualizerAssembly.MainModule.ImportReference(type);
 
             MapType(typeReference);
         }
@@ -191,10 +200,12 @@ namespace BridgeVs.Build.TypeMapper
 
             AssemblyDefinition assemblyDefinition = AssemblyDefinition.ReadAssembly(assemblyToMapTypesFromLocation, GetReaderParameters(assemblyToMapTypesFromLocation));
 
+            bool abstractTypesFilter(TypeDefinition typeDef) => typeDef.IsPublic && !typeDef.IsInterface && !typeDef.IsAbstract;
+
             assemblyDefinition
                .MainModule
                .Types
-               .Where(AbstractTypesFilter)
+               .Where(abstractTypesFilter)
                .ForEach(MapType);
         }
 
@@ -209,8 +220,7 @@ namespace BridgeVs.Build.TypeMapper
             const int maxCount = 3;
             int i = 0;
             string fileName = Path.GetFileNameWithoutExtension(debuggerVisualizerDst);
-
-            //I would have used a goto....can't forget my professor's quote: "Each GOTO can be superseeded by a Repeat Until...God bless Pascal!"
+            
             while (!success && i++ < maxCount)
             {
                 try
@@ -249,7 +259,8 @@ namespace BridgeVs.Build.TypeMapper
             };
 
             string pdbName = Path.ChangeExtension(assemblyPath, "pdb");
-            if (!File.Exists(pdbName)) return readerParameters;
+            if (!File.Exists(pdbName))
+                return readerParameters;
 
             PdbReaderProvider symbolReaderProvider = new PdbReaderProvider();
             readerParameters.SymbolReaderProvider = symbolReaderProvider;

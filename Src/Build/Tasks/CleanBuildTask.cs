@@ -25,6 +25,8 @@
 
 using System.IO;
 using BridgeVs.Build.Util;
+using BridgeVs.Locations;
+using BridgeVs.Logging;
 using Microsoft.Build.Framework;
 
 namespace BridgeVs.Build.Tasks
@@ -33,18 +35,29 @@ namespace BridgeVs.Build.Tasks
     {
         public bool Execute()
         {
-            string visualizerAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(VisualStudioVer, Assembly);
-            string targetInstallationPath = VisualStudioOptions.GetVisualizerDestinationFolder(VisualStudioVer);
+            try
+            {
+                string visualizerAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(VisualStudioVer, Assembly);
+                string targetInstallationPath = VisualStudioOptions.GetVisualizerDestinationFolder(VisualStudioVer);
 
-            string visualizerFullPath = Path.Combine(targetInstallationPath, visualizerAssemblyName);
+                string visualizerFullPath = Path.Combine(targetInstallationPath, visualizerAssemblyName);
 
-            if (File.Exists(visualizerFullPath))
-                File.Delete(visualizerFullPath);
+                if (File.Exists(visualizerFullPath))
+                    File.Delete(visualizerFullPath);
 
-            //check if pdb also exists and delete it
-            string visualizerPdbFullPath = visualizerFullPath.Replace(".dll",".pdb");
-            if (File.Exists(visualizerPdbFullPath))
-                File.Delete(visualizerPdbFullPath);
+                //check if pdb also exists and delete it
+                string visualizerPdbFullPath = Path.ChangeExtension(visualizerFullPath , "pdb");
+
+                if (File.Exists(visualizerPdbFullPath))
+                    File.Delete(visualizerPdbFullPath);
+            }
+            catch (System.Exception exception)
+            {
+                if (CommonRegistryConfigurations.IsErrorTrackingEnabled(VisualStudioVer))
+                    RavenWrapper.Instance.Capture(exception, message: "Error during project cleaning", vsVersion: VisualStudioVer);
+
+                return false;
+            }
 
             return true;
         }

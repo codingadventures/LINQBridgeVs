@@ -49,12 +49,12 @@ namespace BridgeVs.Helper.Configuration
 
         public static List<string> Dependencies => new List<string>
         {
-            "BridgeVs.DynamicCore.dll",
             "BridgeVs.Grapple.dll",
             "BridgeVs.Locations.dll",
             "BridgeVs.Logging.dll",
             "Newtonsoft.Json.dll",
-            "System.IO.Abstractions.dll"
+            "System.IO.Abstractions.dll",
+            "SharpRaven.dll"
         };
 
         #region [ Private Methods ]
@@ -81,7 +81,7 @@ namespace BridgeVs.Helper.Configuration
             var alreadyInstalled = !string.IsNullOrEmpty(currentInstalledVersionPath);
 
             if (alreadyInstalled && Directory.Exists(currentInstalledVersionPath))
-                return true; 
+                return true;
 
             //otherwise set it up manually
             if (Directory.Exists(CommonFolderPaths.LinqPad5DestinationFolder))
@@ -118,7 +118,7 @@ namespace BridgeVs.Helper.Configuration
                     throw new Exception("LINQPad file name not correct");
 
                 CommonRegistryConfigurations.SetLINQPadInstallationPath(vsVersion, linqPadDirectoryName);
-               
+
                 return true;
             }
             openWebSite:
@@ -267,11 +267,14 @@ namespace BridgeVs.Helper.Configuration
 
                 DeployDependencies(vsVersion);
 
+                CommonRegistryConfigurations.SetErrorTracking(vsVersion, true);
+
                 return true;
             }
             catch (Exception e)
             {
-                Log.Write(e, "Error Configuring LINQBridgeVs");
+                const string context = "Error Configuring LINQBridgeVs";
+                Log.Write(e, context);
                 return false;
             }
         }

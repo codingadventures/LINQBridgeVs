@@ -4,8 +4,6 @@ using System.IO;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using BridgeVs.Logging;
-using BridgeVs.DynamicCore;
-using BridgeVs.DynamicCore.Template;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model.UnitTest;
 using BridgeVs.Locations;
