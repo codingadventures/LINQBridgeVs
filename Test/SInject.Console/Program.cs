@@ -28,8 +28,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using BridgeVs.Grapple;
-using ConsoleApp1;
 
 namespace BridgeVs.Console
 {
@@ -41,10 +39,6 @@ namespace BridgeVs.Console
             {
                 IEnumerable<string> mm = Enumerable.Range(0, 100).Select(p => p.ToString());
                 var resu = Process(mm);
-                //Truck truck = new Truck("LINQBridgeVsTruck");
-                //truck.WaitDelivery("MyClass").Wait();
-                //var @object = truck.UnLoadCargo<MyClass>().ToList();
-                //@object.Dump("ConsoleApp1.MyClass", 2);
             }
             catch (Exception e)
             {

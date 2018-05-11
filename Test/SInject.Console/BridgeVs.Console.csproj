@@ -35,9 +35,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ConsoleApp1">
-      <HintPath>..\..\..\..\source\repos\ConsoleApp1\ConsoleApp1\bin\Debug\ConsoleApp1.exe</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
