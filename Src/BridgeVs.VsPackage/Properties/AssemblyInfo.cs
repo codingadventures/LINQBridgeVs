@@ -23,39 +23,39 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-
+using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using System.Resources;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-// General Information about an assembly is controlled through the following
+// General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("BridgeVs.Locations")]
+[assembly: AssemblyTitle("BridgeVs.VsPackage")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("BridgeVs.Locations")]
+[assembly: AssemblyCompany("Coding Adventures")]
+[assembly: AssemblyProduct("BridgeVs")]
 [assembly: AssemblyCopyright("Copyright © Coding Adventures 2013 - 2018")]
 [assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
-
-// Setting ComVisible to false makes the types in this assembly not visible
-// to COM components.  If you need to access a type in this assembly from
-// COM, set the ComVisible attribute to true on that type.
-[assembly: ComVisible(false)]
-
-// The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("bc10f93a-5da2-44f8-ae5e-5603cb46b548")]
+[assembly: AssemblyCulture("")]   
+[assembly: ComVisible(false)]     
+[assembly: CLSCompliant(false)]
+[assembly: NeutralResourcesLanguage("en-US")]
 
 // Version information for an assembly consists of the following four values:
 //
 //      Major Version
-//      Minor Version
+//      Minor Version 
 //      Build Number
 //      Revision
 //
-// You can specify all the values or you can default the Build and Revision Numbers
+// You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
+
 [assembly: AssemblyVersion("1.4.*")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: Guid("2016fd5d-79e9-4823-b927-cb796f7b411a")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1017:MarkAssembliesWithComVisible")]

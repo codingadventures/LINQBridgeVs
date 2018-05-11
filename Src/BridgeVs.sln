@@ -3,19 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.Build", "Build\BridgeVs.Build.csproj", "{276F3935-E0CA-450F-A55F-AED56DC2024E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.Build", "BridgeVs.Build\BridgeVs.Build.csproj", "{276F3935-E0CA-450F-A55F-AED56DC2024E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.VsPackage", "VsExtension\BridgeVs.VsPackage.csproj", "{1B82F962-5D04-42B6-8D18-7AA8E8FB615F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.VsPackage", "BridgeVs.VsPackage\BridgeVs.VsPackage.csproj", "{1B82F962-5D04-42B6-8D18-7AA8E8FB615F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.VsPackage.Helper", "VsExtension.Helper\BridgeVs.VsPackage.Helper.csproj", "{0FA0053B-AB53-40DF-A060-6DCC22568A23}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.VsPackage.Helper", "BridgeVs.VsPackage.Helper\BridgeVs.VsPackage.Helper.csproj", "{0FA0053B-AB53-40DF-A060-6DCC22568A23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.Grapple", "Grapple\BridgeVs.Grapple.csproj", "{79C0C9ED-D22C-4855-97C1-F6BD0127A531}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.Grapple", "BridgeVs.Grapple\BridgeVs.Grapple.csproj", "{79C0C9ED-D22C-4855-97C1-F6BD0127A531}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.Logging", "Logging\BridgeVs.Logging.csproj", "{0B546762-C8C0-45C6-BC42-C5D91D510351}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.Logging", "BridgeVs.Logging\BridgeVs.Logging.csproj", "{0B546762-C8C0-45C6-BC42-C5D91D510351}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.Locations", "BridgeVs.Locations\BridgeVs.Locations.csproj", "{BC10F93A-5DA2-44F8-AE5E-5603CB46B548}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.DynamicVisualizers", "DynamicVisualizer\BridgeVs.DynamicVisualizers.csproj", "{B84FBD50-0B10-4C25-8430-680FC6FC3FEA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.DynamicVisualizers", "BridgeVs.DynamicVisualizers\BridgeVs.DynamicVisualizers.csproj", "{B84FBD50-0B10-4C25-8430-680FC6FC3FEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
