@@ -26,7 +26,6 @@
 using SharpRaven;
 using SharpRaven.Data;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace BridgeVs.Logging

@@ -20,7 +20,6 @@ namespace BridgeVs.Build.Test
         [TestCategory("UnitTest")]
         public void SInjection_BuildTask_Test_Should_Succeed()
         {
-
             SInjectionBuildTask sInjectionBuildTask = new SInjectionBuildTask
             {
                 Assembly = _assemblyModel.Location
