@@ -288,19 +288,13 @@ namespace BridgeVs.Build
             ReaderParameters readerParameters = new ReaderParameters
             {
                 AssemblyResolver = assemblyResolver,
-#if DEBUG
+#if TEST
                 InMemory = true,
 #endif
                 ReadingMode = ReadingMode.Immediate
             };
-
-            if (!File.Exists(PdbName))
-                return readerParameters;
-
-            PdbReaderProvider symbolReaderProvider = new PdbReaderProvider();
-            readerParameters.SymbolReaderProvider = symbolReaderProvider;
-
             return readerParameters;
+            //disables reading the symbols...
         }
 
         private WriterParameters GetWriterParameters()

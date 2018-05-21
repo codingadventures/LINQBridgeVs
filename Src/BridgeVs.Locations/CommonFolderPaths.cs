@@ -97,6 +97,7 @@ namespace BridgeVs.Locations
         {
             get
             {
+#if !TEST
                 //I could cache the file here
                 if (File.Exists(LinqPadCustomQueryFolderConfigurationFile))
                 {
@@ -104,7 +105,7 @@ namespace BridgeVs.Locations
                     if (!string.IsNullOrEmpty(customQueryFolderPath))
                         return Path.Combine(customQueryFolderPath, "BridgeVs");
                 }
-                //
+#endif
                 return Path.Combine(Documents, "LINQPad Queries", "BridgeVs");
             }
         }
@@ -113,13 +114,14 @@ namespace BridgeVs.Locations
         {
             get
             {
+#if !TEST
                 if (File.Exists(LinqPadCustomPluginFolderConfigurationFile))
                 {
                     string customPluginFolderPath = File.ReadLines(LinqPadCustomPluginFolderConfigurationFile).FirstOrDefault();
                     if (!string.IsNullOrEmpty(customPluginFolderPath))
                         return customPluginFolderPath;
                 }
-
+#endif
                 return Path.Combine(Documents, "LINQPad Plugins");
             }
         }

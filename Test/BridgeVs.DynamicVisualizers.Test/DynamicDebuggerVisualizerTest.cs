@@ -72,7 +72,7 @@ namespace BridgeVs.DynamicVisualizers.Test
             DynamicDebuggerVisualizer cVisualizerObjectSource = new DynamicDebuggerVisualizer(_fileSystem);
             cVisualizerObjectSource.DeployLinqScript(_message);
 
-            string dstScriptPath = CommonFolderPaths.LinqPadQueryFolder;
+            string dstScriptPath = CommonFolderPaths.DefaultLinqPadQueryFolder;
 
             string fileNamePath = Path.Combine(dstScriptPath, _message.AssemblyName, _message.FileName);
 
