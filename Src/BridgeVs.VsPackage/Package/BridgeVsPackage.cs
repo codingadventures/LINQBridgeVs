@@ -32,7 +32,6 @@ using BridgeVs.VsPackage.Helper;
 using BridgeVs.VsPackage.Helper.Configuration;
 using BridgeVs.VsPackage.Helper.Installer;
 using BridgeVs.VsPackage.Helper.Settings;
-using BridgeVs.Logging;
 using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
@@ -118,8 +117,6 @@ namespace BridgeVs.VsPackage.Package
 
             try
             {
-                Log.Configure("LINQBridgeVs", "Extensions");
-
                 //if first time user 
                 if (isLinqBridgeVsConfigured)
                 {
@@ -142,7 +139,8 @@ namespace BridgeVs.VsPackage.Package
             }
             catch (Exception e)
             {
-                Log.Write(e, "Initialize Error...");
+                IVsActivityLog log = GetService(typeof(SVsActivityLog)) as IVsActivityLog;
+                log.VsLog("Initialize Error... " + e.Message);
                 MessageBox.Show($"LINQBridgeVs wasn't successfully configured. Please open a new issue on GitHub. Error: {e.Message}");
             }
         }

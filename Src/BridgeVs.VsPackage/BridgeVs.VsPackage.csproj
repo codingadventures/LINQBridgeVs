@@ -165,6 +165,7 @@
       <Name>BridgeVs.Locations</Name>
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\BridgeVs.DynamicVisualizers\BridgeVs.DynamicVisualizers.csproj">
       <Project>{B84FBD50-0B10-4C25-8430-680FC6FC3FEA}</Project>
@@ -183,6 +184,7 @@
     <ProjectReference Include="..\BridgeVs.Logging\BridgeVs.Logging.csproj">
       <Project>{0B546762-C8C0-45C6-BC42-C5D91D510351}</Project>
       <Name>BridgeVs.Logging</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\BridgeVs.Build\BridgeVs.Build.csproj">
       <Project>{276f3935-e0ca-450f-a55f-aed56dc2024e}</Project>

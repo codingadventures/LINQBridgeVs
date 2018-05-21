@@ -26,6 +26,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Linq;
 
 namespace BridgeVs.Locations
 {
@@ -50,17 +51,18 @@ namespace BridgeVs.Locations
         public static readonly string VisualStudio2013Path = Path.Combine(ProgramFilesFolderPath, @"Microsoft Visual Studio 12.0");
         public static readonly string VisualStudio2012Path = Path.Combine(ProgramFilesFolderPath, @"Microsoft Visual Studio 11.0");
 
+        public static readonly string ApplicationData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
         public static readonly string GrappleFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Grapple");
 
         public static string InstallFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
         public static readonly string Documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-        public static readonly string LinqPadQueryFolder = Path.Combine(Documents, "LINQPad Queries", "BridgeVs");
-        public static readonly string LinqPadPluginFolder = Path.Combine(Documents, "LINQPad Plugins");
-
         public static readonly string LinqPad4DestinationFolder = Path.Combine(ProgramFilesFolderPath, "LINQPad4");
         public static readonly string LinqPad5DestinationFolder = Path.Combine(ProgramFilesFolderPath, "LINQPad5");
+        public static readonly string LinqPadCustomQueryFolderConfigurationFile = Path.Combine(ApplicationData, "LINQPad", "QueryLocations.txt");
+        public static readonly string LinqPadCustomPluginFolderConfigurationFile = Path.Combine(ApplicationData, "LINQPad", "PluginLocations.txt");
 
         public static readonly string CustomAfterTargetFileNamePath = Path.Combine(InstallFolder, CustomAfterTargets);
         public static readonly string CustomAfterTargetFileName = Path.GetFileName(CustomAfterTargets);
@@ -90,6 +92,37 @@ namespace BridgeVs.Locations
         public static readonly string Vs2013DebuggerVisualizerDestinationFolder = Documents + @"\Visual Studio 2013\Visualizers\";
         public static readonly string Vs2015DebuggerVisualizerDestinationFolder = Documents + @"\Visual Studio 2015\Visualizers\";
         public static readonly string Vs2017DebuggerVisualizerDestinationFolder = Documents + @"\Visual Studio 2017\Visualizers\";
+
+        public static string DefaultLinqPadQueryFolder
+        {
+            get
+            {
+                //I could cache the file here
+                if (File.Exists(LinqPadCustomQueryFolderConfigurationFile))
+                {
+                    string customQueryFolderPath = File.ReadLines(LinqPadCustomQueryFolderConfigurationFile).FirstOrDefault();
+                    if (!string.IsNullOrEmpty(customQueryFolderPath))
+                        return Path.Combine(customQueryFolderPath, "BridgeVs");
+                }
+                //
+                return Path.Combine(Documents, "LINQPad Queries", "BridgeVs");
+            }
+        }
+
+        public static string DefaultLinqPadPluginFolder
+        {
+            get
+            {
+                if (File.Exists(LinqPadCustomPluginFolderConfigurationFile))
+                {
+                    string customPluginFolderPath = File.ReadLines(LinqPadCustomPluginFolderConfigurationFile).FirstOrDefault();
+                    if (!string.IsNullOrEmpty(customPluginFolderPath))
+                        return customPluginFolderPath;
+                }
+
+                return Path.Combine(Documents, "LINQPad Plugins");
+            }
+        }
 
         static CommonFolderPaths()
         {

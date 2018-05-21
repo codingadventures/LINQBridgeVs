@@ -46,14 +46,22 @@ namespace BridgeVs.Logging
         private RavenWrapper()
         {
 #if DEPLOY
-            Func<Requester, Requester> removeUserId = new Func<Requester, Requester>(req => {
+            Func<Requester, Requester> removeUserId = new Func<Requester, Requester>(req =>
+            {
                 //GDPR compliant, no server name or username stored
                 req.Packet.ServerName = string.Empty;
                 req.Packet.User.Username = string.Empty;
                 return req;
             });
+
+            Action<Exception> onSendError = new Action<Exception>(ex =>
+            {
+                Log.Configure("entry", "AllProjects");
+                Log.Write(ex, "Error sending the exception to Sentry.");
+            });
             _ravenClient = new RavenClient(RavenClientId);
             _ravenClient.BeforeSend = removeUserId;
+            _ravenClient.ErrorOnCapture = onSendError;
 #endif
         }
 

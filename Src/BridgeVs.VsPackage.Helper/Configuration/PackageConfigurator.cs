@@ -32,7 +32,6 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Windows.Forms;
 using BridgeVs.Locations;
-using BridgeVs.Logging;
 using Microsoft.Win32;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 
@@ -131,12 +130,8 @@ namespace BridgeVs.VsPackage.Helper.Configuration
             string msBuildDir = CreateMsBuildTargetDirectory(vsVersion, vsEdition);
             //Copy the CustomAfter and CustomBefore to the default MSbuild v4.0 location
             File.Copy(CommonFolderPaths.CustomAfterTargetFileNamePath, Path.Combine(msBuildDir, CommonFolderPaths.CustomAfterTargetFileName), true);
-            Log.Write("CustomAfterTargetFileName Targets copied to {0} ", Path.Combine(msBuildDir, CommonFolderPaths.CustomAfterTargetFileName));
 
             File.Copy(CommonFolderPaths.CustomBeforeTargetFileNamePath, Path.Combine(msBuildDir, CommonFolderPaths.CustomBeforeTargetFileName), true);
-            Log.Write("CustomBeforeTargetFileName Targets copied to {0} ", Path.Combine(msBuildDir, CommonFolderPaths.CustomBeforeTargetFileName));
-
-            Log.Write("Setting IsEnvironmentConfigured to True");
         }
 
         private static void SetInstallationFolder(string vsVersion)
@@ -147,8 +142,10 @@ namespace BridgeVs.VsPackage.Helper.Configuration
                 if (key == null) return;
 
                 object value = key.GetValue(InstallFolderPathRegistryValue);
-                if (value != null && value.Equals(CommonFolderPaths.InstallFolder)) return;
-                Log.Write("Setting InstallFolderPath to {0}", CommonFolderPaths.InstallFolder);
+
+                if (value != null && value.Equals(CommonFolderPaths.InstallFolder))
+                    return;
+
                 key.SetValue(InstallFolderPathRegistryValue, CommonFolderPaths.InstallFolder);
             }
         }
@@ -176,7 +173,6 @@ namespace BridgeVs.VsPackage.Helper.Configuration
                 ? string.Format(CommonFolderPaths.MsBuildPath2017, vsEdition)
                 : CommonFolderPaths.MsBuildPath, msBuildVersion);
 
-            Log.Write("MsBuild Directory being created {0}", directoryToCreate);
             if (!Directory.Exists(directoryToCreate))
             {
                 try
@@ -191,21 +187,13 @@ namespace BridgeVs.VsPackage.Helper.Configuration
                     Directory.CreateDirectory(directoryToCreate, sec);
                     return directoryToCreate;
                 }
-                catch (UnauthorizedAccessException uae)
+                catch (UnauthorizedAccessException)
                 {
-                    Log.Write(uae);
                     MessageBox.Show(
                         "It wasn't possible to complete the configuration of BridgeVs. Please restart Visual Studio as Administrator");
                     throw;
                 }
-                catch (Exception exception)
-                {
-                    Log.Write(exception);
-                    Log.Write("Error creating MSBuild Path folder in {0}", CommonFolderPaths.MsBuildPath);
-                    throw;
-                }
             }
-            Log.Write("MSBuild Path {0} already exists", directoryToCreate);
             return directoryToCreate;
         }
 
@@ -217,8 +205,6 @@ namespace BridgeVs.VsPackage.Helper.Configuration
         {
             if (InstalledExtensionVersion(visualStudioVersion) != CurrentAssemblyVersion)
             {
-                Log.Write("New LINQBridgeVs Extensions. Previous Version {0}. Current Version {1}",
-                    InstalledExtensionVersion(visualStudioVersion), CurrentAssemblyVersion);
                 return false;
             }
 
@@ -235,48 +221,35 @@ namespace BridgeVs.VsPackage.Helper.Configuration
         }
         public static bool Install(string vsVersion, string vsEdition)
         {
-            Log.Write("Configuring LINQBridgeVs Extension");
-
-            try
+            if (!IsLINQPadInstalled(vsVersion)) //ask the user to insert a custom location
             {
-                if (!IsLINQPadInstalled(vsVersion)) //ask the user to insert a custom location
-                {
-                    return false;
-                }
-
-                ObsoleteXmlConfiguration.RemoveOldTargets();
-
-                SetBridgeVsAssemblyVersion(vsVersion);
-
-                CreateLinqPadQueryFolder();
-
-                CreateLinqPadPluginFolder();
-
-                CreateVisualizerFolder(vsVersion);
-
-                CreateGrappleFolder();
-
-                //Always check if installation folder has changed
-                SetInstallationFolder(vsVersion);
-
-                Log.Write("Setting the Environment");
-
-                SetEnvironment(vsVersion, vsEdition);
-
-                DeleteExistingVisualizers(vsVersion);
-
-                DeployDependencies(vsVersion);
-
-                CommonRegistryConfigurations.SetErrorTracking(vsVersion, true);
-
-                return true;
-            }
-            catch (Exception e)
-            {
-                const string context = "Error Configuring LINQBridgeVs";
-                Log.Write(e, context);
                 return false;
             }
+
+            ObsoleteXmlConfiguration.RemoveOldTargets();
+
+            SetBridgeVsAssemblyVersion(vsVersion);
+            
+            CreateLinqPadQueryFolder();
+
+            CreateLinqPadPluginFolder();
+
+            CreateVisualizerFolder(vsVersion);
+
+            CreateGrappleFolder();
+
+            //Always check if installation folder has changed
+            SetInstallationFolder(vsVersion);
+
+            SetEnvironment(vsVersion, vsEdition);
+
+            DeleteExistingVisualizers(vsVersion);
+
+            DeployDependencies(vsVersion);
+
+            CommonRegistryConfigurations.SetErrorTracking(vsVersion, true);
+
+            return true;
         }
 
         public static void DeployDependencies(string vsVersion)
@@ -286,7 +259,7 @@ namespace BridgeVs.VsPackage.Helper.Configuration
                 throw new Exception("Dll location is null");
 
             string debuggerVisualizerTargetFolder = DebuggerVisualizerTargetFolder(vsVersion);
-            string linqPadPluginFolder = CommonFolderPaths.LinqPadPluginFolder;
+            string linqPadPluginFolder = CommonFolderPaths.DefaultLinqPadPluginFolder;
             foreach (string dependency in Dependencies)
             {
                 string sourceFile = Path.Combine(currentLocation, dependency);
@@ -338,22 +311,22 @@ namespace BridgeVs.VsPackage.Helper.Configuration
 
         private static void CreateLinqPadQueryFolder()
         {
-            string dstScriptPath = CommonFolderPaths.LinqPadQueryFolder;
+            //check first where LINQPad is installed
+            string dstScriptPath = CommonFolderPaths.DefaultLinqPadQueryFolder;
 
-            if (Directory.Exists(dstScriptPath)) return;
+            if (Directory.Exists(dstScriptPath))
+                return;
 
             DirectorySecurity sec = new DirectorySecurity();
             // Using this instead of the "Everyone" string means we work on non-English systems.
             SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
             sec.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
             Directory.CreateDirectory(dstScriptPath, sec);
-
-            Log.Write($"Directory Created: {dstScriptPath}");
         }
 
         private static void CreateLinqPadPluginFolder()
         {
-            string dstScriptPath = CommonFolderPaths.LinqPadPluginFolder;
+            string dstScriptPath = CommonFolderPaths.DefaultLinqPadPluginFolder;
 
             if (Directory.Exists(dstScriptPath)) return;
 
@@ -362,8 +335,6 @@ namespace BridgeVs.VsPackage.Helper.Configuration
             SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
             sec.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
             Directory.CreateDirectory(dstScriptPath, sec);
-
-            Log.Write($"Directory Created: {dstScriptPath}");
         }
 
         private static void CreateVisualizerFolder(string vsVersion)
@@ -376,21 +347,14 @@ namespace BridgeVs.VsPackage.Helper.Configuration
             SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
             sec.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
             Directory.CreateDirectory(debuggerVisualizerTargetFolder, sec);
-
-            Log.Write($"Directory Created: {debuggerVisualizerTargetFolder}");
-
         }
 
         private static void CreateGrappleFolder()
         {
-            Log.Write("Creating folder for Delivery {0}", Path.GetFullPath(CommonFolderPaths.GrappleFolder));
-
             if (Directory.Exists(CommonFolderPaths.GrappleFolder)) return;
 
             //no need for security access
             Directory.CreateDirectory(CommonFolderPaths.GrappleFolder);
-
-            Log.Write("Folder Successfully Created");
         }
         #endregion
     }

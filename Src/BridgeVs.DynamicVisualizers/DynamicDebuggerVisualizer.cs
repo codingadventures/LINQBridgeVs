@@ -91,7 +91,7 @@ namespace BridgeVs.DynamicVisualizers
             {
                 Log.Write("Entered in DeployLinqScript");
 
-                string dstScriptPath = CommonFolderPaths.LinqPadQueryFolder;
+                string dstScriptPath = CommonFolderPaths.DefaultLinqPadQueryFolder;
 
                 Log.Write("dstScriptPath: {0}", dstScriptPath);
                 string targetFolder = Path.Combine(dstScriptPath, message.AssemblyName);
@@ -159,7 +159,7 @@ namespace BridgeVs.DynamicVisualizers
             DeployLinqScript(message);
             Log.Write("LinqQuery Successfully deployed");
 
-            string linqQueryfileName = Path.Combine(CommonFolderPaths.LinqPadQueryFolder, message.AssemblyName, message.FileName);
+            string linqQueryfileName = Path.Combine(CommonFolderPaths.DefaultLinqPadQueryFolder, message.AssemblyName, message.FileName);
             string linqPadInstallationPath = CommonRegistryConfigurations.GetLINQPadInstallationPath(vsVersion);
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
