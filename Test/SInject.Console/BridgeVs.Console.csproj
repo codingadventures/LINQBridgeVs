@@ -35,9 +35,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ConsoleApp1">
-      <HintPath>..\..\..\..\source\repos\ConsoleApp1\ConsoleApp1\bin\Debug\ConsoleApp1.exe</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -51,13 +48,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Src\Grapple\BridgeVs.Grapple.csproj">
+    <ProjectReference Include="..\..\Src\BridgeVs.Grapple\BridgeVs.Grapple.csproj">
       <Project>{79c0c9ed-d22c-4855-97c1-f6bd0127a531}</Project>
       <Name>BridgeVs.Grapple</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Src\SInject\BridgeVs.SInject.csproj">
-      <Project>{cd851c2d-8b24-4d72-b2a1-149f7d27c2f1}</Project>
-      <Name>BridgeVs.SInject</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <BuildDependsOn>
+      $(BuildDependsOn);
+      LINQBridgeAfterBuild;
+    </BuildDependsOn>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CleanDependsOn>
+      $(CleanDependsOn);
+      LINQBridgeAfterClean;
+    </CleanDependsOn>
+  </PropertyGroup>
+
+  <UsingTask TaskName="SInjectionBuildTask" AssemblyFile="$([MSBuild]::Unescape('$(InstallFolderPath)'))\BridgeVs.Build.dll" />
+  <UsingTask TaskName="MapperBuildTask" AssemblyFile="$([MSBuild]::Unescape('$(InstallFolderPath)'))\BridgeVs.Build.dll" />
+  <UsingTask TaskName="CleanBuildTask" AssemblyFile="$([MSBuild]::Unescape('$(InstallFolderPath)'))\BridgeVs.Build.dll" />
+
+  <Target Name="LINQBridgeAfterBuild" DependsOnTargets="CoreCompile" Condition="'$(IsProjectEnabled)' == 'True'">
+    <SInjectionBuildTask Assembly="@(MainAssembly->'%(FullPath)')" VisualStudioVer="$(VisualStudioVersion)" Snk="$(MSBuildProjectDirectory)\$(AssemblyOriginatorKeyFile)"  />
+    <MapperBuildTask Assembly="@(MainAssembly->'%(FullPath)')"   VisualStudioVer="$(VisualStudioVersion)"   />
+  </Target>
+
+  <Target Name="LINQBridgeAfterClean" DependsOnTargets="AfterClean" Condition="'$(IsProjectEnabled)' == 'True'" >
+    <CleanBuildTask Assembly="$(AssemblyName)" VisualStudioVer="$(VisualStudioVersion)"/>
+  </Target>
+</Project>

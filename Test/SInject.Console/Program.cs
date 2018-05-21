@@ -24,19 +24,53 @@
 #endregion
 
 
-using BridgeVs.SInject;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace SInject.Console
+namespace BridgeVs.Console
 {
     class Program
     {
         static void Main(string[] args)
         {
-            var sinject =
-                new SInjection(
-                    @"C:\Work\RBTCode\Trunk\Airline\CrewPay\CrewPay\bin\wnvhtmlconvert.dll", mode: PatchMode.Debug);
-            sinject.Patch(SerializationTypes.BinarySerialization);
-
+            try
+            {
+                IEnumerable<string> mm = Enumerable.Range(0, 100).Select(p => p.ToString());
+                var resu = Process(mm);
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine(e);
+                throw;
+            }
         }
+
+        static IEnumerable Process(object target)
+        {
+            var en = IsEnumerable(target);
+            ArrayList r = new ArrayList();
+            if (en)
+            {
+                return ((IEnumerable<object>)target).ToList();
+            }
+
+            return r;
+        }
+
+        static bool IsEnumerable(object target)
+        {
+            Type @type = target.GetType();
+
+            if (!@type.IsNestedPrivate || !@type.Name.Contains("Iterator") ||
+                !@type.FullName.Contains("System.Linq.Enumerable") || !(target is IEnumerable))
+                return false;
+
+            return @type.BaseType == null || @type.BaseType.FullName.Contains("Object") || true;
+        }
+
+
+
     }
 }
