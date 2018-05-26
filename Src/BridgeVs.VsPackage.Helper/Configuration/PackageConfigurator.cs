@@ -229,7 +229,7 @@ namespace BridgeVs.VsPackage.Helper.Configuration
             ObsoleteXmlConfiguration.RemoveOldTargets();
 
             SetBridgeVsAssemblyVersion(vsVersion);
-            
+
             CreateLinqPadQueryFolder();
 
             CreateLinqPadPluginFolder();
@@ -274,11 +274,14 @@ namespace BridgeVs.VsPackage.Helper.Configuration
         private static void DeleteExistingVisualizers(string vsVersion)
         {
             string debuggerVisualizerTargetFolder = DebuggerVisualizerTargetFolder(vsVersion);
+            string versionNumber = vsVersion.Split('.')[0];
 
             IEnumerable<string> visualizers = from file in Directory.EnumerateFiles(debuggerVisualizerTargetFolder)
                                               where !string.IsNullOrEmpty(file)
                                               let extension = Path.GetExtension(file)
+                                              let fileName = Path.GetFileName(file)
                                               where extension.Equals(".dll") || extension.Equals(".pdb")
+                                              where Dependencies.Contains(fileName) || fileName.Contains($"V{vsVersion}") || fileName.Contains($"V{versionNumber}")
                                               select file;
 
             foreach (string visualizer in visualizers)
@@ -328,7 +331,8 @@ namespace BridgeVs.VsPackage.Helper.Configuration
         {
             string dstScriptPath = CommonFolderPaths.DefaultLinqPadPluginFolder;
 
-            if (Directory.Exists(dstScriptPath)) return;
+            if (Directory.Exists(dstScriptPath))
+                return;
 
             DirectorySecurity sec = new DirectorySecurity();
             // Using this instead of the "Everyone" string means we work on non-English systems.

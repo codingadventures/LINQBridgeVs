@@ -59,7 +59,8 @@ namespace BridgeVs.Build.Util
         /// <example>VS Version: 15 - DotNetDynamicVisualizerType.V15.dll</example>
         public static string GetDotNetVisualizerName(string vsVersion)
         {
-            return $"DotNetDynamicVisualizerType.V{vsVersion}.dll";
+            string versionNumber = vsVersion.Split('.')[0];
+            return $"DotNetDynamicVisualizerType.V{versionNumber}.dll";
         }
     }
 }

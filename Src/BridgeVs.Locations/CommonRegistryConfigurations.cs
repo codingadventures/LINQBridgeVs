@@ -31,13 +31,16 @@ namespace BridgeVs.Locations
 
         public static bool IsErrorTrackingEnabled(string vsVersion)
         {
-            bool? isTrackingEnabled;
+            bool isTrackingEnabled = false;
+
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey($@"Software\LINQBridgeVs\{vsVersion}"))
             {
-                isTrackingEnabled = key?.GetValue(ErrorTrackingRegistryValue) as bool?;
+                string errorTracking = key?.GetValue(ErrorTrackingRegistryValue) as string;
+                if (!string.IsNullOrEmpty(errorTracking))
+                    isTrackingEnabled = Convert.ToBoolean(errorTracking);
             }
 
-            return isTrackingEnabled ?? false;
+            return isTrackingEnabled;
         }
 
         public static void SetErrorTracking(string vsVersion, bool enabled)
