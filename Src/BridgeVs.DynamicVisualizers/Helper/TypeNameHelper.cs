@@ -48,9 +48,9 @@ namespace BridgeVs.DynamicVisualizers.Helper
                                                                         "System.Diagnostics.",
                                                                         "System.Linq.Expression.",
                                                                         "System.Linq.",
-                                                                        "System.",
-
+                                                                        "System.IO.",
                                                                     };
+ 
         public static string RemoveSystemNamespaces(string input)
         {
             SystemNamespaces.ForEach(s => input = input.IndexOf(s, StringComparison.Ordinal) >= 0 ? input.Replace(s, string.Empty) : input);
