@@ -36,7 +36,7 @@ namespace BridgeVs.DynamicVisualizers.Template
         private readonly string _typeToRetrieveFullName;
         private readonly string _typeName;
 
-        public Inspection(List<string> assemblies, string typeToRetrieveFullName, string typeNamespace,string typeName)
+        public Inspection(List<string> assemblies, string typeToRetrieveFullName, string typeNamespace, string typeName)
         {
             _typeNamespace = typeNamespace;
             _typeName = typeName;

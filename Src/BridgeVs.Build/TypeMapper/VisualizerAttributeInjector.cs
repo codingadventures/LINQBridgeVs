@@ -255,17 +255,10 @@ namespace BridgeVs.Build.TypeMapper
             ReaderParameters readerParameters = new ReaderParameters
             {
                 AssemblyResolver = assemblyResolver,
-                ReadingMode = ReadingMode.Immediate
+                ReadingMode = ReadingMode.Immediate,
+                InMemory = true
             };
-
-            string pdbName = Path.ChangeExtension(assemblyPath, "pdb");
-            if (!File.Exists(pdbName))
-                return readerParameters;
-
-            PdbReaderProvider symbolReaderProvider = new PdbReaderProvider();
-            readerParameters.SymbolReaderProvider = symbolReaderProvider;
-            readerParameters.ReadSymbols = true;
-
+            
             return readerParameters;
         }
 

@@ -45,10 +45,10 @@ namespace BridgeVs.DynamicVisualizers
         {
             Log.Configure("LINQBridgeVs", "DynamicCore");
             try
-            { 
+            {
                 Type targetType = GetInterfaceTypeIfIsIterator(target);
-                string targetTypeFullName = TypeNameHelper.GetDisplayName(targetType, true);
-                string targetTypeName = TypeNameHelper.GetDisplayName(targetType, false);
+                string targetTypeFullName = TypeNameHelper.GetDisplayName(targetType, fullName: true);
+                string targetTypeName = TypeNameHelper.GetDisplayName(targetType, fullName: false);
                 //I'm lazy I know...
                 Regex pattern1 = new Regex("[<]");
                 Regex pattern2 = new Regex("[>]");

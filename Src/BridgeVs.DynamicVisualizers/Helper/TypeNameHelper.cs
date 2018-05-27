@@ -38,22 +38,78 @@ namespace BridgeVs.DynamicVisualizers.Helper
 
         private static readonly List<string> SystemNamespaces = new List<string>
                                                                     {
-                                                                        "System.Collections.Generic.",
-                                                                        "System.Collections.",
-                                                                        "System.Data.Common.",
-                                                                        "System.Data.Linq.",
-                                                                        "System.Data.",
-                                                                        "System.ComponentModel.",
-                                                                        "System.Configuration.",
-                                                                        "System.Diagnostics.",
-                                                                        "System.Linq.Expression.",
-                                                                        "System.Linq.",
-                                                                        "System.IO.",
+                                                                     "System.Configuration.Assemblies."
+                                                                     ,"System.IO."
+                                                                     ,"System.IO.IsolatedStorage."
+                                                                     ,"System.Security."
+                                                                     ,"System.Security.AccessControl."
+                                                                     ,"System.Security.Cryptography."
+                                                                     ,"System.Security.Cryptography.X509Certificates."
+                                                                     ,"System.Security.Permissions."
+                                                                     ,"System.Security.Claims."
+                                                                     ,"System.Security.Principal."
+                                                                     ,"System.Security.Policy."
+                                                                     ,"System.Security.Util."
+                                                                     ,"System.Numerics.Hashing."
+                                                                     ,"System.Resources."
+                                                                     ,"System.Globalization."
+                                                                     ,"System.Diagnostics."
+                                                                     ,"System.Diagnostics.SymbolStore."
+                                                                     ,"System.Diagnostics.Contracts."
+                                                                     ,"System.Diagnostics.Contracts.Internal."
+                                                                     ,"System.Diagnostics.CodeAnalysis."
+                                                                     ,"System.Diagnostics.Tracing."
+                                                                     ,"System.Diagnostics.Tracing.Internal."
+                                                                     ,"System.Collections."
+                                                                     ,"System.Collections.Concurrent."
+                                                                     ,"System.Collections.ObjectModel."
+                                                                     ,"System.Collections.Generic."
+                                                                     ,"System.Threading."
+                                                                     ,"System.Threading.Tasks."
+                                                                     ,"System.StubHelpers."
+                                                                     ,"System.Reflection."
+                                                                     ,"System.Reflection.Emit."
+                                                                     ,"System.Deployment.Internal."
+                                                                     ,"System.Deployment.Internal.Isolation."
+                                                                     ,"System.Deployment.Internal.Isolation.Manifest."
+                                                                     ,"System.Runtime."
+                                                                     ,"System.Runtime.DesignerServices."
+                                                                     ,"System.Runtime.Versioning."
+                                                                     ,"System.Runtime.ConstrainedExecution."
+                                                                     ,"System.Runtime.Serialization."
+                                                                     ,"System.Runtime.Serialization.Formatters."
+                                                                     ,"System.Runtime.Serialization.Formatters.Binary."
+                                                                     ,"System.Runtime.ExceptionServices."
+                                                                     ,"System.Runtime.Remoting."
+                                                                     ,"System.Runtime.Remoting.Metadata."
+                                                                     ,"System.Runtime.Remoting.Metadata.W3cXsd2001."
+                                                                     ,"System.Runtime.Remoting.Proxies."
+                                                                     ,"System.Runtime.Remoting.Services."
+                                                                     ,"System.Runtime.Remoting.Contexts."
+                                                                     ,"System.Runtime.Remoting.Lifetime."
+                                                                     ,"System.Runtime.Remoting.Channels."
+                                                                     ,"System.Runtime.Remoting.Messaging."
+                                                                     ,"System.Runtime.Remoting.Activation."
+                                                                     ,"System.Runtime.CompilerServices."
+                                                                     ,"System.Runtime.InteropServices."
+                                                                     ,"System.Runtime.InteropServices.TCEAdapterGen."
+                                                                     ,"System.Runtime.InteropServices.WindowsRuntime."
+                                                                     ,"System.Runtime.InteropServices.Expando."
+                                                                     ,"System.Runtime.InteropServices.ComTypes."
+                                                                     ,"System.Runtime.Hosting."
+                                                                     ,"System.Text."
+                                                                     ,"System."
                                                                     };
- 
+
         public static string RemoveSystemNamespaces(string input)
         {
-            SystemNamespaces.ForEach(s => input = input.IndexOf(s, StringComparison.Ordinal) >= 0 ? input.Replace(s, string.Empty) : input);
+            foreach (string systemNameSpace in SystemNamespaces.OrderByDescending(p => p.Length))
+            {
+                if (input.IndexOf(systemNameSpace, StringComparison.Ordinal) >= 0)
+                {
+                    input = input.Replace(systemNameSpace, string.Empty);
+                }
+            }
 
             return input;
         }
@@ -75,7 +131,7 @@ namespace BridgeVs.DynamicVisualizers.Helper
             }
 
             string anonymousTypeName = GetAnonymousTypeName(type);
-           
+
             // replace `2 with <type1, type2="">
             Regex regex = new Regex("`[0-9]+");
             GenericsMatchEvaluator evaluator = new GenericsMatchEvaluator(type.GetGenericArguments(), fullName);
@@ -89,8 +145,8 @@ namespace BridgeVs.DynamicVisualizers.Helper
                 name = name.Substring(0, start) + name.Substring(end + 2);
             }
             string retName = regex.Replace(name, evaluator.Evaluate);
-            
-            return anonymousTypeName.Length != 0 ? retName.Replace(anonymousTypeName,"AnonymousType") : retName;
+
+            return anonymousTypeName.Length != 0 ? retName.Replace(anonymousTypeName, "AnonymousType") : retName;
         }
 
         private static string GetAnonymousTypeName(Type @type)
@@ -101,7 +157,7 @@ namespace BridgeVs.DynamicVisualizers.Helper
 
             foreach (Type genericType in genericTypes)
             {
-                string  anonymousTypeName = GetAnonymousTypeName(genericType);
+                string anonymousTypeName = GetAnonymousTypeName(genericType);
                 if (anonymousTypeName.Length > 0) return anonymousTypeName;
             }
 
@@ -111,7 +167,7 @@ namespace BridgeVs.DynamicVisualizers.Helper
             bool isAnonymousType = hasCompilerGeneratedAttribute && nameContainsAnonymousType;
 
             if (!isAnonymousType) return string.Empty;
-         
+
             bool hasMoreGenericParams = @type.GetGenericArguments().Length != 0;
             return hasMoreGenericParams ? @type.Name.Split('`')[0] : @type.Name;
         }
