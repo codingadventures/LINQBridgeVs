@@ -27,7 +27,6 @@ using BridgeVs.Shared.Common;
 using SharpRaven;
 using SharpRaven.Data;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace BridgeVs.Shared.Logging
@@ -79,7 +78,6 @@ namespace BridgeVs.Shared.Logging
         }
 
         [Conditional("DEPLOY")]
-        [Conditional("DEBUG")]
         public void Capture(Exception exception, ErrorLevel errorLevel = ErrorLevel.Error, string message = "")
         {
             if (!CommonRegistryConfigurations.IsErrorTrackingEnabled(VisualStudioVersion))
