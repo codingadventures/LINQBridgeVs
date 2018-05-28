@@ -31,7 +31,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using BridgeVs.Build.Util;
-using BridgeVs.Logging;
+using BridgeVs.Shared.Logging;
 using Mono.Cecil;
 using Mono.Cecil.Pdb;
 

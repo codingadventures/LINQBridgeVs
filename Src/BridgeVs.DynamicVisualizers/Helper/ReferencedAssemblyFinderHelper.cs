@@ -25,8 +25,7 @@
 
 using System;
 using System.Collections.Generic;
-using BridgeVs.Locations;
-using BridgeVs.Logging;
+using BridgeVs.Shared.Logging;
 
 namespace BridgeVs.DynamicVisualizers.Helper
 {
@@ -67,10 +66,8 @@ namespace BridgeVs.DynamicVisualizers.Helper
             catch (Exception e)
             {
                 Log.Write(e, "Error While getting the Referenced Assemblies");
-                string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
 
-                if (CommonRegistryConfigurations.IsErrorTrackingEnabled(vsVersion))
-                    RavenWrapper.Instance.Capture(e, vsVersion, message: "Error While getting the Referenced Assemblies");
+                RavenWrapper.Instance.Capture(e, message: "Error While getting the Referenced Assemblies");
 
                 throw;
             }

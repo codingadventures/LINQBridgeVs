@@ -33,14 +33,15 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using System.Windows.Forms;
-using BridgeVs.Logging;
 using BridgeVs.DynamicVisualizers.Forms;
 using BridgeVs.DynamicVisualizers.Helper;
 using BridgeVs.DynamicVisualizers.Template;
-using BridgeVs.Locations;
 using Message = BridgeVs.DynamicVisualizers.Template.Message;
 using SharpRaven;
 using Microsoft.VisualStudio.DebuggerVisualizers;
+using BridgeVs.Shared.Logging;
+using BridgeVs.Shared.Common;
+using BridgeVs.Shared.Options;
 
 namespace BridgeVs.DynamicVisualizers
 {
@@ -87,6 +88,9 @@ namespace BridgeVs.DynamicVisualizers
         /// <param name="message">The message.</param>
         internal void DeployLinqScript(Message message)
         {
+            string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
+            RavenWrapper.VisualStudioVersion = vsVersion;
+
             try
             {
                 Log.Write("Entered in DeployLinqScript");
@@ -104,7 +108,8 @@ namespace BridgeVs.DynamicVisualizers
 
                 List<string> refAssemblies = new List<string>();
                 refAssemblies.AddRange(message.ReferencedAssemblies);
-                Inspection linqQuery = new Inspection(refAssemblies, message.TypeFullName, message.TypeNamespace, message.TypeName);
+                SerializationOption serializationOption = CommonRegistryConfigurations.GetSerializationOption(vsVersion);
+                Inspection linqQuery = new Inspection(refAssemblies, message.TypeFullName, message.TypeNamespace, message.TypeName, serializationOption);
                 string linqQueryText = linqQuery.TransformText();
 
                 Log.Write("LinqQuery file Transformed");
@@ -120,10 +125,7 @@ namespace BridgeVs.DynamicVisualizers
             }
             catch (Exception e)
             {
-                string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
-
-                if (CommonRegistryConfigurations.IsErrorTrackingEnabled(vsVersion))
-                    RavenWrapper.Instance.Capture(e, vsVersion, message: "Error deploying the linqpad script");
+                RavenWrapper.Instance.Capture(e, message: "Error deploying the linqpad script");
 
                 Log.Write(e, "DynamicDebuggerVisualizer.DeployLinqScript");
                 throw;
@@ -194,6 +196,7 @@ namespace BridgeVs.DynamicVisualizers
             Log.Configure("LINQBridgeVs", "DynamicDebuggerVisualizer");
 
             string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
+            RavenWrapper.VisualStudioVersion = vsVersion;
 
             try
             {
@@ -213,9 +216,7 @@ namespace BridgeVs.DynamicVisualizers
                 const string context = "Error during LINQPad execution";
                 Log.Write(exception, context);
 
-                if (CommonRegistryConfigurations.IsErrorTrackingEnabled(vsVersion))
-                    RavenWrapper.Instance.Capture(exception, vsVersion, message: context);
-
+                RavenWrapper.Instance.Capture(exception, message: context);
             }
         }
 
@@ -252,11 +253,8 @@ namespace BridgeVs.DynamicVisualizers
             }
             catch (Exception e)
             {
-                string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
-
                 //don't really need to capture this in sentry, however it can tell me I'm doing the wrong thing with the process
-                if (CommonRegistryConfigurations.IsErrorTrackingEnabled(vsVersion))
-                    RavenWrapper.Instance.Capture(e, vsVersion, message: "Error while sending inputs to linqpad");
+                RavenWrapper.Instance.Capture(e, message: "Error while sending inputs to linqpad");
 
                 Log.Write(e, "Error during LINQPad Sending inputs");
             }

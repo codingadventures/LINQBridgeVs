@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 Coding Adventures
+// Copyright (c) 2013 - 2018 Coding Adventures
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -23,29 +23,37 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-
 using System;
 using System.IO;
-using System.Runtime.Serialization.Formatters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
+using Newtonsoft.Json.Serialization;
 
 namespace BridgeVs.Grapple.Serialization
 {
-    internal class JsonSerializer : SerializationHandler
+    internal class JsonSerializer : IServiceSerializer
     {
-        private const int MaxDepth = 10;
+        private const int MaxDepth = 8;
 
         private readonly Newtonsoft.Json.JsonSerializer _jsonSerializer = new Newtonsoft.Json.JsonSerializer
         {
             MaxDepth = MaxDepth,
             Formatting = Formatting.None,
             ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-            TypeNameAssemblyFormat = FormatterAssemblyStyle.Full,
-            ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor
+            TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Full,
+            DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+            ObjectCreationHandling = ObjectCreationHandling.Auto,
+            NullValueHandling = NullValueHandling.Include,
+            ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
+            ContractResolver = new DefaultContractResolver
+            {
+                IgnoreSerializableInterface = false,
+                IgnoreSerializableAttribute = false,
+            },
+            TypeNameHandling = TypeNameHandling.All
         };
 
-        public override void Serialize<T>(Stream aStream, T objToSerialize)
+        public void Serialize<T>(Stream aStream, T objToSerialize)
         {
             using (BsonWriter sw = new BsonWriter(aStream))
             {
@@ -53,7 +61,7 @@ namespace BridgeVs.Grapple.Serialization
             }
         }
 
-        public override byte[] Serialize<T>(T objToSerialize)
+        public  byte[] Serialize<T>(T objToSerialize)
         {
             using (MemoryStream stream = new MemoryStream())
             using (BsonWriter sw = new BsonWriter(stream))
@@ -63,7 +71,7 @@ namespace BridgeVs.Grapple.Serialization
             }
         }
 
-        public override T Deserialize<T>(Stream aStream)
+        public  T Deserialize<T>(Stream aStream)
         {
             using (BsonReader reader = new BsonReader(aStream))
             {
@@ -71,18 +79,17 @@ namespace BridgeVs.Grapple.Serialization
             }
         }
 
-        public override T Deserialize<T>(byte[] objToDeserialize)
+        public  T Deserialize<T>(byte[] objToDeserialize)
         {
             using (MemoryStream stream = new MemoryStream(objToDeserialize))
             using (BsonReader br = new BsonReader(stream))
             {
-                br.ReadRootValueAsArray = IsCollectionType(typeof (T));
+                //br.ReadRootValueAsArray = IsCollectionType(typeof (T));
                 return _jsonSerializer.Deserialize<T>(br);
             }
         }
 
-
-        public override object Deserialize(byte[] objToDeserialize, Type type = null)
+        public  object Deserialize(byte[] objToDeserialize, Type type = null)
         {
 
             using (MemoryStream stream = new MemoryStream(objToDeserialize))
@@ -91,12 +98,7 @@ namespace BridgeVs.Grapple.Serialization
                 return @type != null ? _jsonSerializer.Deserialize(sw, type) : _jsonSerializer.Deserialize(sw);
             }
         }
-
-        static bool IsCollectionType(Type type)
-        {
-            return (type.GetInterface("ICollection") != null);
-        }
-
+        
         public override string ToString()
         {
             return "JsonSerializer";

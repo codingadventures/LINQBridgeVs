@@ -32,6 +32,7 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Windows.Forms;
 using BridgeVs.Locations;
+using BridgeVs.Shared.Common;
 using Microsoft.Win32;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 
@@ -50,6 +51,7 @@ namespace BridgeVs.VsPackage.Helper.Configuration
         {
             "BridgeVs.Grapple.dll",
             "BridgeVs.Locations.dll",
+            "BridgeVs.Shared.dll",
             "BridgeVs.Logging.dll",
             "Newtonsoft.Json.dll",
             "System.IO.Abstractions.dll",
@@ -232,7 +234,7 @@ namespace BridgeVs.VsPackage.Helper.Configuration
 
             CreateLinqPadQueryFolder();
 
-            CreateLinqPadPluginFolder();
+            CreateLinqPadPluginFolders();
 
             CreateVisualizerFolder(vsVersion);
 
@@ -247,8 +249,6 @@ namespace BridgeVs.VsPackage.Helper.Configuration
 
             DeployDependencies(vsVersion);
 
-            CommonRegistryConfigurations.SetErrorTracking(vsVersion, true);
-
             return true;
         }
 
@@ -259,15 +259,22 @@ namespace BridgeVs.VsPackage.Helper.Configuration
                 throw new Exception("Dll location is null");
 
             string debuggerVisualizerTargetFolder = DebuggerVisualizerTargetFolder(vsVersion);
-            string linqPadPluginFolder = CommonFolderPaths.DefaultLinqPadPluginFolder;
             foreach (string dependency in Dependencies)
             {
                 string sourceFile = Path.Combine(currentLocation, dependency);
                 string targetFile = Path.Combine(debuggerVisualizerTargetFolder, dependency);
+
+                if (!File.Exists(sourceFile))
+                    continue; //could be an old dll
+
                 File.Copy(sourceFile, targetFile, true);
 
-                string targetFileLinqPadPluginFolder = Path.Combine(linqPadPluginFolder, dependency);
-                File.Copy(sourceFile, targetFileLinqPadPluginFolder, true);
+                //it copies the plugins to all the folders found in either custom locations and default
+                foreach (var targetPluginFolder in CommonFolderPaths.AllLinqPadPluginFolders)
+                {
+                    string targetFileLinqPadPluginFolder = Path.Combine(targetPluginFolder, dependency);
+                    File.Copy(sourceFile, targetFileLinqPadPluginFolder, true);
+                }
             }
         }
 
@@ -286,7 +293,8 @@ namespace BridgeVs.VsPackage.Helper.Configuration
 
             foreach (string visualizer in visualizers)
             {
-                File.Delete(visualizer);
+                if (File.Exists(visualizer))
+                    File.Delete(visualizer);
             }
         }
 
@@ -327,18 +335,19 @@ namespace BridgeVs.VsPackage.Helper.Configuration
             Directory.CreateDirectory(dstScriptPath, sec);
         }
 
-        private static void CreateLinqPadPluginFolder()
+        private static void CreateLinqPadPluginFolders()
         {
-            string dstScriptPath = CommonFolderPaths.DefaultLinqPadPluginFolder;
+            foreach (var pluginFolder in CommonFolderPaths.AllLinqPadPluginFolders)
+            {
+                if (Directory.Exists(pluginFolder))
+                    continue;
 
-            if (Directory.Exists(dstScriptPath))
-                return;
-
-            DirectorySecurity sec = new DirectorySecurity();
-            // Using this instead of the "Everyone" string means we work on non-English systems.
-            SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
-            sec.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
-            Directory.CreateDirectory(dstScriptPath, sec);
+                DirectorySecurity sec = new DirectorySecurity();
+                // Using this instead of the "Everyone" string means we work on non-English systems.
+                SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+                sec.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
+                Directory.CreateDirectory(pluginFolder, sec);
+            }
         }
 
         private static void CreateVisualizerFolder(string vsVersion)
@@ -355,7 +364,8 @@ namespace BridgeVs.VsPackage.Helper.Configuration
 
         private static void CreateGrappleFolder()
         {
-            if (Directory.Exists(CommonFolderPaths.GrappleFolder)) return;
+            if (Directory.Exists(CommonFolderPaths.GrappleFolder))
+                return;
 
             //no need for security access
             Directory.CreateDirectory(CommonFolderPaths.GrappleFolder);

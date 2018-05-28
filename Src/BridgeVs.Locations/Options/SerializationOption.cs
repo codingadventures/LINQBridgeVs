@@ -23,28 +23,11 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System.Collections.Generic;
-using BridgeVs.DynamicVisualizers.Helper;
-using BridgeVs.Shared.Options;
-
-namespace BridgeVs.DynamicVisualizers.Template
+namespace BridgeVs.Shared.Options
 {
-    public partial class Inspection
+    public enum SerializationOption
     {
-        private readonly string _typeNamespace;
-
-        private readonly List<string> _assemblies;
-        private readonly string _typeToRetrieveFullName;
-        private readonly string _typeName;
-        private readonly SerializationOption _serializationOption;
-
-        public Inspection(List<string> assemblies, string typeToRetrieveFullName, string typeNamespace, string typeName, SerializationOption serializationOption)
-        {
-            _serializationOption = serializationOption;
-            _typeNamespace = typeNamespace;
-            _typeName = typeName;
-            _assemblies = assemblies;
-            _typeToRetrieveFullName = TypeNameHelper.RemoveSystemNamespaces(typeToRetrieveFullName);
-        }
+        JSON,
+        Binary
     }
 }

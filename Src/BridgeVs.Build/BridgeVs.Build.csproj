@@ -46,17 +46,17 @@
     <Compile Include="Util\VisualizerAssemblyNameFormat.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BridgeVs.Locations\BridgeVs.Locations.csproj">
+    <ProjectReference Include="..\..\Lib\SharpRaven\src\app\SharpRaven\SharpRaven.csproj">
+      <Project>{d472fc40-284f-4532-a269-be7bdac2b153}</Project>
+      <Name>SharpRaven</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BridgeVs.Locations\BridgeVs.Shared.csproj">
       <Project>{bc10f93a-5da2-44f8-ae5e-5603cb46b548}</Project>
-      <Name>BridgeVs.Locations</Name>
+      <Name>BridgeVs.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="..\BridgeVs.DynamicVisualizers\BridgeVs.DynamicVisualizers.csproj">
       <Project>{b84fbd50-0b10-4c25-8430-680fc6fc3fea}</Project>
       <Name>BridgeVs.DynamicVisualizers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BridgeVs.Logging\BridgeVs.Logging.csproj">
-      <Project>{0b546762-c8c0-45c6-bc42-c5d91d510351}</Project>
-      <Name>BridgeVs.Logging</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -75,9 +75,6 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpRaven, Version=2.3.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpRaven.2.3.2\lib\net40\SharpRaven.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

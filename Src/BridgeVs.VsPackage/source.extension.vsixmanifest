@@ -19,10 +19,10 @@
     </Installation>
     <Assets>
         <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="BridgeVs.Grapple" d:InstallSource="Embed" Path="|BridgeVs.Grapple|" DisplayName="|BridgeVs.Grapple|" Id="|BridgeVs.Grapple|" AssemblyName="|BridgeVs.Grapple;AssemblyName|" />
-        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="BridgeVs.Locations" d:InstallSource="Embed" Path="|BridgeVs.Locations|" DisplayName="|BridgeVs.Locations|" Id="|BridgeVs.Locations|" AssemblyName="|BridgeVs.Locations;AssemblyName|" />
         <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="BridgeVs.DynamicVisualizers" d:InstallSource="Embed" Path="|BridgeVs.DynamicVisualizers|" DisplayName="|BridgeVs.DynamicVisualizers|" Id="|BridgeVs.DynamicVisualizers|" AssemblyName="|BridgeVs.DynamicVisualizers;AssemblyName|" />
         <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
         <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="Libs\Newtonsoft.Json.dll" AssemblyName="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed" TargetVersion="11.0.0.0" />
+        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="BridgeVs.Shared" Path="|BridgeVs.Shared|" AssemblyName="|BridgeVs.Shared;AssemblyName|" />
 
     </Assets>
     <Prerequisites>

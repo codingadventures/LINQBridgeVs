@@ -11,6 +11,8 @@
   <Namespace>System.Runtime.Serialization.Formatters</Namespace>
   <Namespace>System.Xml.Linq</Namespace>
   <Namespace>BridgeVs.Grapple</Namespace>
+  <Namespace>BridgeVs.Shared</Namespace>
+  <Namespace>BridgeVs.Shared.Options</Namespace>
   <Namespace><#= _typeNamespace #></Namespace>
   <# foreach(var elem in this._assemblies){
     if (!elem.Contains("mscorlib")) {
@@ -21,7 +23,7 @@
 
 void Main()
 {
-    Truck truck = new Truck("LINQBridgeVsTruck");
+    Truck truck = new Truck("LINQBridgeVsTruck", SerializationOption.<#=_serializationOption#>);
 	truck.WaitDelivery("<#= _typeName #>").Wait();
     var @object = truck.UnLoadCargo<<#=_typeToRetrieveFullName#>>();
     @object.Dump("<#=_typeToRetrieveFullName#>", 2);

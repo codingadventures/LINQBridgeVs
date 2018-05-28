@@ -1,6 +1,3 @@
-[submodule "SInject"]
-	path = SInject
-	url = https://github.com/nbasakuragi/SInject
-[submodule "Grapple"]
-	path = Grapple
-	url = https://github.com/nbasakuragi/Grapple
+[submodule "Lib/SharpRaven"]
+	path = Lib/SharpRaven
+	url = https://github.com/getsentry/raven-csharp

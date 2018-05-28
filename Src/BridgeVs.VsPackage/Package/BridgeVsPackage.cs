@@ -25,17 +25,21 @@
 
 using System;
 using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Windows;
+using BridgeVs.Locations;
 using BridgeVs.VsPackage.Helper;
 using BridgeVs.VsPackage.Helper.Configuration;
 using BridgeVs.VsPackage.Helper.Installer;
 using BridgeVs.VsPackage.Helper.Settings;
 using EnvDTE;
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Settings;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.Shell.Settings;
 
 namespace BridgeVs.VsPackage.Package
 {
@@ -69,7 +73,7 @@ namespace BridgeVs.VsPackage.Package
         private Welcome _welcomePage;
         private bool? _installationResult;
         public static bool IsElevated => new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
-
+        private PackageSettings _packageSettings;
         #region Package Members
 
         /// <inheritdoc />
@@ -114,10 +118,11 @@ namespace BridgeVs.VsPackage.Package
             mcs.AddCommand(menuItemDisable);
             mcs.AddCommand(menuItemGettingStarted);
             mcs.AddCommand(menuItemSendFeedback);
-
+            //Initialize Object Exporter settings
+            _packageSettings = (PackageSettings)GetDialogPage(typeof(PackageSettings));
+          
             try
-            {
-                //if first time user 
+            {   //if first time user 
                 if (isLinqBridgeVsConfigured)
                 {
                     return;
@@ -139,9 +144,9 @@ namespace BridgeVs.VsPackage.Package
             }
             catch (Exception e)
             {
-                IVsActivityLog log = GetService(typeof(SVsActivityLog)) as IVsActivityLog;
-                log.VsLog("Initialize Error... " + e.Message);
-                MessageBox.Show($"LINQBridgeVs wasn't successfully configured. Please open a new issue on GitHub. Error: {e.Message}");
+                Trace.Write("LINQBridgeVs: Initialize Error... " + e.Message);
+                Trace.Write(e.StackTrace);
+                MessageBox.Show($"LINQBridgeVs: Configuration unsuccessful. Please open a new issue on GitHub. Error: {e.Message}");
             }
         }
 
@@ -151,10 +156,16 @@ namespace BridgeVs.VsPackage.Package
             if (_installationResult == null)
                 return;
 
+            var messageResult = MessageBox.Show("Do you want to send anonymous error report?", "LINQBridgeVs", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+
+            _packageSettings.ErrorTrackingEnabled = messageResult == MessageBoxResult.Yes;
+            _packageSettings.SaveSettingsToStorage();
+
             MessageBox.Show(_installationResult.Value
                ? "LINQBridgeVs has been successfully configured."
-               : "LINQBridgeVs wasn't successfully configured. Please restart Visual Studio");
+               : "LINQBridgeVs wasn't successfully configured. Please check the logs in the output folder");
         }
+        
         #endregion
     }
 }

@@ -23,7 +23,6 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-
 using System;
 
 namespace BridgeVs.Grapple.Serialization
@@ -32,13 +31,11 @@ namespace BridgeVs.Grapple.Serialization
     {
         public static IServiceSerializer CreateServiceSerializer(Type @type)
         {
+            //I should read from registry
             DefaultSerializer defaultSerializer = new DefaultSerializer();
             JsonSerializer jsonSerializer = new JsonSerializer();
 
-            defaultSerializer.SetSuccessor(jsonSerializer);
-
             return defaultSerializer;
         }
-
     }
 }

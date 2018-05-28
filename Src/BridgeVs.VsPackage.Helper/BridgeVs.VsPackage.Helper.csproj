@@ -213,7 +213,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActivityLogger.cs" />
     <Compile Include="BridgeCommand.cs" />
     <Compile Include="BridgeCommand.ExecuteParams.cs" />
     <Compile Include="Configuration\MsBuildVersionHelper.cs" />
@@ -266,9 +265,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BridgeVs.Locations\BridgeVs.Locations.csproj">
+    <ProjectReference Include="..\BridgeVs.Locations\BridgeVs.Shared.csproj">
       <Project>{bc10f93a-5da2-44f8-ae5e-5603cb46b548}</Project>
-      <Name>BridgeVs.Locations</Name>
+      <Name>BridgeVs.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

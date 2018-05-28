@@ -1,12 +1,14 @@
 ﻿using System;
 using Microsoft.Win32;
 using System.Linq;
+using BridgeVs.Shared.Options;
 
-namespace BridgeVs.Locations
+namespace BridgeVs.Shared.Common
 {
     public class CommonRegistryConfigurations
     {
         private const string ErrorTrackingRegistryValue = "SentryErrorTracking";
+        private const string SerializationMethodRegistryValue = "SerializationMethod";
 
         // ReSharper disable once InconsistentNaming
         private const string LINQPadInstallationPathRegistryValue = "LINQPadInstallationPath";
@@ -96,6 +98,28 @@ namespace BridgeVs.Locations
                 }
             }
             return string.Empty;
+        }
+
+        public static void SetSerializationMethod(string vsVersion, string value)
+        {
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey($@"Software\LINQBridgeVs\{vsVersion}"))
+            {
+                key?.SetValue(SerializationMethodRegistryValue, value);
+            }
+        }
+
+        public static SerializationOption GetSerializationOption(string vsVersion)
+        {
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey($@"Software\LINQBridgeVs\{vsVersion}"))
+            {
+                string serializationOption = key?.GetValue(SerializationMethodRegistryValue) as string;
+                if (!string.IsNullOrEmpty(serializationOption))
+                {
+                    return (SerializationOption)Enum.Parse(typeof(SerializationOption), serializationOption);
+                }
+
+                return SerializationOption.Binary;
+            }
         }
     }
 }

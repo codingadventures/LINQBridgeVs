@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 Coding Adventures
+// Copyright (c) 2013 - 2018 Coding Adventures
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -29,11 +29,18 @@ using System.Linq;
 using System.Reflection;
 using BridgeVs.Grapple.Contracts;
 using BridgeVs.Grapple.Serialization;
+using BridgeVs.Locations;
 
 namespace BridgeVs.Grapple.Grapple
 {
     internal class BinaryGrapple : IGrapple
     {
+        private readonly IServiceSerializer _serviceSerializer;
+        public BinaryGrapple(IServiceSerializer serviceSerializer)
+        {
+            _serviceSerializer = serviceSerializer;
+        }
+
         #region [ IGrapple Methods ]
         public Tuple<Type, byte[]> Grab<T>(T item)
         {
@@ -46,20 +53,18 @@ namespace BridgeVs.Grapple.Grapple
             {
                 MethodInfo toList = typeof(Enumerable).GetMethod("ToList");
                 Type baseType = item.GetType().BaseType;
-                if (baseType == null) return new Tuple<Type, byte[]>(serializedType, byteStream);
+                if (baseType == null)
+                    return new Tuple<Type, byte[]>(serializedType, byteStream);
 
                 MethodInfo constructedToList = toList.MakeGenericMethod(baseType.GetGenericArguments()[0]);
                 object castList = constructedToList.Invoke(null, new object[] { item });
 
-                serializedType = castList.GetType();
-                IServiceSerializer serviceSerializer = FactorySerializer.CreateServiceSerializer(serializedType);
-                byteStream = serviceSerializer.Serialize(castList);
+                serializedType = castList.GetType(); 
+                byteStream = _serviceSerializer.Serialize(castList);
             }
             else
-            {
-                IServiceSerializer serviceSerializer = FactorySerializer.CreateServiceSerializer(serializedType);
-
-                byteStream = serviceSerializer.Serialize(item);
+            { 
+                byteStream = _serviceSerializer.Serialize(item);
             }
 
             return new Tuple<Type, byte[]>(serializedType, byteStream);
@@ -67,17 +72,13 @@ namespace BridgeVs.Grapple.Grapple
 
         public T Release<T>(byte[] item)
         {
-            IServiceSerializer serviceSerializer = FactorySerializer.CreateServiceSerializer(typeof(T));
-            return serviceSerializer.Deserialize<T>(item);
+            return _serviceSerializer.Deserialize<T>(item);
         }
 
         public object Release(byte[] item, Type type)
         {
-            IServiceSerializer serviceSerializer = FactorySerializer.CreateServiceSerializer(type);
-
-            return serviceSerializer.Deserialize(item, type);
+            return _serviceSerializer.Deserialize(item, type);
         }
-
         #endregion
     }
 }

@@ -29,8 +29,8 @@ using System.IO;
 using System.Linq;
 using BridgeVs.Build.TypeMapper;
 using BridgeVs.Build.Util;
-using BridgeVs.Locations;
-using BridgeVs.Logging;
+using BridgeVs.Shared.Locations;
+using BridgeVs.Shared.Logging;
 using Microsoft.Build.Framework;
 
 namespace BridgeVs.Build.Tasks
@@ -65,13 +65,15 @@ namespace BridgeVs.Build.Tasks
         /// </returns>
         public bool Execute()
         {
+            RavenWrapper.VisualStudioVersion = VisualStudioVer;
+
             try
             {
                 Log.Configure("LINQBridgeVs", "MapperBuildTask");
 
                 //this is where the current assembly being built is saved
                 string currentBuildingFolder = Path.GetDirectoryName(Assembly);
-                string visualizerDestinationFolder = VisualStudioOptions.GetVisualizerDestinationFolder(VisualStudioVer);
+                string visualizerDestinationFolder = VisualStudioOption.GetVisualizerDestinationFolder(VisualStudioVer);
 
                 Log.Write($"Visualizer Destination Folder Path {visualizerDestinationFolder}");
 
@@ -93,8 +95,7 @@ namespace BridgeVs.Build.Tasks
                 const string errorMessage = "Error Executing MSBuild Task MapperBuildTask";
                 Log.Write(e, errorMessage);
 
-                if (CommonRegistryConfigurations.IsErrorTrackingEnabled(VisualStudioVer))
-                    RavenWrapper.Instance.Capture(e, VisualStudioVer, message: errorMessage);
+                RavenWrapper.Instance.Capture(e, message: errorMessage);
 
                 return false;
             }

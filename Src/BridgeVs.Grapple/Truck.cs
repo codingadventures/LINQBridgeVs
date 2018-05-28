@@ -28,15 +28,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
-using System.Security.AccessControl;
-using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using BridgeVs.Grapple.Contracts;
 using BridgeVs.Grapple.Extensions;
 using BridgeVs.Grapple.Grapple;
-using BridgeVs.Locations;
-using BridgeVs.Logging;
+using BridgeVs.Grapple.Serialization;
+using BridgeVs.Shared.Common;
+using BridgeVs.Shared.Logging;
+using BridgeVs.Shared.Options;
 
 namespace BridgeVs.Grapple
 {
@@ -55,9 +55,15 @@ namespace BridgeVs.Grapple
         /// 
         /// </summary>
         /// <param name="truckName"></param>
-        public Truck(string truckName)
-            : this(truckName, new BinaryGrapple())
+        public Truck(string truckName, SerializationOption serializationOption = SerializationOption.Binary)
         {
+            _truckName = truckName;
+            if (serializationOption == SerializationOption.Binary)
+                _grapple = new BinaryGrapple(new DefaultSerializer());
+            else
+                _grapple = new BinaryGrapple(new JsonSerializer());
+
+            Init();
         }
 
         internal Truck(string truckName, IGrapple grapple)
@@ -66,8 +72,13 @@ namespace BridgeVs.Grapple
 
             _truckName = truckName;
             _grapple = grapple;
+            Init();
+        }
 
-            if (Directory.Exists(TruckPosition)) return;
+        private void Init()
+        {
+            if (Directory.Exists(TruckPosition))
+                return;
 
             //no need for security access
             Directory.CreateDirectory(TruckPosition);
@@ -156,7 +167,7 @@ namespace BridgeVs.Grapple
         /// <returns></returns>
         public IEnumerable<object> UnLoadCargo(Type type)
         {
-            Log.Write("Unstuffing Cargo of Type {0}", type.FullName);
+            Log.Write("unloading Cargo of Type {0}", type.FullName);
 
             return (from i in _container.Keys
                     where type.IsAssignableFrom(i)
@@ -226,7 +237,9 @@ namespace BridgeVs.Grapple
         private byte[] InternalCollect(string address)
         {
             string filePath = Path.Combine(TruckPosition, address);
-            if (!File.Exists(filePath)) return new byte[0];
+
+            if (!File.Exists(filePath))
+                return new byte[0];
 
             using (MemoryMappedFile ipcMappedFile = MemoryMappedFile.CreateFromFile(filePath, FileMode.Open))
             {

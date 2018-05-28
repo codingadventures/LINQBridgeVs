@@ -28,12 +28,13 @@ using System.Collections;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
-using BridgeVs.Logging;
 using BridgeVs.DynamicVisualizers.Helper;
 using BridgeVs.DynamicVisualizers.Template;
 using BridgeVs.Grapple;
 using Microsoft.VisualStudio.DebuggerVisualizers;
-using BridgeVs.Locations;
+using BridgeVs.Shared.Common;
+using BridgeVs.Shared.Logging;
+using BridgeVs.Shared.Options;
 
 namespace BridgeVs.DynamicVisualizers
 {
@@ -44,6 +45,10 @@ namespace BridgeVs.DynamicVisualizers
         public void BroadCastData(object target, Stream outgoingData)
         {
             Log.Configure("LINQBridgeVs", "DynamicCore");
+            //configure once the vs version
+            string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
+            RavenWrapper.VisualStudioVersion = vsVersion;
+
             try
             {
                 Type targetType = GetInterfaceTypeIfIsIterator(target);
@@ -81,8 +86,8 @@ namespace BridgeVs.DynamicVisualizers
                 binaryFormatter.Serialize(outgoingData, message);
 
                 Log.Write("BroadCastData to LINQBridgeVsTruck");
-
-                Truck truck = new Truck("LINQBridgeVsTruck");
+                SerializationOption serializationOption = CommonRegistryConfigurations.GetSerializationOption(vsVersion);
+                Truck truck = new Truck("LINQBridgeVsTruck", serializationOption);
                 truck.LoadCargo(target);
                 bool res = truck.DeliverTo(typeName);
                 Log.Write("Data Succesfully Shipped to Grapple");
@@ -91,11 +96,7 @@ namespace BridgeVs.DynamicVisualizers
             catch (Exception exception)
             {
                 Log.Write(exception, "Error in BroadCastData");
-                string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
-
-                if (CommonRegistryConfigurations.IsErrorTrackingEnabled(vsVersion))
-                    RavenWrapper.Instance.Capture(exception, vsVersion, message: "Error broadcasting the data to linqpad");
-
+                RavenWrapper.Instance.Capture(exception, message: "Error broadcasting the data to linqpad");
                 throw;
             }
         }

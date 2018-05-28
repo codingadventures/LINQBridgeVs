@@ -23,14 +23,14 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using BridgeVs.Shared.Common;
+using BridgeVs.Shared.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Runtime.InteropServices;
-using BridgeVs.Locations;
-using BridgeVs.Logging;
 
 namespace BridgeVs.DynamicVisualizers.Helper
 {
@@ -69,11 +69,7 @@ namespace BridgeVs.DynamicVisualizers.Helper
                 string context = $"GetDirectoryName of assembly: {assembly.FullName} failed. Path is wrong {location}";
 
                 Log.Write(exception, context);
-
-                string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
-
-                if (CommonRegistryConfigurations.IsErrorTrackingEnabled(vsVersion))
-                    RavenWrapper.Instance.Capture(exception, vsVersion, message: context);
+                RavenWrapper.Instance.Capture(exception, message: context);
             }
 
 
@@ -122,11 +118,7 @@ namespace BridgeVs.DynamicVisualizers.Helper
             {
                 const string context = "Exception in FindPath";
                 Log.Write(e, context);
-
-                string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
-
-                if (CommonRegistryConfigurations.IsErrorTrackingEnabled(vsVersion))
-                    RavenWrapper.Instance.Capture(e, vsVersion, SharpRaven.Data.ErrorLevel.Error, context);
+                RavenWrapper.Instance.Capture(e, SharpRaven.Data.ErrorLevel.Error, context);
 
                 throw;
             }

@@ -25,8 +25,7 @@
 
 using System;
 using System.IO;
-using BridgeVs.Locations;
-using BridgeVs.Logging;
+using BridgeVs.Shared.Logging;
 using Microsoft.Build.Framework;
 
 namespace BridgeVs.Build.Tasks
@@ -45,6 +44,7 @@ namespace BridgeVs.Build.Tasks
         public bool Execute()
         {
             Log.Configure("LINQBridgeVs", "SinjectionBuildTask");
+            RavenWrapper.VisualStudioVersion = VisualStudioVer;
 
             try
             {
@@ -57,8 +57,7 @@ namespace BridgeVs.Build.Tasks
                 const string errorMessage = "Error Executing MSBuild Task SInjectionBuildTask";
                 Log.Write(e, errorMessage);
 
-                if (CommonRegistryConfigurations.IsErrorTrackingEnabled(VisualStudioVer))
-                    RavenWrapper.Instance.Capture(e, VisualStudioVer, message: errorMessage);
+                RavenWrapper.Instance.Capture(e, message: errorMessage);
 
                 return false;
             }

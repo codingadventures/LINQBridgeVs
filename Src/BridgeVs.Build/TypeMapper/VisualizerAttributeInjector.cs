@@ -29,7 +29,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using BridgeVs.Build.Util;
-using BridgeVs.Logging;
+using BridgeVs.Shared.Logging;
 using Mono.Cecil;
 using Mono.Cecil.Pdb;
 using Mono.Cecil.Rocks;

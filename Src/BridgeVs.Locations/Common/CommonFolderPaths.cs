@@ -27,8 +27,9 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Linq;
+using System.Collections.Generic;
 
-namespace BridgeVs.Locations
+namespace BridgeVs.Shared.Common
 {
     /// <summary>
     /// This static class is a container for all the folders needed in the extension
@@ -110,21 +111,21 @@ namespace BridgeVs.Locations
             }
         }
 
-        public static string DefaultLinqPadPluginFolder
+        public static List<string> AllLinqPadPluginFolders
         {
             get
             {
+                List<string> folders = new List<string>(10);
 #if !TEST
                 if (File.Exists(LinqPadCustomPluginFolderConfigurationFile))
                 {
-                    string customPluginFolderPath = File.ReadLines(LinqPadCustomPluginFolderConfigurationFile).FirstOrDefault();
-                    if (!string.IsNullOrEmpty(customPluginFolderPath))
-                        return customPluginFolderPath;
+                    folders.AddRange(File.ReadLines(LinqPadCustomPluginFolderConfigurationFile));
                 }
 #endif
-                return Path.Combine(Documents, "LINQPad Plugins");
+                folders.Add(Path.Combine(Documents, "LINQPad Plugins"));
+                return folders;
             }
-        }
+        } 
 
         static CommonFolderPaths()
         {

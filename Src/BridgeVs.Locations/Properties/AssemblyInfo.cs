@@ -30,11 +30,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("BridgeVs.Locations")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("BridgeVs.Shared")]
+[assembly: AssemblyDescription("Shared classes for BridgeVs")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("BridgeVs.Locations")]
+[assembly: AssemblyCompany("Coding Adventures")]
+[assembly: AssemblyProduct("BridgeVs.Shared")]
 [assembly: AssemblyCopyright("Copyright © Coding Adventures 2013 - 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

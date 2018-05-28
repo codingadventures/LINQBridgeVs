@@ -27,14 +27,14 @@ using System;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using BridgeVs.Logging;
+using BridgeVs.Shared.Logging;
 
 namespace BridgeVs.Grapple.Serialization
 {
     /// <summary>
     /// Default Binary Serializer. It uses the BinaryFormatter and it expects the types to be marked as Serializable
     /// </summary>
-    internal class DefaultSerializer : SerializationHandler
+    internal class DefaultSerializer : IServiceSerializer
     {
         private readonly BinaryFormatter _formatter = new BinaryFormatter();
 
@@ -44,10 +44,10 @@ namespace BridgeVs.Grapple.Serialization
         /// <typeparam name="T">Type T to be serialized</typeparam>
         /// <param name="aStream">A stream.</param>
         /// <param name="objToSerialize">The object to serialize.</param>
-        public override void Serialize<T>(Stream aStream, T objToSerialize)
+        public void Serialize<T>(Stream aStream, T objToSerialize)
         {
             aStream.Seek(0, SeekOrigin.Begin);
-            Log.Write("Serialization Used: " + this.ToString());
+            Log.Write("Serialization Used: " + ToString());
 
             try
             {
@@ -56,11 +56,7 @@ namespace BridgeVs.Grapple.Serialization
             catch (SerializationException)
             {
                 Log.Write("Binary Serialization unsuccessful");
-                Log.Write("Next Serialization Method: " + Successor.ToString());
-
-                aStream.Seek(0, SeekOrigin.Begin);
-
-                Successor.Serialize(aStream, objToSerialize);
+                throw;
             }
         }
 
@@ -70,7 +66,7 @@ namespace BridgeVs.Grapple.Serialization
         /// <typeparam name="T">Type T to be serialized</typeparam>
         /// <param name="objToSerialize">The object to serialize.</param>
         /// <returns></returns>
-        public override byte[] Serialize<T>(T objToSerialize)
+        public byte[] Serialize<T>(T objToSerialize)
         {
             byte[] retValue;
             try
@@ -85,7 +81,7 @@ namespace BridgeVs.Grapple.Serialization
             }
             catch (SerializationException)
             {
-                retValue = Successor.Serialize(objToSerialize);
+                throw;
             }
             return retValue;
         }
@@ -96,17 +92,18 @@ namespace BridgeVs.Grapple.Serialization
         /// <typeparam name="T">Type T to be serialized</typeparam>
         /// <param name="aStream">A stream.</param>
         /// <returns></returns>
-        public override T Deserialize<T>(Stream aStream)
+        public T Deserialize<T>(Stream aStream)
         {
             try
             {
                 aStream.Seek(0, SeekOrigin.Begin);
                 return (T)_formatter.Deserialize(aStream);
             }
-            catch (SerializationException)
+            catch (SerializationException se)
             {
-                aStream.Seek(0, SeekOrigin.Begin);
-                return Successor.Deserialize<T>(aStream);
+                Log.Write(se);
+                //log something here
+                throw;
             }
         }
 
@@ -116,7 +113,7 @@ namespace BridgeVs.Grapple.Serialization
         /// <typeparam name="T">Type T to be serialized</typeparam>
         /// <param name="objToDeserialize">The object to deserialize.</param>
         /// <returns></returns>
-        public override T Deserialize<T>(byte[] objToDeserialize)
+        public T Deserialize<T>(byte[] objToDeserialize)
         {
             T retValue;
             try
@@ -129,7 +126,7 @@ namespace BridgeVs.Grapple.Serialization
             catch (SerializationException serializationException)
             {
                 Log.Write(serializationException);
-                retValue = Successor.Deserialize<T>(objToDeserialize);
+                throw;
             }
 
             return retValue;
@@ -142,7 +139,7 @@ namespace BridgeVs.Grapple.Serialization
         /// <param name="objToDeserialize">The object to deserialize.</param>
         /// <param name="type">The type</param>
         /// <returns></returns>
-        public override object Deserialize(byte[] objToDeserialize, Type type = null)
+        public object Deserialize(byte[] objToDeserialize, Type type = null)
         {
             object @object;
             try
@@ -154,7 +151,8 @@ namespace BridgeVs.Grapple.Serialization
             }
             catch (SerializationException e)
             {
-                @object = Successor.Deserialize(objToDeserialize, type);
+                Log.Write(e);
+                throw;
             }
             return @object;
         }

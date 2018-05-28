@@ -23,11 +23,12 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using BridgeVs.Shared.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace BridgeVs.Locations
+namespace BridgeVs.Shared.Locations
 {
     internal class Settings
     {
@@ -38,11 +39,11 @@ namespace BridgeVs.Locations
         public List<string> CommonReferenceAssembliesLocation;
     }
 
-    public static class VisualStudioOptions
+    public static class VisualStudioOption
     {
         private static readonly Dictionary<string, Settings> VisualStudioPaths;
 
-        static VisualStudioOptions()
+        static VisualStudioOption()
         {
             VisualStudioPaths = new Dictionary<string, Settings>
             {

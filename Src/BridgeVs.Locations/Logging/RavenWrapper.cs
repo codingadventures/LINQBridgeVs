@@ -23,12 +23,13 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using BridgeVs.Shared.Common;
 using SharpRaven;
 using SharpRaven.Data;
 using System;
 using System.Diagnostics;
 
-namespace BridgeVs.Logging
+namespace BridgeVs.Shared.Logging
 {
     public sealed class RavenWrapper
     {
@@ -43,6 +44,8 @@ namespace BridgeVs.Logging
 
         private RavenClient _ravenClient;
 
+        public static string VisualStudioVersion;
+
         private RavenWrapper()
         {
 #if DEPLOY
@@ -56,8 +59,9 @@ namespace BridgeVs.Logging
 
             Action<Exception> onSendError = new Action<Exception>(ex =>
             {
-                Log.Configure("entry", "AllProjects");
-                Log.Write(ex, "Error sending the exception to Sentry.");
+                Trace.WriteLine("Error sending report to Sentry.io");
+                Trace.WriteLine(ex.Message);
+                Trace.WriteLine(ex.StackTrace);
             });
             _ravenClient = new RavenClient(RavenClientId);
             _ravenClient.BeforeSend = removeUserId;
@@ -66,15 +70,20 @@ namespace BridgeVs.Logging
         }
 
         [Conditional("DEPLOY")]
-        public void Capture(Exception exception, string vsVersion, ErrorLevel errorLevel = ErrorLevel.Error, string message = "")
+        public void Capture(Exception exception, ErrorLevel errorLevel = ErrorLevel.Error, string message = "")
         {
+            if (!CommonRegistryConfigurations.IsErrorTrackingEnabled(VisualStudioVersion))
+            {
+                return;
+            }
+
             var sentryEvent = new SentryEvent(exception)
             {
                 Message = message,
                 Level = errorLevel
             };
             //Log LINQBridgeVs detail
-            sentryEvent.Fingerprint.Add(vsVersion);
+            sentryEvent.Fingerprint.Add(VisualStudioVersion);
 
             _ravenClient.Capture(sentryEvent);
         }

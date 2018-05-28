@@ -30,7 +30,7 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using BridgeVs.Logging;
+using BridgeVs.Shared.Logging;
 using Microsoft.Build.Evaluation;
 
 namespace BridgeVs.Build.Dependency

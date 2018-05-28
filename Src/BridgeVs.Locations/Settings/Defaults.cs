@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 Coding Adventures
+// Copyright (c) 2013 - 2018 Coding Adventures
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -23,25 +23,13 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using BridgeVs.Shared.Options;
 
-using System;
-using System.IO;
-
-namespace BridgeVs.Grapple.Serialization
+namespace BridgeVs.Shared.Settings
 {
-    internal abstract class SerializationHandler : IServiceSerializer
+    public static class Defaults
     {
-        protected SerializationHandler Successor;
-
-        public void SetSuccessor(SerializationHandler successor)
-        {
-            Successor = successor;
-        }
-
-        public abstract void Serialize<T>(Stream aStream, T objToSerialize);
-        public abstract byte[] Serialize<T>(T objToSerialize);
-        public abstract T Deserialize<T>(Stream aStream);
-        public abstract T Deserialize<T>(byte[] objToDeserialize);
-        public abstract object Deserialize(byte[] objToDeserialize, Type type = null);
-    }
+        public const string LINQPadInstallationPath = @"C:\Program Files (x86)\LINQPad5";
+        public const SerializationOption SerializationMethod = SerializationOption.Binary;
+        public const bool ErrorTrackingEnabled = false;}
 }

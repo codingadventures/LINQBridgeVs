@@ -27,12 +27,10 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.IO.Compression;
-using System.Net.Mail;
 using System.Security.AccessControl;
 using System.Security.Principal;
 
-namespace BridgeVs.Logging
+namespace BridgeVs.Shared.Logging
 {
     public static class Log
     {
