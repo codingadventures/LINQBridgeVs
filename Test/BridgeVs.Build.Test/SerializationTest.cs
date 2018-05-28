@@ -80,6 +80,7 @@ namespace BridgeVs.Build.Test
         }
 
         [TestMethod]
+        [TestCategory("UnitTest")]
         public void Not_Serializable_Inerhits_Dictionary_Should_Serialize_After_Patching()
         {
             BinaryFormatter f = new BinaryFormatter();
@@ -97,6 +98,7 @@ namespace BridgeVs.Build.Test
         }
 
         [TestMethod]
+        [TestCategory("UnitTest")]
         public void Not_Serializable_Object_Should_Serialize_After_Patching()
         {
             BinaryFormatter f = new BinaryFormatter();
@@ -111,6 +113,5 @@ namespace BridgeVs.Build.Test
                 Assert.IsTrue(obj.GetType() == _notSerializableObject.GetType(), "Object is not of the same type");
             }
         }
-
     }
 }
