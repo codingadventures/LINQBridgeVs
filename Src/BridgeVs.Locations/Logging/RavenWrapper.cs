@@ -49,12 +49,15 @@ namespace BridgeVs.Shared.Logging
         private RavenWrapper()
         {
 #if DEPLOY
-            Func<Requester, Requester> removeUserId = new Func<Requester, Requester>(req =>
+            Func<IRequester, IRequester> removeUserId = new Func<IRequester, IRequester>(req =>
             {
-                //GDPR compliant, no server name or username stored
-                req.Packet.ServerName = string.Empty;
-                req.Packet.User.Username = string.Empty;
-                return req;
+                HttpRequester request = req as HttpRequester;
+                //GDPR compliant, no server name, no username stored, no ip address
+                request.Data.JsonPacket.ServerName = "linqbridgevs";
+                request.Data.JsonPacket.User.Username = "linqbridgevs-" + DateTime.Now.ToLongTimeString();
+                request.Data.JsonPacket.Release = "1.4.6"; //read it from somewhere
+                request.Data.JsonPacket.User.IpAddress = "0.0.0.0";
+                return request;
             });
 
             Action<Exception> onSendError = new Action<Exception>(ex =>
@@ -63,9 +66,12 @@ namespace BridgeVs.Shared.Logging
                 Trace.WriteLine(ex.Message);
                 Trace.WriteLine(ex.StackTrace);
             });
-            _ravenClient = new RavenClient(RavenClientId);
-            _ravenClient.BeforeSend = removeUserId;
-            _ravenClient.ErrorOnCapture = onSendError;
+
+            _ravenClient = new RavenClient(RavenClientId)
+            {
+                BeforeSend = removeUserId,
+                ErrorOnCapture = onSendError
+            };
 #endif
         }
 
@@ -82,8 +88,8 @@ namespace BridgeVs.Shared.Logging
                 Message = message,
                 Level = errorLevel
             };
-            //Log LINQBridgeVs detail
-            sentryEvent.Fingerprint.Add(VisualStudioVersion);
+            sentryEvent.Tags.Add("Visual Studio Version", VisualStudioVersion);
+            sentryEvent.Breadcrumbs.Add(new Breadcrumb("Stacktrace", BreadcrumbType.Http) { Message = exception.StackTrace });
 
             _ravenClient.Capture(sentryEvent);
         }
