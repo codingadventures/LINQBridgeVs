@@ -52,6 +52,7 @@ namespace BridgeVs.Grapple.Test
         }
 
         [TestMethod]
+        [TestCategory("UnitTest")]
         public void TruckConstructorTest()
         {
             ITruck b = _truck;
@@ -63,22 +64,22 @@ namespace BridgeVs.Grapple.Test
 
 
         [TestMethod]
+        [TestCategory("UnitTest")]
         public void TruckLoadCargoTest()
         {
-            const string test = "test test test";
+            object[] test = new[] { "test test test" };
             _truck.LoadCargo(test);
             _truck.LoadCargo(test);
 
-            IEnumerable<string> objects = _truck.UnLoadCargo<string>();
+            object[] objects = _truck.UnLoadCargo<object[]>().First();
 
-            Assert.IsNotNull(objects);
-            IEnumerable<string> enumerable = objects as IList<string> ?? objects.ToList();
-            Assert.AreEqual(2, enumerable.Count());
-            Assert.AreEqual(enumerable.First(), test);
-
+            Assert.IsNotNull(objects); 
+            Assert.AreEqual(1, objects.Length);
+            Assert.AreEqual(objects[0], test[0]);
         }
 
         [TestMethod]
+        [TestCategory("UnitTest")]
         public void TruckDeliverToTest()
         {
             _truck.LoadCargo(KeyValues);
@@ -87,6 +88,7 @@ namespace BridgeVs.Grapple.Test
         }
 
         [TestMethod]
+        [TestCategory("UnitTest")]
         public void TruckUnStuffCargoTest()
         {
             _truck.LoadCargo(KeyValues);
@@ -102,6 +104,7 @@ namespace BridgeVs.Grapple.Test
         }
 
         [TestMethod]
+        [TestCategory("UnitTest")]
         public void AddNonSerializableObjectTest()
         {
             _truck.LoadCargo(new NonSerializableClass());
@@ -113,6 +116,7 @@ namespace BridgeVs.Grapple.Test
         }
 
         [TestMethod]
+        [TestCategory("UnitTest")]
         public void AddNonSerializableObjectTestRetrieveByType()
         {
             _truck.LoadCargo(new NonSerializableClass());
@@ -123,12 +127,12 @@ namespace BridgeVs.Grapple.Test
         }
 
         [TestMethod]
+        [TestCategory("UnitTest")]
         public void AddIteratorTypeSelectWhereIteratorOfIntShouldSerialize()
         {
             IEnumerable<int> r = from i in Enumerable.Range(0, 100)
-                    select i;
+                                 select i;
             _truck.LoadCargo(r);
-            _truck.LoadCargo(r.GetType());
             _truck.DeliverTo("Mom");
             _truck.WaitDelivery("Mom").Wait();
             IEnumerable<int> res = _truck.UnLoadCargo<IEnumerable<int>>().FirstOrDefault();
@@ -139,14 +143,14 @@ namespace BridgeVs.Grapple.Test
         }
 
         [TestMethod]
+        [TestCategory("UnitTest")]
         public void AddIteratorTypeSelectWhereIteratorOfCustomStructShouldSerialize()
         {
 
             IEnumerable<BinaryTestStruct> r = from i in Enumerable.Range(0, 100)
-                    select new BinaryTestStruct { Type = i.ToString(CultureInfo.InvariantCulture) };
+                                              select new BinaryTestStruct { Type = i.ToString(CultureInfo.InvariantCulture) };
 
             _truck.LoadCargo(r);
-            _truck.LoadCargo(r.GetType());
             _truck.DeliverTo("Mom");
             _truck.WaitDelivery("Mom").Wait();
             IEnumerable<BinaryTestStruct> res = _truck.UnLoadCargo<IEnumerable<BinaryTestStruct>>().FirstOrDefault();
@@ -157,11 +161,12 @@ namespace BridgeVs.Grapple.Test
         }
 
         [TestMethod]
+        [TestCategory("UnitTest")]
         public void AddIteratorTypeSelectWhereIteratorOfObjectShouldSerialize()
         {
 
             IEnumerable<BinaryTestStruct> r = from i in Enumerable.Range(0, 100)
-                    select new BinaryTestStruct { Type = i.ToString(CultureInfo.InvariantCulture) };
+                                              select new BinaryTestStruct { Type = i.ToString(CultureInfo.InvariantCulture) };
 
             _truck.LoadCargo((object)r);
 
@@ -175,6 +180,7 @@ namespace BridgeVs.Grapple.Test
         }
 
         [TestMethod]
+        [TestCategory("UnitTest")]
         public void WaitForNotExistingTruckWaitForAtLeast5000Milliseconds()
         {
             Stopwatch stopWatch = new Stopwatch();
@@ -183,7 +189,6 @@ namespace BridgeVs.Grapple.Test
             stopWatch.Stop();
 
             Assert.IsTrue(stopWatch.ElapsedMilliseconds >= 5000);
-
         }
     }
 }
