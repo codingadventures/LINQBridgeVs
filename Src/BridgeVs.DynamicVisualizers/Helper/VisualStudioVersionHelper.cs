@@ -42,6 +42,5 @@ namespace BridgeVs.DynamicVisualizers.Helper
 
             return version + ".0";
         }
-
     }
 }

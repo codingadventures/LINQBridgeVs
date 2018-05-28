@@ -68,6 +68,10 @@
       <Project>{79c0c9ed-d22c-4855-97c1-f6bd0127a531}</Project>
       <Name>BridgeVs.Grapple</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Src\BridgeVs.Locations\BridgeVs.Shared.csproj">
+      <Project>{BC10F93A-5DA2-44F8-AE5E-5603CB46B548}</Project>
+      <Name>BridgeVs.Shared</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

@@ -86,7 +86,7 @@ namespace BridgeVs.Grapple.Test
         [TestMethod]
         public void BsonStressTest()
         {
-            Truck b = new Truck("MAN");
+            Truck b = new Truck("MAN", Shared.Options.SerializationOption.JSON);
 
             double upper = Math.Pow(10, 3);
 

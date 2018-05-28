@@ -28,6 +28,7 @@ using BridgeVs.Build.Tasks;
 using BridgeVs.Build.Util;
 using BridgeVs.Locations;
 using BridgeVs.Model.Test;
+using BridgeVs.Shared.Locations;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BridgeVs.Build.Test
@@ -49,7 +50,7 @@ namespace BridgeVs.Build.Test
 
         private static string TargetInstallationPath(string vsVersion)
         {
-            return VisualStudioOptions.GetVisualizerDestinationFolder(vsVersion);
+            return VisualStudioOption.GetVisualizerDestinationFolder(vsVersion);
         }
 
         private static string DotNetAssemblyName(string vsVersion)

@@ -59,10 +59,6 @@
     <Compile Include="MsBuildVersionHelperUnitTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Src\BridgeVs.Logging\BridgeVs.Logging.csproj">
-      <Project>{0B546762-C8C0-45C6-BC42-C5D91D510351}</Project>
-      <Name>BridgeVs.Logging</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Src\BridgeVs.VsPackage.Helper\BridgeVs.VsPackage.Helper.csproj">
       <Project>{0fa0053b-ab53-40df-a060-6dcc22568a23}</Project>
       <Name>BridgeVs.VsPackage.Helper</Name>

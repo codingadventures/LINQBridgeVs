@@ -29,7 +29,6 @@ using System.Linq;
 using System.Reflection;
 using BridgeVs.Grapple.Contracts;
 using BridgeVs.Grapple.Serialization;
-using BridgeVs.Locations;
 
 namespace BridgeVs.Grapple.Grapple
 {

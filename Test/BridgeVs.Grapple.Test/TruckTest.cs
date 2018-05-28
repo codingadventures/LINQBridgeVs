@@ -48,7 +48,7 @@ namespace BridgeVs.Grapple.Test
         [TestInitialize]
         public void Init()
         {
-            _truck = new Truck("Iveco");
+            _truck = new Truck("Iveco", Shared.Options.SerializationOption.JSON);
         }
 
         [TestMethod]

@@ -75,13 +75,9 @@
       <Project>{B84FBD50-0B10-4C25-8430-680FC6FC3FEA}</Project>
       <Name>BridgeVs.DynamicVisualizers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Src\BridgeVs.Locations\BridgeVs.Locations.csproj">
+    <ProjectReference Include="..\..\Src\BridgeVs.Locations\BridgeVs.Shared.csproj">
       <Project>{BC10F93A-5DA2-44F8-AE5E-5603CB46B548}</Project>
-      <Name>BridgeVs.Locations</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Src\BridgeVs.Logging\BridgeVs.Logging.csproj">
-      <Project>{0B546762-C8C0-45C6-BC42-C5D91D510351}</Project>
-      <Name>BridgeVs.Logging</Name>
+      <Name>BridgeVs.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="..\BridgeVs.AnotherModel.Test\BridgeVs.AnotherModel.Test.csproj">
       <Project>{7B0C3D12-296A-438D-B0EA-B049A0D6D3C1}</Project>

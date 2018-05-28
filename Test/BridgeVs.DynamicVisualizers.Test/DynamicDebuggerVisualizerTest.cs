@@ -28,11 +28,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
-using BridgeVs.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using BridgeVs.Locations;
 using BridgeVs.DynamicVisualizers.Template;
 using BridgeVs.Model.Test;
+using BridgeVs.Shared.Logging;
+using BridgeVs.Shared.Common;
 
 namespace BridgeVs.DynamicVisualizers.Test
 {
