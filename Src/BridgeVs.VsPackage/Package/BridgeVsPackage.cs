@@ -156,7 +156,7 @@ namespace BridgeVs.VsPackage.Package
             if (_installationResult == null)
                 return;
 
-            var messageResult = MessageBox.Show("Do you want to send anonymous error report?", "LINQBridgeVs", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+            var messageResult = MessageBox.Show("Do you want to send anonymous error reports to LINQBridgeVs?", "LINQBridgeVs", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
 
             _packageSettings.ErrorTrackingEnabled = messageResult == MessageBoxResult.Yes;
             _packageSettings.SaveSettingsToStorage();
