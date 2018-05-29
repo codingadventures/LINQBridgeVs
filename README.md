@@ -49,7 +49,7 @@ Only for the first time, Visual Studio must be run with Administrator privileges
 Once Visual Studio is restarted as Administrator, the configuration will complete and the form will never appear again. 
 
 During this process two custom MsBuild Targets, [Custom.After.Microsoft.Common.targets](https://github.com/codingadventures/LINQBridgeVs/blob/master/Src/VsExtension/Targets/Custom.After.Microsoft.Common.targets) and [Custom.Before.Microsoft.Common.targets](https://github.com/codingadventures/LINQBridgeVs/blob/master/Src/VsExtension/Targets/Custom.Before.Microsoft.Common.targets), are needed to extend the MsBuild process. They are copied into a specific Visual Studio version and edition's folder:
-* Visual Studio 2017 - C:\Program Files (x86)\Microsoft Visual Studio\2017\{Edition}\MSBuild\v15.0
+* Visual Studio 2017 - C:\Program Files (x86)\Microsoft Visual Studio\2017\\**Edition**\MSBuild\v15.0
 * Visual Studio 2015 - C:\Program Files (x86)\MSBuild\v14.0
 * Visual Studio 2013 - C:\Program Files (x86)\MSBuild\v12.0
 * Visual Studio 2012 - C:\Program Files (x86)\MSBuild\v4.0
@@ -71,7 +71,7 @@ either delete manually the two files above or their content.
 ## Error Tracking
 
 This extension uses [Sentry](https://sentry.io) error tracking to log exceptions. 
-After the [Configuration](#Configuration) is finished a message box will appear asking if you want to enable this functionality. Should you click yes, you will help me keep this project bug free.
+After the [Configuration](#configuration) is finished a message box will appear asking if you want to enable this functionality. Should you click yes, you will help me keep this project bug free.
 
 <br>
 <p align="center">
@@ -99,7 +99,7 @@ The BridgeVs Option menu offers three options:
     <img src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/BridgeVsOption.PNG?raw=true" width="700" />
 </p>
 
-The error tracking feature, as explained in the [Error Tracking](#Error-Tracking) section, can be turned on or off at anytime. 
+The error tracking feature, as explained in the [Error Tracking](#error-tracking) section, can be turned on or off at anytime. 
 The LINQPad installation path can also be changed should you prefer to use a portable version after the configuration is completed. Bear in mind that the folder provided must contain the LINQPad.exe otherwise it
 won't change the path.
 
@@ -108,7 +108,7 @@ The Serialization Type is the method used to transmit debugging variables to LIN
 ## Troubleshooting
 
 If after bridging and rebuilding your solution the magnifier glass still does not appear, make sure that in this folder _"C:\Users\youruser\Documents\Visual Studio 201**x**\Visualizers"_ there is/are assemblies with this name template "_**AssemblyName**.Visualizer.V1**x**.dll_" (where x is the version number of Visual Studio). 
-If the folder does not contain any assembly then please open [a new bug](https://github.com/codingadventures/LINQBridgeVs/issues/new). There are a number of dependent assemblies required by the custom visualizer (_BridgeVs.DynamicCore.dll, BridgeVs.Grapple.dll, BridgeVs.Shared.dll, Newtonsoft.Json.dll, System.IO.Abstractions.dll, SharpRaven.dll_) which are copied in these two folders during the [Configuration](#Configuration):
+If the folder does not contain any assembly then please open [a new bug](https://github.com/codingadventures/LINQBridgeVs/issues/new). There are a number of dependent assemblies required by the custom visualizer (_BridgeVs.DynamicCore.dll, BridgeVs.Grapple.dll, BridgeVs.Shared.dll, Newtonsoft.Json.dll, System.IO.Abstractions.dll, SharpRaven.dll_) which are copied in these two folders during the [Configuration](#configuration):
 * C:\Users\youruser\Documents\Visual Studio 201**x**\Visualizers
 * C:\Users\youruser\Documents\LINQPad Plugins
 
