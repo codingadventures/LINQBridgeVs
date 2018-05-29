@@ -206,7 +206,7 @@ For each class (*Class1, Class2, Class3*) a global assembly attribute that maps 
 A very special thanks goes to [Sentry](https://sentry.io) and to [Advanced Installer](https://www.advancedinstaller.com) for sponsoring this project.
 
 <a href="https://Sentry.io"><img width="200" src="https://sentry-brand.storage.googleapis.com/sentry-logo-black.svg" /> </a>
-<a href="https://www.advancedinstaller.com"><img width="200" src="https://raw.githubusercontent.com/codingadventures/LINQBridgeVs/master/Docs/AdvancedInstaller.jpg" /></a>
+<a href="https://www.advancedinstaller.com"><img width="200" src="https://raw.githubusercontent.com/codingadventures/LINQBridgeVs/master/Docs/AdvancedInstaller.png" /></a>
 ## Acknowledgments
 
  for sponsoring this project. I have also used several community open source projects to make this extension. So if you like LINQBridgeVs I recommend checking out the following:
