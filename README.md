@@ -86,7 +86,7 @@ Sentry is compliance with the GDPR as a data processor, please refer to this art
 
 In no way personal data, like email addresses, credit card information, name of the machine, username or IP address are sent to Sentry. A data scrubber is enabled by default to remove any values that look like they contain credit cards (using regular expression).
 Keys that contain any of the following values: password, secret, passwd, authorization, api_key, apikey, access_token are filtered as well.
-[RavenWrapper](https://github.com/codingadventures/LINQBridgeVs/blob/b51ed2131fa270f802df456fd05f5a318eae0e98/Src/BridgeVs.Locations/Logging/RavenWrapper.cs#L54-L61) is the class used to send exceptions to Sentry, please refer to lines 54-61 regarding the information filtered before the request is sent.
+[RavenWrapper](https://github.com/codingadventures/LINQBridgeVs/blob/b51ed2131fa270f802df456fd05f5a318eae0e98/Src/BridgeVs.Locations/Logging/RavenWrapper.cs#L54-L61) is the wrapper class used to send exceptions to Sentry. Please refer to lines 54-61 to see how some data is filtered out before the request is sent.
 
 Data sent through the extension will live for a maximum of 90 days and after it will be deleted. If you're concerned that personal data has been accidentally sent, please drop an email to linqbridgevs [at] gmail [dot] com 
 I will delete the data as soon as possible.
@@ -204,10 +204,13 @@ For each class (*Class1, Class2, Class3*) a global assembly attribute that maps 
 ## Special thanks to my Sponsors
 
 A very special thanks goes to [Sentry](https://sentry.io) and to [Advanced Installer](https://www.advancedinstaller.com) for sponsoring this project.
+<style type="text/css">
+img {background-color:black;}
+</style>
 
 <a href="https://Sentry.io"><img width="200" src="https://sentry-brand.storage.googleapis.com/sentry-logo-black.svg" /> </a>
-<a href="https://www.advancedinstaller.com"><img width="200" style="background-color:black" src="https://www.advancedinstaller.com/svg/common/iconNavLogo.svg" /></a>
-
+<span><a href="https://www.advancedinstaller.com"><img width="200" src="https://www.advancedinstaller.com/svg/common/iconNavLogo.svg" /></a>
+</span>
 ## Acknowledgments
 
  for sponsoring this project. I have also used several community open source projects to make this extension. So if you like LINQBridgeVs I recommend checking out the following:
