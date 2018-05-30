@@ -47,6 +47,24 @@ namespace BridgeVs.VsPackage.Helper.Settings
 
         private string _linqPadInstallationPath = Defaults.LINQPadInstallationPath;
 
+        [Category("Installation")]
+        [DisplayName("ID")]
+        [Description("Unique installation ID. Please if you open a bug refer to this ID.")]
+        [ReadOnly(true)]
+        public string InstallationId
+        {
+            get
+            {
+                var dte = (DTE)GetService(typeof(SDTE));
+                if (dte != null)
+                {
+                    return CommonRegistryConfigurations.GetUniqueGuid(dte.Version);
+                }
+
+                return string.Empty;
+            }
+        }
+
         [Category("LINQPad")]
         [DisplayName("Installation Path")]
         [Description("Sets the path to the LINQPad exe")]

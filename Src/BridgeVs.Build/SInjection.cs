@@ -31,6 +31,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using BridgeVs.Build.Util;
+using BridgeVs.Shared.Common;
 using BridgeVs.Shared.Logging;
 using Mono.Cecil;
 using Mono.Cecil.Pdb;
@@ -125,6 +126,7 @@ namespace BridgeVs.Build
             _assemblyLocation = assemblyLocation;
             _snkCertificatePath = snkCertificatePath;
             _mode = mode;
+
             Log.Write("Assembly being Injected {0}", assemblyLocation);
 
             //  if (IsAssemblyInExcludedList(Path.GetFileName(assemblyLocation))) return;

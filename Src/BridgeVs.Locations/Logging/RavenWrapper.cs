@@ -54,8 +54,8 @@ namespace BridgeVs.Shared.Logging
                 HttpRequester request = req as HttpRequester;
                 //GDPR compliant, no personal data sent: no server name, no username stored, no ip address
                 request.Data.JsonPacket.ServerName = "linqbridgevs";
-                request.Data.JsonPacket.Contexts.Device.Name = "linqbridgevs"; 
-                request.Data.JsonPacket.User.Username = "linqbridgevs-" + DateTime.Now.ToLongTimeString();
+                request.Data.JsonPacket.Contexts.Device.Name = "linqbridgevs";
+                request.Data.JsonPacket.User.Username = CommonRegistryConfigurations.GetUniqueGuid(VisualStudioVersion);
                 request.Data.JsonPacket.Release = "1.4.6"; //read it from somewhere
                 request.Data.JsonPacket.User.IpAddress = "0.0.0.0";
                 return request;

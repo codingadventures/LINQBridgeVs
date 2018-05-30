@@ -9,12 +9,14 @@ namespace BridgeVs.Shared.Common
     {
         private const string ErrorTrackingRegistryValue = "SentryErrorTracking";
         private const string SerializationMethodRegistryValue = "SerializationMethod";
-        public static string LoggingRegistryValue = "Logging";
+        public const string LoggingRegistryValue = "Logging";
 
         // ReSharper disable once InconsistentNaming
         private const string LINQPadInstallationPathRegistryValue = "LINQPadInstallationPath";
         // ReSharper disable once InconsistentNaming
         private const string LINQPadVersionPathRegistryValue = "LINQPadVersion";
+
+        public const string InstallationGuidRegistryValue = "UniqueId";
 
 
         // ReSharper disable once InconsistentNaming
@@ -65,7 +67,7 @@ namespace BridgeVs.Shared.Common
         public static string GetOriginalAssemblyLocation(Type @type, string vsVersion)
         {
             bool isSystemAssembly(string name) => name.Contains("Microsoft") || name.Contains("System") || name.Contains("mscorlib");
-            
+
             string registryKeyPath = $@"Software\LINQBridgeVs\{vsVersion}\Solutions";
 
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey(registryKeyPath))
@@ -143,6 +145,23 @@ namespace BridgeVs.Shared.Common
             using (RegistryKey key = Registry.CurrentUser.CreateSubKey($@"Software\LINQBridgeVs\{vsVersion}"))
             {
                 key?.SetValue(LoggingRegistryValue, enabled);
+            }
+        }
+
+        public static string GetUniqueGuid(string vsVersion)
+        {
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey($@"Software\LINQBridgeVs\{vsVersion}"))
+            {
+                return key?.GetValue(InstallationGuidRegistryValue) as string;
+
+            }
+        }
+
+        public static void SetUniqueGuid(string vsVersion, string guid)
+        {
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey($@"Software\LINQBridgeVs\{vsVersion}"))
+            {
+                key?.SetValue(InstallationGuidRegistryValue, guid);
             }
         }
     }

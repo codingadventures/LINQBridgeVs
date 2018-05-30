@@ -50,9 +50,7 @@ namespace BridgeVs.VsPackage.Helper.Configuration
         public static List<string> Dependencies => new List<string>
         {
             "BridgeVs.Grapple.dll",
-            "BridgeVs.Locations.dll",
             "BridgeVs.Shared.dll",
-            "BridgeVs.Logging.dll",
             "Newtonsoft.Json.dll",
             "System.IO.Abstractions.dll",
             "SharpRaven.dll"
@@ -127,7 +125,7 @@ namespace BridgeVs.VsPackage.Helper.Configuration
             return false;
         }
 
-        private static void SetEnvironment(string vsVersion, string vsEdition)
+        private static void DeployMsBuildTargets(string vsVersion, string vsEdition)
         {
             string msBuildDir = CreateMsBuildTargetDirectory(vsVersion, vsEdition);
             //Copy the CustomAfter and CustomBefore to the default MSbuild v4.0 location
@@ -245,13 +243,20 @@ namespace BridgeVs.VsPackage.Helper.Configuration
             //Always check if installation folder has changed
             SetInstallationFolder(vsVersion);
 
-            SetEnvironment(vsVersion, vsEdition);
+            DeployMsBuildTargets(vsVersion, vsEdition);
+
+            GenerateGuidForCurrentInstallation(vsVersion);
 
             DeleteExistingVisualizers(vsVersion);
 
             DeployDependencies(vsVersion);
 
             return true;
+        }
+
+        private static void GenerateGuidForCurrentInstallation(string vsVersion)
+        {
+            CommonRegistryConfigurations.SetUniqueGuid(vsVersion, Guid.NewGuid().ToString());
         }
 
         public static void DeployDependencies(string vsVersion)
