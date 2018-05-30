@@ -93,16 +93,17 @@ I will delete the data as soon as possible.
 
 ## BridgeVs Option Menu
 
-The BridgeVs Option menu offers three options: 
+The BridgeVs Option menu offers four options: 
 
 <p align="center">
     <img src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/BridgeVsOption.PNG?raw=true" width="700" />
 </p>
 
-The error tracking feature, as explained in the [Error Tracking](#error-tracking) section, can be turned on or off at anytime. 
+The error tracking feature, as explained in the [Error Tracking](#error-tracking) section, can be swtiched on or off at anytime. 
+To enable diagnostic logging set Enable Logging to true. Logs will be saved in *%LOCALAPPDATA%\BridgeVs\logs.txt*. Be careful, logging is synchronous so it will slow down the extension.
+
 The LINQPad installation path can also be changed should you prefer to use a portable version after the configuration is completed. Bear in mind that the folder provided must contain the LINQPad.exe otherwise it
 won't change the path.
-
 The Serialization Type is the method used to transmit debugging variables to LINQPad. Binary serialization is set by default. Json.NET is also available.
 
 ## Troubleshooting
