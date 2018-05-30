@@ -32,10 +32,18 @@ namespace BridgeVs.Shared.Logging
 {
     public static class Log
     {
-        private static string _logTxtFilePath = Path.Combine(CommonFolderPaths.LogFolderPath, "logs.txt");
+        private static readonly string LogTxtFilePath = Path.Combine(CommonFolderPaths.LogFolderPath, "logs.txt");
+
+        public static string VisualStudioVersion { get; set; }
 
         public static void Write(Exception ex, string context = null)
         {
+            if (string.IsNullOrEmpty(VisualStudioVersion))
+                return;
+
+            if (!CommonRegistryConfigurations.IsLoggingEnabled(VisualStudioVersion))
+                return;
+
             try
             {
                 string text = string.Concat(ex.GetType().Name, ": ", ex.Message, "\r\n", ex.StackTrace ?? "");
@@ -62,7 +70,7 @@ namespace BridgeVs.Shared.Logging
             if (args != null && args.Length > 0)
                 msg = string.Format(CultureInfo.InvariantCulture, msg, args);
 
-            File.AppendAllText(_logTxtFilePath, string.Concat(new[]
+            File.AppendAllText(LogTxtFilePath, string.Concat(new[]
                 {
                     DateTime.Now.ToString("o"), " ", msg.Trim(), Environment.NewLine
                 }));
@@ -74,6 +82,12 @@ namespace BridgeVs.Shared.Logging
         /// <param name="msg">A composite format string (see Remarks) that contains text intermixed with zero or more format items, which correspond to objects in the <paramref name="args"/> array.</param><param name="args">An object array that contains zero or more objects to format. </param>
         public static void Write(string msg, params object[] args)
         {
+            if (string.IsNullOrEmpty(VisualStudioVersion))
+                return;
+
+            if (!CommonRegistryConfigurations.IsLoggingEnabled(VisualStudioVersion))
+                return;
+
             try
             {
                 InternalWrite(msg, args);
@@ -82,22 +96,6 @@ namespace BridgeVs.Shared.Logging
             {
                 // ignored
             }
-        }
-
-        public static void WriteIf(bool condition, string msg, params object[] args)
-        {
-            if (!condition)
-                return;
-
-            Write(msg, args);
-        }
-
-        public static void WriteIf(bool condition, Exception exception, string context)
-        {
-            if (!condition)
-                return;
-
-            Write(exception, context);
-        }
+        } 
     }
 }

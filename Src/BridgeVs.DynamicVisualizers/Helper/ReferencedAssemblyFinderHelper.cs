@@ -54,9 +54,9 @@ namespace BridgeVs.DynamicVisualizers.Helper
                     if (!string.IsNullOrEmpty(originalTypeLocation))
                         returnList.Add(originalTypeLocation);
 
-                    Log.WriteIf(
-                        !string.IsNullOrEmpty(originalTypeLocation) &&
-                        !@type.Assembly.Location.Equals(originalTypeLocation), "No Referenced Assemblies");
+                    if (!string.IsNullOrEmpty(originalTypeLocation) &&
+                        !@type.Assembly.Location.Equals(originalTypeLocation))
+                        Log.Write("No Referenced Assemblies");
 
                     IEnumerable<string> referencedAssemblyPaths = @type.Assembly.GetReferencedAssembliesPath(originalTypeLocation);
 

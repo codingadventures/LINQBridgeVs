@@ -118,6 +118,28 @@ namespace BridgeVs.VsPackage.Helper.Settings
             }
         }
 
+        private bool _isLoggingEnabled = Defaults.LoggingEnabled;
+
+        [Category("Feedback")]
+        [DisplayName("Enable Logging")]
+        [Description(@"Enable diagnostic logging for this extension. Logs will be saved in %LOCALAPPDATA%\BridgeVs\logs.txt")]
+        public bool LoggingEnabled
+        {
+            get
+            {
+                return _isLoggingEnabled;
+            }
+            set
+            {
+                var dte = (DTE)GetService(typeof(SDTE));
+                if (dte != null)
+                {
+                    CommonRegistryConfigurations.SetLogging(dte.Version, value);
+                    _isLoggingEnabled = value;
+                }
+            }
+        }
+
         private SerializationOption _serializationOption = Defaults.SerializationMethod;
 
         [Category("Serialization")]

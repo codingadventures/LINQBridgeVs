@@ -9,11 +9,13 @@ namespace BridgeVs.Shared.Common
     {
         private const string ErrorTrackingRegistryValue = "SentryErrorTracking";
         private const string SerializationMethodRegistryValue = "SerializationMethod";
+        public static string LoggingRegistryValue = "Logging";
 
         // ReSharper disable once InconsistentNaming
         private const string LINQPadInstallationPathRegistryValue = "LINQPadInstallationPath";
         // ReSharper disable once InconsistentNaming
         private const string LINQPadVersionPathRegistryValue = "LINQPadVersion";
+
 
         // ReSharper disable once InconsistentNaming
         public static string GetLINQPadInstallationPath(string vsVersion)
@@ -119,6 +121,28 @@ namespace BridgeVs.Shared.Common
                 }
 
                 return SerializationOption.Binary;
+            }
+        }
+
+        public static bool IsLoggingEnabled(string vsVersion)
+        {
+            bool isLoggingEnabled = false;
+
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey($@"Software\LINQBridgeVs\{vsVersion}"))
+            {
+                string logging = key?.GetValue(LoggingRegistryValue) as string;
+                if (!string.IsNullOrEmpty(logging))
+                    isLoggingEnabled = Convert.ToBoolean(logging);
+            }
+
+            return isLoggingEnabled;
+        }
+
+        public static void SetLogging(string vsVersion, bool enabled)
+        {
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey($@"Software\LINQBridgeVs\{vsVersion}"))
+            {
+                key?.SetValue(LoggingRegistryValue, enabled);
             }
         }
     }

@@ -44,6 +44,7 @@ namespace BridgeVs.Build.Tasks
         public bool Execute()
         {
             RavenWrapper.VisualStudioVersion = VisualStudioVer;
+            Log.VisualStudioVersion = VisualStudioVer;
 
             try
             {

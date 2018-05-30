@@ -47,6 +47,7 @@ namespace BridgeVs.DynamicVisualizers
             //configure once the vs version
             string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
             RavenWrapper.VisualStudioVersion = vsVersion;
+            Log.VisualStudioVersion = vsVersion;
 
             try
             {
