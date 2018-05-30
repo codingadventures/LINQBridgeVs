@@ -67,8 +67,6 @@ namespace BridgeVs.DynamicVisualizers.Test
         [TestCategory("UnitTest")]
         public void DeployLinqScriptTest()
         {
-            Log.Configure("UnitTest", "DynamicDebuggerVisualizerUnitTest");
-
             DynamicDebuggerVisualizer cVisualizerObjectSource = new DynamicDebuggerVisualizer(_fileSystem);
             cVisualizerObjectSource.DeployLinqScript(_message);
 
