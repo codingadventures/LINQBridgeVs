@@ -44,7 +44,6 @@ namespace BridgeVs.DynamicVisualizers
 
         public void BroadCastData(object target, Stream outgoingData)
         {
-            Log.Configure("LINQBridgeVs", "DynamicCore");
             //configure once the vs version
             string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
             RavenWrapper.VisualStudioVersion = vsVersion;
@@ -103,7 +102,6 @@ namespace BridgeVs.DynamicVisualizers
 
         private static Type GetInterfaceTypeIfIsIterator(object o)
         {
-            Log.Write("GetInterfaceTypeIfIsIterator Started");
             Type @type = o.GetType();
 
             if (!@type.IsNestedPrivate || !@type.Name.Contains("Iterator") ||

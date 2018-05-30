@@ -43,14 +43,13 @@ namespace BridgeVs.Build.Tasks
 
         public bool Execute()
         {
-            Log.Configure("LINQBridgeVs", "SinjectionBuildTask");
             RavenWrapper.VisualStudioVersion = VisualStudioVer;
 
             try
             {
                 string snkCertificate = File.Exists(Snk) ? Snk : null;
                 var sInjection = new SInjection(Assembly, mode: PatchMode.Debug, snkCertificatePath: snkCertificate);
-                sInjection.Patch(SerializationTypes.BinarySerialization);
+                return sInjection.Patch(SerializationTypes.BinarySerialization);
             }
             catch (Exception e)
             {
@@ -61,10 +60,7 @@ namespace BridgeVs.Build.Tasks
 
                 return false;
             }
-
-            return true;
         }
-
 
         public IBuildEngine BuildEngine { get; set; }
         public ITaskHost HostObject { get; set; }

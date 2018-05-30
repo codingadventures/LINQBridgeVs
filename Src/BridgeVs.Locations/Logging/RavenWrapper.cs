@@ -72,7 +72,7 @@ namespace BridgeVs.Shared.Logging
             {
                 BeforeSend = removeUserId,
                 ErrorOnCapture = onSendError,
-                Timeout = TimeSpan.FromMilliseconds(500) //should fail early if it can't send a message
+                Timeout = TimeSpan.FromMilliseconds(2000) //should fail early if it can't send a message
             };
 #endif
         }

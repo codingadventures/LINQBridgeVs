@@ -69,8 +69,6 @@ namespace BridgeVs.Build.Tasks
 
             try
             {
-                Log.Configure("LINQBridgeVs", "MapperBuildTask");
-
                 //this is where the current assembly being built is saved
                 string currentBuildingFolder = Path.GetDirectoryName(Assembly);
                 string visualizerDestinationFolder = VisualStudioOption.GetVisualizerDestinationFolder(VisualStudioVer);

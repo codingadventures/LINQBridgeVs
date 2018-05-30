@@ -122,7 +122,6 @@ namespace BridgeVs.Build
         /// <exception cref="System.Exception"></exception>
         public SInjection(string assemblyLocation, string snkCertificatePath = null, PatchMode mode = PatchMode.Release)
         {
-            Log.Configure("Bridge", "SInject");
             _assemblyLocation = assemblyLocation;
             _snkCertificatePath = snkCertificatePath;
             _mode = mode;
@@ -288,13 +287,17 @@ namespace BridgeVs.Build
             ReaderParameters readerParameters = new ReaderParameters
             {
                 AssemblyResolver = assemblyResolver,
-#if TEST
                 InMemory = true,
-#endif
                 ReadingMode = ReadingMode.Immediate
             };
+
+            if (!File.Exists(PdbName))
+                 return readerParameters;
+            
+            PdbReaderProvider symbolReaderProvider = new PdbReaderProvider();
+            readerParameters.SymbolReaderProvider = symbolReaderProvider;
+
             return readerParameters;
-            //disables reading the symbols...
         }
 
         private WriterParameters GetWriterParameters()
@@ -307,12 +310,12 @@ namespace BridgeVs.Build
                 writerParameters.WriteSymbols = true;
             }
 
-            if (string.IsNullOrEmpty(_snkCertificatePath) || !SnkFileExists) return writerParameters;
+            if (string.IsNullOrEmpty(_snkCertificatePath) || !SnkFileExists)
+                return writerParameters;
 
             using (FileStream file = File.OpenRead(_snkCertificatePath))
             {
                 writerParameters.StrongNameKeyPair = new StrongNameKeyPair(file);
-
             }
 
             return writerParameters;

@@ -39,9 +39,13 @@ namespace BridgeVs.Shared.Common
         private const string CustomAfterTargets = @"Targets\Custom.After.Microsoft.Common.targets";
         private const string CustomBeforeTargets = @"Targets\Custom.Before.Microsoft.Common.targets";
 
-        private static readonly string SpecialWindowsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
-
         public static readonly string ProgramFilesFolderPath = Environment.GetEnvironmentVariable("ProgramFiles(x86)");
+        private static readonly string SpecialWindowsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
+        private static readonly string LocalApplicationData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        public static readonly string ApplicationData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+        public static readonly string LogFolderPath = Path.Combine(LocalApplicationData, "BridgeVs");
+        public static readonly string GrappleFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Grapple");
 
         public static readonly string VisualStudio2017Path = Path.Combine(ProgramFilesFolderPath, @"Microsoft Visual Studio\2017");
         public static readonly string VisualStudio2017EntPath = Path.Combine(ProgramFilesFolderPath, VisualStudio2017Path, "enterprise");
@@ -52,9 +56,6 @@ namespace BridgeVs.Shared.Common
         public static readonly string VisualStudio2013Path = Path.Combine(ProgramFilesFolderPath, @"Microsoft Visual Studio 12.0");
         public static readonly string VisualStudio2012Path = Path.Combine(ProgramFilesFolderPath, @"Microsoft Visual Studio 11.0");
 
-        public static readonly string ApplicationData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-
-        public static readonly string GrappleFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Grapple");
 
         public static string InstallFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
@@ -125,7 +126,7 @@ namespace BridgeVs.Shared.Common
                 folders.Add(Path.Combine(Documents, "LINQPad Plugins"));
                 return folders;
             }
-        } 
+        }
 
         static CommonFolderPaths()
         {

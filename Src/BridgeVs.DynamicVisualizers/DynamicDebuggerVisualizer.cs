@@ -193,8 +193,6 @@ namespace BridgeVs.DynamicVisualizers
 
         protected override void Show(IDialogVisualizerService windowService, IVisualizerObjectProvider objectProvider)
         {
-            Log.Configure("LINQBridgeVs", "DynamicDebuggerVisualizer");
-
             string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
             RavenWrapper.VisualStudioVersion = vsVersion;
 

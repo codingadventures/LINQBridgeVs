@@ -240,6 +240,8 @@ namespace BridgeVs.VsPackage.Helper.Configuration
 
             CreateGrappleFolder();
 
+            CreateLogFolder();
+
             //Always check if installation folder has changed
             SetInstallationFolder(vsVersion);
 
@@ -369,6 +371,25 @@ namespace BridgeVs.VsPackage.Helper.Configuration
 
             //no need for security access
             Directory.CreateDirectory(CommonFolderPaths.GrappleFolder);
+        }
+
+        private static void CreateLogFolder()
+        {
+            if (!Directory.Exists(CommonFolderPaths.LogFolderPath))
+            {
+                try
+                {
+                    DirectorySecurity sec = new DirectorySecurity();
+                    // Using this instead of the "Everyone" string means we work on non-English systems.
+                    SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+                    sec.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
+                    Directory.CreateDirectory(CommonFolderPaths.LogFolderPath, sec);
+                }
+                catch
+                {
+                    return;
+                }
+            }
         }
         #endregion
     }
