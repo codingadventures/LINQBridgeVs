@@ -25,21 +25,17 @@
 
 using System;
 using System.ComponentModel.Design;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Windows;
-using BridgeVs.Locations;
 using BridgeVs.VsPackage.Helper;
 using BridgeVs.VsPackage.Helper.Configuration;
 using BridgeVs.VsPackage.Helper.Installer;
 using BridgeVs.VsPackage.Helper.Settings;
 using EnvDTE;
 using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Settings;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.Shell.Settings;
 
 namespace BridgeVs.VsPackage.Package
 {
@@ -72,6 +68,12 @@ namespace BridgeVs.VsPackage.Package
         //if this is not null means vs has to restart
         private Welcome _welcomePage;
         private bool? _installationResult;
+        private class Error
+        {
+            public string Body;
+            public string Title;
+        }
+        private Error _error;
         public static bool IsElevated => new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
         private PackageSettings _packageSettings;
         #region Package Members
@@ -120,7 +122,7 @@ namespace BridgeVs.VsPackage.Package
             mcs.AddCommand(menuItemSendFeedback);
             //Initialize Object Exporter settings
             _packageSettings = (PackageSettings)GetDialogPage(typeof(PackageSettings));
-          
+
             try
             {   //if first time user 
                 if (isLinqBridgeVsConfigured)
@@ -144,28 +146,46 @@ namespace BridgeVs.VsPackage.Package
             }
             catch (Exception e)
             {
-                Trace.Write("LINQBridgeVs: Initialize Error... " + e.Message);
-                Trace.Write(e.StackTrace);
-                MessageBox.Show($"LINQBridgeVs: Configuration unsuccessful. Please open a new issue on GitHub. Error: {e.Message}");
+                _error = new Error();
+                _error.Body = $"{e.Message} %0A {e.StackTrace}";
+                _error.Title = "Error during installation. 1.4.6";
+                Exception innerException = e.InnerException;
+                while (innerException != null)
+                {
+                    _error.Body += $"%0A {innerException.Message} {innerException.StackTrace}";
+                    innerException = innerException.InnerException;
+                }
+                _error.Body = _error.Body.Replace(Environment.NewLine, "%0A");
             }
         }
 
         private void _dteEvents_OnStartupComplete()
         {
             _welcomePage?.Show();
+
+            if (_error != null)
+            {
+                var boxresult = MessageBox.Show($"Configuration unsuccessful. Do you want to open an issue on GitHub?", "LINQBridgeVs: Error during the configuration", MessageBoxButton.YesNo);
+                if (boxresult == MessageBoxResult.Yes)
+                {
+                    System.Diagnostics.Process.Start($"https://github.com/codingadventures/LINQBridgeVs/issues/new?title={_error.Title}&body={_error.Body}");
+                }
+                _error = null;
+            }
+
             if (_installationResult == null)
                 return;
 
-            var messageResult = MessageBox.Show("Do you want to send anonymous error reports to LINQBridgeVs?", "LINQBridgeVs", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+            var messageResult = MessageBox.Show("Do you want to send anonymous error reports to LINQBridgeVs?", "LINQBridgeVs: Error Tracking", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
 
             _packageSettings.ErrorTrackingEnabled = messageResult == MessageBoxResult.Yes;
             _packageSettings.SaveSettingsToStorage();
 
             MessageBox.Show(_installationResult.Value
                ? "LINQBridgeVs has been successfully configured."
-               : "LINQBridgeVs wasn't successfully configured. Please check the logs in the output folder");
+               : "LINQBridgeVs wasn't successfully configured.");
         }
-        
+
         #endregion
     }
 }
