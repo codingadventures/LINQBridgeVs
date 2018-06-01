@@ -58,15 +58,14 @@ You can skip this process but you will not be able to use the extension until yo
 
 ### LINQPad
 
-LINQPad must be present in the system before installing the extension otherwise it will not be possible to complete the configuration. Either the portable and the installed version are supported. 
+LINQPad must be present in the system before installing the extension otherwise it will not be possible to complete the configuration. Either the portable or the installed version are supported. 
 
 Custom folders for LINQPad queries and plugins are supported. This extension reads the configuration files located here:
 
 * _%APPDATA%\LINQPad\PluginLocations.txt_
 * _%APPDATA%\LINQPad\QueryLocations.txt_
 
-Please remember that if you set a custom folder through LINQPad for either plugins or queries and then you go back to the default folder you need to 
-either delete manually the two files above or their content.
+Please remember that if you set a custom folder through LINQPad for either plugins or queries and then you go back to the default folder you need to manually delete either the two files above or their content.
 
 ## Error Tracking
 
@@ -82,14 +81,13 @@ This feature can be turned on or off at any time through the option menu: Tools-
 
 ### Data Protection
 
-Sentry is compliance with the GDPR as a data processor, please refer to this article [GDPR, Sentry and you](https://blog.sentry.io/2018/03/14/gdpr-sentry-and-you).
+Sentry is compliant with the GDPR as a data processor, please refer to this article [GDPR, Sentry and you](https://blog.sentry.io/2018/03/14/gdpr-sentry-and-you).
 
-In no way personal data, like email addresses, credit card information, name of the machine, username or IP address are sent to Sentry. A data scrubber is enabled by default to remove any values that look like they contain credit cards (using regular expression).
+In no way is personal data (such as email addresses, credit card information, name of the machine, username or IP address) sent to Sentry. A data scrubber is enabled by default to remove any values that look like they contain credit cards (using regular expression).
 Keys that contain any of the following values: password, secret, passwd, authorization, api_key, apikey, access_token are filtered as well.
 [RavenWrapper](https://github.com/codingadventures/LINQBridgeVs/blob/ff72631f29a8ba97517fc69d47c31a80bf13eb98/Src/BridgeVs.Locations/Logging/RavenWrapper.cs#L54-L61) is the wrapper class used to send exceptions to Sentry. Please refer to lines 54-61 to see how some data is filtered out before the request is sent.
 
-Data sent through the extension will live for a maximum of 90 days and after it will be deleted. If you're concerned that personal data has been accidentally sent, please drop an email to linqbridgevs [at] gmail [dot] com 
-I will delete the data as soon as possible.
+Data sent through the extension will live for a maximum of 90 days, after which it will be deleted. If you're concerned that personal data has been accidentally sent, please drop an email to linqbridgevs [at] gmail [dot] com and I will delete the data as soon as possible.
 
 ## BridgeVs Option Menu
 
