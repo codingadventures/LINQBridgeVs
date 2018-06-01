@@ -10,22 +10,22 @@
 <img width="250" src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Src/BridgeVs.VsPackage/LINQBridgeLogo.png?raw=true" align="right"/>
 
 LINQBridgeVs is a Visual Studio Extension compatible with Visual Studio 2012/2013/2015/2017.
-It is a bridge between a Visual Studio debugging session and [LINQPad](http://www.linqpad.net). It creates, at compile time, a Custom Debugger Visualizer making the magnifier glass available for all of the public classes and structs. By clicking on the magnifier glass on an object instance, this will be transmitted over a
+It is a bridge between a Visual Studio debugging session and [LINQPad](http://www.linqpad.net). It creates, at compile time, a Custom Debugger Visualizer making the magnifying glass available for all of the public classes and structs. By clicking on the magnifying glass on an object instance, this will be transmitted over a
 bus and 'Dumped' out by LINQPad.
 <br><br>
 
 ## Getting Started
 
-Once the extension is installed, a new menu called *"BridgeVs"* will be available in the Visual Studio Menu Bar. Such menu is only visible
+Once the extension is installed, a new menu called *"BridgeVs"* will be available in the Visual Studio Menu Bar. This menu is only visible
 when a solution is loaded. There are two options available:
 
 *  *Bridge Solution*
 *  *Un-Bridge Solution*
 
 Bridging a solution will extend the MsBuild process to create a custom debugger visualizer assembly for each project. These assemblies are created or updated when you build your projects. 
-Private and internal classes _are not_ included, hence the magnifier glass will not be available for them. 
+Private and internal classes _are not_ included, hence the magnifying glass will not be available for them. 
 
-Run the solution, set a breakpoint and hover the mouse pointer on any object instance then the magnifier glass will appear inside the data tip. 
+Run the solution, set a breakpoint and hover the mouse pointer on any object instance then the magnifying glass will appear inside the data tip. 
 <br>
 <p align="center">
     <img src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/Example.gif?raw=true" width="1000" />
@@ -108,7 +108,7 @@ The Serialization Type is the method used to transmit debugging variables to LIN
 
 ## Troubleshooting
 
-If after bridging and rebuilding your solution the magnifier glass still does not appear, make sure that in this folder _"C:\Users\youruser\Documents\Visual Studio 201**x**\Visualizers"_ there is/are assemblies with this name template "_**AssemblyName**.Visualizer.V1**x**.dll_" (where x is the version number of Visual Studio). 
+If after bridging and rebuilding your solution the magnifying glass still does not appear, make sure that in this folder _"C:\Users\youruser\Documents\Visual Studio 201**x**\Visualizers"_ there is/are assemblies with this name template "_**AssemblyName**.Visualizer.V1**x**.dll_" (where x is the version number of Visual Studio). 
 If the folder does not contain any assembly then please open [a new bug](https://github.com/codingadventures/LINQBridgeVs/issues/new). There are a number of dependent assemblies required by the custom visualizer (_BridgeVs.DynamicCore.dll, BridgeVs.Grapple.dll, BridgeVs.Shared.dll, Newtonsoft.Json.dll, System.IO.Abstractions.dll, SharpRaven.dll_) which are copied in these two folders during the [Configuration](#configuration):
 * C:\Users\youruser\Documents\Visual Studio 201**x**\Visualizers
 * C:\Users\youruser\Documents\LINQPad Plugins
