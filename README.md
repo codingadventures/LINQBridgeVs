@@ -129,7 +129,7 @@ Specifically, in Visual Studio the Build Engine is called [MsBuild](https://en.w
 
 This extension uses custom build Targets in order to avoid the modification of each individual project.
 
-When a solution is *Bridged*, every project in is essentially flagged. Configuration values are stored in the Windows Registry at this location ***\HKEY_CURRENT_USER\Software\LINQBridgeVs***
+When a solution is *Bridged*, every project in the solution is essentially flagged. Configuration values are stored in the Windows Registry at this location ***\HKEY_CURRENT_USER\Software\LINQBridgeVs***
 
 <p align="center">
     <img src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/Registry.PNG?raw=true" width="700" />
@@ -146,7 +146,7 @@ When a solution is *Bridged*, every project in is essentially flagged. Configura
 From the [MSDN documentation](https://docs.microsoft.com/en-us/visualstudio/debugger/create-custom-visualizers-of-data): 
    >Visualizers are components of the Visual Studio debugger user interface. A visualizer creates a dialog box or another interface to display a variable or object in a manner that is appropriate to its data type. For example, an HTML visualizer interprets an HTML string and displays the result as it would appear in a browser window; a bitmap visualizer interprets a bitmap structure and displays the graphic it represents. The Visual Studio debugger includes six standard visualizers.
    >
-The process of creating custom visualizers to extend the debugger is not too complicated. However, it requires a lot of setup, either for mapping a class to custom visualizer but also to prepare the class for serialization. 
+The process of creating custom visualizers to extend the debugger is not too complicated. However, it requires a lot of setup either for mapping a class to custom visualizer but, also to prepare the class for serialization. 
 
 The architecture of a debugger visualizer has two parts:
 
@@ -155,7 +155,7 @@ The architecture of a debugger visualizer has two parts:
 
 The debuggee side runs within the process Visual Studio is debugging (the debuggee). The debuggee side has to send that data object to the debugger side, which can then display it using a user interface you create. In order to send that data, the object needs to be serialized. Unless you use a serializer, like JSON.NET, that requires no markup on neither the class itself nor on the properties, the class must be marked as Serialized, or with other specific attributes depending on the serializer.
 
-Below is an example of what it is needed to map a class to a custom debugger visualizer:
+Below is an example of what is needed to map a class to a custom debugger visualizer:
 ```csharp
 using DebuggerVisualizerExample;
 using Microsoft.VisualStudio.DebuggerVisualizers;
@@ -211,7 +211,7 @@ I have also used several community open source projects to make this extension. 
 
 - [LINQPad](http://www.linqpad.net) super useful scratch pad for C#, VB, F# and SQL. Without it this extension would not exist.
 - [SharpRaven](https://github.com/getsentry/raven-csharp) C# client for Sentry.
-- [Mono.Cecil](http://www.mono-project.com/docs/tools+libraries/libraries/Mono.Cecil/) very famous and useful AOP library designed, written and maintaned by JB Evain to generate and inspect programs and libraries in the ECMA CIL format.
+- [Mono.Cecil](http://www.mono-project.com/docs/tools+libraries/libraries/Mono.Cecil/) very famous and useful AOP library designed, written and maintained by JB Evain to generate and inspect programs and libraries in the ECMA CIL format.
 - [JSON.NET](https://github.com/JamesNK/Newtonsoft.Json) is an awesome serializer. It has become part of the .NET Framework and it is used by millions worlwide, now it has become the standard. LINQBridgeVs mainly uses the BinaryFormatter, but should it fail, it uses JSON.NET as a fallback mechanism.
-- [VsRestart](https://github.com/ilmax/vs-restart) is an extension that restart Visual Studio under Administrator privileges. Unfortunately the project seems abandoned. The extension works only with Visual Studio 2013. However, code proved to be working with any Visual Studio version.
+- [VsRestart](https://github.com/ilmax/vs-restart) is an extension that restart Visual Studio under Administrator privileges. Unfortunately the project seems abandoned. The extension works only with Visual Studio 2013. However it seems the code works just fine with any Visual Studio version.
 - [MahApps](https://github.com/MahApps/MahApps.Metro) which was the first open source project to make WPF truly modern.
