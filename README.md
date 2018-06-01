@@ -97,11 +97,10 @@ The BridgeVs Option menu offers four options:
     <img src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/BridgeVsOption.PNG?raw=true" width="700" />
 </p>
 
-The error tracking feature, as explained in the [Error Tracking](#error-tracking) section, can be swtiched on or off at anytime. 
+The error tracking feature, as explained in the [Error Tracking](#error-tracking) section, can be switched on or off at any time. 
 To enable diagnostic logging set Enable Logging to true. Logs will be saved in *%LOCALAPPDATA%\BridgeVs\logs.txt*. Be careful, logging is synchronous so it will slow down the extension.
 
-The LINQPad installation path can also be changed should you prefer to use a portable version after the configuration is completed. Bear in mind that the folder provided must contain the LINQPad.exe otherwise it
-won't change the path.
+The LINQPad installation path can also be changed should you prefer to use a portable version after the configuration is completed. Bear in mind that the folder provided must contain the LINQPad.exe, otherwise it won't change the path.
 The Serialization Type is the method used to transmit debugging variables to LINQPad. Binary serialization is set by default. Json.NET is also available.
 
 ## Troubleshooting
@@ -111,9 +110,9 @@ If the folder does not contain any assembly then please open [a new bug](https:/
 * C:\Users\youruser\Documents\Visual Studio 201**x**\Visualizers
 * C:\Users\youruser\Documents\LINQPad Plugins
 
-Please do not delete these files. If they are delete accidentally, the extension must be re-installed.
+Please do not delete these files. If they are accidentally deleted, the extension must be re-installed.
 
-Do not keep two instances of two different versions of LINQPad running (e.g. LINQPad 4 and LINQPad 5) at the same time. If you do so, the data will be automatically sent to the lower version of LINQPad. 
+Do not keep two instances of two different versions of LINQPad running (e.g. LINQPad 4 and LINQPad 5) at the same time. If you do so, the data will automatically be sent to the lower version of LINQPad. 
 
 ## How it works
 
