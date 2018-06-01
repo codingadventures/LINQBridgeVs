@@ -210,10 +210,10 @@ A very special thanks goes to [Sentry](https://sentry.io) and to [Advanced Insta
 <a href="https://www.advancedinstaller.com"><img width="200" src="https://raw.githubusercontent.com/codingadventures/LINQBridgeVs/master/Docs/AdvancedInstaller.png" /></a>
 ## Acknowledgments
 
- for sponsoring this project. I have also used several community open source projects to make this extension. So if you like LINQBridgeVs I recommend checking out the following:
+I have also used several community open source projects to make this extension. So if you like LINQBridgeVs I recommend checking out the following:
 
 - [LINQPad](http://www.linqpad.net) super useful scratch pad for C#, VB, F# and SQL. Without it this extension would not exist.
-- [SharpRaven](https://github.com/getsentry/raven-csharp) C# client for Sentry integration.
+- [SharpRaven](https://github.com/getsentry/raven-csharp) C# client for Sentry.
 - [Mono.Cecil](http://www.mono-project.com/docs/tools+libraries/libraries/Mono.Cecil/) very famous and useful AOP library designed, written and maintaned by JB Evain to generate and inspect programs and libraries in the ECMA CIL format.
 - [JSON.NET](https://github.com/JamesNK/Newtonsoft.Json) is an awesome serializer. It has become part of the .NET Framework and it is used by millions worlwide, now it has become the standard. LINQBridgeVs mainly uses the BinaryFormatter, but should it fail, it uses JSON.NET as a fallback mechanism.
 - [VsRestart](https://github.com/ilmax/vs-restart) is an extension that restart Visual Studio under Administrator privileges. Unfortunately the project seems abandoned. The extension works only with Visual Studio 2013. However, code proved to be working with any Visual Studio version.
