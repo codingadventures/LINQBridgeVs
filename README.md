@@ -201,11 +201,13 @@ For each class (*Class1, Class2, Class3*) a global assembly attribute that maps 
 
 ## Special thanks to my Sponsors
 
-A very special thanks goes to [Sentry](https://sentry.io), [Advanced Installer](https://www.advancedinstaller.com) and [NDepend](https://www.ndepend.com) for sponsoring this project.
+A very special thanks goes to [Sentry](https://sentry.io), [Advanced Installer](https://www.advancedinstaller.com), [NDepend](https://www.ndepend.com) and [TypeMock](https://www.typemock.com) for sponsoring this project.
 
 <a href="https://Sentry.io"><img width="200" src="https://sentry-brand.storage.googleapis.com/sentry-logo-black.svg" /> </a>
 <a href="https://www.advancedinstaller.com"><img width="200" src="https://raw.githubusercontent.com/codingadventures/LINQBridgeVs/master/Docs/AdvancedInstaller.png" /></a>
 <a href="https://www.ndepend.com"><img width="200" src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/PoweredByNDepend.png" />
+<a href="https://www.typemock.com"><img width="200" src="https://www.typemock.com/wp-content/themes/typemock/inc/img/typemock-logo.png" />    
+    
 ## Acknowledgments
 
 I have also used several community open source projects to make this extension. So if you like LINQBridgeVs I recommend checking out the following:
