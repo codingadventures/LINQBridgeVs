@@ -203,14 +203,18 @@ namespace DebuggerVisualizerExample
 
 For each class (*Class1, Class2, Class3*) a global assembly attribute that maps the type to a debugger visualizer is needed. This extension does all of this automatically. Internally it uses the .NET BinaryFormatter to send the data from the debuggee to the debugger. If the BinaryFormatter fails to serialize the data, JSON.NET is used instead.
 
-## Special thanks to my Sponsors
+## Special Thanks to my Sponsors
 
 A very special thanks goes to [Sentry](https://sentry.io), [Advanced Installer](https://www.advancedinstaller.com), [NDepend](https://www.ndepend.com) and [TypeMock](https://www.typemock.com) for sponsoring this project.
 
 <a href="https://Sentry.io"><img width="200" src="https://sentry-brand.storage.googleapis.com/sentry-logo-black.svg" /> </a>
 <a href="https://www.advancedinstaller.com"><img width="200" src="https://raw.githubusercontent.com/codingadventures/LINQBridgeVs/master/Docs/AdvancedInstaller.png" /></a>
 <a href="https://www.ndepend.com"><img width="200" src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/PoweredByNDepend.png" />
-<a href="https://www.typemock.com"><img width="200" src="https://www.typemock.com/wp-content/themes/typemock/inc/img/typemock-logo.png" />    
+<a href="https://www.typemock.com"><img width="200" src="https://www.typemock.com/wp-content/themes/typemock/inc/img/typemock-logo.png" />
+    
+## Support
+
+Your opinion is important, if you have some spare time please leave a review on the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=codingadventures.linqbridgevs#review-details).
     
 ## Acknowledgments
 
