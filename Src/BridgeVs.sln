@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.DynamicVisualizers
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRaven", "..\Lib\SharpRaven\src\app\SharpRaven\SharpRaven.csproj", "{D472FC40-284F-4532-A269-BE7BDAC2B153}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessagePack", "..\..\GitHub\MessagePack-CSharp\src\MessagePack\MessagePack.csproj", "{179C693D-85F2-48B1-960D-0EF1273DE5C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -201,6 +203,30 @@ Global
 		{D472FC40-284F-4532-A269-BE7BDAC2B153}.Release-netstandard2.0|Any CPU.Build.0 = Release-netstandard2.0|Any CPU
 		{D472FC40-284F-4532-A269-BE7BDAC2B153}.Test|Any CPU.ActiveCfg = Debug-net40|Any CPU
 		{D472FC40-284F-4532-A269-BE7BDAC2B153}.Test|Any CPU.Build.0 = Debug-net40|Any CPU
+		{179C693D-85F2-48B1-960D-0EF1273DE5C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{179C693D-85F2-48B1-960D-0EF1273DE5C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{179C693D-85F2-48B1-960D-0EF1273DE5C5}.Debug-net35|Any CPU.ActiveCfg = Debug|Any CPU
+		{179C693D-85F2-48B1-960D-0EF1273DE5C5}.Debug-net35|Any CPU.Build.0 = Debug|Any CPU
+		{179C693D-85F2-48B1-960D-0EF1273DE5C5}.Debug-net40|Any CPU.ActiveCfg = Debug|Any CPU
+		{179C693D-85F2-48B1-960D-0EF1273DE5C5}.Debug-net40|Any CPU.Build.0 = Debug|Any CPU
+		{179C693D-85F2-48B1-960D-0EF1273DE5C5}.Debug-net45|Any CPU.ActiveCfg = Debug|Any CPU
+		{179C693D-85F2-48B1-960D-0EF1273DE5C5}.Debug-net45|Any CPU.Build.0 = Debug|Any CPU
+		{179C693D-85F2-48B1-960D-0EF1273DE5C5}.Debug-netstandard2.0|Any CPU.ActiveCfg = Debug|Any CPU
+		{179C693D-85F2-48B1-960D-0EF1273DE5C5}.Debug-netstandard2.0|Any CPU.Build.0 = Debug|Any CPU
+		{179C693D-85F2-48B1-960D-0EF1273DE5C5}.Deploy|Any CPU.ActiveCfg = Debug|Any CPU
+		{179C693D-85F2-48B1-960D-0EF1273DE5C5}.Deploy|Any CPU.Build.0 = Debug|Any CPU
+		{179C693D-85F2-48B1-960D-0EF1273DE5C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{179C693D-85F2-48B1-960D-0EF1273DE5C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{179C693D-85F2-48B1-960D-0EF1273DE5C5}.Release-net35|Any CPU.ActiveCfg = Release|Any CPU
+		{179C693D-85F2-48B1-960D-0EF1273DE5C5}.Release-net35|Any CPU.Build.0 = Release|Any CPU
+		{179C693D-85F2-48B1-960D-0EF1273DE5C5}.Release-net40|Any CPU.ActiveCfg = Release|Any CPU
+		{179C693D-85F2-48B1-960D-0EF1273DE5C5}.Release-net40|Any CPU.Build.0 = Release|Any CPU
+		{179C693D-85F2-48B1-960D-0EF1273DE5C5}.Release-net45|Any CPU.ActiveCfg = Release|Any CPU
+		{179C693D-85F2-48B1-960D-0EF1273DE5C5}.Release-net45|Any CPU.Build.0 = Release|Any CPU
+		{179C693D-85F2-48B1-960D-0EF1273DE5C5}.Release-netstandard2.0|Any CPU.ActiveCfg = Release|Any CPU
+		{179C693D-85F2-48B1-960D-0EF1273DE5C5}.Release-netstandard2.0|Any CPU.Build.0 = Release|Any CPU
+		{179C693D-85F2-48B1-960D-0EF1273DE5C5}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{179C693D-85F2-48B1-960D-0EF1273DE5C5}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

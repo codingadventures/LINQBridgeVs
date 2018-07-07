@@ -27,6 +27,7 @@ namespace BridgeVs.Shared.Options
 {
     public enum SerializationOption
     {
+        MessagePack,
         JSON,
         Binary
     }

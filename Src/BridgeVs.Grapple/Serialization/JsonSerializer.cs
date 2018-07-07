@@ -61,7 +61,7 @@ namespace BridgeVs.Grapple.Serialization
             }
         }
 
-        public  byte[] Serialize<T>(T objToSerialize)
+        public byte[] Serialize<T>(T objToSerialize)
         {
             using (MemoryStream stream = new MemoryStream())
             using (BsonWriter sw = new BsonWriter(stream))
@@ -71,7 +71,7 @@ namespace BridgeVs.Grapple.Serialization
             }
         }
 
-        public  T Deserialize<T>(Stream aStream)
+        public T Deserialize<T>(Stream aStream)
         {
             using (BsonReader reader = new BsonReader(aStream))
             {
@@ -79,7 +79,7 @@ namespace BridgeVs.Grapple.Serialization
             }
         }
 
-        public  T Deserialize<T>(byte[] objToDeserialize)
+        public T Deserialize<T>(byte[] objToDeserialize)
         {
             using (MemoryStream stream = new MemoryStream(objToDeserialize))
             using (BsonReader br = new BsonReader(stream))
@@ -89,7 +89,7 @@ namespace BridgeVs.Grapple.Serialization
             }
         }
 
-        public  object Deserialize(byte[] objToDeserialize, Type type = null)
+        public object Deserialize(byte[] objToDeserialize, Type type = null)
         {
 
             using (MemoryStream stream = new MemoryStream(objToDeserialize))
@@ -98,10 +98,10 @@ namespace BridgeVs.Grapple.Serialization
                 return @type != null ? _jsonSerializer.Deserialize(sw, type) : _jsonSerializer.Deserialize(sw);
             }
         }
-        
+
         public override string ToString()
         {
-            return "JsonSerializer";
+            return "Json.NET Serializer";
         }
     }
 }

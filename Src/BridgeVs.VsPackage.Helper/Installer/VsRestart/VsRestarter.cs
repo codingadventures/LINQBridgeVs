@@ -17,7 +17,7 @@ namespace BridgeVs.VsPackage.Helper.Installer.VsRestart
                 .WithArguments(parser.GetArguments());
 
             OpenedItem openedItem = dte.GetOpenedItem();
-            if (openedItem != OpenedItem.None)
+            if (!openedItem.IsNone())
             {
                 if (openedItem.IsSolution)
                 {

@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BridgeVs.Grapple</RootNamespace>
     <AssemblyName>BridgeVs.Grapple</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Test|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -29,6 +31,7 @@
     <DefineConstants>TRACE;DEBUG;TEST</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Deploy|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -37,6 +40,7 @@
     <DefineConstants>TRACE;DEPLOY</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -53,6 +57,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Sand.cs" />
     <Compile Include="Serialization\DefaultSerializer.cs" />
     <Compile Include="Serialization\FactorySerializer.cs" />
     <Compile Include="Serialization\IServiceSerializer.cs" />
@@ -62,9 +67,14 @@
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Grapple\BinaryGrapple.cs" />
+    <Compile Include="Serialization\MessagePackSerializer.cs" />
     <Compile Include="Truck.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\GitHub\MessagePack-CSharp\src\MessagePack\MessagePack.csproj">
+      <Project>{179c693d-85f2-48b1-960d-0ef1273de5c5}</Project>
+      <Name>MessagePack</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BridgeVs.Locations\BridgeVs.Shared.csproj">
       <Project>{BC10F93A-5DA2-44F8-AE5E-5603CB46B548}</Project>
       <Name>BridgeVs.Shared</Name>

@@ -24,6 +24,8 @@
 #endregion
 
 
+using BridgeVs.Grapple;
+using BridgeVs.Shared.Options;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -31,20 +33,29 @@ using System.Linq;
 
 namespace BridgeVs.Console
 {
+    public class Class1
+    {
+        public string asd;
+        public IEnumerable<string> mm = Enumerable.Range(0, 100).Select(p => p.ToString());
+        public Class1()
+        {
+            asd = DateTime.Now.ToShortDateString();
+        }
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
-            try
-            {
-                IEnumerable<string> mm = Enumerable.Range(0, 100).Select(p => p.ToString());
-                var resu = Process(mm);
-            }
-            catch (Exception e)
-            {
-                System.Console.WriteLine(e);
-                throw;
-            }
+            
+            Truck truck = new Truck("somethingsomething", SerializationOption.MessagePack);
+            truck.LoadCargo(new Class1());
+            truck.DeliverTo("myaddress");
+            truck = null;
+
+            truck = new Truck("somethingsomething", SerializationOption.MessagePack);
+            truck.WaitDelivery("myaddress").Wait();
+            Class1 c = truck.UnLoadCargo<Class1>().First();
         }
 
         static IEnumerable Process(object target)

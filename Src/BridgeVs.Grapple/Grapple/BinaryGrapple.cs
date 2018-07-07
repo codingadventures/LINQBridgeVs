@@ -41,11 +41,11 @@ namespace BridgeVs.Grapple.Grapple
         }
 
         #region [ IGrapple Methods ]
-        public Tuple<Type, byte[]> Grab<T>(T item)
+        public Sand Grab<T>(T item)
         {
             Type @type = item.GetType();
             byte[] byteStream = { };
-            Type serializedType = @type;
+            string serializedType = @type.AssemblyQualifiedName;
 
             if (@type.IsNestedPrivate && @type.Name.Contains("Iterator") &&
                 @type.FullName.Contains("System.Linq.Enumerable") && item is IEnumerable)
@@ -53,20 +53,20 @@ namespace BridgeVs.Grapple.Grapple
                 MethodInfo toList = typeof(Enumerable).GetMethod("ToList");
                 Type baseType = item.GetType().BaseType;
                 if (baseType == null)
-                    return new Tuple<Type, byte[]>(serializedType, byteStream);
+                    return new Sand { Type = serializedType, Content = byteStream, SerializationMethod = _serviceSerializer.ToString() };
 
                 MethodInfo constructedToList = toList.MakeGenericMethod(baseType.GetGenericArguments()[0]);
                 object castList = constructedToList.Invoke(null, new object[] { item });
 
-                serializedType = castList.GetType(); 
+                serializedType = castList.GetType().AssemblyQualifiedName;
                 byteStream = _serviceSerializer.Serialize(castList);
             }
             else
-            { 
+            {
                 byteStream = _serviceSerializer.Serialize(item);
             }
 
-            return new Tuple<Type, byte[]>(serializedType, byteStream);
+            return new Sand { Type = serializedType, Content = byteStream };
         }
 
         public T Release<T>(byte[] item)
@@ -74,9 +74,9 @@ namespace BridgeVs.Grapple.Grapple
             return _serviceSerializer.Deserialize<T>(item);
         }
 
-        public object Release(byte[] item, Type type)
+        public object Release(byte[] item, string type)
         {
-            return _serviceSerializer.Deserialize(item, type);
+            return _serviceSerializer.Deserialize(item, Type.GetType(type));
         }
         #endregion
     }

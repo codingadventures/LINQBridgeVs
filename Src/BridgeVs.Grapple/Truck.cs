@@ -47,7 +47,7 @@ namespace BridgeVs.Grapple
     {
         private readonly string _truckName;
         private readonly IGrapple _grapple;
-        private Dictionary<Type, List<byte[]>> _container = new Dictionary<Type, List<byte[]>>();
+        private Dictionary<string, List<byte[]>> _container = new Dictionary<string, List<byte[]>>();
 
         private string TruckPosition => Path.Combine(CommonFolderPaths.GrappleFolder, _truckName);
 
@@ -58,10 +58,18 @@ namespace BridgeVs.Grapple
         public Truck(string truckName, SerializationOption serializationOption = SerializationOption.Binary)
         {
             _truckName = truckName;
-            if (serializationOption == SerializationOption.Binary)
-                _grapple = new BinaryGrapple(new DefaultSerializer());
-            else
-                _grapple = new BinaryGrapple(new JsonSerializer());
+            switch (serializationOption)
+            {
+                case SerializationOption.MessagePack:
+                    _grapple = new BinaryGrapple(new MessagePackSerializer());
+                    break;
+                case SerializationOption.JSON:
+                    _grapple = new BinaryGrapple(new JsonSerializer());
+                    break;
+                case SerializationOption.Binary:
+                    _grapple = new BinaryGrapple(new DefaultSerializer());
+                    break;
+            } 
 
             Init();
         }
@@ -92,14 +100,14 @@ namespace BridgeVs.Grapple
         public void LoadCargo<T>(T item)
         {
             Log.Write("Loading Cargo");
-            Tuple<Type, byte[]> serializedType = _grapple.Grab(item);
+            Sand serializedType = _grapple.Grab(item);
 
-            Type typeCodeName = serializedType.Item1;
+            string typeCodeName = serializedType.Type;
             //If the type is already in and the same object has not been already added then add to the internal map
             if (!_container.ContainsKey(typeCodeName))
-                _container.Add(typeCodeName, new List<byte[]> { serializedType.Item2 });
+                _container.Add(typeCodeName, new List<byte[]> { serializedType.Content });
             else
-                _container[typeCodeName].Add(serializedType.Item2);
+                _container[typeCodeName].Add(serializedType.Content);
 
             Log.Write("Cargo Loaded");
         }
@@ -115,12 +123,12 @@ namespace BridgeVs.Grapple
 
             try
             {
-                Tuple<Type, byte[]> buffer = _grapple.Grab(_container);
+                Sand buffer = _grapple.Grab(_container);
 
                 using (MemoryMappedFile ipcMappedFile = MemoryMappedFile.CreateFromFile(
                     new FileStream(Path.Combine(TruckPosition, address), FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite)
                     , _truckName + address
-                    , buffer.Item2.Length
+                    , buffer.Content.Length
                     , MemoryMappedFileAccess.ReadWrite
                     , null
                     , HandleInheritability.Inheritable
@@ -128,7 +136,7 @@ namespace BridgeVs.Grapple
                 {
                     using (MemoryMappedViewStream stream = ipcMappedFile.CreateViewStream(0, 0, MemoryMappedFileAccess.ReadWrite))
                     {
-                        stream.Write(buffer.Item2, 0, buffer.Item2.Length);
+                        stream.Write(buffer.Content, 0, buffer.Content.Length);
                     }
                 }
                 Log.Write($"Cargo Successfully Delivered {address}");
@@ -149,12 +157,12 @@ namespace BridgeVs.Grapple
         /// <returns></returns>
         public IEnumerable<T> UnLoadCargo<T>()
         {
-            Log.Write("UnLoading Cargo of Type {0}", typeof(T).FullName);
+            Log.Write("UnLoading Cargo of Type {0}", typeof(T).AssemblyQualifiedName);
 
             Type typeCodeName = typeof(T);
-            return (from i in _container.Keys
-                    where typeCodeName.IsAssignableFrom(i)
-                    let objects = _container[i]
+            return (from type in _container.Keys
+                    where typeCodeName.IsAssignableFrom(Type.GetType(type))
+                    let objects = _container[type]
                     select objects.Select(o => _grapple.Release<T>(o)))
                     .SelectMany(o => o);
 
@@ -167,12 +175,12 @@ namespace BridgeVs.Grapple
         /// <returns></returns>
         public IEnumerable<object> UnLoadCargo(Type type)
         {
-            Log.Write("unloading Cargo of Type {0}", type.FullName);
+            Log.Write("unloading Cargo of Type {0}", type.AssemblyQualifiedName);
 
             return (from i in _container.Keys
-                    where type.IsAssignableFrom(i)
+                    where type.IsAssignableFrom(Type.GetType(i))
                     let objects = _container[i]
-                    select objects.Select(o => _grapple.Release(o, type)))
+                    select objects.Select(o => _grapple.Release(o, type.AssemblyQualifiedName)))
                    .SelectMany(o => o);
         }
 
@@ -223,7 +231,7 @@ namespace BridgeVs.Grapple
                 else
                     //Container is being merged with the current loaded
                     _container = _grapple
-                        .Release<Dictionary<Type, List<byte[]>>>(buffer)
+                        .Release<Dictionary<string, List<byte[]>>>(buffer)
                         .MergeLeft(_container);
 
             }

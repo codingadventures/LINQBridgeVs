@@ -23,14 +23,12 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-
-namespace BridgeVs.Grapple.Contracts
+namespace BridgeVs.Grapple
 {
-    internal interface IGrapple
+    internal class Sand
     {
-        Sand Grab<T>(T item);
-        T Release<T>(byte[] item); 
-        object Release(byte[] item, string type);
+        public string Type;
+        public string SerializationMethod;
+        public byte[] Content;
     }
 }

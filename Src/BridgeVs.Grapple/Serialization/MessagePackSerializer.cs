@@ -24,13 +24,41 @@
 #endregion
 
 using System;
+using System.IO;
 
-namespace BridgeVs.Grapple.Contracts
+namespace BridgeVs.Grapple.Serialization
 {
-    internal interface IGrapple
+    public class MessagePackSerializer : IServiceSerializer
     {
-        Sand Grab<T>(T item);
-        T Release<T>(byte[] item); 
-        object Release(byte[] item, string type);
+        public T Deserialize<T>(Stream aStream)
+        {
+            return (T)MessagePack.MessagePackSerializer.Typeless.Deserialize(aStream);
+        }
+
+        public T Deserialize<T>(byte[] objToDeserialize)
+        {
+            return (T)Deserialize(objToDeserialize);
+        }
+
+        public object Deserialize(byte[] objToDeserialize, Type type = null)
+        {
+            return MessagePack.MessagePackSerializer.Typeless.Deserialize(objToDeserialize);
+        }
+
+        public void Serialize<T>(Stream aStream, T objToSerialize)
+        {
+            byte[] serializedObj = Serialize(objToSerialize);
+            aStream.Write(serializedObj, 0, serializedObj.Length);
+        }
+
+        public byte[] Serialize<T>(T objToSerialize)
+        {
+            return MessagePack.MessagePackSerializer.Typeless.Serialize(objToSerialize);
+        }
+
+        public override string ToString()
+        {
+            return "Message Pack Serializer";
+        }
     }
 }

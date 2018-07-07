@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.Shared", "BridgeVs
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRaven", "..\Lib\SharpRaven\src\app\SharpRaven\SharpRaven.csproj", "{31FE81F8-6E49-432C-B0B2-658E76F96983}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessagePack", "..\..\GitHub\MessagePack-CSharp\src\MessagePack\MessagePack.csproj", "{DD9905AD-1104-4234-8F65-7314BEE85F06}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -372,6 +374,30 @@ Global
 		{31FE81F8-6E49-432C-B0B2-658E76F96983}.Release-netstandard2.0|Any CPU.Build.0 = Release-netstandard2.0|Any CPU
 		{31FE81F8-6E49-432C-B0B2-658E76F96983}.Test|Any CPU.ActiveCfg = Debug-net40|Any CPU
 		{31FE81F8-6E49-432C-B0B2-658E76F96983}.Test|Any CPU.Build.0 = Debug-net40|Any CPU
+		{DD9905AD-1104-4234-8F65-7314BEE85F06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD9905AD-1104-4234-8F65-7314BEE85F06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD9905AD-1104-4234-8F65-7314BEE85F06}.Debug-net35|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD9905AD-1104-4234-8F65-7314BEE85F06}.Debug-net35|Any CPU.Build.0 = Debug|Any CPU
+		{DD9905AD-1104-4234-8F65-7314BEE85F06}.Debug-net40|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD9905AD-1104-4234-8F65-7314BEE85F06}.Debug-net40|Any CPU.Build.0 = Debug|Any CPU
+		{DD9905AD-1104-4234-8F65-7314BEE85F06}.Debug-net45|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD9905AD-1104-4234-8F65-7314BEE85F06}.Debug-net45|Any CPU.Build.0 = Debug|Any CPU
+		{DD9905AD-1104-4234-8F65-7314BEE85F06}.Debug-netstandard2.0|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD9905AD-1104-4234-8F65-7314BEE85F06}.Debug-netstandard2.0|Any CPU.Build.0 = Debug|Any CPU
+		{DD9905AD-1104-4234-8F65-7314BEE85F06}.Deploy|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD9905AD-1104-4234-8F65-7314BEE85F06}.Deploy|Any CPU.Build.0 = Debug|Any CPU
+		{DD9905AD-1104-4234-8F65-7314BEE85F06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD9905AD-1104-4234-8F65-7314BEE85F06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD9905AD-1104-4234-8F65-7314BEE85F06}.Release-net35|Any CPU.ActiveCfg = Release|Any CPU
+		{DD9905AD-1104-4234-8F65-7314BEE85F06}.Release-net35|Any CPU.Build.0 = Release|Any CPU
+		{DD9905AD-1104-4234-8F65-7314BEE85F06}.Release-net40|Any CPU.ActiveCfg = Release|Any CPU
+		{DD9905AD-1104-4234-8F65-7314BEE85F06}.Release-net40|Any CPU.Build.0 = Release|Any CPU
+		{DD9905AD-1104-4234-8F65-7314BEE85F06}.Release-net45|Any CPU.ActiveCfg = Release|Any CPU
+		{DD9905AD-1104-4234-8F65-7314BEE85F06}.Release-net45|Any CPU.Build.0 = Release|Any CPU
+		{DD9905AD-1104-4234-8F65-7314BEE85F06}.Release-netstandard2.0|Any CPU.ActiveCfg = Release|Any CPU
+		{DD9905AD-1104-4234-8F65-7314BEE85F06}.Release-netstandard2.0|Any CPU.Build.0 = Release|Any CPU
+		{DD9905AD-1104-4234-8F65-7314BEE85F06}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{DD9905AD-1104-4234-8F65-7314BEE85F06}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
