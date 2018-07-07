@@ -37,6 +37,10 @@ LINQBridgeVs is compatible with any Visual Studio edition from 2012 through 2017
 Due to a Visual Studio limitation, ASP.NET Core does not support debugger visualizers as of yet (April 2018), hence this extension does not support .NET Core. 
 There is a feature request in the Visual Studio [Uservoice](https://visualstudio.uservoice.com/forums/121579-visual-studio-ide/suggestions/33344638-custom-debugger-visualizer-for-net-core-apps-in-v).
 
+### Visual Studio 2017 Preview
+
+LINQBridgeVs is compatible with the preview version of Visual Studio 2017, but it needs a workaround in order to work. Please refer to my last comment on this issue [#47](https://github.com/codingadventures/LINQBridgeVs/issues/47#issuecomment-403206501).
+
 ## Configuration
 
 Unfortunately an installer is not available yet, therefore Visual Studio needs to be configured in order to run the extension. This is done only once by the extension itself. 
