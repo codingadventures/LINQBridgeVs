@@ -30,21 +30,19 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
 using BridgeVs.DynamicVisualizers.Helper;
 using BridgeVs.DynamicVisualizers.Template;
-using BridgeVs.Grapple;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using BridgeVs.Shared.Common;
 using BridgeVs.Shared.Logging;
 using BridgeVs.Shared.Options;
+using BridgeVs.Shared.Serialization;
 
 namespace BridgeVs.DynamicVisualizers
 {
     public class DynamicObjectSource : VisualizerObjectSource
     {
-        internal const string FileNameFormat = "{0}.linq";
-
         public void BroadCastData(object target, Stream outgoingData)
         {
-            //configure once the vs version
+            //configure once the vs version for logging and raven
             string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
             RavenWrapper.VisualStudioVersion = vsVersion;
             Log.VisualStudioVersion = vsVersion;
@@ -54,43 +52,35 @@ namespace BridgeVs.DynamicVisualizers
                 Type targetType = GetInterfaceTypeIfIsIterator(target);
                 string targetTypeFullName = TypeNameHelper.GetDisplayName(targetType, fullName: true);
                 string targetTypeName = TypeNameHelper.GetDisplayName(targetType, fullName: false);
-                //I'm lazy I know...
-                Regex pattern1 = new Regex("[<]");
-                Regex pattern2 = new Regex("[>]");
-                Regex pattern3 = new Regex("[,]");
-                Regex pattern4 = new Regex("[`]");
-                Regex pattern5 = new Regex("[ ]");
+                
+                CalculateFileNameAndTypeName(targetTypeFullName, targetTypeName, out string fileName, out string typeName);
 
-                string fileName = pattern1.Replace(targetTypeFullName, "(");
-                fileName = pattern2.Replace(fileName, ")");
-
-                string typeName = pattern1.Replace(targetTypeName, string.Empty);
-                typeName = pattern2.Replace(typeName, string.Empty);
-                typeName = pattern3.Replace(typeName, string.Empty);
-                typeName = pattern4.Replace(typeName, string.Empty);
-                typeName = pattern5.Replace(typeName, string.Empty);
-
-                fileName = TypeNameHelper.RemoveSystemNamespaces(fileName);
-
-                Message message = new Message
+                string truckId = Guid.NewGuid().ToString();
+                IServiceSerializer serializationStrategy = CreateSerializationStrategy(CommonRegistryConfigurations.GetSerializationOption(vsVersion));
+                SerializationOption? serializationOption = Truck.SendCargo(target, truckId, serializationStrategy);
+               
+                if (serializationOption.HasValue)
                 {
-                    FileName = string.Format(FileNameFormat, fileName),
-                    TypeName = typeName.Trim(),
-                    TypeFullName = targetTypeFullName,
-                    TypeNamespace = targetType.Namespace,
-                    AssemblyQualifiedName = targetType.AssemblyQualifiedName,
-                    AssemblyName = targetType.Assembly.GetName().Name
-                };
+                    Message message = new Message
+                    {
+                        FileName = $"{fileName}.linq",
+                        TypeName = typeName.Trim(),
+                        TypeFullName = targetTypeFullName,
+                        TypeNamespace = targetType.Namespace,
+                        AssemblyQualifiedName = targetType.AssemblyQualifiedName,
+                        AssemblyName = targetType.Assembly.GetName().Name,
+                        TruckId = truckId,
+                        SerializationType = serializationOption.Value
+                    };
 
-                BinaryFormatter binaryFormatter = new BinaryFormatter();
-                binaryFormatter.Serialize(outgoingData, message);
+                    BinaryFormatter binaryFormatter = new BinaryFormatter();
+                    binaryFormatter.Serialize(outgoingData, message);
+                }
+                else
+                {
+                    //should throw an error message in a friendly way
+                }
 
-                Log.Write("BroadCastData to LINQBridgeVsTruck");
-                SerializationOption serializationOption = CommonRegistryConfigurations.GetSerializationOption(vsVersion);
-                Truck truck = new Truck("LINQBridgeVsTruck", serializationOption);
-                truck.LoadCargo(target);
-                bool res = truck.DeliverTo(typeName);
-                Log.Write("Data Succesfully Shipped to Grapple");
 
             }
             catch (Exception exception)
@@ -99,6 +89,51 @@ namespace BridgeVs.DynamicVisualizers
                 RavenWrapper.Instance.Capture(exception, message: "Error broadcasting the data to linqpad");
                 throw;
             }
+        }
+
+        private static void CalculateFileNameAndTypeName(string targetTypeFullName, string targetTypeName, out string fileName, out string typeName)
+        {
+            Regex pattern1 = new Regex("[<]");
+            Regex pattern2 = new Regex("[>]");
+            Regex pattern3 = new Regex("[,]");
+            Regex pattern4 = new Regex("[`]");
+            Regex pattern5 = new Regex("[ ]");
+
+            fileName = pattern1.Replace(targetTypeFullName, "(");
+            fileName = pattern2.Replace(fileName, ")");
+
+            typeName = pattern1.Replace(targetTypeName, string.Empty);
+            typeName = pattern2.Replace(typeName, string.Empty);
+            typeName = pattern3.Replace(typeName, string.Empty);
+            typeName = pattern4.Replace(typeName, string.Empty);
+            typeName = pattern5.Replace(typeName, string.Empty);
+
+            fileName = TypeNameHelper.RemoveSystemNamespaces(fileName);
+        }
+
+        private IServiceSerializer CreateSerializationStrategy(SerializationOption option)
+        {
+            IServiceSerializer serviceSerializer = null;
+
+            switch (option)
+            {
+                case SerializationOption.JsonSerializer:
+                    serviceSerializer = new JsonSerializer()
+                    {
+                        Next = new DefaultSerializer()
+                    };
+                    break;
+                case SerializationOption.BinarySerializer:
+                    serviceSerializer = new DefaultSerializer()
+                    {
+                        Next = new JsonSerializer()
+                    };
+                    break;
+                default:
+                    break;
+            }
+
+            return serviceSerializer;
         }
 
         private static Type GetInterfaceTypeIfIsIterator(object o)

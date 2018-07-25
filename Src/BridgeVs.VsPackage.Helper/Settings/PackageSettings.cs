@@ -34,7 +34,6 @@ using System.IO;
 using System.Linq;
 using BridgeVs.Shared.Common;
 using BridgeVs.Shared.Options;
-using BridgeVs.Shared.Settings;
 
 namespace BridgeVs.VsPackage.Helper.Settings
 {

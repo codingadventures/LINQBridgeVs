@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BridgeVs.VsPackage.Helper {
+namespace BridgeVs.VsPackage.Helper.Configuration {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace BridgeVs.VsPackage.Helper {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BridgeVs.VsPackage.Helper.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BridgeVs.VsPackage.Helper.Configuration.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

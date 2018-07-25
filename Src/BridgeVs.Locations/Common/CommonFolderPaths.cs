@@ -39,7 +39,7 @@ namespace BridgeVs.Shared.Common
         private const string CustomAfterTargets = @"Targets\Custom.After.Microsoft.Common.targets";
         private const string CustomBeforeTargets = @"Targets\Custom.Before.Microsoft.Common.targets";
 
-        public static readonly string ProgramFilesFolderPath = Environment.GetEnvironmentVariable("ProgramFiles(x86)");
+        public static readonly string ProgramFilesFolderPath = Environment.GetEnvironmentVariable("ProgramFiles");
         private static readonly string SpecialWindowsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
         private static readonly string LocalApplicationData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         public static readonly string ApplicationData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);

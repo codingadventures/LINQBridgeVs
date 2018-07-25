@@ -37,11 +37,9 @@ using BridgeVs.DynamicVisualizers.Forms;
 using BridgeVs.DynamicVisualizers.Helper;
 using BridgeVs.DynamicVisualizers.Template;
 using Message = BridgeVs.DynamicVisualizers.Template.Message;
-using SharpRaven;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using BridgeVs.Shared.Logging;
 using BridgeVs.Shared.Common;
-using BridgeVs.Shared.Options;
 
 namespace BridgeVs.DynamicVisualizers
 {
@@ -91,37 +89,24 @@ namespace BridgeVs.DynamicVisualizers
             string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
             RavenWrapper.VisualStudioVersion = vsVersion;
 
+            Log.Write("DeployLinqScript: DefaultLinqPadQueryFolder: {0}", CommonFolderPaths.DefaultLinqPadQueryFolder);
+
+            string targetFolder = Path.Combine(CommonFolderPaths.DefaultLinqPadQueryFolder, message.AssemblyName);
+            string linqPadScriptPath = Path.Combine(targetFolder, message.FileName);
+
             try
             {
-                Log.Write("Entered in DeployLinqScript");
-
-                string dstScriptPath = CommonFolderPaths.DefaultLinqPadQueryFolder;
-
-                Log.Write("dstScriptPath: {0}", dstScriptPath);
-                string targetFolder = Path.Combine(dstScriptPath, message.AssemblyName);
-
                 if (!FileSystem.Directory.Exists(targetFolder))
                     FileSystem.Directory.CreateDirectory(targetFolder);
 
-                string linqPadScriptPath = Path.Combine(targetFolder, message.FileName);
                 Log.Write("linqPadScriptPath: {0}", linqPadScriptPath);
-
-                List<string> refAssemblies = new List<string>();
-                refAssemblies.AddRange(message.ReferencedAssemblies);
-                SerializationOption serializationOption = CommonRegistryConfigurations.GetSerializationOption(vsVersion);
-                Inspection linqQuery = new Inspection(refAssemblies, message.TypeFullName, message.TypeNamespace, message.TypeName, serializationOption);
+                
+                Inspection linqQuery = new Inspection(message);
                 string linqQueryText = linqQuery.TransformText();
-
-                Log.Write("LinqQuery file Transformed");
-
-                using (Stream memoryStream = FileSystem.File.Open(linqPadScriptPath, FileMode.Create))
-                using (StreamWriter streamWriter = new StreamWriter(memoryStream))
-                {
-                    streamWriter.Write(linqQueryText);
-                    streamWriter.Flush();
-                    memoryStream.Flush();
-                }
-                Log.Write("LinqQuery file Generated");
+                
+                FileSystem.File.WriteAllText(linqPadScriptPath, linqQueryText);
+             
+                Log.Write($"LinqQuery file Generated: {linqPadScriptPath}");
             }
             catch (Exception e)
             {
@@ -140,15 +125,11 @@ namespace BridgeVs.DynamicVisualizers
         /// <returns></returns>
         public Form ShowLINQPad(Stream inData, string vsVersion)
         {
-            Log.Write("ShowVisualizer Started...");
-
-            Log.Write("Vs Targeted Version ", vsVersion);
-
+            Log.Write($"ShowLINQPad: Vs Targeted Version {vsVersion}");
+            
             BinaryFormatter formatter = new BinaryFormatter();
             Message message = (Message)formatter.Deserialize(inData);
-
-            Log.Write("Message deserialized");
-            Log.Write($"Message content /n {message}");
+            Log.Write($"Message content: /n {message}");
 
             Type type = Type.GetType(message.AssemblyQualifiedName);
 

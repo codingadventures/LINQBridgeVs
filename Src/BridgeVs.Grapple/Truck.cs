@@ -24,64 +24,37 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.IO.MemoryMappedFiles;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using BridgeVs.Grapple.Contracts;
-using BridgeVs.Grapple.Extensions;
-using BridgeVs.Grapple.Grapple;
 using BridgeVs.Grapple.Serialization;
 using BridgeVs.Shared.Common;
 using BridgeVs.Shared.Logging;
-using BridgeVs.Shared.Options;
 
 namespace BridgeVs.Grapple
 {
     /// <summary>
     /// 
     /// </summary>
-    public class Truck : ITruck
+    public class Truck
     {
-        private readonly string _truckName;
-        private readonly IGrapple _grapple;
-        private Dictionary<Type, List<byte[]>> _container = new Dictionary<Type, List<byte[]>>();
-
-        private string TruckPosition => Path.Combine(CommonFolderPaths.GrappleFolder, _truckName);
+        private readonly string _truckId;
+        private readonly IServiceSerializer _serviceSerializer;
+        private string FilePath => Path.Combine(CommonFolderPaths.GrappleFolder, _truckId);
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="truckName"></param>
-        public Truck(string truckName, SerializationOption serializationOption = SerializationOption.Binary)
+        /// <param name="truckId"></param>
+        /// <param name="serviceSerializer"></param>
+        public Truck(string truckId, IServiceSerializer serviceSerializer = null )
         {
-            _truckName = truckName;
-            if (serializationOption == SerializationOption.Binary)
-                _grapple = new BinaryGrapple(new DefaultSerializer());
-            else
-                _grapple = new BinaryGrapple(new JsonSerializer());
+            Log.Write($"Setting Up the Truck {truckId}");
+            if (string.IsNullOrEmpty(truckId))
+            {
+                throw new ArgumentException("truckId cannot be null", nameof(truckId));
+            }
 
-            Init();
-        }
-
-        internal Truck(string truckName, IGrapple grapple)
-        {
-            Log.Write($"Setting Up the Truck {truckName}");
-
-            _truckName = truckName;
-            _grapple = grapple;
-            Init();
-        }
-
-        private void Init()
-        {
-            if (Directory.Exists(TruckPosition))
-                return;
-
-            //no need for security access
-            Directory.CreateDirectory(TruckPosition);
+            _truckId = truckId;
+            _serviceSerializer = serviceSerializer ?? new DefaultSerializer();
         }
 
         /// <summary>
@@ -89,166 +62,63 @@ namespace BridgeVs.Grapple
         /// </summary>
         /// <param name="item"></param>
         /// <typeparam name="T"></typeparam>
-        public void LoadCargo<T>(T item)
+        public void SendCargo<T>(T item)
         {
-            Log.Write("Loading Cargo");
-            Tuple<Type, byte[]> serializedType = _grapple.Grab(item);
+            Type type = item.GetType();
 
-            Type typeCodeName = serializedType.Item1;
-            //If the type is already in and the same object has not been already added then add to the internal map
-            if (!_container.ContainsKey(typeCodeName))
-                _container.Add(typeCodeName, new List<byte[]> { serializedType.Item2 });
-            else
-                _container[typeCodeName].Add(serializedType.Item2);
-
-            Log.Write("Cargo Loaded");
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="address"></param>
-        /// <returns></returns>
-        public bool DeliverTo(string address)
-        {
-            Log.Write($"Delivering Cargo to {address}");
-
+            Log.Write($"SendCargo - Type {item.GetType()}");
             try
             {
-                Tuple<Type, byte[]> buffer = _grapple.Grab(_container);
+                byte[] byteStream = _serviceSerializer.Serialize(item);
+                
+                File.WriteAllBytes(FilePath, byteStream);
 
-                using (MemoryMappedFile ipcMappedFile = MemoryMappedFile.CreateFromFile(
-                    new FileStream(Path.Combine(TruckPosition, address), FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite)
-                    , _truckName + address
-                    , buffer.Item2.Length
-                    , MemoryMappedFileAccess.ReadWrite
-                    , null
-                    , HandleInheritability.Inheritable
-                    , false))
-                {
-                    using (MemoryMappedViewStream stream = ipcMappedFile.CreateViewStream(0, 0, MemoryMappedFileAccess.ReadWrite))
-                    {
-                        stream.Write(buffer.Item2, 0, buffer.Item2.Length);
-                    }
-                }
-                Log.Write($"Cargo Successfully Delivered {address}");
-
-                return true;
+                Log.Write($"SendCargo - Cargo Sent - Byte sent: {byteStream.Length} - File Created: {FilePath}");
             }
             catch (Exception e)
             {
-                Log.Write(e, "Error During DeliveryTo");
+                Log.Write(e, "SendCargo - Error During serializing cargo");
                 throw;
             }
         }
-
+        
         /// <summary>
         /// 
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public IEnumerable<T> UnLoadCargo<T>()
+        public T ReceiveCargo<T>()
         {
-            Log.Write("UnLoading Cargo of Type {0}", typeof(T).FullName);
-
-            Type typeCodeName = typeof(T);
-            return (from i in _container.Keys
-                    where typeCodeName.IsAssignableFrom(i)
-                    let objects = _container[i]
-                    select objects.Select(o => _grapple.Release<T>(o)))
-                    .SelectMany(o => o);
-
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public IEnumerable<object> UnLoadCargo(Type type)
-        {
-            Log.Write("unloading Cargo of Type {0}", type.FullName);
-
-            return (from i in _container.Keys
-                    where type.IsAssignableFrom(i)
-                    let objects = _container[i]
-                    select objects.Select(o => _grapple.Release(o, type)))
-                   .SelectMany(o => o);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="address"></param>
-        /// <param name="timeout"></param>
-        /// <returns></returns>
-        /// <exception cref="AggregateException"></exception>
-        public Task WaitDelivery(string address, int timeout = 5000)
-        {
+            string typeName = typeof(T).FullName;
+            Log.Write("ReceiveCargo - Receiving Cargo of Type {0}", typeName);
             try
             {
-                return Task.Factory.StartNew(() => WaitForNextTruck(address, timeout));
-            }
-            catch (AggregateException ae)
-            {
-                ae.Handle(exception =>
-                {
-                    Log.Write(exception, "Error Waiting Delivery");
-                    return false;
-                });
-                throw ae.Flatten();
-            }
-            catch (Exception exception)
-            {
-                Log.Write(exception, "Error Waiting Truck");
-                throw;
-            }
-        }
+                byte[] byteStream = File.ReadAllBytes(FilePath);
 
-        private void WaitForNextTruck(string address, int timeout)
-        {
-            const int waiting = 100;
-
-            if (timeout == 0) return;
-
-            try
-            {
-                byte[] buffer = InternalCollect(address);
-
-                if (buffer.Length == 0)
-                {
-                    Thread.Sleep(waiting);
-                    WaitForNextTruck(address, timeout - waiting);
-                }
-                else
-                    //Container is being merged with the current loaded
-                    _container = _grapple
-                        .Release<Dictionary<Type, List<byte[]>>>(buffer)
-                        .MergeLeft(_container);
-
+                return _serviceSerializer.Deserialize<T>(byteStream);
             }
             catch (Exception e)
             {
-                Log.Write(e, "Error Waiting Truck. Truck doesn't exist");
+                Log.Write(e, $"ReceiveCargo - Error while deserializing type {typeName}");
+
                 throw;
             }
         }
 
-        private byte[] InternalCollect(string address)
+        public object ReceiveCargo()
         {
-            string filePath = Path.Combine(TruckPosition, address);
-
-            if (!File.Exists(filePath))
-                return new byte[0];
-
-            using (MemoryMappedFile ipcMappedFile = MemoryMappedFile.CreateFromFile(filePath, FileMode.Open))
+            Log.Write("ReceiveCargo - UnLoading Cargo for Typeless object");
+            try
             {
-                using (MemoryMappedViewStream stream = ipcMappedFile.CreateViewStream(0, 0, MemoryMappedFileAccess.ReadWrite))
-                {
-                    byte[] @byte = new byte[stream.Length];
-                    stream.Read(@byte, 0, (int)stream.Length);
-                    return @byte;
-                }
+                byte[] byteStream = File.ReadAllBytes(FilePath);
+
+                return _serviceSerializer.Deserialize(byteStream);
+            }
+            catch (Exception e)
+            {
+                Log.Write(e, $"ReceiveCargo - Error while deserializing");
+
+                throw;
             }
         }
     }

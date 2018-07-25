@@ -44,8 +44,7 @@ namespace BridgeVs.DynamicVisualizers.Helper
                     Type[] genericTypes = @type.GetGenericArguments();
                     foreach (Type genericType in genericTypes)
                     {
-                        Log.Write("Generic Type Found {0}: ", genericType);
-
+                        Log.Write($"Generic Type Found {genericType}");
                         returnList.AddRange(GetReferencedAssemblies(genericType, originalTypeLocation));
                     }
                 }

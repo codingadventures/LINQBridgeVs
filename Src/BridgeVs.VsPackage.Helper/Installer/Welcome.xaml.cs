@@ -62,7 +62,7 @@ namespace BridgeVs.VsPackage.Helper.Installer
             };
 
             MessageDialogResult result = await this.ShowMessageAsync("Quit Wizard?",
-                                                  BridgeVs.VsPackage.Helper.Resources.SkipMessage,
+                                                  Configuration.Resources.SkipMessage,
                                                   MessageDialogStyle.AffirmativeAndNegative, mySettings);
 
             bool shutdown = result == MessageDialogResult.Affirmative;

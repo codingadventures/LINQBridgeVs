@@ -23,6 +23,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using BridgeVs.Shared.Options;
 using System;
 using System.Collections.Generic;
 
@@ -38,7 +39,8 @@ namespace BridgeVs.DynamicVisualizers.Template
         public string TypeNamespace;
         public string AssemblyQualifiedName;
         public string AssemblyName;
-
+        public string TruckId;
+        public SerializationOption SerializationType;
         public readonly List<string> ReferencedAssemblies;
 
         public Message()
@@ -48,13 +50,17 @@ namespace BridgeVs.DynamicVisualizers.Template
 
         public override string ToString()
         {
-            return "FileName: " + FileName
+            return $"FileName: {FileName}"
                 + Environment.NewLine
-                + "TypeFullName: " + TypeFullName
+                + $"TypeFullName: {TypeFullName}"
                 + Environment.NewLine
-                + "TypeName: " + TypeName
+                + $"TypeName: {TypeName}"
                 + Environment.NewLine
-                + "TypeNamespace: " + TypeNamespace;
+                + $"TypeNamespace: {TypeNamespace}"
+                + Environment.NewLine
+                + $"TruckId: {TruckId}"
+                + Environment.NewLine
+                + $"SerializationType: {SerializationType}";
         }
     }
 }

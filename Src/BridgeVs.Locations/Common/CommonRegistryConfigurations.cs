@@ -122,7 +122,7 @@ namespace BridgeVs.Shared.Common
                     return (SerializationOption)Enum.Parse(typeof(SerializationOption), serializationOption);
                 }
 
-                return SerializationOption.Binary;
+                return SerializationOption.BinarySerializer;
             }
         }
 

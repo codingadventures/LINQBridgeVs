@@ -10,7 +10,7 @@
   <Namespace>System.Dynamic</Namespace>
   <Namespace>System.Runtime.Serialization.Formatters</Namespace>
   <Namespace>System.Xml.Linq</Namespace>
-  <Namespace>BridgeVs.Grapple</Namespace>
+  <Namespace>BridgeVs.Shared.Grapple</Namespace>
   <Namespace>BridgeVs.Shared</Namespace>
   <Namespace>BridgeVs.Shared.Options</Namespace>
   <Namespace><#= _typeNamespace #></Namespace>
@@ -23,8 +23,18 @@
 
 void Main()
 {
-    Truck truck = new Truck("LINQBridgeVsTruck", SerializationOption.<#=_serializationOption#>);
-	truck.WaitDelivery("<#= _typeName #>").Wait();
-    var @object = truck.UnLoadCargo<<#=_typeToRetrieveFullName#>>();
-    @object.Dump("<#=_typeToRetrieveFullName#>", 2);
+    Truck.ReceiveCargo<<#=_typeToRetrieveFullName#>>("<#=_truckId#>", CreateStrategy()).Dump("<#=_typeToRetrieveFullName#>", 2);
+}
+
+ISerializationService CreateStrategy()
+{
+	switch (<#=_serializationType#>)
+    {
+        case SerializationOption.JsonSerializer:
+            return new JsonSerializer();
+        case SerializationOption.BinarySerializer:
+           return new DefaultSerializer();
+    }
+
+	return null;
 }

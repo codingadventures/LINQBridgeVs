@@ -173,13 +173,6 @@
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\BridgeVs.Grapple\BridgeVs.Grapple.csproj">
-      <Project>{79C0C9ED-D22C-4855-97C1-F6BD0127A531}</Project>
-      <Name>BridgeVs.Grapple</Name>
-      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="..\BridgeVs.Build\BridgeVs.Build.csproj">
       <Project>{276f3935-e0ca-450f-a55f-aed56dc2024e}</Project>
       <Name>BridgeVs.Build</Name>

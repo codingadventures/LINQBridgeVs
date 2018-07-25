@@ -34,7 +34,7 @@ namespace BridgeVs.DynamicVisualizers.Template
   <Namespace>System.Dynamic</Namespace>
   <Namespace>System.Runtime.Serialization.Formatters</Namespace>
   <Namespace>System.Xml.Linq</Namespace>
-  <Namespace>BridgeVs.Grapple</Namespace>
+  <Namespace>BridgeVs.Shared.Grapple</Namespace>
   <Namespace>BridgeVs.Shared</Namespace>
   <Namespace>BridgeVs.Shared.Options</Namespace>
   <Namespace>");
@@ -67,36 +67,37 @@ namespace BridgeVs.DynamicVisualizers.Template
             
             #line default
             #line hidden
-            this.Write(" \r\n</Query>\r\n\r\nvoid Main()\r\n{\r\n    Truck truck = new Truck(\"LINQBridgeVsTruck\", S" +
-                    "erializationOption.");
+            this.Write(" \r\n</Query>\r\n\r\nvoid Main()\r\n{\r\n    Truck.ReceiveCargo<");
             
             #line 26 "C:\Users\Thanos\Documents\LINQBridgeVs\Src\BridgeVs.DynamicVisualizers\Template\Inspection.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(_serializationOption));
-            
-            #line default
-            #line hidden
-            this.Write(");\r\n\ttruck.WaitDelivery(\"");
-            
-            #line 27 "C:\Users\Thanos\Documents\LINQBridgeVs\Src\BridgeVs.DynamicVisualizers\Template\Inspection.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(_typeName));
-            
-            #line default
-            #line hidden
-            this.Write("\").Wait();\r\n    var @object = truck.UnLoadCargo<");
-            
-            #line 28 "C:\Users\Thanos\Documents\LINQBridgeVs\Src\BridgeVs.DynamicVisualizers\Template\Inspection.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_typeToRetrieveFullName));
             
             #line default
             #line hidden
-            this.Write(">();\r\n    @object.Dump(\"");
+            this.Write(">(\"");
             
-            #line 29 "C:\Users\Thanos\Documents\LINQBridgeVs\Src\BridgeVs.DynamicVisualizers\Template\Inspection.tt"
+            #line 26 "C:\Users\Thanos\Documents\LINQBridgeVs\Src\BridgeVs.DynamicVisualizers\Template\Inspection.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(_truckId));
+            
+            #line default
+            #line hidden
+            this.Write("\", CreateStrategy()).Dump(\"");
+            
+            #line 26 "C:\Users\Thanos\Documents\LINQBridgeVs\Src\BridgeVs.DynamicVisualizers\Template\Inspection.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_typeToRetrieveFullName));
             
             #line default
             #line hidden
-            this.Write("\", 2);\r\n}");
+            this.Write("\", 2);\r\n}\r\n\r\nISerializationService CreateStrategy()\r\n{\r\n\tswitch (");
+            
+            #line 31 "C:\Users\Thanos\Documents\LINQBridgeVs\Src\BridgeVs.DynamicVisualizers\Template\Inspection.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(_serializationType));
+            
+            #line default
+            #line hidden
+            this.Write(")\r\n    {\r\n        case SerializationOption.JsonSerializer:\r\n            return ne" +
+                    "w JsonSerializer();\r\n        case SerializationOption.BinarySerializer:\r\n       " +
+                    "    return new DefaultSerializer();\r\n    }\r\n\r\n\treturn null;\r\n}");
             return this.GenerationEnvironment.ToString();
         }
     }

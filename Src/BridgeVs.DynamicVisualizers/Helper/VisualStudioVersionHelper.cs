@@ -30,8 +30,8 @@ namespace BridgeVs.DynamicVisualizers.Helper
     internal static class VisualStudioVersionHelper
     {
         /// <summary>
-        /// It returns the visual studio version of the current assembly. by reading the Microsoft.VisualStudio.DebuggerVisualizers' major version
-        /// is possible to deduce the visual studio version.
+        /// It returns the visual studio version of the current assembly. by reading the major version from the assembly 
+        /// of Microsoft.VisualStudio.DebuggerVisualizers it is possible to deduce the visual studio version.
         /// </summary>
         /// <returns>The visual studio version. 15.0 --> VS2017, 14.0 --> VS2015 and so on </returns>
         internal static string FindCurrentVisualStudioVersion()

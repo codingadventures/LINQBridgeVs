@@ -36,15 +36,17 @@ namespace BridgeVs.DynamicVisualizers.Template
         private readonly List<string> _assemblies;
         private readonly string _typeToRetrieveFullName;
         private readonly string _typeName;
-        private readonly SerializationOption _serializationOption;
+        private readonly string _truckId;
+        private readonly SerializationOption _serializationType;
 
-        public Inspection(List<string> assemblies, string typeToRetrieveFullName, string typeNamespace, string typeName, SerializationOption serializationOption)
+        internal Inspection(Message message)
         {
-            _serializationOption = serializationOption;
-            _typeNamespace = typeNamespace;
-            _typeName = typeName;
-            _assemblies = assemblies;
-            _typeToRetrieveFullName = TypeNameHelper.RemoveSystemNamespaces(typeToRetrieveFullName);
+            _truckId = message.TruckId;
+            _typeNamespace = message.TypeNamespace;
+            _typeName = message.TypeName;
+            _assemblies = message.ReferencedAssemblies;
+            _typeToRetrieveFullName = TypeNameHelper.RemoveSystemNamespaces(message.TypeFullName);
+            _serializationType = message.SerializationType;
         }
     }
 }

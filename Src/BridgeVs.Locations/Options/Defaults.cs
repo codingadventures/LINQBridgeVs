@@ -23,16 +23,13 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using BridgeVs.Shared.Options;
-
-namespace BridgeVs.Shared.Settings
+namespace BridgeVs.Shared.Options
 {
     public static class Defaults
     {
         public const string LINQPadInstallationPath = @"C:\Program Files (x86)\LINQPad5";
-        public const SerializationOption SerializationMethod = SerializationOption.Binary;
+        public const SerializationOption SerializationMethod = SerializationOption.BinarySerializer;
         public const bool ErrorTrackingEnabled = false;
         public const bool LoggingEnabled = false;
-
     }
 }
