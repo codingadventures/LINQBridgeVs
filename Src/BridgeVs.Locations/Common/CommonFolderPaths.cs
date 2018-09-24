@@ -56,7 +56,6 @@ namespace BridgeVs.Shared.Common
         public static readonly string VisualStudio2013Path = Path.Combine(ProgramFilesFolderPath, @"Microsoft Visual Studio 12.0");
         public static readonly string VisualStudio2012Path = Path.Combine(ProgramFilesFolderPath, @"Microsoft Visual Studio 11.0");
 
-
         public static string InstallFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
         public static readonly string Documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
