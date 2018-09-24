@@ -66,8 +66,9 @@ namespace BridgeVs.DynamicVisualizers.Helper
             catch (Exception e)
             {
                 Log.Write(e, "Error While getting the Referenced Assemblies");
+                string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
 
-                RavenWrapper.Instance.Capture(e, message: "Error While getting the Referenced Assemblies");
+                e.Capture(vsVersion, message: "Error While getting the Referenced Assemblies");
 
                 throw;
             }

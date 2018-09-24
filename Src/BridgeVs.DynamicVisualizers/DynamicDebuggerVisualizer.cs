@@ -89,8 +89,7 @@ namespace BridgeVs.DynamicVisualizers
         internal void DeployLinqScript(Message message)
         {
             string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
-            RavenWrapper.VisualStudioVersion = vsVersion;
-
+           
             try
             {
                 Log.Write("Entered in DeployLinqScript");
@@ -125,7 +124,7 @@ namespace BridgeVs.DynamicVisualizers
             }
             catch (Exception e)
             {
-                RavenWrapper.Instance.Capture(e, message: "Error deploying the linqpad script");
+                e.Capture(vsVersion, message: "Error deploying the linqpad script");
 
                 Log.Write(e, "DynamicDebuggerVisualizer.DeployLinqScript");
                 throw;
@@ -194,7 +193,6 @@ namespace BridgeVs.DynamicVisualizers
         protected override void Show(IDialogVisualizerService windowService, IVisualizerObjectProvider objectProvider)
         {
             string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
-            RavenWrapper.VisualStudioVersion = vsVersion;
             Log.VisualStudioVersion = vsVersion;
 
             try
@@ -215,7 +213,7 @@ namespace BridgeVs.DynamicVisualizers
                 const string context = "Error during LINQPad execution";
                 Log.Write(exception, context);
 
-                RavenWrapper.Instance.Capture(exception, message: context);
+                exception.Capture(vsVersion, message: context);
             }
         }
 
@@ -252,9 +250,6 @@ namespace BridgeVs.DynamicVisualizers
             }
             catch (Exception e)
             {
-                //don't really need to capture this in sentry, however it can tell me I'm doing the wrong thing with the process
-                RavenWrapper.Instance.Capture(e, message: "Error while sending inputs to linqpad");
-
                 Log.Write(e, "Error during LINQPad Sending inputs");
             }
         }

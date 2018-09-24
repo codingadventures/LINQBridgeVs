@@ -46,7 +46,6 @@ namespace BridgeVs.DynamicVisualizers
         {
             //configure once the vs version
             string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
-            RavenWrapper.VisualStudioVersion = vsVersion;
             Log.VisualStudioVersion = vsVersion;
 
             try
@@ -96,7 +95,7 @@ namespace BridgeVs.DynamicVisualizers
             catch (Exception exception)
             {
                 Log.Write(exception, "Error in BroadCastData");
-                RavenWrapper.Instance.Capture(exception, message: "Error broadcasting the data to linqpad");
+                exception.Capture(vsVersion, message: "Error broadcasting the data to linqpad");
                 throw;
             }
         }

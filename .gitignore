@@ -7,6 +7,7 @@
 .metadata
 bin/
 tmp/
+NDependOut/
 .vs/
 *.tmp
 *.bak

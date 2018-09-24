@@ -67,9 +67,10 @@ namespace BridgeVs.DynamicVisualizers.Helper
             catch (Exception exception)
             {
                 string context = $"GetDirectoryName of assembly: {assembly.FullName} failed. Path is wrong {location}";
+                string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
 
                 Log.Write(exception, context);
-                RavenWrapper.Instance.Capture(exception, message: context);
+                exception.Capture(vsVersion, message: context);
             }
 
 
@@ -118,7 +119,9 @@ namespace BridgeVs.DynamicVisualizers.Helper
             {
                 const string context = "Exception in FindPath";
                 Log.Write(e, context);
-                RavenWrapper.Instance.Capture(e, SharpRaven.Data.ErrorLevel.Error, context);
+                string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
+
+                e.Capture(vsVersion, SharpRaven.Data.ErrorLevel.Error, context);
 
                 throw;
             }

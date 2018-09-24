@@ -31,59 +31,45 @@ using System.Diagnostics;
 
 namespace BridgeVs.Shared.Logging
 {
-    public sealed class RavenWrapper
-    {
-        private static Lazy<RavenWrapper> _instance = new Lazy<RavenWrapper>(() => new RavenWrapper());
 
-        public static RavenWrapper Instance => _instance.Value;
-
+    public static class RavenWrapper
+    { 
         /// <summary>
         /// The client id associated with the Sentry.io account.
         /// </summary>
         private const string RavenClientId = "https://e187bfd9b1304311be6876ac9036956d:6580e15fc2fd40899e5d5b0f28685efc@sentry.io/1189532";
 
-        private RavenClient _ravenClient;
-
-        public static string VisualStudioVersion;
-
-        private RavenWrapper()
+        private static Action<Exception> onSendError = new Action<Exception>(ex =>
         {
-#if !TEST
+            Trace.WriteLine("Error sending report to Sentry.io");
+            Trace.WriteLine(ex.Message);
+            Trace.WriteLine(ex.StackTrace);
+        });
+
+        [Conditional("DEPLOY")]
+        public static void Capture(this Exception exception, string vsVersion, ErrorLevel errorLevel = ErrorLevel.Error, string message = "")
+        {
+            if (string.IsNullOrEmpty(vsVersion))
+            {
+                return;
+            }
+
+            if (!CommonRegistryConfigurations.IsErrorTrackingEnabled(vsVersion))
+            {
+                return;
+            }
+
             Func<IRequester, IRequester> removeUserId = new Func<IRequester, IRequester>(req =>
             {
                 HttpRequester request = req as HttpRequester;
                 //GDPR compliant, no personal data sent: no server name, no username stored, no ip address
                 request.Data.JsonPacket.ServerName = "linqbridgevs";
                 request.Data.JsonPacket.Contexts.Device.Name = "linqbridgevs";
-                request.Data.JsonPacket.User.Username = CommonRegistryConfigurations.GetUniqueGuid(VisualStudioVersion);
+                request.Data.JsonPacket.User.Username = CommonRegistryConfigurations.GetUniqueGuid(vsVersion);
                 request.Data.JsonPacket.Release = "1.4.6"; //read it from somewhere
                 request.Data.JsonPacket.User.IpAddress = "0.0.0.0";
                 return request;
             });
-
-            Action<Exception> onSendError = new Action<Exception>(ex =>
-            {
-                Trace.WriteLine("Error sending report to Sentry.io");
-                Trace.WriteLine(ex.Message);
-                Trace.WriteLine(ex.StackTrace);
-            });
-
-            _ravenClient = new RavenClient(RavenClientId)
-            {
-                BeforeSend = removeUserId,
-                ErrorOnCapture = onSendError,
-                Timeout = TimeSpan.FromMilliseconds(2000) //should fail early if it can't send a message
-            };
-#endif
-        }
-
-        [Conditional("DEPLOY")]
-        public void Capture(Exception exception, ErrorLevel errorLevel = ErrorLevel.Error, string message = "")
-        {
-            if (!CommonRegistryConfigurations.IsErrorTrackingEnabled(VisualStudioVersion))
-            {
-                return;
-            }
 
             var sentryEvent = new SentryEvent(exception)
             {
@@ -91,9 +77,16 @@ namespace BridgeVs.Shared.Logging
                 Level = errorLevel
             };
 
-            sentryEvent.Tags.Add("Visual Studio Version", VisualStudioVersion);
+            sentryEvent.Tags.Add("Visual Studio Version", vsVersion);
 
-            _ravenClient.Capture(sentryEvent);
+            RavenClient ravenClient = new RavenClient(RavenClientId)
+            {
+                BeforeSend = removeUserId,
+                ErrorOnCapture = onSendError,
+                Timeout = TimeSpan.FromMilliseconds(2000) //should fail early if it can't send a message
+            };
+
+            ravenClient.Capture(sentryEvent);
         }
     }
 }
