@@ -212,7 +212,7 @@ A very special thanks goes to [Sentry](https://sentry.io), [Advanced Installer](
 <a href="https://www.ndepend.com"><img align="middle" width="30%" src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/PoweredByNDepend.png" /></a>
 <br/>
 <p align="center">
-<a href="https://www.typemock.com"><img align="middle" width="30%" src="https://www.typemock.com/wp-content/themes/typemock/inc/img/typemock-logo.png" /></a> <a href="https://www.jetbrains.com/?from=LINQBridgeVs"><img width="300" height="250" align="middle" src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/jetbrains-variant-2.png" /></a>
+<a href="https://www.typemock.com"><img align="middle" width="30%" src="https://www.typemock.com/wp-content/themes/typemock/inc/img/typemock-logo.png" /></a> <a href="https://www.jetbrains.com/?from=LINQBridgeVs"><img width="260" align="middle" src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/jetbrains-variant-2.png" /></a>
 </p>
     
 ## Support
