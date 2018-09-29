@@ -211,8 +211,9 @@ A very special thanks goes to [Sentry](https://sentry.io), [Advanced Installer](
 <a href="https://www.advancedinstaller.com"><img width="30%"  align="middle"  src="https://raw.githubusercontent.com/codingadventures/LINQBridgeVs/master/Docs/AdvancedInstaller.png" /></a>
 <a href="https://www.ndepend.com"><img align="middle" width="30%" src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/PoweredByNDepend.png" /></a>
 <br/>
-<a href="https://www.typemock.com"><img align="middle" width="200" src="https://www.typemock.com/wp-content/themes/typemock/inc/img/typemock-logo.png" /></a> <a href="https://www.jetbrains.com/?from=LINQBridgeVs"><img width="200" height="167" align="middle" src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/jetbrains-variant-2.png" /></a>
-
+<p align="center">
+<a href="https://www.typemock.com"><img align="middle" width="30%" src="https://www.typemock.com/wp-content/themes/typemock/inc/img/typemock-logo.png" /></a> <a href="https://www.jetbrains.com/?from=LINQBridgeVs"><img width="300" height="250" align="middle" src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/jetbrains-variant-2.png" /></a>
+</p>
     
 ## Support
 
