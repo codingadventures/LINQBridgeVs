@@ -205,7 +205,7 @@ For each class (*Class1, Class2, Class3*) a global assembly attribute that maps 
 
 ## Special Thanks to my Sponsors
 
-A very special thanks goes to [Sentry](https://sentry.io), [Advanced Installer](https://www.advancedinstaller.com), [NDepend](https://www.ndepend.com) and [TypeMock](https://www.typemock.com) for sponsoring this project.
+A very special thanks goes to [Sentry](https://sentry.io), [Advanced Installer](https://www.advancedinstaller.com), [NDepend](https://www.ndepend.com), [TypeMock](https://www.typemock.com) and [Jetbrains](https://www.jetbrains.com/?from=LINQBridgeVs) for sponsoring this project.
 
 <a href="https://Sentry.io"><img width="200" src="https://sentry-brand.storage.googleapis.com/sentry-logo-black.svg" /> </a>
 <a href="https://www.advancedinstaller.com"><img width="200" src="https://raw.githubusercontent.com/codingadventures/LINQBridgeVs/master/Docs/AdvancedInstaller.png" /></a>
