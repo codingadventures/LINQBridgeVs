@@ -207,11 +207,11 @@ For each class (*Class1, Class2, Class3*) a global assembly attribute that maps 
 
 A very special thanks goes to [Sentry](https://sentry.io), [Advanced Installer](https://www.advancedinstaller.com), [NDepend](https://www.ndepend.com), [TypeMock](https://www.typemock.com) and [Jetbrains](https://www.jetbrains.com/?from=LINQBridgeVs) for sponsoring this project.
 
-<a href="https://Sentry.io"><img width="200" src="https://sentry-brand.storage.googleapis.com/sentry-logo-black.svg" /> </a>
-<a href="https://www.advancedinstaller.com"><img width="200" src="https://raw.githubusercontent.com/codingadventures/LINQBridgeVs/master/Docs/AdvancedInstaller.png" /></a>
-<a href="https://www.ndepend.com"><img width="200" src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/PoweredByNDepend.png" /></a>
-<a href="https://www.typemock.com"><img width="200" src="https://www.typemock.com/wp-content/themes/typemock/inc/img/typemock-logo.png" /></a>
-<a href="https://www.jetbrains.com/?from=LINQBridgeVs"><img width="200" src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/jetbrains-variant-2.png" /></a>
+<a href="https://Sentry.io"><img width="30%" align="middle" src="https://sentry-brand.storage.googleapis.com/sentry-logo-black.svg" /> </a>
+<a href="https://www.advancedinstaller.com"><img width="30%"  align="middle"  src="https://raw.githubusercontent.com/codingadventures/LINQBridgeVs/master/Docs/AdvancedInstaller.png" /></a>
+<a href="https://www.ndepend.com"><img align="middle" width="30%" src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/PoweredByNDepend.png" /></a>
+<br/>
+<a href="https://www.typemock.com"><img align="middle" width="200" src="https://www.typemock.com/wp-content/themes/typemock/inc/img/typemock-logo.png" /></a> <a href="https://www.jetbrains.com/?from=LINQBridgeVs"><img width="200" height="167" align="middle" src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/jetbrains-variant-2.png" /></a>
 
     
 ## Support
