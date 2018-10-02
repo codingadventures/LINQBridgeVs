@@ -37,6 +37,10 @@ LINQBridgeVs is compatible with any Visual Studio edition from 2012 through 2017
 Due to a Visual Studio limitation, ASP.NET Core does not support debugger visualizers as of yet (April 2018), hence this extension does not support .NET Core. 
 There is a feature request in the Visual Studio [Uservoice](https://visualstudio.uservoice.com/forums/121579-visual-studio-ide/suggestions/33344638-custom-debugger-visualizer-for-net-core-apps-in-v).
 
+### Visual Studio 2017 Preview
+
+LINQBridgeVs is compatible with the preview version of Visual Studio 2017, but it needs a workaround in order to work. Please refer to my last comment on this issue [#47](https://github.com/codingadventures/LINQBridgeVs/issues/47#issuecomment-403206501).
+
 ## Configuration
 
 Unfortunately an installer is not available yet, therefore Visual Studio needs to be configured in order to run the extension. This is done only once by the extension itself. 
@@ -199,14 +203,21 @@ namespace DebuggerVisualizerExample
 
 For each class (*Class1, Class2, Class3*) a global assembly attribute that maps the type to a debugger visualizer is needed. This extension does all of this automatically. Internally it uses the .NET BinaryFormatter to send the data from the debuggee to the debugger. If the BinaryFormatter fails to serialize the data, JSON.NET is used instead.
 
-## Special thanks to my Sponsors
+## Special Thanks to my Sponsors
 
-A very special thanks goes to [Sentry](https://sentry.io), [Advanced Installer](https://www.advancedinstaller.com), [NDepend](https://www.ndepend.com) and [TypeMock](https://www.typemock.com) for sponsoring this project.
+A very special thanks goes to [Sentry](https://sentry.io), [Advanced Installer](https://www.advancedinstaller.com), [NDepend](https://www.ndepend.com), [TypeMock](https://www.typemock.com) and [Jetbrains](https://www.jetbrains.com/?from=LINQBridgeVs) for sponsoring this project.
 
-<a href="https://Sentry.io"><img width="200" src="https://sentry-brand.storage.googleapis.com/sentry-logo-black.svg" /> </a>
-<a href="https://www.advancedinstaller.com"><img width="200" src="https://raw.githubusercontent.com/codingadventures/LINQBridgeVs/master/Docs/AdvancedInstaller.png" /></a>
-<a href="https://www.ndepend.com"><img width="200" src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/PoweredByNDepend.png" />
-<a href="https://www.typemock.com"><img width="200" src="https://www.typemock.com/wp-content/themes/typemock/inc/img/typemock-logo.png" />    
+<a href="https://Sentry.io"><img width="30%" align="middle" src="https://sentry-brand.storage.googleapis.com/sentry-logo-black.svg" /> </a>
+<a href="https://www.advancedinstaller.com"><img width="30%"  align="middle"  src="https://raw.githubusercontent.com/codingadventures/LINQBridgeVs/master/Docs/AdvancedInstaller.png" /></a>
+<a href="https://www.ndepend.com"><img align="middle" width="30%" src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/PoweredByNDepend.png" /></a>
+<br/>
+<p align="center">
+<a href="https://www.typemock.com"><img align="middle" width="30%" src="https://www.typemock.com/wp-content/themes/typemock/inc/img/typemock-logo.png" /></a> <a href="https://www.jetbrains.com/?from=LINQBridgeVs"><img width="260" align="middle" src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Docs/jetbrains-variant-2.png" /></a>
+</p>
+    
+## Support
+
+Your opinion is important, if you have some spare time please leave a review on the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=codingadventures.linqbridgevs#review-details).
     
 ## Acknowledgments
 

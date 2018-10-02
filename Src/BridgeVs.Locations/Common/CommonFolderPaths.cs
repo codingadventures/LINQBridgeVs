@@ -39,7 +39,7 @@ namespace BridgeVs.Shared.Common
         private const string CustomAfterTargets = @"Targets\Custom.After.Microsoft.Common.targets";
         private const string CustomBeforeTargets = @"Targets\Custom.Before.Microsoft.Common.targets";
 
-        public static readonly string ProgramFilesFolderPath = Environment.GetEnvironmentVariable("ProgramFiles");
+        public static readonly string ProgramFilesFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
         private static readonly string SpecialWindowsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
         private static readonly string LocalApplicationData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         public static readonly string ApplicationData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
@@ -55,7 +55,6 @@ namespace BridgeVs.Shared.Common
         public static readonly string VisualStudio2015Path = Path.Combine(ProgramFilesFolderPath, @"Microsoft Visual Studio 14.0");
         public static readonly string VisualStudio2013Path = Path.Combine(ProgramFilesFolderPath, @"Microsoft Visual Studio 12.0");
         public static readonly string VisualStudio2012Path = Path.Combine(ProgramFilesFolderPath, @"Microsoft Visual Studio 11.0");
-
 
         public static string InstallFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 

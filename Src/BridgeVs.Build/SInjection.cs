@@ -129,8 +129,6 @@ namespace BridgeVs.Build
 
             Log.Write("Assembly being Injected {0}", assemblyLocation);
 
-            //  if (IsAssemblyInExcludedList(Path.GetFileName(assemblyLocation))) return;
-
             if (!File.Exists(assemblyLocation))
                 throw new Exception($"Assembly at location {assemblyLocation} doesn't exist");
 
@@ -354,7 +352,11 @@ namespace BridgeVs.Build
             {
                 try
                 {
-                    _assemblyDefinition.Write(_assemblyLocation, GetWriterParameters());
+                    using (FileStream s = new FileStream(_assemblyLocation, FileMode.OpenOrCreate, FileAccess.Write))
+                    {
+                        _assemblyDefinition.Write(s, GetWriterParameters());
+                       
+                    }
 
                     return true;
                 }

@@ -65,7 +65,6 @@ namespace BridgeVs.Build.Tasks
         /// </returns>
         public bool Execute()
         {
-            RavenWrapper.VisualStudioVersion = VisualStudioVer;
             Log.VisualStudioVersion = VisualStudioVer;
 
             try
@@ -94,7 +93,7 @@ namespace BridgeVs.Build.Tasks
                 const string errorMessage = "Error Executing MSBuild Task MapperBuildTask";
                 Log.Write(e, errorMessage);
 
-                RavenWrapper.Instance.Capture(e, message: errorMessage);
+                e.Capture(VisualStudioVer, message: errorMessage);
 
                 return false;
             }

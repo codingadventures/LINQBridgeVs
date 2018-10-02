@@ -35,7 +35,6 @@ namespace BridgeVs.Build.Tasks
     {
         public bool Execute()
         {
-            RavenWrapper.VisualStudioVersion = VisualStudioVer;
             Log.VisualStudioVersion = VisualStudioVer;
 
             try
@@ -56,7 +55,7 @@ namespace BridgeVs.Build.Tasks
             }
             catch (System.Exception exception)
             {
-                RavenWrapper.Instance.Capture(exception, message: "Error during project cleaning");
+                exception.Capture(VisualStudioVer, message: "Error during project cleaning");
 
                 return false;
             }
