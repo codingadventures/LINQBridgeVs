@@ -38,13 +38,15 @@ namespace BridgeVs.Shared.Logging
         /// The client id associated with the Sentry.io account.
         /// </summary>
         private const string RavenClientId = "https://e187bfd9b1304311be6876ac9036956d:6580e15fc2fd40899e5d5b0f28685efc@sentry.io/1189532";
+        private const string LinqBridgeVs = "linqbridgevs";
+        private const int Timeout = 2000;
 
-        private static Action<Exception> onSendError = new Action<Exception>(ex =>
+        private static readonly Action<Exception> OnSendError = ex =>
         {
             Trace.WriteLine("Error sending report to Sentry.io");
             Trace.WriteLine(ex.Message);
             Trace.WriteLine(ex.StackTrace);
-        });
+        };
 
         [Conditional("DEPLOY")]
         public static void Capture(this Exception exception, string vsVersion, ErrorLevel errorLevel = ErrorLevel.Error, string message = "")
@@ -63,8 +65,8 @@ namespace BridgeVs.Shared.Logging
             {
                 HttpRequester request = req as HttpRequester;
                 //GDPR compliant, no personal data sent: no server name, no username stored, no ip address
-                request.Data.JsonPacket.ServerName = "linqbridgevs";
-                request.Data.JsonPacket.Contexts.Device.Name = "linqbridgevs";
+                request.Data.JsonPacket.ServerName = LinqBridgeVs;
+                request.Data.JsonPacket.Contexts.Device.Name = LinqBridgeVs;
                 request.Data.JsonPacket.User.Username = CommonRegistryConfigurations.GetUniqueGuid(vsVersion);
                 request.Data.JsonPacket.Release = "1.4.6"; //read it from somewhere
                 request.Data.JsonPacket.User.IpAddress = "0.0.0.0";
@@ -82,8 +84,8 @@ namespace BridgeVs.Shared.Logging
             RavenClient ravenClient = new RavenClient(RavenClientId)
             {
                 BeforeSend = removeUserId,
-                ErrorOnCapture = onSendError,
-                Timeout = TimeSpan.FromMilliseconds(2000) //should fail early if it can't send a message
+                ErrorOnCapture = OnSendError,
+                Timeout = TimeSpan.FromMilliseconds(Timeout) //should fail early if it can't send a message
             };
 
             ravenClient.Capture(sentryEvent);
