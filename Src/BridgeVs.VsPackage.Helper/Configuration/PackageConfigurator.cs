@@ -31,7 +31,6 @@ using System.Reflection;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Windows.Forms;
-using BridgeVs.Locations;
 using BridgeVs.Shared.Common;
 using Microsoft.Win32;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
@@ -226,8 +225,6 @@ namespace BridgeVs.VsPackage.Helper.Configuration
                 return false;
             }
 
-            ObsoleteXmlConfiguration.RemoveOldTargets();
-
             SetBridgeVsAssemblyVersion(vsVersion);
 
             CreateLinqPadQueryFolder();
@@ -277,7 +274,7 @@ namespace BridgeVs.VsPackage.Helper.Configuration
                 File.Copy(sourceFile, targetFile, true);
 
                 //it copies the plugins to all the folders found in either custom locations and default
-                foreach (var targetPluginFolder in CommonFolderPaths.AllLinqPadPluginFolders)
+                foreach (string targetPluginFolder in CommonFolderPaths.AllLinqPadPluginFolders)
                 {
                     string targetFileLinqPadPluginFolder = Path.Combine(targetPluginFolder, dependency);
                     File.Copy(sourceFile, targetFileLinqPadPluginFolder, true);
@@ -344,7 +341,7 @@ namespace BridgeVs.VsPackage.Helper.Configuration
 
         private static void CreateLinqPadPluginFolders()
         {
-            foreach (var pluginFolder in CommonFolderPaths.AllLinqPadPluginFolders)
+            foreach (string pluginFolder in CommonFolderPaths.AllLinqPadPluginFolders)
             {
                 if (Directory.Exists(pluginFolder))
                     continue;

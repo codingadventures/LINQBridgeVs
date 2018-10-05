@@ -24,7 +24,11 @@
 #endregion
 
 using System;
+using System.CodeDom;
+using System.Collections;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using BridgeVs.Shared.Common;
 using BridgeVs.Shared.Logging;
 using BridgeVs.Shared.Options;
@@ -42,15 +46,16 @@ namespace BridgeVs.Shared.Serialization
         /// <typeparam name="T"></typeparam>
         /// <param name="item">The object to serialize</param>
         /// <param name="truckId">the unique id used to save the serialize item to disk</param>
-        /// <param name="suggestedSerializer">Suggested strategy for serialization</param>
-        /// <returns>Returns the type of serialization used for </returns>
-        public static SerializationOption? SendCargo<T>(T item, string truckId, IServiceSerializer suggestedSerializer)
+        /// <param name="serializationOption"> the proposed serialization strategy</param>
+        /// <returns>Returns the actual serialization strategy used to serialize the <paramref name="item"/> </returns>
+        public static SerializationOption? SendCargo<T>(T item, string truckId, SerializationOption serializationOption)
         {
-            Type type = item.GetType();
             byte[] byteStream = null;
 
-            Log.Write($"SendCargo - Type {type.FullName}");
-            IServiceSerializer serializer = suggestedSerializer;
+            Log.Write($"SendCargo - Type {typeof(T).FullName}");
+
+            IServiceSerializer serializer = CreateSerializationStrategy(serializationOption);
+            
             do
             {
                 try
@@ -59,7 +64,7 @@ namespace BridgeVs.Shared.Serialization
                 }
                 catch (Exception e)
                 {
-                    Log.Write(e, $"SendCargo - Error During serializing cargo with this strategy: {serializer.ToString()}");
+                    Log.Write(e, $"SendCargo - Error During serializing cargo with this strategy: {serializer}");
                     serializer = serializer.Next;
                 }
             }
@@ -69,16 +74,17 @@ namespace BridgeVs.Shared.Serialization
             {
                 string filePath = Path.Combine(CommonFolderPaths.GrappleFolder, truckId);
                 File.WriteAllBytes(filePath, byteStream);
+                if (serializer == null)
+                    return null;
+
                 SerializationOption successfulSerialization = (SerializationOption)Enum.Parse(typeof(SerializationOption), serializer.ToString());
                 Log.Write($"SendCargo - Cargo Sent - Byte sent: {byteStream.Length} - File Created: {filePath} - Serialization Used: {successfulSerialization}");
 
                 return successfulSerialization;
+            } 
 
-            }
-            else
-            {
-                Log.Write($"SendCargo - It was not possible to serialize at all the type {type.FullName}");
-            }
+            Log.Write($"SendCargo - It was not possible to serialize at all the type {typeof(T).FullName}");
+           
 
             return null;
         }
@@ -88,15 +94,15 @@ namespace BridgeVs.Shared.Serialization
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static T ReceiveCargo<T>(string truckId, IServiceSerializer serviceSerializer)
+        public static T ReceiveCargo<T>(string truckId, SerializationOption serializationOption)
         {
             Log.Write("ReceiveCargo - Receiving Cargo of Type {0}", typeof(T).FullName);
 
             try
             {
                 byte[] byteStream = File.ReadAllBytes(Path.Combine(CommonFolderPaths.GrappleFolder, truckId));
-
-                return serviceSerializer.Deserialize<T>(byteStream);
+                IServiceSerializer serviceSerializer = CreateDeserializationStrategy(serializationOption);
+                return serviceSerializer != null ? serviceSerializer.Deserialize<T>(byteStream) : default(T);
             }
             catch (Exception e)
             {
@@ -106,14 +112,16 @@ namespace BridgeVs.Shared.Serialization
             }
         }
 
-        public static object ReceiveCargo(string truckId, IServiceSerializer serviceSerializer)
+        public static object ReceiveCargo(string truckId, SerializationOption serializationOption)
         {
             Log.Write("ReceiveCargo - UnLoading Cargo for Typeless object");
             try
             {
                 byte[] byteStream = File.ReadAllBytes(Path.Combine(CommonFolderPaths.GrappleFolder, truckId));
 
-                return serviceSerializer.Deserialize(byteStream);
+                IServiceSerializer serviceSerializer = CreateDeserializationStrategy(serializationOption);
+
+                return serviceSerializer?.Deserialize(byteStream);
             }
             catch (Exception e)
             {
@@ -121,6 +129,56 @@ namespace BridgeVs.Shared.Serialization
 
                 throw;
             }
+        }
+
+        /// <summary>
+        /// The serialization strategy tries to serialize the type with the first serializer and if
+        /// it fails it uses the next one. 
+        /// </summary>
+        /// <param name="option"></param>
+        /// <returns></returns>
+        private static IServiceSerializer CreateSerializationStrategy(SerializationOption option)
+        {
+            IServiceSerializer serviceSerializer = null;
+
+            switch (option)
+            {
+                case SerializationOption.JsonSerializer:
+                    serviceSerializer = new JsonSerializer()
+                    {
+                        Next = new DefaultSerializer()
+                    };
+                    break;
+                case SerializationOption.BinarySerializer:
+                    serviceSerializer = new DefaultSerializer()
+                    {
+                        Next = new JsonSerializer()
+                    };
+                    break;
+            }
+
+            return serviceSerializer;
+        }
+
+        /// <summary>
+        /// The deserialization strategy strictly uses the strategy chosen and doesn't try to deserialize
+        /// with a different <seealso cref="IServiceSerializer"/>
+        /// </summary>
+        /// <param name="option"></param>
+        /// <returns></returns>
+        private static IServiceSerializer CreateDeserializationStrategy(SerializationOption option)
+        { 
+            switch (option)
+            {
+                case SerializationOption.JsonSerializer:
+                    return new JsonSerializer();
+                case SerializationOption.BinarySerializer:
+                    return new DefaultSerializer();
+            }
+
+            Log.Write("CreateDeserializationStrategy - SerializationOption is not valid Value: {0}", option);
+
+            return null;
         }
     }
 }

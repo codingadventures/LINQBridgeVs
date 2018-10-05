@@ -41,7 +41,6 @@ using SharpRaven;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using BridgeVs.Shared.Logging;
 using BridgeVs.Shared.Common;
-using BridgeVs.Shared.Options;
 
 namespace BridgeVs.DynamicVisualizers
 {
@@ -83,7 +82,7 @@ namespace BridgeVs.DynamicVisualizers
         #endregion
 
         /// <summary>
-        /// Deploys the dynamically generated linqscript.
+        /// Deploys the dynamically generated linq script.
         /// </summary>
         /// <param name="message">The message.</param>
         internal void DeployLinqScript(Message message)
@@ -103,12 +102,9 @@ namespace BridgeVs.DynamicVisualizers
                     FileSystem.Directory.CreateDirectory(targetFolder);
 
                 string linqPadScriptPath = Path.Combine(targetFolder, message.FileName);
-                Log.Write("linqPadScriptPath: {0}", linqPadScriptPath);
-
-                List<string> refAssemblies = new List<string>();
-                refAssemblies.AddRange(message.ReferencedAssemblies);
-                SerializationOption serializationOption = CommonRegistryConfigurations.GetSerializationOption(vsVersion);
-                Inspection linqQuery = new Inspection(refAssemblies, message.TypeFullName, message.TypeNamespace, message.TypeName, serializationOption);
+                Log.Write("linqPadScriptPath: {0}", linqPadScriptPath); 
+                 
+                Inspection linqQuery = new Inspection(message);
                 string linqQueryText = linqQuery.TransformText();
 
                 Log.Write("LinqQuery file Transformed");
@@ -152,22 +148,20 @@ namespace BridgeVs.DynamicVisualizers
             Type type = Type.GetType(message.AssemblyQualifiedName);
 
             string originalTypeLocation = CommonRegistryConfigurations.GetOriginalAssemblyLocation(type, vsVersion);
-
-            List<string> referencedAssemblies = type.GetReferencedAssemblies(originalTypeLocation);
-
-            message.ReferencedAssemblies.AddRange(referencedAssemblies);
+             
+            message.ReferencedAssemblies.AddRange(type.GetReferencedAssemblies(originalTypeLocation));
 
             DeployLinqScript(message);
             Log.Write("LinqQuery Successfully deployed");
 
-            string linqQueryfileName = Path.Combine(CommonFolderPaths.DefaultLinqPadQueryFolder, message.AssemblyName, message.FileName);
+            string linqQueryFileName = Path.Combine(CommonFolderPaths.DefaultLinqPadQueryFolder, message.AssemblyName, message.FileName);
             string linqPadInstallationPath = CommonRegistryConfigurations.GetLINQPadInstallationPath(vsVersion);
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 WindowStyle = ProcessWindowStyle.Normal,
                 FileName = "LINQPad.exe",
                 WorkingDirectory = Path.GetFullPath(linqPadInstallationPath),
-                Arguments = linqQueryfileName + " -run"
+                Arguments = linqQueryFileName + " -run"
             };
 
             Log.Write("About to start LINQPad with these parameters: {0}, {1}", startInfo.FileName, startInfo.Arguments);

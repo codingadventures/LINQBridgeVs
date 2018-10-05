@@ -28,18 +28,21 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using BridgeVs.Shared.Logging;
+using BridgeVs.Shared.Options;
 
 namespace BridgeVs.Shared.Serialization
 {
+    /// <inheritdoc />
     /// <summary>
     /// Default Binary Serializer. It uses the BinaryFormatter and it expects the types to be marked as Serializable
     /// </summary>
-    public class DefaultSerializer : IServiceSerializer
+    public sealed class DefaultSerializer : IServiceSerializer
     {
         private readonly BinaryFormatter _formatter = new BinaryFormatter();
 
         public IServiceSerializer Next { get; set; }
 
+        /// <inheritdoc />
         /// <summary>
         /// Serializes the specified a stream.
         /// </summary>
@@ -62,6 +65,7 @@ namespace BridgeVs.Shared.Serialization
             }
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Serializes the specified object to serialize.
         /// </summary>
@@ -88,6 +92,7 @@ namespace BridgeVs.Shared.Serialization
             return retValue;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Deserializes the specified a stream.
         /// </summary>
@@ -109,6 +114,7 @@ namespace BridgeVs.Shared.Serialization
             }
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Deserializes the specified object to deserialize.
         /// </summary>
@@ -135,6 +141,7 @@ namespace BridgeVs.Shared.Serialization
         }
 
 
+        /// <inheritdoc />
         /// <summary>
         /// Deserializes the specified object to deserialize.
         /// </summary>
@@ -161,7 +168,7 @@ namespace BridgeVs.Shared.Serialization
 
         public override string ToString()
         {
-            return "Binary Serializer";
+            return SerializationOption.BinarySerializer.ToString();
         }
     }
 }

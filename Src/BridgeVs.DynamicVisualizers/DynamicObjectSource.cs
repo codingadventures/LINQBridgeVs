@@ -54,9 +54,9 @@ namespace BridgeVs.DynamicVisualizers
                 
                 CalculateFileNameAndTypeName(targetTypeFullName, targetTypeName, out string fileName, out string typeName);
 
-                string truckId = Guid.NewGuid().ToString();
-                IServiceSerializer serializationStrategy = CreateSerializationStrategy(CommonRegistryConfigurations.GetSerializationOption(vsVersion));
-                SerializationOption? serializationOption = Truck.SendCargo(target, truckId, serializationStrategy);
+                string truckId = Guid.NewGuid().ToString(); 
+
+                SerializationOption? serializationOption = Truck.SendCargo(target, truckId, CommonRegistryConfigurations.GetSerializationOption(vsVersion));
                
                 if (serializationOption.HasValue)
                 {
@@ -108,31 +108,6 @@ namespace BridgeVs.DynamicVisualizers
             typeName = pattern5.Replace(typeName, string.Empty);
 
             fileName = TypeNameHelper.RemoveSystemNamespaces(fileName);
-        }
-
-        private IServiceSerializer CreateSerializationStrategy(SerializationOption option)
-        {
-            IServiceSerializer serviceSerializer = null;
-
-            switch (option)
-            {
-                case SerializationOption.JsonSerializer:
-                    serviceSerializer = new JsonSerializer()
-                    {
-                        Next = new DefaultSerializer()
-                    };
-                    break;
-                case SerializationOption.BinarySerializer:
-                    serviceSerializer = new DefaultSerializer()
-                    {
-                        Next = new JsonSerializer()
-                    };
-                    break;
-                default:
-                    break;
-            }
-
-            return serviceSerializer;
         }
 
         private static Type GetInterfaceTypeIfIsIterator(object o)

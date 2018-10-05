@@ -61,7 +61,6 @@
     <Compile Include="Common\CommonRegistryConfigurations.cs" />
     <Compile Include="Logging\Log.cs" />
     <Compile Include="Logging\RavenWrapper.cs" />
-    <Compile Include="ObsoleteXmlConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Options\SerializationOption.cs" />
     <Compile Include="Options\VisualStudioOption.cs" />

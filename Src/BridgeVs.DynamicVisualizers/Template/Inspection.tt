@@ -14,27 +14,19 @@
   <Namespace>BridgeVs.Shared</Namespace>
   <Namespace>BridgeVs.Shared.Options</Namespace>
   <Namespace><#= _typeNamespace #></Namespace>
-  <# foreach(var elem in this._assemblies){
-    if (!elem.Contains("mscorlib")) {
-  #>
+  <# foreach(var elem in this._assemblies)
+	{
+		if (!elem.Contains("mscorlib")) {  #>
   <Reference><#=elem#></Reference>
-  <#}}#> 
+		<#}
+	}#> 
 </Query>
 
 void Main()
 {
-    Truck.ReceiveCargo<<#=_typeToRetrieveFullName#>>("<#=_truckId#>", CreateStrategy()).Dump("<#=_typeToRetrieveFullName#>", 2);
-}
-
-ISerializationService CreateStrategy()
-{
-	switch (<#=_serializationType#>)
-    {
-        case SerializationOption.JsonSerializer:
-            return new JsonSerializer();
-        case SerializationOption.BinarySerializer:
-           return new DefaultSerializer();
-    }
-
-	return null;
+<# if (_typeToRetrieveFullName.Contains("AnonymousType")) { #> 
+    Truck.ReceiveCargo("<#=_truckId#>",  SerializationOption.<#= _serializationType #>).Dump("<#=_typeToRetrieveFullName#>", 2);
+<# } else { #>
+    Truck.ReceiveCargo<<#=_typeToRetrieveFullName#>>("<#=_truckId#>", SerializationOption.<#= _serializationType #>).Dump("<#=_typeToRetrieveFullName#>", 2);
+<# } #>
 }

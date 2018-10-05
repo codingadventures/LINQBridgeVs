@@ -31,7 +31,6 @@ using System.IO.Abstractions.TestingHelpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using BridgeVs.DynamicVisualizers.Template;
 using BridgeVs.Model.Test;
-using BridgeVs.Shared.Logging;
 using BridgeVs.Shared.Common;
 
 namespace BridgeVs.DynamicVisualizers.Test
@@ -45,7 +44,8 @@ namespace BridgeVs.DynamicVisualizers.Test
             TypeFullName = typeof(CustomType1).FullName,
             TypeNamespace = typeof(CustomType1).Namespace,
             TypeName = typeof(CustomType1).Name,
-            AssemblyName = typeof(CustomType1).Assembly.GetName().Name
+            AssemblyName = typeof(CustomType1).Assembly.GetName().Name,
+            TruckId = Guid.NewGuid().ToString()
         };
 
        

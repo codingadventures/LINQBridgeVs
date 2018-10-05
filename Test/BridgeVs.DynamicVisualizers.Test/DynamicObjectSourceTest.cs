@@ -45,9 +45,9 @@ namespace BridgeVs.DynamicVisualizers.Test
         [TestCategory("UnitTest")]
         public void BroadCastData_SkipWhileIteratorShouldSucceed()
         {
-            var r = TestQuery.SkipWhile(i => i < 45).ToList();
+            List<int> r = TestQuery.SkipWhile(i => i < 45).ToList();
 
-            var message = DeserializeMessage(r);
+            Message message = DeserializeMessage(r);
 
 
             Assert.AreEqual(message.FileName, "List(Int32).linq");
@@ -60,9 +60,9 @@ namespace BridgeVs.DynamicVisualizers.Test
         [TestCategory("UnitTest")]
         public void BroadCastData_OfTypeIteratorShouldSucceed()
         {
-            var r = TestQuery.OfType<short>().ToList(); ;
+            List<short> r = TestQuery.OfType<short>().ToList(); ;
 
-            var message = DeserializeMessage(r);
+            Message message = DeserializeMessage(r);
 
             Assert.AreEqual(message.FileName, "List(Int16).linq");
             Assert.AreEqual(message.TypeFullName, "System.Collections.Generic.List<System.Int16>");
@@ -74,9 +74,9 @@ namespace BridgeVs.DynamicVisualizers.Test
         [TestCategory("UnitTest")]
         public void BroadCastData_DictionaryShouldSucceed()
         {
-            var r = new Dictionary<int, object> { { 1, "Test" } };
+            Dictionary<int, object> r = new Dictionary<int, object> { { 1, "Test" } };
 
-            var message = DeserializeMessage(r);
+            Message message = DeserializeMessage(r);
 
             Assert.AreEqual(message.FileName, "Dictionary(Int32, Object).linq");
             Assert.AreEqual(message.TypeFullName, "System.Collections.Generic.Dictionary<System.Int32, System.Object>");
@@ -114,11 +114,11 @@ namespace BridgeVs.DynamicVisualizers.Test
 
         private static Message DeserializeMessage(object @object)
         {
-            using (var memoryStream = new MemoryStream())
+            using (MemoryStream memoryStream = new MemoryStream())
             {
                 DynamicObjectSource dynamicObjectSource = new DynamicObjectSource();
                 dynamicObjectSource.BroadCastData(@object, memoryStream);
-                var binaryFormatter = new BinaryFormatter();
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
                 memoryStream.Position = 0;
                 return (Message)binaryFormatter.Deserialize(memoryStream);
             }

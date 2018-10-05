@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.VsPackage", "Bridg
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.VsPackage.Helper", "BridgeVs.VsPackage.Helper\BridgeVs.VsPackage.Helper.csproj", "{0FA0053B-AB53-40DF-A060-6DCC22568A23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.Grapple", "BridgeVs.Grapple\BridgeVs.Grapple.csproj", "{79C0C9ED-D22C-4855-97C1-F6BD0127A531}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.DynamicVisualizers", "BridgeVs.DynamicVisualizers\BridgeVs.DynamicVisualizers.csproj", "{B84FBD50-0B10-4C25-8430-680FC6FC3FEA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BridgeVs.Console", "..\Test\SInject.Console\BridgeVs.Console.csproj", "{FFE2F6D9-8421-4DFA-878A-BFFBA513CC6F}"
@@ -121,30 +119,6 @@ Global
 		{0FA0053B-AB53-40DF-A060-6DCC22568A23}.Release-netstandard2.0|Any CPU.Build.0 = Test|Any CPU
 		{0FA0053B-AB53-40DF-A060-6DCC22568A23}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{0FA0053B-AB53-40DF-A060-6DCC22568A23}.Test|Any CPU.Build.0 = Test|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Debug-net35|Any CPU.ActiveCfg = Debug|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Debug-net35|Any CPU.Build.0 = Debug|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Debug-net40|Any CPU.ActiveCfg = Debug|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Debug-net40|Any CPU.Build.0 = Debug|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Debug-net45|Any CPU.ActiveCfg = Debug|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Debug-net45|Any CPU.Build.0 = Debug|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Debug-netstandard2.0|Any CPU.ActiveCfg = Debug|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Debug-netstandard2.0|Any CPU.Build.0 = Debug|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Deploy|Any CPU.ActiveCfg = Deploy|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Deploy|Any CPU.Build.0 = Deploy|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Release|Any CPU.ActiveCfg = Test|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Release|Any CPU.Build.0 = Test|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Release-net35|Any CPU.ActiveCfg = Test|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Release-net35|Any CPU.Build.0 = Test|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Release-net40|Any CPU.ActiveCfg = Test|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Release-net40|Any CPU.Build.0 = Test|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Release-net45|Any CPU.ActiveCfg = Test|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Release-net45|Any CPU.Build.0 = Test|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Release-netstandard2.0|Any CPU.ActiveCfg = Test|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Release-netstandard2.0|Any CPU.Build.0 = Test|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Test|Any CPU.ActiveCfg = Test|Any CPU
-		{79C0C9ED-D22C-4855-97C1-F6BD0127A531}.Test|Any CPU.Build.0 = Test|Any CPU
 		{B84FBD50-0B10-4C25-8430-680FC6FC3FEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B84FBD50-0B10-4C25-8430-680FC6FC3FEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B84FBD50-0B10-4C25-8430-680FC6FC3FEA}.Debug-net35|Any CPU.ActiveCfg = Debug|Any CPU

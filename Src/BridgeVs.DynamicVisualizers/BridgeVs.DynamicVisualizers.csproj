@@ -47,15 +47,12 @@
       <HintPath>..\..\Lib\VS2017\Microsoft.VisualStudio.DebuggerVisualizers.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.IO.Abstractions, Version=2.1.0.178, Culture=neutral, PublicKeyToken=96bf224d23c43e59, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.IO.Abstractions.2.1.0.178\lib\net40\System.IO.Abstractions.dll</HintPath>
+    <Reference Include="System.IO.Abstractions, Version=2.1.0.231, Culture=neutral, PublicKeyToken=96bf224d23c43e59, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Abstractions.2.1.0.231\lib\net40\System.IO.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -75,7 +72,9 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Template\Message.cs" />
-    <Compile Include="Template\Template.cs" />
+    <Compile Include="Template\Inspection.Template.cs">
+      <DependentUpon>Inspection.tt</DependentUpon>
+    </Compile>
     <Compile Include="Helper\ReferencedAssemblyFinderHelper.cs" />
     <Compile Include="Helper\TypeNameHelper.cs" />
   </ItemGroup>

@@ -25,13 +25,14 @@
 
 using System;
 using System.IO;
+using BridgeVs.Shared.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
 using Newtonsoft.Json.Serialization;
 
 namespace BridgeVs.Shared.Serialization
 {
-    public class JsonSerializer : IServiceSerializer
+    public sealed class JsonSerializer : IServiceSerializer
     {
         private const int MaxDepth = 8;
 
@@ -103,7 +104,7 @@ namespace BridgeVs.Shared.Serialization
         
         public override string ToString()
         {
-            return "JsonSerializer";
+            return SerializationOption.JsonSerializer.ToString();
         }
     }
 }
