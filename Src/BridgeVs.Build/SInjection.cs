@@ -77,7 +77,6 @@ namespace BridgeVs.Build
     {
         #region [ Private Properties ]
         private readonly string _assemblyLocation;
-        private readonly PatchMode _mode;
         private readonly AssemblyDefinition _assemblyDefinition;
         private static readonly Func<string, bool> IsSystemAssembly = name => name.Contains("Microsoft") || name.Contains("System") || name.Contains("mscorlib");
 
@@ -119,14 +118,12 @@ namespace BridgeVs.Build
         /// </summary>
         /// <param name="assemblyLocation">The assembly location.</param>
         /// <param name="snkCertificatePath">The location of snk certificate</param>
-        /// <param name="mode">The mode.</param>
         /// <exception cref="System.Exception"></exception>
-        public SInjection(string assemblyLocation, string snkCertificatePath = null, PatchMode mode = PatchMode.Release)
+        public SInjection(string assemblyLocation, string snkCertificatePath = null)
         {
             _assemblyLocation = assemblyLocation;
             _snkCertificatePath = snkCertificatePath;
-            _mode = mode;
-
+         
             Log.Write("Assembly being Injected {0}", assemblyLocation);
 
             if (!File.Exists(assemblyLocation))
@@ -145,15 +142,15 @@ namespace BridgeVs.Build
         /// <exception cref="System.Exception"></exception>
         public bool Patch(SerializationTypes types)
         {
-            bool isAlreadySinjected = CheckIfAlreadySinjected();
-#if !DEBUG
-            if (isAlreadySinjected)
+            bool alreadySInjected = CheckIfAlreadySInjected();
+
+            if (alreadySInjected)
             {
-                Log.Write("Assembly already Sinjected");
+                Log.Write("Assembly already SInjected");
 
                 return true;
             }
-#endif
+
             List<TypeDefinition> typeToInjects = GetTypesToInject().ToList();
 
             InjectSerialization(typeToInjects);
@@ -264,7 +261,7 @@ namespace BridgeVs.Build
             }
         }
 
-        private bool CheckIfAlreadySinjected()
+        private bool CheckIfAlreadySInjected()
         {
             return _assemblyDefinition.HasCustomAttributes
                    && _assemblyDefinition.CustomAttributes
@@ -304,7 +301,7 @@ namespace BridgeVs.Build
         {
             WriterParameters writerParameters = new WriterParameters();
 
-            if (_mode == PatchMode.Debug && File.Exists(PdbName))
+            if (File.Exists(PdbName))
             {
                 writerParameters.SymbolWriterProvider = new PdbWriterProvider();
                 writerParameters.WriteSymbols = true;

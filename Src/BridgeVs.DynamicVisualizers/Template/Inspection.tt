@@ -14,19 +14,17 @@
   <Namespace>BridgeVs.Shared</Namespace>
   <Namespace>BridgeVs.Shared.Options</Namespace>
   <Namespace><#= _typeNamespace #></Namespace>
-  <# foreach(var elem in this._assemblies)
-	{
-		if (!elem.Contains("mscorlib")) {  #>
-  <Reference><#=elem#></Reference>
-		<#}
-	}#> 
-</Query>
+  <# foreach(var elem in this._assemblies) {
+		if (!elem.Contains("mscorlib")){#>
+<Reference><#=elem#></Reference>
+	<#}
+}#></Query>
 
 void Main()
 {
-<# if (_typeToRetrieveFullName.Contains("AnonymousType")) { #> 
-    Truck.ReceiveCargo("<#=_truckId#>",  SerializationOption.<#= _serializationType #>).Dump("<#=_typeToRetrieveFullName#>", 2);
-<# } else { #>
-    Truck.ReceiveCargo<<#=_typeToRetrieveFullName#>>("<#=_truckId#>", SerializationOption.<#= _serializationType #>).Dump("<#=_typeToRetrieveFullName#>", 2);
-<# } #>
+<# if (_typeToRetrieveFullName.Contains("AnonymousType")){#>
+	Truck.ReceiveCargo("<#=_truckId#>",  SerializationOption.<#= _serializationType #>).Dump("<#=_typeToRetrieveFullName#>", 2);
+<#} else {#>
+	Truck.ReceiveCargo<<#=_typeToRetrieveFullName#>>("<#=_truckId#>", SerializationOption.<#= _serializationType #>).Dump("<#=_typeToRetrieveFullName#>", 2);
+<#}#>
 }

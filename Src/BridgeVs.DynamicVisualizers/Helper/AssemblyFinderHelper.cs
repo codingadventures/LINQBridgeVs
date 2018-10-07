@@ -31,6 +31,7 @@ using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Runtime.InteropServices;
+using BridgeVs.Shared.FileSystem;
 
 namespace BridgeVs.DynamicVisualizers.Helper
 {
@@ -42,7 +43,7 @@ namespace BridgeVs.DynamicVisualizers.Helper
         internal static readonly Func<string, bool> IsSystemAssembly =
             name => name.Contains("Microsoft") || name.Contains("System") || name.Contains("mscorlib");
 
-        public static IFileSystem FileSystem { private get; set; }
+        private static IFileSystem FileSystem => FileSystemFactory.FileSystem;
 
         public static IEnumerable<string> GetReferencedAssembliesPath(this _Assembly assembly, string location, bool includeSystemAssemblies = false)
         {

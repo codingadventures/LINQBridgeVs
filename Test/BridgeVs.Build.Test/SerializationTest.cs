@@ -54,14 +54,14 @@ namespace BridgeVs.Build.Test
         /// Initializes the specified test context. Patch with SInject the Model Library
         /// </summary>
         /// <param name="testContext">The test context.</param>
-        //[ClassInitialize]
-        //public static void Init(TestContext testContext)
-        //{
-        //    SInjection sInjection = new SInjection(SInjectTestModelPath);
-        //    _patchResult = sInjection.Patch(SerializationTypes.BinarySerialization);
-        //    AppDomain.CurrentDomain.AssemblyResolve += HandleAssemblyResolve;
-        //    _modelAssembly = AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName(SInjectTestModelPath));
-        //}
+        [ClassInitialize]
+        public static void Init(TestContext testContext)
+        {
+            SInjection sInjection = new SInjection(SInjectTestModelPath);
+            _patchResult = sInjection.Patch(SerializationTypes.BinarySerialization);
+            AppDomain.CurrentDomain.AssemblyResolve += HandleAssemblyResolve;
+            _modelAssembly = AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName(SInjectTestModelPath));
+        }
 
         private static Assembly HandleAssemblyResolve(object sender, ResolveEventArgs args)
         {
@@ -71,47 +71,48 @@ namespace BridgeVs.Build.Test
         private object _notSerializableInheritsDictionary;
         private object _notSerializableObject;
 
-        //[TestInitialize]
-        //public void Init()
-        //{
-        //    //Load the types
-        //    _notSerializableInheritsDictionary = _modelAssembly.CreateInstance(typeof(NotSerializableInerhitsDictionary).FullName);
-        //    _notSerializableObject = _modelAssembly.CreateInstance(typeof(NotSerializableObject).FullName);
-        //}
+        [TestInitialize]
+        public void Init()
+        {
+            //Load the types
+            _notSerializableInheritsDictionary = _modelAssembly.CreateInstance(typeof(NotSerializableInerhitsDictionary).FullName);
+            _notSerializableObject = _modelAssembly.CreateInstance(typeof(NotSerializableObject).FullName);
+        }
 
-        //[TestMethod]
-        //[TestCategory("UnitTest")]
-        //public void Not_Serializable_Inherits_Dictionary_Should_Serialize_After_Patching()
-        //{
-        //    BinaryFormatter f = new BinaryFormatter();
+        [TestMethod]
+        [TestCategory("UnitTest")]
+        public void Not_Serializable_Inherits_Dictionary_Should_Serialize_After_Patching()
+        {
+            BinaryFormatter f = new BinaryFormatter();
 
-        //    using (MemoryStream stream = new MemoryStream())
-        //    {
-        //        f.Serialize(stream, _notSerializableInheritsDictionary);
-        //        stream.Position = 0;
-        //        object obj = f.Deserialize(stream);
+            using (MemoryStream stream = new MemoryStream())
+            {
+                f.Serialize(stream, _notSerializableInheritsDictionary);
+                stream.Position = 0;
+                object obj = f.Deserialize(stream);
 
-        //        Assert.IsTrue(_patchResult, "Assembly has not been patched correctly");
-        //        Assert.IsNotNull(obj, "Object hasn't been serialized");
-        //        Assert.IsTrue(obj.GetType() == _notSerializableInheritsDictionary.GetType(), "Object is not of the same type");
-        //    }
-        //}
+                Assert.IsTrue(_patchResult, "Assembly has not been patched correctly");
+                Assert.IsNotNull(obj, "Object hasn't been serialized");
+                Assert.IsTrue(obj.GetType() == _notSerializableInheritsDictionary.GetType(), "Object is not of the same type");
+                
+            }
+        }
 
-        //[TestMethod]
-        //[TestCategory("UnitTest")]
-        //public void Not_Serializable_Object_Should_Serialize_After_Patching()
-        //{
-        //    BinaryFormatter f = new BinaryFormatter();
+        [TestMethod]
+        [TestCategory("UnitTest")]
+        public void Not_Serializable_Object_Should_Serialize_After_Patching()
+        {
+            BinaryFormatter f = new BinaryFormatter();
 
-        //    using (MemoryStream stream = new MemoryStream())
-        //    {
-        //        f.Serialize(stream, _notSerializableObject);
-        //        stream.Position = 0;
-        //        object obj = f.Deserialize(stream);
-        //        Assert.IsTrue(_patchResult, "Assembly has not been patched correctly");
-        //        Assert.IsNotNull(obj, "Object hasn't been serialized");
-        //        Assert.IsTrue(obj.GetType() == _notSerializableObject.GetType(), "Object is not of the same type");
-        //    }
-        //}
+            using (MemoryStream stream = new MemoryStream())
+            {
+                f.Serialize(stream, _notSerializableObject);
+                stream.Position = 0;
+                object obj = f.Deserialize(stream);
+                Assert.IsTrue(_patchResult, "Assembly has not been patched correctly");
+                Assert.IsNotNull(obj, "Object hasn't been serialized");
+                Assert.IsTrue(obj.GetType() == _notSerializableObject.GetType(), "Object is not of the same type");
+            }
+        }
     }
 }

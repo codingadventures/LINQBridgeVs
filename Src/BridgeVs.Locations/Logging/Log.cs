@@ -25,6 +25,7 @@
 
 using BridgeVs.Shared.Common;
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 
@@ -36,6 +37,7 @@ namespace BridgeVs.Shared.Logging
 
         public static string VisualStudioVersion { get; set; }
 
+        [Conditional("DEPLOY")]
         public static void Write(Exception ex, string context = null)
         {
             if (string.IsNullOrEmpty(VisualStudioVersion))
@@ -80,6 +82,7 @@ namespace BridgeVs.Shared.Logging
         /// Writes a formatted message  
         /// </summary>
         /// <param name="msg">A composite format string (see Remarks) that contains text intermixed with zero or more format items, which correspond to objects in the <paramref name="args"/> array.</param><param name="args">An object array that contains zero or more objects to format. </param>
+        [Conditional("DEPLOY")]
         public static void Write(string msg, params object[] args)
         {
             if (string.IsNullOrEmpty(VisualStudioVersion))

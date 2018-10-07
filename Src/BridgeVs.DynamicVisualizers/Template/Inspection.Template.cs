@@ -46,7 +46,7 @@ namespace BridgeVs.DynamicVisualizers.Template
             _typeName = message.TypeName;
             _assemblies = message.ReferencedAssemblies;
             _typeToRetrieveFullName = TypeNameHelper.RemoveSystemNamespaces(message.TypeFullName);
-            _serializationType = message.SerializationType;
+            _serializationType = message.SerializationOption;
         }
     }
 }

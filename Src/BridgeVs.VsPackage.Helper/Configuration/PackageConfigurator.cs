@@ -43,8 +43,6 @@ namespace BridgeVs.VsPackage.Helper.Configuration
 
         private const string VersionRegistryValue = "LINQBridgeVsVersion";
         private const string InstallFolderPathRegistryValue = "InstallFolderPath";
-        private const string LinqPad5 = "LINQPad 5";
-        private const string LinqPad4 = "LINQPad 4";
 
         public static List<string> Dependencies => new List<string>
         {

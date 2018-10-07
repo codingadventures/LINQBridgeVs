@@ -1,26 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO.Abstractions.TestingHelpers;
-using BridgeVs.AnotherModel.Test;
+﻿using BridgeVs.AnotherModel.Test;
 using BridgeVs.DynamicVisualizers.Helper;
 using BridgeVs.Model.Test;
+using BridgeVs.Shared.FileSystem;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
+using System.IO.Abstractions.TestingHelpers;
+using TypeMock.ArrangeActAssert;
 
 namespace BridgeVs.DynamicVisualizers.Test.Helper
 {
     [TestClass]
     public class ReferencedAssemblyFinderHelperTests
     {
-        //private CustomType4 _customType4;
         private Dictionary<string, CustomType4> _dictionary;
         private const string SourcePath = @"c:\Root1\Version1\A\AnotherModel.Test.dll";
-        private const string registryKeyPath = @"Software\LINQBridgeVs\0.0\Solutions";
-        [ClassInitialize]
+        private static MockFileSystem _mockFileSystem;
+       [ClassInitialize]
         [TestCategory("UnitTest")]
         public static void Initialize(TestContext c)
         {
 
-            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            _mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                                                         {
                                                             {
                                                                SourcePath ,
@@ -30,20 +31,22 @@ namespace BridgeVs.DynamicVisualizers.Test.Helper
                                                                     }
                                                             }
                                                         });
+        }
 
-
-
-
-            AssemblyFinderHelper.FileSystem = mockFileSystem;
+        [TestCategory("UnitTest")]
+        [TestCleanup]
+        public void Cleanup()
+        {
+            Isolate.CleanUp();
         }
 
         [TestInitialize]
         [TestCategory("UnitTest")]
         public void Init()
         {
-            var customType4 = new CustomType4 { { "1", new AnotherModelTest() } };
+            Isolate.WhenCalled(() => FileSystemFactory.FileSystem).WillReturn(_mockFileSystem);
 
-
+            CustomType4 customType4 = new CustomType4 { { "1", new AnotherModelTest() } };
             _dictionary = new Dictionary<string, CustomType4> { { "2", customType4 } };
         }
 
@@ -51,7 +54,7 @@ namespace BridgeVs.DynamicVisualizers.Test.Helper
         [TestCategory("UnitTest")]
         public void FindReferencedAssembliesTest()
         {
-            var refAss = _dictionary.GetType().GetReferencedAssemblies(SourcePath);
+            List<string> refAss = _dictionary.GetType().GetReferencedAssemblies(SourcePath);
 
             Assert.IsTrue(refAss.Count > 0);
             Assert.AreEqual(refAss[0], SourcePath);

@@ -23,18 +23,16 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Collections;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text.RegularExpressions;
 using BridgeVs.DynamicVisualizers.Helper;
 using BridgeVs.DynamicVisualizers.Template;
-using Microsoft.VisualStudio.DebuggerVisualizers;
 using BridgeVs.Shared.Common;
 using BridgeVs.Shared.Logging;
 using BridgeVs.Shared.Options;
 using BridgeVs.Shared.Serialization;
+using Microsoft.VisualStudio.DebuggerVisualizers;
+using System;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace BridgeVs.DynamicVisualizers
 {
@@ -48,29 +46,13 @@ namespace BridgeVs.DynamicVisualizers
 
             try
             {
-                Type targetType = GetInterfaceTypeIfIsIterator(target);
-                string targetTypeFullName = TypeNameHelper.GetDisplayName(targetType, fullName: true);
-                string targetTypeName = TypeNameHelper.GetDisplayName(targetType, fullName: false);
-                
-                CalculateFileNameAndTypeName(targetTypeFullName, targetTypeName, out string fileName, out string typeName);
-
-                string truckId = Guid.NewGuid().ToString(); 
+                string truckId = Guid.NewGuid().ToString();
 
                 SerializationOption? serializationOption = Truck.SendCargo(target, truckId, CommonRegistryConfigurations.GetSerializationOption(vsVersion));
-               
+
                 if (serializationOption.HasValue)
                 {
-                    Message message = new Message
-                    {
-                        FileName = $"{fileName}.linq",
-                        TypeName = typeName.Trim(),
-                        TypeFullName = targetTypeFullName,
-                        TypeNamespace = targetType.Namespace,
-                        AssemblyQualifiedName = targetType.AssemblyQualifiedName,
-                        AssemblyName = targetType.Assembly.GetName().Name,
-                        TruckId = truckId,
-                        SerializationType = serializationOption.Value
-                    };
+                    Message message = new Message(truckId, serializationOption.Value, target.GetType());
 
                     BinaryFormatter binaryFormatter = new BinaryFormatter();
                     binaryFormatter.Serialize(outgoingData, message);
@@ -85,43 +67,9 @@ namespace BridgeVs.DynamicVisualizers
             catch (Exception exception)
             {
                 Log.Write(exception, "Error in BroadCastData");
-                exception.Capture(vsVersion, message: "Error broadcasting the data to linqpad");
+                exception.Capture(vsVersion, message: "Error broadcasting the data to LINQPad");
                 throw;
             }
-        }
-
-        private static void CalculateFileNameAndTypeName(string targetTypeFullName, string targetTypeName, out string fileName, out string typeName)
-        {
-            Regex pattern1 = new Regex("[<]");
-            Regex pattern2 = new Regex("[>]");
-            Regex pattern3 = new Regex("[,]");
-            Regex pattern4 = new Regex("[`]");
-            Regex pattern5 = new Regex("[ ]");
-
-            fileName = pattern1.Replace(targetTypeFullName, "(");
-            fileName = pattern2.Replace(fileName, ")");
-
-            typeName = pattern1.Replace(targetTypeName, string.Empty);
-            typeName = pattern2.Replace(typeName, string.Empty);
-            typeName = pattern3.Replace(typeName, string.Empty);
-            typeName = pattern4.Replace(typeName, string.Empty);
-            typeName = pattern5.Replace(typeName, string.Empty);
-
-            fileName = TypeNameHelper.RemoveSystemNamespaces(fileName);
-        }
-
-        private static Type GetInterfaceTypeIfIsIterator(object o)
-        {
-            Type @type = o.GetType();
-
-            if (!@type.IsNestedPrivate || !@type.Name.Contains("Iterator") ||
-                !@type.FullName.Contains("System.Linq.Enumerable") || !(o is IEnumerable)) return @type;
-
-            if (@type.BaseType == null || @type.BaseType.FullName.Contains("Object"))
-                return @type.GetInterface("IEnumerable`1");
-
-            Log.Write("Iterator type, LINQ Query found {0}", @type.BaseType.ToString());
-            return @type.BaseType.GetInterface("IEnumerable`1");
         }
 
         public override void GetData(object target, Stream outgoingData)

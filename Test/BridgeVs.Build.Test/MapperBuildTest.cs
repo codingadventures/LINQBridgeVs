@@ -23,13 +23,12 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System.IO;
 using BridgeVs.Build.Tasks;
 using BridgeVs.Build.Util;
-using BridgeVs.Locations;
 using BridgeVs.Model.Test;
 using BridgeVs.Shared.Locations;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.IO;
 
 namespace BridgeVs.Build.Test
 {
@@ -55,7 +54,7 @@ namespace BridgeVs.Build.Test
 
         private static string DotNetAssemblyName(string vsVersion)
         {
-           return VisualizerAssemblyNameFormat.GetDotNetVisualizerName(vsVersion);
+            return VisualizerAssemblyNameFormat.GetDotNetVisualizerName(vsVersion);
         }
 
         [ClassInitialize]

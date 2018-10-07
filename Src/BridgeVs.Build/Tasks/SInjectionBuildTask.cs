@@ -48,7 +48,7 @@ namespace BridgeVs.Build.Tasks
             try
             {
                 string snkCertificate = File.Exists(Snk) ? Snk : null;
-                var sInjection = new SInjection(Assembly, mode: PatchMode.Debug, snkCertificatePath: snkCertificate);
+                var sInjection = new SInjection(Assembly, snkCertificate);
                 return sInjection.Patch(SerializationTypes.BinarySerialization);
             }
             catch (Exception e)

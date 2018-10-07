@@ -16,15 +16,20 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
 // OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
 // HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using BridgeVs.DynamicVisualizers.Forms;
+using BridgeVs.DynamicVisualizers.Helper;
+using BridgeVs.DynamicVisualizers.Template;
+using BridgeVs.Shared.Common;
+using BridgeVs.Shared.Logging;
+using Microsoft.VisualStudio.DebuggerVisualizers;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Abstractions;
@@ -33,53 +38,24 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using System.Windows.Forms;
-using BridgeVs.DynamicVisualizers.Forms;
-using BridgeVs.DynamicVisualizers.Helper;
-using BridgeVs.DynamicVisualizers.Template;
+using BridgeVs.Shared.FileSystem;
 using Message = BridgeVs.DynamicVisualizers.Template.Message;
-using SharpRaven;
-using Microsoft.VisualStudio.DebuggerVisualizers;
-using BridgeVs.Shared.Logging;
-using BridgeVs.Shared.Common;
 
 namespace BridgeVs.DynamicVisualizers
 {
     /// <summary>
     /// Core of Dynamic Visualizer. This class is used by all four DynamicVisualizerVx (for VS2012, VS2013, VS2015, VS2017)
-    /// It opens LINQPad and create dynamically a linqscript.
+    /// It opens LINQPad and create dynamically a linq script.
     /// </summary>
     public class DynamicDebuggerVisualizer : DialogDebuggerVisualizer
     {
-        private static IFileSystem _fileSystem;
-        internal static IFileSystem FileSystem
-        {
-            get => _fileSystem ?? (_fileSystem = new FileSystem());
-            set => _fileSystem = value;
-        }
-
         #region [ Consts ]
         private const UInt32 WmKeydown = 0x0100;
         private const int VkF5 = 0x74;
         private const int SwShownormal = 1;
         #endregion
 
-        #region [ Constructors ]
-        public DynamicDebuggerVisualizer()
-        {
-            AssemblyFinderHelper.FileSystem = FileSystem;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DynamicDebuggerVisualizer"/> class. Internal for testing purpose only.
-        /// </summary>
-        /// <param name="fileSystem">The file system. System.IO.Abstraction can be used to Mock the file System. </param>
-        internal DynamicDebuggerVisualizer(IFileSystem fileSystem)
-        {
-            FileSystem = fileSystem;
-            AssemblyFinderHelper.FileSystem = FileSystem;
-        }
-
-        #endregion
+        private static IFileSystem FileSystem => FileSystemFactory.FileSystem;
 
         /// <summary>
         /// Deploys the dynamically generated linq script.
@@ -88,7 +64,7 @@ namespace BridgeVs.DynamicVisualizers
         internal void DeployLinqScript(Message message)
         {
             string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
-           
+
             try
             {
                 Log.Write("Entered in DeployLinqScript");
@@ -102,8 +78,8 @@ namespace BridgeVs.DynamicVisualizers
                     FileSystem.Directory.CreateDirectory(targetFolder);
 
                 string linqPadScriptPath = Path.Combine(targetFolder, message.FileName);
-                Log.Write("linqPadScriptPath: {0}", linqPadScriptPath); 
-                 
+                Log.Write("linqPadScriptPath: {0}", linqPadScriptPath);
+
                 Inspection linqQuery = new Inspection(message);
                 string linqQueryText = linqQuery.TransformText();
 
@@ -120,8 +96,7 @@ namespace BridgeVs.DynamicVisualizers
             }
             catch (Exception e)
             {
-                e.Capture(vsVersion, message: "Error deploying the linqpad script");
-
+                e.Capture(vsVersion, message: "Error deploying the LINQPad script");
                 Log.Write(e, "DynamicDebuggerVisualizer.DeployLinqScript");
                 throw;
             }
@@ -148,7 +123,7 @@ namespace BridgeVs.DynamicVisualizers
             Type type = Type.GetType(message.AssemblyQualifiedName);
 
             string originalTypeLocation = CommonRegistryConfigurations.GetOriginalAssemblyLocation(type, vsVersion);
-             
+
             message.ReferencedAssemblies.AddRange(type.GetReferencedAssemblies(originalTypeLocation));
 
             DeployLinqScript(message);
@@ -197,10 +172,8 @@ namespace BridgeVs.DynamicVisualizers
                     return;
 
                 Form formToShow = ShowLINQPad(dataStream, vsVersion);
-
-#if !TEST
+                
                 windowService.ShowDialog(formToShow);
-#endif
             }
             catch (Exception exception)
             {
@@ -213,9 +186,8 @@ namespace BridgeVs.DynamicVisualizers
 
         #region [ Private Static Methods ]
 
-
         /// <summary>
-        /// Sends the input to LINQPad. Simulates key inputs to run a linqscript (F5)
+        /// Sends the input to LINQPad. Simulates key inputs to run a linq script (F5)
         /// </summary>
         private static void SendInputToProcess(Process process)
         {
