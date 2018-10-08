@@ -23,11 +23,12 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using BridgeVs.Shared.FileSystem;
 using System;
-using System.IO;
-using System.Reflection;
-using System.Linq;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace BridgeVs.Shared.Common
 {
@@ -37,14 +38,12 @@ namespace BridgeVs.Shared.Common
     public static class CommonFolderPaths
     {
         private const string CustomAfterTargets = @"Targets\Custom.After.Microsoft.Common.targets";
+        private const string CustomBeforeTargets = @"Targets\Custom.Before.Microsoft.Common.targets";
 
         public static readonly string ProgramFilesFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-        private static readonly string SpecialWindowsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
-        private static readonly string LocalApplicationData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-        public static readonly string ApplicationData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        public static readonly string ApplicationDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
-        public static readonly string LogFolderPath = Path.Combine(LocalApplicationData, "BridgeVs");
-        public static readonly string GrappleFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Grapple");
+        public static readonly string LogFolderPath = Path.Combine(Path.GetTempPath(), "BridgeVs");
 
         public static readonly string VisualStudio2017Path = Path.Combine(ProgramFilesFolderPath, @"Microsoft Visual Studio\2017");
         public static readonly string VisualStudio2017EntPath = Path.Combine(ProgramFilesFolderPath, VisualStudio2017Path, "enterprise");
@@ -61,27 +60,16 @@ namespace BridgeVs.Shared.Common
 
         public static readonly string LinqPad4DestinationFolder = Path.Combine(ProgramFilesFolderPath, "LINQPad4");
         public static readonly string LinqPad5DestinationFolder = Path.Combine(ProgramFilesFolderPath, "LINQPad5");
-        public static readonly string LinqPadCustomQueryFolderConfigurationFile = Path.Combine(ApplicationData, "LINQPad", "QueryLocations.txt");
-        public static readonly string LinqPadCustomPluginFolderConfigurationFile = Path.Combine(ApplicationData, "LINQPad", "PluginLocations.txt");
+        public static readonly string LinqPadCustomQueryFolderConfigurationFile = Path.Combine(ApplicationDataPath, "LINQPad", "QueryLocations.txt");
+        public static readonly string LinqPadCustomPluginFolderConfigurationFile = Path.Combine(ApplicationDataPath, "LINQPad", "PluginLocations.txt");
 
         public static readonly string CustomAfterTargetFileNamePath = Path.Combine(InstallFolder, CustomAfterTargets);
         public static readonly string CustomAfterTargetFileName = Path.GetFileName(CustomAfterTargets);
+        public static readonly string CustomBeforeTargetFileName = Path.GetFileName(CustomBeforeTargets);
 
         public static readonly string MsBuildPath = Path.Combine(ProgramFilesFolderPath, "MSBuild");
 
         public static readonly string MsBuildPath2017 = Path.Combine(ProgramFilesFolderPath, $@"{VisualStudio2017Path}\{{0}}\MSBuild");
-
-        public static readonly string DotNet40FrameworkPath = Path.Combine(SpecialWindowsFolderPath, @"Microsoft.NET\Framework\v4.0.30319");
-
-        public static readonly string DotNet45FrameworkPath = Path.Combine(ProgramFilesFolderPath, @"MSBuild\12.0\Bin");
-
-        public static readonly string DotNet40Framework64Path = Path.Combine(SpecialWindowsFolderPath, @"Microsoft.NET\Framework64\v4.0.30319");
-
-        public static readonly string MicrosoftCommonTargetFileNamePath = Path.Combine(DotNet40FrameworkPath, "Microsoft.Common.targets");
-
-        public static readonly string MicrosoftCommonTarget45FileNamePath = Path.Combine(DotNet45FrameworkPath, "Microsoft.Common.targets");
-
-        public static readonly string MicrosoftCommonTargetX64FileNamePath = Path.Combine(DotNet40Framework64Path, "Microsoft.Common.targets");
 
         public static readonly string CommonReferenceAssembliesPath = @"Common7\IDE\ReferenceAssemblies\v2.0";
 
@@ -94,16 +82,16 @@ namespace BridgeVs.Shared.Common
         {
             get
             {
-#if !TEST
                 //I could cache the file here
-                if (File.Exists(LinqPadCustomQueryFolderConfigurationFile))
+                if (!FileSystemFactory.FileSystem.File.Exists(LinqPadCustomQueryFolderConfigurationFile))
                 {
-                    string customQueryFolderPath = File.ReadLines(LinqPadCustomQueryFolderConfigurationFile).FirstOrDefault();
-                    if (!string.IsNullOrEmpty(customQueryFolderPath))
-                        return Path.Combine(customQueryFolderPath, "BridgeVs");
+                    return Path.Combine(Documents, "LINQPad Queries", "BridgeVs");
                 }
-#endif
-                return Path.Combine(Documents, "LINQPad Queries", "BridgeVs");
+                string customQueryFolderPath = File.ReadLines(LinqPadCustomQueryFolderConfigurationFile).FirstOrDefault();
+
+                return !string.IsNullOrEmpty(customQueryFolderPath) 
+                    ? Path.Combine(customQueryFolderPath, "BridgeVs") 
+                    : Path.Combine(Documents, "LINQPad Queries", "BridgeVs");
             }
         }
 
@@ -112,12 +100,10 @@ namespace BridgeVs.Shared.Common
             get
             {
                 List<string> folders = new List<string>(10);
-#if !TEST
-                if (File.Exists(LinqPadCustomPluginFolderConfigurationFile))
+                if (FileSystemFactory.FileSystem.File.Exists(LinqPadCustomPluginFolderConfigurationFile))
                 {
                     folders.AddRange(File.ReadLines(LinqPadCustomPluginFolderConfigurationFile));
                 }
-#endif
                 folders.Add(Path.Combine(Documents, "LINQPad Plugins"));
                 return folders;
             }

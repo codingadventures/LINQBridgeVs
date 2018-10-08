@@ -25,22 +25,39 @@
 
 using BridgeVs.Shared.Common;
 using EnvDTE;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 
 namespace BridgeVs.VsPackage.Helper
 {
     public static class BridgeCommand
     {
-        public static void ActivateBridgeVsOnSolution(CommandAction action, List<Project> projects, string solutionName, string vsVersion,
+        private static readonly List<string> UnsupportedFrameworks = new List<string>(20)
+        {
+            "netstandard",
+            "netcoreapp",
+            "netcore",
+            "netmf",
+            "sl4",
+            "sl5",
+            "wp",
+            "uap",
+            "uap"
+        };
+
+        public static void ActivateBridgeVsOnSolution(CommandAction action, List<Project> projects, string solutionName,
+            string vsVersion,
             string vsEdition)
         {
             //enable each individual project by mapping the assembly name and location to a registry entry
             foreach (Project project in projects)
             {
                 string path = project.Properties.Item("FullPath").Value.ToString();
-                string outputPath = project.ConfigurationManager.ActiveConfiguration.Properties.Item("OutputPath").Value.ToString();
+                string outputPath = project.ConfigurationManager.ActiveConfiguration.Properties.Item("OutputPath").Value
+                    .ToString();
                 string fileName = project.Properties.Item("OutputFileName").Value.ToString();
                 string projectOutputPath = Path.Combine(path, outputPath, fileName);
 
@@ -63,13 +80,41 @@ namespace BridgeVs.VsPackage.Helper
             switch (executeParams.Action)
             {
                 case CommandAction.Enable:
-                    CommonRegistryConfigurations.EnableProject(executeParams.ProjectOutput, executeParams.AssemblyName, executeParams.SolutionName,
-                           executeParams.VsVersion);
+                    CommonRegistryConfigurations.EnableProject(executeParams.ProjectOutput, executeParams.AssemblyName,
+                        executeParams.SolutionName,
+                        executeParams.VsVersion);
                     break;
                 case CommandAction.Disable:
-                    CommonRegistryConfigurations.DisableProject(executeParams.AssemblyName, executeParams.SolutionName, executeParams.VsVersion);
+                    CommonRegistryConfigurations.DisableProject(executeParams.AssemblyName, executeParams.SolutionName,
+                        executeParams.VsVersion);
                     break;
             }
         }
+
+        public static bool IsEveryProjectSupported(List<Project> projects, string applicationVersion,
+            string applicationEdition)
+        {
+            foreach (Project project in projects)
+            {
+                string targetFramework = project.Properties.Item("TargetFrameworkMoniker").Value.ToString();
+                if (string.IsNullOrEmpty(targetFramework))
+                    continue;
+
+                string tfm = targetFramework.Split(',').FirstOrDefault();
+
+                if (!string.IsNullOrEmpty(tfm) && UnsupportedFrameworks.Any(s => Contains(tfm, s, StringComparison.OrdinalIgnoreCase)))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static bool Contains(string source, string toCheck, StringComparison comp)
+        {
+            return source?.IndexOf(toCheck, comp) >= 0;
+        }
+
     }
 }

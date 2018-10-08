@@ -28,6 +28,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using BridgeVs.Shared.Common;
 using BridgeVs.VsPackage.Helper;
 using BridgeVs.VsPackage.Helper.Configuration;
@@ -74,7 +75,16 @@ namespace BridgeVs.VsPackage
             if (projects.Count == 0)
                 return;
 
-            BridgeCommand.ActivateBridgeVsOnSolution(action, projects, SolutionName, _application.Version, _application.Edition);
+            if (BridgeCommand.IsEveryProjectSupported(projects, _application.Version, _application.Edition))
+            {
+                BridgeCommand.ActivateBridgeVsOnSolution(action, projects, SolutionName, _application.Version,
+                    _application.Edition);
+            }
+            else
+            {
+                string message = $@"Solution {SolutionName} contains one or more un-supported projects. ASP.NET Core, .NETCore, .NET standard and UAP are not supported by LINQBridgeVs.";
+                MessageBox.Show(message);
+            }
         }
 
         public void UpdateCommand(MenuCommand cmd, CommandAction action)

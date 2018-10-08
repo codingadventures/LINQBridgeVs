@@ -23,15 +23,11 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.CodeDom;
-using System.Collections;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using BridgeVs.Shared.Common;
+using BridgeVs.Shared.FileSystem;
 using BridgeVs.Shared.Logging;
 using BridgeVs.Shared.Options;
+using System;
+using System.IO;
 
 namespace BridgeVs.Shared.Serialization
 {
@@ -55,7 +51,7 @@ namespace BridgeVs.Shared.Serialization
             Log.Write($"SendCargo - Type {typeof(T).FullName}");
 
             IServiceSerializer serializer = CreateSerializationStrategy(serializationOption);
-            
+
             do
             {
                 try
@@ -72,7 +68,7 @@ namespace BridgeVs.Shared.Serialization
 
             if (byteStream.Length > 0)
             {
-                string filePath = Path.Combine(CommonFolderPaths.GrappleFolder, truckId);
+                string filePath = Path.Combine(FileSystemFactory.FileSystem.Path.GetTempPath(), truckId);
                 File.WriteAllBytes(filePath, byteStream);
                 if (serializer == null)
                     return null;
@@ -81,10 +77,10 @@ namespace BridgeVs.Shared.Serialization
                 Log.Write($"SendCargo - Cargo Sent - Byte sent: {byteStream.Length} - File Created: {filePath} - Serialization Used: {successfulSerialization}");
 
                 return successfulSerialization;
-            } 
+            }
 
             Log.Write($"SendCargo - It was not possible to serialize at all the type {typeof(T).FullName}");
-           
+
 
             return null;
         }
@@ -100,7 +96,7 @@ namespace BridgeVs.Shared.Serialization
 
             try
             {
-                byte[] byteStream = File.ReadAllBytes(Path.Combine(CommonFolderPaths.GrappleFolder, truckId));
+                byte[] byteStream = File.ReadAllBytes(Path.Combine(FileSystemFactory.FileSystem.Path.GetTempPath(), truckId));
                 IServiceSerializer serviceSerializer = CreateDeserializationStrategy(serializationOption);
                 return serviceSerializer != null ? serviceSerializer.Deserialize<T>(byteStream) : default(T);
             }
@@ -117,7 +113,7 @@ namespace BridgeVs.Shared.Serialization
             Log.Write("ReceiveCargo - UnLoading Cargo for Typeless object");
             try
             {
-                byte[] byteStream = File.ReadAllBytes(Path.Combine(CommonFolderPaths.GrappleFolder, truckId));
+                byte[] byteStream = File.ReadAllBytes(Path.Combine(FileSystemFactory.FileSystem.Path.GetTempPath(), truckId));
 
                 IServiceSerializer serviceSerializer = CreateDeserializationStrategy(serializationOption);
 
@@ -167,7 +163,7 @@ namespace BridgeVs.Shared.Serialization
         /// <param name="option"></param>
         /// <returns></returns>
         private static IServiceSerializer CreateDeserializationStrategy(SerializationOption option)
-        { 
+        {
             switch (option)
             {
                 case SerializationOption.JsonSerializer:

@@ -124,8 +124,15 @@ namespace BridgeVs.VsPackage.Helper.Configuration
         private static void DeployMsBuildTargets(string vsVersion, string vsEdition)
         {
             string msBuildDir = CreateMsBuildTargetDirectory(vsVersion, vsEdition);
-            //Copy the CustomAfter and CustomBefore to the default MSbuild v4.0 location
+            //Copy the CustomAfter and CustomBefore to the default MSBuild v4.0 location
             File.Copy(CommonFolderPaths.CustomAfterTargetFileNamePath, Path.Combine(msBuildDir, CommonFolderPaths.CustomAfterTargetFileName), true);
+
+            string customBeforeTarget = Path.Combine(msBuildDir, CommonFolderPaths.CustomBeforeTargetFileName);
+            if (File.Exists(customBeforeTarget)) //old before target, now obsolete
+            {
+                File.Delete(customBeforeTarget);
+            }
+               
         }
 
         private static void SetInstallationFolder(string vsVersion)
@@ -222,8 +229,6 @@ namespace BridgeVs.VsPackage.Helper.Configuration
             CreateLinqPadPluginFolders();
 
             CreateVisualizerFolder(vsVersion);
-
-            CreateGrappleFolder();
 
             CreateLogFolder();
 
@@ -354,15 +359,6 @@ namespace BridgeVs.VsPackage.Helper.Configuration
             SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
             sec.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
             Directory.CreateDirectory(debuggerVisualizerTargetFolder, sec);
-        }
-
-        private static void CreateGrappleFolder()
-        {
-            if (Directory.Exists(CommonFolderPaths.GrappleFolder))
-                return;
-
-            //no need for security access
-            Directory.CreateDirectory(CommonFolderPaths.GrappleFolder);
         }
 
         private static void CreateLogFolder()
