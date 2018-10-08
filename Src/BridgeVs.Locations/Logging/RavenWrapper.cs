@@ -61,15 +61,14 @@ namespace BridgeVs.Shared.Logging
                 return;
             }
 
-            Func<IRequester, IRequester> removeUserId = new Func<IRequester, IRequester>(req =>
-            {
-                HttpRequester request = req as HttpRequester;
+            Func<Requester, Requester> removeUserId = new Func<Requester, Requester>(request =>
+            { 
                 //GDPR compliant, no personal data sent: no server name, no username stored, no ip address
-                request.Data.JsonPacket.ServerName = LinqBridgeVs;
-                request.Data.JsonPacket.Contexts.Device.Name = LinqBridgeVs;
-                request.Data.JsonPacket.User.Username = CommonRegistryConfigurations.GetUniqueGuid(vsVersion);
-                request.Data.JsonPacket.Release = "1.4.6"; //read it from somewhere
-                request.Data.JsonPacket.User.IpAddress = "0.0.0.0";
+                request.Packet.ServerName = LinqBridgeVs;
+                request.Packet.Contexts.Device.Name = LinqBridgeVs;
+                request.Packet.User.Username = CommonRegistryConfigurations.GetUniqueGuid(vsVersion);
+                request.Packet.Release = "1.4.6"; //read it from somewhere
+                request.Packet.User.IpAddress = "0.0.0.0";
                 return request;
             });
 

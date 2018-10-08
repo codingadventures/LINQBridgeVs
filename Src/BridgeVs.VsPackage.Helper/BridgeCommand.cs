@@ -23,42 +23,16 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
+using BridgeVs.Shared.Common;
+using EnvDTE;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
-using BridgeVs.VsPackage.Helper.Configuration;
-using EnvDTE;
-using Microsoft.Win32;
 
 namespace BridgeVs.VsPackage.Helper
 {
     public static class BridgeCommand
     {
-        private const string EnabledProjectsRegistryKey = @"Software\LINQBridgeVs\{0}\Solutions\{1}";
-        private const string SolutionEnabled = "SolutionEnabled";
-
-        private static void EnableProject(string assemblyPath, string assemblyName, string solutionName, string vsVersion)
-        {
-            string keyPath = string.Format(PackageConfigurator.GetRegistryKey(EnabledProjectsRegistryKey, vsVersion, solutionName));
-            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(keyPath))
-            {
-                key?.SetValue($"{assemblyName}", "True", RegistryValueKind.String);
-                key?.SetValue($"{assemblyName}_location", Path.GetFullPath(assemblyPath), RegistryValueKind.String);
-            }
-        }
-
-        private static void DisableProject(string assemblyName, string solutionName, string vsVersion)
-        {
-            string keyPath = string.Format(PackageConfigurator.GetRegistryKey(EnabledProjectsRegistryKey, vsVersion, solutionName));
-
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(keyPath, true))
-            {
-                key?.DeleteValue(assemblyName, false);
-                key?.DeleteValue($"{assemblyName}_location", false);
-            }
-        }
-
         public static void ActivateBridgeVsOnSolution(CommandAction action, List<Project> projects, string solutionName, string vsVersion,
             string vsEdition)
         {
@@ -76,12 +50,7 @@ namespace BridgeVs.VsPackage.Helper
                 Execute(executeParams);
             }
 
-            //now create a general solution flag to mark the current solution as activated
-            string keyPath = string.Format(PackageConfigurator.GetRegistryKey(EnabledProjectsRegistryKey, vsVersion, solutionName));
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(keyPath, true))
-            {
-                key?.SetValue(SolutionEnabled, action == CommandAction.Enable ? "True" : "False", RegistryValueKind.String);
-            }
+            CommonRegistryConfigurations.EnableSolution(solutionName, vsVersion, action == CommandAction.Enable);
 
             string result = action == CommandAction.Enable ? "Bridged" : "Un-Bridged";
             string userAction = action == CommandAction.Enable ? "Please rebuild your solution." : string.Empty;
@@ -89,28 +58,16 @@ namespace BridgeVs.VsPackage.Helper
             MessageBox.Show(message);
         }
 
-        public static bool IsSolutionEnabled(string solutionName, string vsVersion)
-        {
-            string keyPath = string.Format(PackageConfigurator.GetRegistryKey(EnabledProjectsRegistryKey, vsVersion, solutionName));
-
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(keyPath, false))
-            {
-                if (key == null) return false;
-                string value = (string)key.GetValue(SolutionEnabled);
-                return value != null && Convert.ToBoolean(value);
-            }
-        }
-
         private static void Execute(ExecuteParams executeParams)
         {
             switch (executeParams.Action)
             {
                 case CommandAction.Enable:
-                    EnableProject(executeParams.ProjectOutput, executeParams.AssemblyName, executeParams.SolutionName,
-                        executeParams.VsVersion);
+                    CommonRegistryConfigurations.EnableProject(executeParams.ProjectOutput, executeParams.AssemblyName, executeParams.SolutionName,
+                           executeParams.VsVersion);
                     break;
                 case CommandAction.Disable:
-                    DisableProject(executeParams.AssemblyName, executeParams.SolutionName, executeParams.VsVersion);
+                    CommonRegistryConfigurations.DisableProject(executeParams.AssemblyName, executeParams.SolutionName, executeParams.VsVersion);
                     break;
             }
         }

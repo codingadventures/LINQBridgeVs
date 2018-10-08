@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using System.Linq;
 using BridgeVs.Shared.Options;
+using System.IO;
 
 namespace BridgeVs.Shared.Common
 {
@@ -9,16 +10,22 @@ namespace BridgeVs.Shared.Common
     {
         private const string ErrorTrackingRegistryValue = "SentryErrorTracking";
         private const string SerializationMethodRegistryValue = "SerializationMethod";
+        private const string EnabledProjectsRegistryKey = @"Software\LINQBridgeVs\{0}\Solutions\{1}";
+
         public const string LoggingRegistryValue = "Logging";
 
         // ReSharper disable once InconsistentNaming
         private const string LINQPadInstallationPathRegistryValue = "LINQPadInstallationPath";
         // ReSharper disable once InconsistentNaming
-        private const string LINQPadVersionPathRegistryValue = "LINQPadVersion";
 
         public const string InstallationGuidRegistryValue = "UniqueId";
 
 
+        public static string GetRegistryKey(string key, params object[] argStrings)
+        {
+            return string.Format(key, argStrings);
+        }
+        
         // ReSharper disable once InconsistentNaming
         public static string GetLINQPadInstallationPath(string vsVersion)
         {
@@ -33,6 +40,50 @@ namespace BridgeVs.Shared.Common
             {
                 key?.SetValue(LINQPadInstallationPathRegistryValue, installationPath);
             }
+        }
+
+        public static void EnableProject(string assemblyPath, string assemblyName, string solutionName, string vsVersion)
+        {
+            string keyPath = string.Format(GetRegistryKey(EnabledProjectsRegistryKey, vsVersion, solutionName));
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(keyPath))
+            {
+                key?.SetValue($"{assemblyName}", "True", RegistryValueKind.String);
+                key?.SetValue($"{assemblyName}_location", Path.GetFullPath(assemblyPath), RegistryValueKind.String);
+            }
+        }
+
+        public static void DisableProject(string assemblyName, string solutionName, string vsVersion)
+        {
+            string keyPath = string.Format(GetRegistryKey(EnabledProjectsRegistryKey, vsVersion, solutionName));
+
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(keyPath, true))
+            {
+                key?.DeleteValue(assemblyName, false);
+                key?.DeleteValue($"{assemblyName}_location", false);
+            }
+        }
+        
+        public static bool IsSolutionEnabled(string solutionName, string vsVersion)
+        {
+            string keyPath = string.Format(GetRegistryKey(EnabledProjectsRegistryKey, vsVersion, solutionName));
+
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(keyPath, false))
+            {
+                if (key == null) return false;
+                string value = (string)key.GetValue("SolutionEnabled");
+                return value != null && Convert.ToBoolean(value);
+            }
+        }
+
+        public static void EnableSolution(string solutionName, string vsVersion, bool enable)
+        {
+            //now create a general solution flag to mark the current solution as activated
+            string keyPath = string.Format(CommonRegistryConfigurations.GetRegistryKey(EnabledProjectsRegistryKey, vsVersion, solutionName));
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(keyPath, true))
+            {
+                key?.SetValue("SolutionEnabled", enable ? "True" : "False", RegistryValueKind.String);
+            }
+
         }
 
         public static bool IsErrorTrackingEnabled(string vsVersion)
@@ -66,7 +117,7 @@ namespace BridgeVs.Shared.Common
         /// <returns></returns>
         public static string GetOriginalAssemblyLocation(Type @type, string vsVersion)
         {
-            bool isSystemAssembly(string name) => name.Contains("Microsoft") || name.Contains("System") || name.Contains("mscorlib");
+            bool IsSystemAssembly(string name) => name.Contains("Microsoft") || name.Contains("System") || name.Contains("mscorlib");
 
             string registryKeyPath = $@"Software\LINQBridgeVs\{vsVersion}\Solutions";
 
@@ -83,11 +134,11 @@ namespace BridgeVs.Shared.Common
 
                         string name = subKey?.GetValueNames().FirstOrDefault(p =>
                         {
-                            if (!@type.IsGenericType)
-                                return p == @type.Assembly.GetName().Name;
-                            Type genericType = @type.GetGenericArguments()[0];
+                            if (!type.IsGenericType)
+                                return p == type.Assembly.GetName().Name;
+                            Type genericType = type.GetGenericArguments()[0];
 
-                            if (isSystemAssembly(genericType.Assembly.GetName().Name))
+                            if (IsSystemAssembly(genericType.Assembly.GetName().Name))
                                 return false;
 
                             return p == genericType.Assembly.GetName().Name;

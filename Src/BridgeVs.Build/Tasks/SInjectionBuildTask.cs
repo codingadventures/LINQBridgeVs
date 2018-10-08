@@ -25,6 +25,7 @@
 
 using System;
 using System.IO;
+using BridgeVs.Shared.Common;
 using BridgeVs.Shared.Logging;
 using Microsoft.Build.Framework;
 
@@ -41,14 +42,22 @@ namespace BridgeVs.Build.Tasks
         [Required]
         public string Snk { get; set; }
 
+        [Required]
+        public string SolutionName { get; set; }
+
         public bool Execute()
         {
             Log.VisualStudioVersion = VisualStudioVer;
 
+            if (!CommonRegistryConfigurations.IsSolutionEnabled(SolutionName, VisualStudioVer))
+            {
+                return true;
+            }
+
             try
             {
                 string snkCertificate = File.Exists(Snk) ? Snk : null;
-                var sInjection = new SInjection(Assembly, snkCertificate);
+                SInjection sInjection = new SInjection(Assembly, snkCertificate);
                 return sInjection.Patch(SerializationTypes.BinarySerialization);
             }
             catch (Exception e)

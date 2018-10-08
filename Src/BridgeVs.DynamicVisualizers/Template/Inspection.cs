@@ -34,7 +34,7 @@ namespace BridgeVs.DynamicVisualizers.Template
   <Namespace>System.Dynamic</Namespace>
   <Namespace>System.Runtime.Serialization.Formatters</Namespace>
   <Namespace>System.Xml.Linq</Namespace>
-  <Namespace>BridgeVs.Shared.Grapple</Namespace>
+  <Namespace>BridgeVs.Shared.Serialization</Namespace>
   <Namespace>BridgeVs.Shared</Namespace>
   <Namespace>BridgeVs.Shared.Options</Namespace>
   <Namespace>");
@@ -47,7 +47,7 @@ namespace BridgeVs.DynamicVisualizers.Template
             this.Write("</Namespace>\r\n  ");
             
             #line 17 "C:\Users\Jarvis\Documents\GitHub\LINQBridgeVs\Src\BridgeVs.DynamicVisualizers\Template\Inspection.tt"
- foreach(var elem in this._assemblies) {
+ foreach(var elem in this._assemblies.Distinct()) {
 		if (!elem.Contains("mscorlib")){
             
             #line default

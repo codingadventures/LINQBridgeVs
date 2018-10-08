@@ -28,6 +28,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
+using BridgeVs.Shared.Common;
 using BridgeVs.VsPackage.Helper;
 using BridgeVs.VsPackage.Helper.Configuration;
 using EnvDTE;
@@ -92,7 +93,7 @@ namespace BridgeVs.VsPackage
             if (!isBridgeVsConfigured)
                 return result; //just show it as visible
 
-            bool isSolutionEnabled = BridgeCommand.IsSolutionEnabled(SolutionName, _application.Version);
+            bool isSolutionEnabled = CommonRegistryConfigurations.IsSolutionEnabled(SolutionName, _application.Version);
 
             if (isSolutionEnabled && action == CommandAction.Disable || !isSolutionEnabled && action == CommandAction.Enable)
                 result |= CommandStates.Enabled;

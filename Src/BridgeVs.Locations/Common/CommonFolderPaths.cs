@@ -37,7 +37,6 @@ namespace BridgeVs.Shared.Common
     public static class CommonFolderPaths
     {
         private const string CustomAfterTargets = @"Targets\Custom.After.Microsoft.Common.targets";
-        private const string CustomBeforeTargets = @"Targets\Custom.Before.Microsoft.Common.targets";
 
         public static readonly string ProgramFilesFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
         private static readonly string SpecialWindowsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
@@ -67,9 +66,6 @@ namespace BridgeVs.Shared.Common
 
         public static readonly string CustomAfterTargetFileNamePath = Path.Combine(InstallFolder, CustomAfterTargets);
         public static readonly string CustomAfterTargetFileName = Path.GetFileName(CustomAfterTargets);
-
-        public static readonly string CustomBeforeTargetFileNamePath = Path.Combine(InstallFolder, CustomBeforeTargets);
-        public static readonly string CustomBeforeTargetFileName = Path.GetFileName(CustomBeforeTargets);
 
         public static readonly string MsBuildPath = Path.Combine(ProgramFilesFolderPath, "MSBuild");
 

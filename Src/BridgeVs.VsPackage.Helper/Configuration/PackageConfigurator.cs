@@ -46,7 +46,6 @@ namespace BridgeVs.VsPackage.Helper.Configuration
 
         public static List<string> Dependencies => new List<string>
         {
-            "BridgeVs.Grapple.dll",
             "BridgeVs.Shared.dll",
             "Newtonsoft.Json.dll",
             "System.IO.Abstractions.dll",
@@ -57,7 +56,7 @@ namespace BridgeVs.VsPackage.Helper.Configuration
 
         private static string InstalledExtensionVersion(string vsVersion)
         {
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(GetRegistryKey(Resources.ProductVersion, vsVersion)))
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(CommonRegistryConfigurations.GetRegistryKey(Resources.ProductVersion, vsVersion)))
             {
                 if (key == null) return string.Empty;
 
@@ -73,8 +72,8 @@ namespace BridgeVs.VsPackage.Helper.Configuration
         // ReSharper disable once InconsistentNaming
         private static bool IsLINQPadInstalled(string vsVersion)
         {
-            var currentInstalledVersionPath = CommonRegistryConfigurations.GetLINQPadInstallationPath(vsVersion);
-            var alreadyInstalled = !string.IsNullOrEmpty(currentInstalledVersionPath);
+            string currentInstalledVersionPath = CommonRegistryConfigurations.GetLINQPadInstallationPath(vsVersion);
+            bool alreadyInstalled = !string.IsNullOrEmpty(currentInstalledVersionPath);
 
             if (alreadyInstalled && Directory.Exists(currentInstalledVersionPath))
                 return true;
@@ -127,14 +126,12 @@ namespace BridgeVs.VsPackage.Helper.Configuration
             string msBuildDir = CreateMsBuildTargetDirectory(vsVersion, vsEdition);
             //Copy the CustomAfter and CustomBefore to the default MSbuild v4.0 location
             File.Copy(CommonFolderPaths.CustomAfterTargetFileNamePath, Path.Combine(msBuildDir, CommonFolderPaths.CustomAfterTargetFileName), true);
-
-            File.Copy(CommonFolderPaths.CustomBeforeTargetFileNamePath, Path.Combine(msBuildDir, CommonFolderPaths.CustomBeforeTargetFileName), true);
         }
 
         private static void SetInstallationFolder(string vsVersion)
         {
             //Set in the registry the installer location if it is has changed
-            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(GetRegistryKey(Resources.ProductRegistryKey, vsVersion)))
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(CommonRegistryConfigurations.GetRegistryKey(Resources.ProductRegistryKey, vsVersion)))
             {
                 if (key == null) return;
 
@@ -150,16 +147,11 @@ namespace BridgeVs.VsPackage.Helper.Configuration
         private static string GetInstallationFolder(string vsVersion)
         {
             //Set in the registry the installer location if it is has changed
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(GetRegistryKey(Resources.ProductRegistryKey, vsVersion)))
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(CommonRegistryConfigurations.GetRegistryKey(Resources.ProductRegistryKey, vsVersion)))
             {
                 object value = key?.GetValue(InstallFolderPathRegistryValue);
                 return value?.ToString();
             }
-        }
-
-        public static string GetRegistryKey(string key, params object[] argStrings)
-        {
-            return string.Format(key, argStrings);
         }
 
         private static string CreateMsBuildTargetDirectory(string vsVersion, string vsEdition)
@@ -211,7 +203,7 @@ namespace BridgeVs.VsPackage.Helper.Configuration
         }
         private static void SetBridgeVsAssemblyVersion(string vsVersion)
         {
-            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(GetRegistryKey(Resources.ProductVersion, vsVersion)))
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(CommonRegistryConfigurations.GetRegistryKey(Resources.ProductVersion, vsVersion)))
             {
                 key?.SetValue(VersionRegistryValue, CurrentAssemblyVersion);
             }

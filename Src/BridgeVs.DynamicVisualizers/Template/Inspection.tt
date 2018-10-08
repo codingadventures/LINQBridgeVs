@@ -10,11 +10,11 @@
   <Namespace>System.Dynamic</Namespace>
   <Namespace>System.Runtime.Serialization.Formatters</Namespace>
   <Namespace>System.Xml.Linq</Namespace>
-  <Namespace>BridgeVs.Shared.Grapple</Namespace>
+  <Namespace>BridgeVs.Shared.Serialization</Namespace>
   <Namespace>BridgeVs.Shared</Namespace>
   <Namespace>BridgeVs.Shared.Options</Namespace>
   <Namespace><#= _typeNamespace #></Namespace>
-  <# foreach(var elem in this._assemblies) {
+  <# foreach(var elem in this._assemblies.Distinct()) {
 		if (!elem.Contains("mscorlib")){#>
 <Reference><#=elem#></Reference>
 	<#}

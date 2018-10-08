@@ -25,6 +25,7 @@
 
 using System.IO;
 using BridgeVs.Build.Util;
+using BridgeVs.Shared.Common;
 using BridgeVs.Shared.Locations;
 using BridgeVs.Shared.Logging;
 using Microsoft.Build.Framework;
@@ -33,9 +34,26 @@ namespace BridgeVs.Build.Tasks
 {
     public class CleanBuildTask : ITask
     {
+        [Required]
+        public string VisualStudioVer { private get; set; }
+
+        [Required]
+        public string Assembly { private get; set; }
+
+        [Required]
+        public string SolutionName { get; set; }
+
+        public IBuildEngine BuildEngine { get; set; }
+        public ITaskHost HostObject { get; set; }
+
         public bool Execute()
         {
             Log.VisualStudioVersion = VisualStudioVer;
+
+            if (!CommonRegistryConfigurations.IsSolutionEnabled(SolutionName, VisualStudioVer))
+            {
+                return true;
+            }
 
             try
             {
@@ -62,14 +80,5 @@ namespace BridgeVs.Build.Tasks
 
             return true;
         }
-
-        [Required]
-        public string VisualStudioVer { private get; set; }
-
-        [Required]
-        public string Assembly { private get; set; }
-
-        public IBuildEngine BuildEngine { get; set; }
-        public ITaskHost HostObject { get; set; }
     }
 }

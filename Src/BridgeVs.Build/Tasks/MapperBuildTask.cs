@@ -23,15 +23,16 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using BridgeVs.Build.TypeMapper;
+using BridgeVs.Build.Util;
+using BridgeVs.Shared.Common;
+using BridgeVs.Shared.Locations;
+using BridgeVs.Shared.Logging;
+using Microsoft.Build.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using BridgeVs.Build.TypeMapper;
-using BridgeVs.Build.Util;
-using BridgeVs.Shared.Locations;
-using BridgeVs.Shared.Logging;
-using Microsoft.Build.Framework;
 
 namespace BridgeVs.Build.Tasks
 {
@@ -44,6 +45,9 @@ namespace BridgeVs.Build.Tasks
 
         [Required]
         public string VisualStudioVer { private get; set; }
+
+        [Required]
+        public string SolutionName { get; set; }
 
         private string TargetVisualizerAssemblyName
             => VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(VisualStudioVer, Assembly);
@@ -66,6 +70,11 @@ namespace BridgeVs.Build.Tasks
         public bool Execute()
         {
             Log.VisualStudioVersion = VisualStudioVer;
+
+            if (!CommonRegistryConfigurations.IsSolutionEnabled(SolutionName, VisualStudioVer))
+            {
+                return true;
+            }
 
             try
             {

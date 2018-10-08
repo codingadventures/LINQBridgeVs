@@ -130,7 +130,7 @@ namespace BridgeVs.Build.TypeMapper
 
         private void RemapAssembly()
         {
-            var microsoftDebuggerVisualizerAssembly = _debuggerVisualizerAssembly.MainModule.AssemblyReferences.First(p => p.Name == "Microsoft.VisualStudio.DebuggerVisualizers");
+            AssemblyNameReference microsoftDebuggerVisualizerAssembly = _debuggerVisualizerAssembly.MainModule.AssemblyReferences.First(p => p.Name == "Microsoft.VisualStudio.DebuggerVisualizers");
 
             if (microsoftDebuggerVisualizerAssembly.Version.Major == _targetVsVersion)
                 return;
