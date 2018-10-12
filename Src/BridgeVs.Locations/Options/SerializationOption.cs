@@ -31,6 +31,7 @@ namespace BridgeVs.Shared.Options
     public enum SerializationOption
     {
         JsonSerializer,
-        BinarySerializer
+        BinarySerializer,
+        XmlSerializer
     }
 }
