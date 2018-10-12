@@ -23,7 +23,6 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using BridgeVs.Shared.Common;
 using BridgeVs.Shared.Logging;
 using System;
 using System.Collections.Generic;
@@ -47,6 +46,12 @@ namespace BridgeVs.DynamicVisualizers.Helper
 
         public static IEnumerable<string> GetReferencedAssembliesPath(this _Assembly assembly, string location, bool includeSystemAssemblies = false)
         {
+            if (string.IsNullOrEmpty(location))
+                return Enumerable.Empty<string>();
+
+            if (string.IsNullOrWhiteSpace(location))
+                return Enumerable.Empty<string>();
+
             Log.Write("GetReferencedAssembliesPath Started - Parameters assembly: {0}, includeSystemAssemblies: {1}", assembly.ToString(), includeSystemAssemblies);
             List<string> retPaths = new List<string>();
 
@@ -68,14 +73,12 @@ namespace BridgeVs.DynamicVisualizers.Helper
             catch (Exception exception)
             {
                 string context = $"GetDirectoryName of assembly: {assembly.FullName} failed. Path is wrong {location}";
-                string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
-
                 Log.Write(exception, context);
-                exception.Capture(vsVersion, message: context);
             }
 
 
-            if (string.IsNullOrEmpty(currentAssemblyPath)) return Enumerable.Empty<string>();
+            if (string.IsNullOrEmpty(currentAssemblyPath))
+                return Enumerable.Empty<string>();
 
             Log.Write("currentAssemblyPath: {0}", currentAssemblyPath);
 

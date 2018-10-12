@@ -23,26 +23,25 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using BridgeVs.Shared.Options;
 using System;
 using System.IO;
-using BridgeVs.Shared.Options;
 using MicrosoftXml = System.Xml.Serialization;
 
 namespace BridgeVs.Shared.Serialization
 {
     public sealed class XmlSerializer : IServiceSerializer
-    { 
+    {
         public IServiceSerializer Next { get; set; }
-		
+
         public void Serialize<T>(Stream aStream, T objToSerialize)
         {
-            using (MicrosoftXml.XmlSerializer xmlSerializer = new MicrosoftXml.XmlSerializer(typeof(T)))
-            {
-                xmlSerializer.Serialize(aStream, objToSerialize);
-            }
+            MicrosoftXml.XmlSerializer xmlSerializer = new MicrosoftXml.XmlSerializer(typeof(T));
+
+            xmlSerializer.Serialize(aStream, objToSerialize);
         }
 
-        public  byte[] Serialize<T>(T objToSerialize)
+        public byte[] Serialize<T>(T objToSerialize)
         {
             using (MemoryStream stream = new MemoryStream())
             {
@@ -51,35 +50,35 @@ namespace BridgeVs.Shared.Serialization
             }
         }
 
-        public  T Deserialize<T>(Stream aStream)
+        public T Deserialize<T>(Stream aStream)
         {
-            using ( MicrosoftXml.XmlSerializer xmlSerializer = new MicrosoftXml.XmlSerializer xmlSerializer(typeof(T)))
-            {
-                return xmlSerializer.Deserialize(aStream) as T;
-            }
+            MicrosoftXml.XmlSerializer xmlSerializer = new MicrosoftXml.XmlSerializer(typeof(T));
+
+            return (T) xmlSerializer.Deserialize(aStream);
+
         }
 
-        public  T Deserialize<T>(byte[] objToDeserialize)
+        public T Deserialize<T>(byte[] objToDeserialize)
         {
             using (MemoryStream stream = new MemoryStream(objToDeserialize))
             {
-                T t = Deserialize<T>(stream);
+                return Deserialize<T>(stream);
             }
         }
 
         public object Deserialize(byte[] objToDeserialize, Type type = null)
         {
 
-			if (type == null)
-				return null; //cannot deserialize with xml a not-known type
-			
+            if (type == null)
+                return null; //cannot deserialize with xml a not-known type
+
+            MicrosoftXml.XmlSerializer xmlSerializer = new MicrosoftXml.XmlSerializer(type);
             using (MemoryStream stream = new MemoryStream(objToDeserialize))
-			using ( MicrosoftXml.XmlSerializer xmlSerializer = new MicrosoftXml.XmlSerializer xmlSerializer(type))
             {
-                return  xmlSerializer.Deserialize(stream);
+                return xmlSerializer.Deserialize(stream);
             }
         }
-        
+
         public override string ToString()
         {
             return SerializationOption.XmlSerializer.ToString();

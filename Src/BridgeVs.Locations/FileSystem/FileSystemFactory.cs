@@ -10,6 +10,6 @@ namespace BridgeVs.Shared.FileSystem
     {
         private static readonly Lazy<IFileSystem> RealFileSystem = new Lazy<IFileSystem>(() => new System.IO.Abstractions.FileSystem());
 
-        public static IFileSystem FileSystem =>  RealFileSystem.Value;
+        public static IFileSystem FileSystem => RealFileSystem.Value;
     }
 }

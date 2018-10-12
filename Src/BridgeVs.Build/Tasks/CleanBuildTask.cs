@@ -26,8 +26,8 @@
 using System.IO;
 using BridgeVs.Build.Util;
 using BridgeVs.Shared.Common;
-using BridgeVs.Shared.Locations;
 using BridgeVs.Shared.Logging;
+using BridgeVs.Shared.Options;
 using Microsoft.Build.Framework;
 
 namespace BridgeVs.Build.Tasks

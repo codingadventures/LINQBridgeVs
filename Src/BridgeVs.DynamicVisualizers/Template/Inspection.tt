@@ -21,10 +21,6 @@
 }#></Query>
 
 void Main()
-{
-<# if (_typeToRetrieveFullName.Contains("AnonymousType")){#>
+{ 
 	Truck.ReceiveCargo("<#=_truckId#>",  SerializationOption.<#= _serializationType #>).Dump("<#=_typeToRetrieveFullName#>", 2);
-<#} else {#>
-	Truck.ReceiveCargo<<#=_typeToRetrieveFullName#>>("<#=_truckId#>", SerializationOption.<#= _serializationType #>).Dump("<#=_typeToRetrieveFullName#>", 2);
-<#}#>
 }

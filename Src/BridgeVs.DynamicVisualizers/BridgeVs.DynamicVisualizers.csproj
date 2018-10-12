@@ -87,6 +87,10 @@
     </Compile>
     <Compile Include="Helper\ReferencedAssemblyFinderHelper.cs" />
     <Compile Include="Helper\TypeNameHelper.cs" />
+    <Compile Include="Win32Interop.WinHandles\Internal\NativeMethods.cs" />
+    <Compile Include="Win32Interop.WinHandles\TopLevelWindowUtils.cs" />
+    <Compile Include="Win32Interop.WinHandles\WindowHandle.cs" />
+    <Compile Include="Win32Interop.WinHandles\WindowHandleExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

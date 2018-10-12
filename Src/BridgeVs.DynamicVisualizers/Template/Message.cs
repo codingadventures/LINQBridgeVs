@@ -26,7 +26,6 @@
 using BridgeVs.DynamicVisualizers.Helper;
 using BridgeVs.Shared.Options;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -55,7 +54,7 @@ namespace BridgeVs.DynamicVisualizers.Template
         public Message(string truckId, SerializationOption serializationOption, Type type)
         {
             Type targetType = GetInterfaceTypeIfIsIterator(type);
-           
+
             SerializationOption = serializationOption;
             FileName = $"{CalculateFileNameFromType(targetType)}.linq";
             TypeName = CalculateTypeNameFromType(targetType).Trim();
@@ -80,7 +79,7 @@ namespace BridgeVs.DynamicVisualizers.Template
         }
 
         private static Type GetInterfaceTypeIfIsIterator(Type type)
-        { 
+        {
             string typeFullName = type.FullName;
 
             bool isObjectEnumerable = !string.IsNullOrEmpty(typeFullName) && typeFullName.Contains("System.Linq.Enumerable");

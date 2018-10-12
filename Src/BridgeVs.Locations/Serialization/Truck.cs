@@ -68,7 +68,7 @@ namespace BridgeVs.Shared.Serialization
 
             if (byteStream.Length > 0)
             {
-                string filePath = Path.Combine(FileSystemFactory.FileSystem.Path.GetTempPath(), truckId);
+                string filePath = Path.Combine(Path.GetTempPath(), truckId);
                 File.WriteAllBytes(filePath, byteStream);
                 if (serializer == null)
                     return null;
@@ -142,11 +142,11 @@ namespace BridgeVs.Shared.Serialization
                 case SerializationOption.JsonSerializer:
                     serviceSerializer = new JsonSerializer()
                     {
-                        Next = new DefaultSerializer()
+                        Next = new BinarySerializer()
                     };
                     break;
                 case SerializationOption.BinarySerializer:
-                    serviceSerializer = new DefaultSerializer()
+                    serviceSerializer = new BinarySerializer()
                     {
                         Next = new JsonSerializer()
                     };
@@ -169,7 +169,7 @@ namespace BridgeVs.Shared.Serialization
                 case SerializationOption.JsonSerializer:
                     return new JsonSerializer();
                 case SerializationOption.BinarySerializer:
-                    return new DefaultSerializer();
+                    return new BinarySerializer();
             }
 
             Log.Write("CreateDeserializationStrategy - SerializationOption is not valid Value: {0}", option);

@@ -36,7 +36,7 @@ namespace BridgeVs.Shared.Serialization
     /// <summary>
     /// Default Binary Serializer. It uses the BinaryFormatter and it expects the types to be marked as Serializable
     /// </summary>
-    public sealed class DefaultSerializer : IServiceSerializer
+    public sealed class BinarySerializer : IServiceSerializer
     {
         private readonly BinaryFormatter _formatter = new BinaryFormatter();
 

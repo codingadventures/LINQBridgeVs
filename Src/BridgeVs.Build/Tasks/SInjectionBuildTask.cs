@@ -23,11 +23,11 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.IO;
 using BridgeVs.Shared.Common;
 using BridgeVs.Shared.Logging;
 using Microsoft.Build.Framework;
+using System;
+using System.IO;
 
 namespace BridgeVs.Build.Tasks
 {
@@ -57,8 +57,10 @@ namespace BridgeVs.Build.Tasks
             try
             {
                 string snkCertificate = File.Exists(Snk) ? Snk : null;
-                SInjection sInjection = new SInjection(Assembly, snkCertificate);
-                return sInjection.Patch(SerializationTypes.BinarySerialization);
+                using (SInjection sInjection = new SInjection(Assembly, snkCertificate))
+                {
+                    return sInjection.Patch(SerializationTypes.BinarySerialization);
+                }
             }
             catch (Exception e)
             {

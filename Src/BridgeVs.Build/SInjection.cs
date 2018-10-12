@@ -69,11 +69,12 @@ namespace BridgeVs.Build
         Release
     }
 
+    /// <inheritdoc />
     /// <summary>
     /// This class inject the Serializable Attribute to all public class types in a given assembly, and adds
     /// default deserialization constructor for those type which implement ISerializable interface
     /// </summary>
-    internal class SInjection
+    internal class SInjection : IDisposable
     {
         #region [ Private Properties ]
         private readonly string _assemblyLocation;
@@ -352,7 +353,6 @@ namespace BridgeVs.Build
                     using (FileStream s = new FileStream(_assemblyLocation, FileMode.OpenOrCreate, FileAccess.Write))
                     {
                         _assemblyDefinition.Write(s, GetWriterParameters());
-                       
                     }
 
                     return true;
@@ -368,5 +368,10 @@ namespace BridgeVs.Build
             return false;
         }
         #endregion
+
+        public void Dispose()
+        {
+            _assemblyDefinition?.Dispose();
+        }
     }
 }

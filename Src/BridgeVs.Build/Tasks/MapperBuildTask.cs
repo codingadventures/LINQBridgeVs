@@ -26,13 +26,13 @@
 using BridgeVs.Build.TypeMapper;
 using BridgeVs.Build.Util;
 using BridgeVs.Shared.Common;
-using BridgeVs.Shared.Locations;
 using BridgeVs.Shared.Logging;
 using Microsoft.Build.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BridgeVs.Shared.Options;
 
 namespace BridgeVs.Build.Tasks
 {

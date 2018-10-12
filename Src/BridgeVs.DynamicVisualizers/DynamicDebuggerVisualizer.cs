@@ -33,12 +33,12 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Abstractions;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using System.Windows.Forms;
 using BridgeVs.Shared.FileSystem;
+using Win32Interop.WinHandles;
 using Message = BridgeVs.DynamicVisualizers.Template.Message;
 
 namespace BridgeVs.DynamicVisualizers
@@ -52,7 +52,7 @@ namespace BridgeVs.DynamicVisualizers
         #region [ Consts ]
         private const UInt32 WmKeydown = 0x0100;
         private const int VkF5 = 0x74;
-        private const int SwShownormal = 1;
+        private const int SwShowNormal = 1;
         #endregion
 
         private static IFileSystem FileSystem => FileSystemFactory.FileSystem;
@@ -61,10 +61,9 @@ namespace BridgeVs.DynamicVisualizers
         /// Deploys the dynamically generated linq script.
         /// </summary>
         /// <param name="message">The message.</param>
-        internal void DeployLinqScript(Message message)
-        {
-            string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
-
+        /// <param name="vsVersion">The visual studio version</param>
+        internal void DeployLinqScript(Message message, string vsVersion)
+        { 
             try
             {
                 Log.Write("Entered in DeployLinqScript");
@@ -77,15 +76,15 @@ namespace BridgeVs.DynamicVisualizers
                 if (!FileSystem.Directory.Exists(targetFolder))
                     FileSystem.Directory.CreateDirectory(targetFolder);
 
-                string linqPadScriptPath = Path.Combine(targetFolder, message.FileName);
-                Log.Write("linqPadScriptPath: {0}", linqPadScriptPath);
+                string linqPadScriptFilePath = Path.Combine(targetFolder, $"{message.FileName} - {message.TruckId}");
+                Log.Write("linqPadScriptPath: {0}", linqPadScriptFilePath);
 
                 Inspection linqQuery = new Inspection(message);
                 string linqQueryText = linqQuery.TransformText();
 
                 Log.Write("LinqQuery file Transformed");
 
-                using (Stream memoryStream = FileSystem.File.Open(linqPadScriptPath, FileMode.Create))
+                using (Stream memoryStream = FileSystem.File.Open(linqPadScriptFilePath, FileMode.Create))
                 using (StreamWriter streamWriter = new StreamWriter(memoryStream))
                 {
                     streamWriter.Write(linqQueryText);
@@ -95,7 +94,7 @@ namespace BridgeVs.DynamicVisualizers
                 Log.Write("LinqQuery file Generated");
             }
             catch (Exception e)
-            {
+            { 
                 e.Capture(vsVersion, message: "Error deploying the LINQPad script");
                 Log.Write(e, "DynamicDebuggerVisualizer.DeployLinqScript");
                 throw;
@@ -126,7 +125,7 @@ namespace BridgeVs.DynamicVisualizers
 
             message.ReferencedAssemblies.AddRange(type.GetReferencedAssemblies(originalTypeLocation));
 
-            DeployLinqScript(message);
+            DeployLinqScript(message, vsVersion);
             Log.Write("LinqQuery Successfully deployed");
 
             string linqQueryFileName = Path.Combine(CommonFolderPaths.DefaultLinqPadQueryFolder, message.AssemblyName, message.FileName);
@@ -149,10 +148,8 @@ namespace BridgeVs.DynamicVisualizers
             }
             string linqPadExePath = Path.Combine(linqPadInstallationPath, "LINQPad.exe");
             string linqPadVersion = FileVersionInfo.GetVersionInfo(linqPadExePath).FileDescription;
-
-            Process foundProcess = Process.GetProcessesByName("LINQPad").FirstOrDefault(p => linqPadVersion.Equals(p.MainWindowTitle));
-
-            SendInputToProcess(foundProcess ?? process);
+             
+            SendInputToLinqPad(linqPadVersion);
 
             Log.Write("LINQPad Successfully started");
 
@@ -181,6 +178,9 @@ namespace BridgeVs.DynamicVisualizers
                 Log.Write(exception, context);
 
                 exception.Capture(vsVersion, message: context);
+                MessageBox.Show(
+                    $"There was an error during the transmission of the object to LINQPad {exception.StackTrace} ",
+                    "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -189,30 +189,16 @@ namespace BridgeVs.DynamicVisualizers
         /// <summary>
         /// Sends the input to LINQPad. Simulates key inputs to run a linq script (F5)
         /// </summary>
-        private static void SendInputToProcess(Process process)
+        private static void SendInputToLinqPad(string linqPadVersion)
         {
             try
             {
-                int index = 0;
-                while (process.MainWindowHandle == IntPtr.Zero && index < 3)
-                {
-                    // Discard cached information about the process
-                    // because MainWindowHandle might be cached.
-
-                    Log.Write("Waiting MainWindowHandle... - Iteration: {0}", ++index);
-                    process.Refresh();
-                    index++;
-                    Thread.Sleep(10);
-                }
-
-                ShowWindowAsync(process.MainWindowHandle, SwShownormal);
-                Log.Write("LINQPad ShowWindowAsync {0}", process.MainWindowHandle);
-
-                SetForegroundWindow(process.MainWindowHandle);
-
-                PostMessage(process.MainWindowHandle, WmKeydown, VkF5, 0);
-
-                Log.Write("LINQPad PostMessage {0}", VkF5);
+                WindowHandle linqPad = TopLevelWindowUtils.FindWindow(wh => wh.GetWindowText().Contains($"LINQPad {linqPadVersion}"));
+                IntPtr intPtr = linqPad.RawPtr;
+                ShowWindowAsync(intPtr, SwShowNormal);
+                SetForegroundWindow(intPtr);
+                Thread.Sleep(10); //just the time needed to open the window 
+                PostMessage(intPtr, WmKeydown, VkF5, 0);
             }
             catch (Exception e)
             {

@@ -24,7 +24,6 @@
 #endregion
 
 using BridgeVs.DynamicVisualizers.Helper;
-using BridgeVs.DynamicVisualizers.Template;
 using BridgeVs.Shared.Common;
 using BridgeVs.Shared.Logging;
 using BridgeVs.Shared.Options;
@@ -33,6 +32,8 @@ using Microsoft.VisualStudio.DebuggerVisualizers;
 using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Windows.Forms;
+using Message = BridgeVs.DynamicVisualizers.Template.Message;
 
 namespace BridgeVs.DynamicVisualizers
 {
@@ -60,6 +61,7 @@ namespace BridgeVs.DynamicVisualizers
                 else
                 {
                     //should throw an error message in a friendly way
+                    Log.Write("Serialization option returned null - Probably failed");
                 }
 
 
@@ -68,7 +70,8 @@ namespace BridgeVs.DynamicVisualizers
             {
                 Log.Write(exception, "Error in BroadCastData");
                 exception.Capture(vsVersion, message: "Error broadcasting the data to LINQPad");
-                throw;
+                MessageBox.Show($"There was an error sending the object to LINQPad {exception.StackTrace}", "Error!",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
