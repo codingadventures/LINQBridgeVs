@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 // Copyright (c) 2013 - 2018 Coding Adventures
 //
 // Permission is hereby granted, free of charge, to any person
@@ -30,7 +30,6 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using BridgeVs.Shared.Logging;
 using Microsoft.Build.Evaluation;
 
 namespace BridgeVs.Build.Dependency
@@ -42,13 +41,11 @@ namespace BridgeVs.Build.Dependency
         /// Finds the project dependencies given a csproj or vbproj file
         /// </summary>
         /// <param name="csvbProjectName">Name of the CS or VB project.</param>
-        /// <param name="solutionName">Name of the solution.</param>
         /// <returns></returns>
-        internal static IEnumerable<ProjectDependency> FindDependencies(string csvbProjectName, string solutionName)
+        internal static IEnumerable<ProjectDependency> FindDependencies(string csvbProjectName)
         {
             if (string.IsNullOrEmpty(csvbProjectName))
             {
-                Log.Write("BridgeVs.VsPackage.Helper.Dependency.Crawler: csvbProjectName is null or empty");
                 return Enumerable.Empty<ProjectDependency>();
             }
 
@@ -59,28 +56,19 @@ namespace BridgeVs.Build.Dependency
             Project loadedProject =
                 ProjectCollection.GlobalProjectCollection.LoadedProjects
                 .FirstOrDefault(p => CompareProjectFileName(p, csvbProjectName))
-                ??
-                new Project(csvbProjectName);
+                ?? new Project(csvbProjectName);
 
-            return
+            var assemblyReference =
                 from proj in loadedProject.Items
-                where proj.ItemType.Equals("ProjectReference") || proj.ItemType.Equals("Reference")
-                where !proj.EvaluatedInclude.Contains("Microsoft") && !proj.EvaluatedInclude.Contains("System")
-                where proj.ItemType.Equals("ProjectReference")
-                let referenceProjectFileName = Path.Combine(loadedProject.DirectoryPath, proj.Xml.Include)
-                let referenceProjectPath = Path.GetDirectoryName(referenceProjectFileName)
-                let referenceProjectXDocument = XDocument.Load(referenceProjectFileName)
-                let assemblyName = referenceProjectXDocument.XPathSelectElement("/aw:Project/aw:PropertyGroup/aw:AssemblyName", namespaceManager)?.Value
-                let outputType = referenceProjectXDocument.XPathSelectElement("/aw:Project/aw:PropertyGroup/aw:OutputType", namespaceManager)?.Value
-                let outputPath = referenceProjectXDocument.XPathSelectElement("/aw:Project/aw:PropertyGroup/aw:OutputPath", namespaceManager)?.Value
+                where proj.ItemType.Equals("Reference") && !proj.EvaluatedInclude.Contains("Microsoft") && !proj.EvaluatedInclude.Contains("System")
+                let info = proj.DirectMetadata.Select(p => p.EvaluatedValue)
                 select new ProjectDependency
                 {
-                    DependencyType =
-                        proj.ItemType.Equals("Reference") ? DependencyType.AssemblyReference : DependencyType.ProjectReference,
-                    AssemblyName = assemblyName,
-                    AssemblyPath = Path.GetFullPath(Path.Combine(referenceProjectPath, outputPath, assemblyName + (outputType.Equals("Library") ? ".dll" : ".exe"))),
-                    SolutionName = solutionName
+                    DependencyType = DependencyType.AssemblyReference,
+                    AssemblyPath = info.FirstOrDefault()
                 };
+
+            return assemblyReference;
         }
 
         private static readonly Func<Project, string, bool> CompareProjectFileName =
