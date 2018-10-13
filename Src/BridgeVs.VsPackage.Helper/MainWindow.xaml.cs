@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -65,7 +65,7 @@ namespace WpfApp1
             _process = Process.Start(psi);
             _process.WaitForInputIdle();
 
-           var winHandle = TopLevelWindowUtils.FindWindow(a => a.GetWindowText().Equals("LINQPad 5"));
+            var winHandle = TopLevelWindowUtils.FindWindow(a => a.GetWindowText().Equals("LINQPad 5"));
             while (winHandle.RawPtr == IntPtr.Zero)
             {
                 Thread.Yield();
