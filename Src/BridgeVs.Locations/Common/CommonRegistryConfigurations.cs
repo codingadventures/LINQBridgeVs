@@ -1,6 +1,7 @@
 ﻿using BridgeVs.Shared.Options;
 using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -12,6 +13,7 @@ namespace BridgeVs.Shared.Common
         private const string Map3RdPartyAssemblyRegistryValue = "Map3rdPartyAssembly";
         private const string SerializationMethodRegistryValue = "SerializationMethod";
         private const string EnabledProjectsRegistryKey = @"Software\LINQBridgeVs\{0}\Solutions\{1}";
+        private static readonly string ProjectReferencesRegistryKey = $@"{EnabledProjectsRegistryKey}\References";
 
         public const string LoggingRegistryValue = "Logging";
 
@@ -246,6 +248,17 @@ namespace BridgeVs.Shared.Common
             using (RegistryKey key = Registry.CurrentUser.CreateSubKey($@"Software\LINQBridgeVs\{vsVersion}"))
             {
                 key?.SetValue(InstallationGuidRegistryValue, guid);
+            }
+        }
+
+        public static void StoreProjectReferences(string executeParamsAssemblyName, string solutionName, string vsVersion, List<string> executeParamsReferences)
+        {
+            string keyPath = string.Format(GetRegistryKey(ProjectReferencesRegistryKey, vsVersion, solutionName));
+            Registry.CurrentUser.DeleteSubKeyTree(keyPath); //clean first
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(keyPath))
+            {
+                key?.SetValue($"{assemblyName}", "True", RegistryValueKind.String);
+                key?.SetValue($"{assemblyName}_location", Path.GetFullPath(assemblyPath), RegistryValueKind.String);
             }
         }
     }

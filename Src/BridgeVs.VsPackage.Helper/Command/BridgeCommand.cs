@@ -64,25 +64,18 @@ namespace BridgeVs.VsPackage.Helper.Command
                 string projectOutputPath = Path.Combine(path, outputPath, fileName);
 
                 string assemblyName = project.Properties.Item("AssemblyName").Value.ToString();
-                VSProject vsProject = project.Object as VSLangProj.VSProject;
+                VSProject vsProject = project.Object as VSProject;
                 if (vsProject?.References == null)
                 {
                     continue;
                 }
-                List<string> references = new List<string>();
 
-                foreach (Reference reference in vsProject.References)
-                {
-                    if (reference.SourceProject == null)
-                    {
-                        // This is an assembly reference
-                        references.Add(reference.Path);
-                    }
-                }
-
-
+                IEnumerable<string> references = from Reference reference in vsProject.References
+                    where reference.SourceProject == null
+                    select reference.Path;
+                
                 ExecuteParams executeParams = new ExecuteParams(action, project.FullName, solutionName, assemblyName,
-                    projectOutputPath, vsVersion, vsEdition, references);
+                    projectOutputPath, vsVersion, vsEdition, references.ToList());
                 Execute(executeParams);
             }
 
@@ -102,6 +95,9 @@ namespace BridgeVs.VsPackage.Helper.Command
                     CommonRegistryConfigurations.EnableProject(executeParams.ProjectOutput, executeParams.AssemblyName,
                         executeParams.SolutionName,
                         executeParams.VsVersion);
+                    CommonRegistryConfigurations.StoreProjectReferences(executeParams.AssemblyName,
+                        executeParams.SolutionName,
+                        executeParams.VsVersion, executeParams.References);
                     break;
                 case CommandAction.Disable:
                     CommonRegistryConfigurations.DisableProject(executeParams.AssemblyName, executeParams.SolutionName,
