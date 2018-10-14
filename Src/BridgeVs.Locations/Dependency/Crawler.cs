@@ -16,7 +16,7 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
 // OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
 // HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
@@ -28,23 +28,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
-using System.Xml.Linq;
-using System.Xml.XPath;
 using Microsoft.Build.Evaluation;
 
-namespace BridgeVs.Build.Dependency
+namespace BridgeVs.Shared.Dependency
 {
-    internal class Crawler
+    public class Crawler
     {
         private const string MsbuildNamespace = "http://schemas.microsoft.com/developer/msbuild/2003";
         /// <summary>
         /// Finds the project dependencies given a csproj or vbproj file
         /// </summary>
-        /// <param name="csvbProjectName">Name of the CS or VB project.</param>
+        /// <param name="projectFilePath">Path to the CS or VB project.</param>
         /// <returns></returns>
-        internal static IEnumerable<ProjectDependency> FindDependencies(string csvbProjectName)
+        public static IEnumerable<ProjectDependency> FindDependencies(string projectFilePath)
         {
-            if (string.IsNullOrEmpty(csvbProjectName))
+            if (string.IsNullOrEmpty(projectFilePath))
             {
                 return Enumerable.Empty<ProjectDependency>();
             }
@@ -55,17 +53,18 @@ namespace BridgeVs.Build.Dependency
 
             Project loadedProject =
                 ProjectCollection.GlobalProjectCollection.LoadedProjects
-                .FirstOrDefault(p => CompareProjectFileName(p, csvbProjectName))
-                ?? new Project(csvbProjectName);
+                .FirstOrDefault(p => CompareProjectFileName(p, projectFilePath))
+                ?? new Project(projectFilePath);
 
-            var assemblyReference =
+            IEnumerable<ProjectDependency> assemblyReference =
                 from proj in loadedProject.Items
                 where proj.ItemType.Equals("Reference") && !proj.EvaluatedInclude.Contains("Microsoft") && !proj.EvaluatedInclude.Contains("System")
-                let info = proj.DirectMetadata.Select(p => p.EvaluatedValue)
+                let info = proj.DirectMetadata.Select(p => p.EvaluatedValue).FirstOrDefault()
+                where !string.IsNullOrEmpty(info)
                 select new ProjectDependency
                 {
                     DependencyType = DependencyType.AssemblyReference,
-                    AssemblyPath = info.FirstOrDefault()
+                    AssemblyPath = info
                 };
 
             return assemblyReference;

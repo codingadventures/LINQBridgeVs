@@ -35,6 +35,7 @@ using System.IO;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
 using TypeMock.ArrangeActAssert;
 
@@ -98,7 +99,7 @@ namespace BridgeVs.DynamicVisualizers.Test
         public void DeployLinqScriptTest()
         {
             DynamicDebuggerVisualizer cVisualizerObjectSource = new DynamicDebuggerVisualizer();
-            cVisualizerObjectSource.DeployLinqScript(_message);
+            cVisualizerObjectSource.DeployLinqScript(_message, "15.0");
 
             string dstScriptPath = CommonFolderPaths.DefaultLinqPadQueryFolder;
 
@@ -142,6 +143,24 @@ namespace BridgeVs.DynamicVisualizers.Test
 
             bool linqIsEqual = CompareNormalisedString(linqQueryText, linqToCompare);
             Assert.IsTrue(linqIsEqual);
+        }
+
+        [TestMethod]
+        [TestCategory("IntegrationTest")]
+        public void SpawnDynamicDebuggerVisualizer()
+        {
+            Message msg;
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                DynamicObjectSource dynamicObjectSource = new DynamicObjectSource();
+                dynamicObjectSource.GetData(new XmlClass(), memoryStream);
+               
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
+                memoryStream.Position = 0;
+                msg = (Message)binaryFormatter.Deserialize(memoryStream);
+            }
+
+            DynamicDebuggerVisualizer.TestShowVisualizer(msg);
         }
 
         private static bool CompareNormalisedString(string str1, string str2)

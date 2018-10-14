@@ -17,18 +17,19 @@
 
   <PropertyGroup>
     <InstallFolderPath>$([MSBuild]::GetRegistryValueFromView('HKEY_CURRENT_USER\Software\LINQBridgeVs\$(VisualStudioVersion)', 'InstallFolderPath', 'False', RegistryView.Registry64, RegistryView.Registry32))</InstallFolderPath>
+    <IsSolutionBridged>$([MSBuild]::GetRegistryValueFromView('HKEY_CURRENT_USER\Software\LINQBridgeVs\$(VisualStudioVersion)\Solutions\$(SolutionName)', 'SolutionEnabled', 'False', RegistryView.Registry64, RegistryView.Registry32))</IsSolutionBridged>
   </PropertyGroup>
 
   <UsingTask TaskName="SInjectionBuildTask" AssemblyFile="$([MSBuild]::Unescape('$(InstallFolderPath)'))\BridgeVs.Build.dll" />
   <UsingTask TaskName="MapperBuildTask" AssemblyFile="$([MSBuild]::Unescape('$(InstallFolderPath)'))\BridgeVs.Build.dll" />
   <UsingTask TaskName="CleanBuildTask" AssemblyFile="$([MSBuild]::Unescape('$(InstallFolderPath)'))\BridgeVs.Build.dll" />
 
-  <Target Name="LINQBridgeAfterBuild" DependsOnTargets="CoreCompile">
+  <Target Name="LINQBridgeAfterBuild" DependsOnTargets="CoreCompile" Condition="'$(IsSolutionBridged)' == 'True'" >
     <SInjectionBuildTask Assembly="@(MainAssembly->'%(FullPath)')" SolutionName="$(SolutionName)" VisualStudioVer="$(VisualStudioVersion)" Snk="$(MSBuildProjectDirectory)\$(AssemblyOriginatorKeyFile)"  />
-    <MapperBuildTask Assembly="@(MainAssembly->'%(FullPath)')" SolutionName="$(SolutionName)" VisualStudioVer="$(VisualStudioVersion)"   />
+    <MapperBuildTask Assembly="@(MainAssembly->'%(FullPath)')" ProjectPath="$(MSBuildProjectFullPath)" SolutionName="$(SolutionName)" VisualStudioVer="$(VisualStudioVersion)"   />
   </Target>
 
-  <Target Name="LINQBridgeAfterClean" DependsOnTargets="AfterClean">
+  <Target Name="LINQBridgeAfterClean" DependsOnTargets="AfterClean" Condition="'$(IsSolutionBridged)' == 'True'">
     <CleanBuildTask Assembly="$(AssemblyName)" SolutionName="$(SolutionName)" VisualStudioVer="$(VisualStudioVersion)"/>
   </Target>
 

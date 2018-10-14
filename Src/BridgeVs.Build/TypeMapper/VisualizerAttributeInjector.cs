@@ -16,23 +16,23 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
 // OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
 // HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading;
 using BridgeVs.Build.Util;
 using BridgeVs.Shared.Logging;
 using Mono.Cecil;
 using Mono.Cecil.Pdb;
 using Mono.Cecil.Rocks;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading;
 
 namespace BridgeVs.Build.TypeMapper
 {
@@ -44,7 +44,6 @@ namespace BridgeVs.Build.TypeMapper
     {
         #region [ Constants ]
         private const string SystemType = "System.Type";
-        private const string SystemDiagnosticsDebuggerVisualizerAttribute = "System.Diagnostics.DebuggerVisualizerAttribute";
         private const string SystemReflectionAssemblyDescriptionAttribute = "System.Reflection.AssemblyDescriptionAttribute";
         #endregion
 
@@ -54,7 +53,7 @@ namespace BridgeVs.Build.TypeMapper
         private CustomAttributeArgument _customDebuggerVisualizerAttributeArgument;
         private CustomAttributeArgument _visualizerObjectSourceCustomAttributeArgument;
 
-        private int _targetVsVersion;
+        private readonly int _targetVsVersion;
 
         private readonly WriterParameters _writerParameters = new WriterParameters
         {
@@ -66,11 +65,12 @@ namespace BridgeVs.Build.TypeMapper
 #endif
         };
 
-         
+
         /// <summary>
         /// Initializes a new instance of the <see cref="VisualizerAttributeInjector"/> class.
         /// </summary>
         /// <param name="targetVisualizerAssemblyPath">The assembly debugger visualizer location.</param>
+        /// <param name="targetVsVersion">The targeted Visual Studio version</param>
         /// <exception cref="System.IO.FileNotFoundException"></exception>
         public VisualizerAttributeInjector(string targetVisualizerAssemblyPath, string targetVsVersion)
         {
@@ -95,7 +95,7 @@ namespace BridgeVs.Build.TypeMapper
 
         private void InitializeDebuggerAssembly()
         {
-            bool baseTypeFilter(TypeDefinition typeDef, string toCompare) 
+            bool BaseTypeFilter(TypeDefinition typeDef, string toCompare)
                 => typeDef.BaseType != null && typeDef.BaseType.Name.Contains(toCompare);
 
             _debuggerVisualizerAssembly.MainModule.TryGetTypeReference(SystemType, out TypeReference systemTypeReference);
@@ -105,11 +105,11 @@ namespace BridgeVs.Build.TypeMapper
             TypeDefinition customDebuggerVisualizerTypeReference = _debuggerVisualizerAssembly
                 .MainModule
                 .Types
-                .SingleOrDefault(definition => baseTypeFilter(definition, "DialogDebuggerVisualizer"));
+                .SingleOrDefault(definition => BaseTypeFilter(definition, "DialogDebuggerVisualizer"));
             TypeDefinition customDebuggerVisualizerObjectSourceTypeReference = _debuggerVisualizerAssembly
                 .MainModule
                 .Types
-                .SingleOrDefault(definition => baseTypeFilter(definition, "VisualizerObjectSource"));
+                .SingleOrDefault(definition => BaseTypeFilter(definition, "VisualizerObjectSource"));
 
             _debuggerVisualizerAttributeCtor = debuggerVisualizerAttributeTypeReference.Resolve().GetConstructors().SingleOrDefault(definition =>
                                                                        definition.Parameters.Count == 2 &&
@@ -136,7 +136,7 @@ namespace BridgeVs.Build.TypeMapper
                 return;
 
             _debuggerVisualizerAssembly.MainModule.AssemblyReferences.Remove(microsoftDebuggerVisualizerAssembly);
-           
+
             microsoftDebuggerVisualizerAssembly.Version = new Version(_targetVsVersion, 0);
 
             _debuggerVisualizerAssembly.MainModule.AssemblyReferences.Add(microsoftDebuggerVisualizerAssembly);
@@ -149,13 +149,13 @@ namespace BridgeVs.Build.TypeMapper
             switch (typeReference.Scope.MetadataScopeType)
             {
                 case MetadataScopeType.AssemblyNameReference:
-                    scope = FromCILToTypeName(typeReference.FullName) + ", " + typeReference.Scope;
+                    scope = FromCilToTypeName(typeReference.FullName) + ", " + typeReference.Scope;
                     break;
                 case MetadataScopeType.ModuleReference:
                     break;
                 case MetadataScopeType.ModuleDefinition:
-                    ModuleDefinition moduleDefinition = typeReference.Scope as ModuleDefinition;
-                    if (moduleDefinition != null) scope = FromCILToTypeName(typeReference.FullName) + ", " + moduleDefinition.Assembly;
+                    if (typeReference.Scope is ModuleDefinition moduleDefinition)
+                        scope = FromCilToTypeName(typeReference.FullName) + ", " + moduleDefinition.Assembly;
                     break;
                 default:
                     throw new Exception($"Assembly Scope Null. Check assembly {typeReference.FullName}");
@@ -200,12 +200,12 @@ namespace BridgeVs.Build.TypeMapper
 
             AssemblyDefinition assemblyDefinition = AssemblyDefinition.ReadAssembly(assemblyToMapTypesFromLocation, GetReaderParameters(assemblyToMapTypesFromLocation));
 
-            bool abstractTypesFilter(TypeDefinition typeDef) => typeDef.IsPublic && !typeDef.IsInterface && !typeDef.IsAbstract;
+            bool AbstractTypesFilter(TypeDefinition typeDef) => typeDef.IsPublic && !typeDef.IsInterface && !typeDef.IsAbstract;
 
             assemblyDefinition
                .MainModule
                .Types
-               .Where(abstractTypesFilter)
+               .Where(AbstractTypesFilter)
                .ForEach(MapType);
         }
 
@@ -220,7 +220,7 @@ namespace BridgeVs.Build.TypeMapper
             const int maxCount = 3;
             int i = 0;
             string fileName = Path.GetFileNameWithoutExtension(debuggerVisualizerDst);
-            
+
             while (!success && i++ < maxCount)
             {
                 try
@@ -258,7 +258,7 @@ namespace BridgeVs.Build.TypeMapper
                 ReadingMode = ReadingMode.Immediate,
                 InMemory = true
             };
-            
+
             return readerParameters;
         }
 
@@ -269,7 +269,7 @@ namespace BridgeVs.Build.TypeMapper
         /// This helper method change it back to a plus
         /// </summary>
         /// <param name="fullName">The full name.</param>
-        private static string FromCILToTypeName(string fullName)
+        private static string FromCilToTypeName(string fullName)
         {
             return fullName.Replace('/', '+');
         }

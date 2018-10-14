@@ -16,7 +16,7 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
 // OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
 // HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
@@ -30,8 +30,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using VSLangProj;
 
-namespace BridgeVs.VsPackage.Helper
+namespace BridgeVs.VsPackage.Helper.Command
 {
     public static class BridgeCommand
     {
@@ -55,6 +56,7 @@ namespace BridgeVs.VsPackage.Helper
             //enable each individual project by mapping the assembly name and location to a registry entry
             foreach (Project project in projects)
             {
+
                 string path = project.Properties.Item("FullPath").Value.ToString();
                 string outputPath = project.ConfigurationManager.ActiveConfiguration.Properties.Item("OutputPath").Value
                     .ToString();
@@ -62,8 +64,25 @@ namespace BridgeVs.VsPackage.Helper
                 string projectOutputPath = Path.Combine(path, outputPath, fileName);
 
                 string assemblyName = project.Properties.Item("AssemblyName").Value.ToString();
+                VSProject vsProject = project.Object as VSLangProj.VSProject;
+                if (vsProject?.References == null)
+                {
+                    continue;
+                }
+                List<string> references = new List<string>();
+
+                foreach (Reference reference in vsProject.References)
+                {
+                    if (reference.SourceProject == null)
+                    {
+                        // This is an assembly reference
+                        references.Add(reference.Path);
+                    }
+                }
+
+
                 ExecuteParams executeParams = new ExecuteParams(action, project.FullName, solutionName, assemblyName,
-                    projectOutputPath, vsVersion, vsEdition);
+                    projectOutputPath, vsVersion, vsEdition, references);
                 Execute(executeParams);
             }
 

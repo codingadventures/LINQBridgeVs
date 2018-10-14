@@ -28,6 +28,7 @@ using BridgeVs.Shared.Logging;
 using BridgeVs.Shared.Options;
 using System;
 using System.IO;
+using System.Threading;
 
 namespace BridgeVs.Shared.Serialization
 {
@@ -48,9 +49,9 @@ namespace BridgeVs.Shared.Serialization
         {
             byte[] byteStream = null;
 
-            Log.Write($"SendCargo - Type {typeof(T).FullName}");
-
+            Try:
             IServiceSerializer serializer = CreateSerializationStrategy(serializationOption);
+            Log.Write($"SendCargo - Type {typeof(T).FullName} - Serialization strategy: {serializer}");
 
             do
             {
@@ -58,9 +59,15 @@ namespace BridgeVs.Shared.Serialization
                 {
                     byteStream = serializer.Serialize(item);
                 }
+                catch (ThreadAbortException tae)
+                {
+                    Thread.ResetAbort();
+                    Log.Write(tae, "SendCargo - Thread Exception.");
+                    goto Try;
+                }
                 catch (Exception e)
                 {
-                    Log.Write(e, $"SendCargo - Error During serializing cargo with this strategy: {serializer}");
+                    Log.Write(e, "SendCargo - Error During serializing cargo");
                     serializer = serializer.Next;
                 }
             }
@@ -103,12 +110,11 @@ namespace BridgeVs.Shared.Serialization
             catch (Exception e)
             {
                 Log.Write(e, $"ReceiveCargo - Error while deserializing type {typeof(T).FullName}");
-
                 throw;
             }
         }
 
-        public static object ReceiveCargo(string truckId, SerializationOption serializationOption)
+        public static object ReceiveCargo(string truckId, SerializationOption serializationOption, Type type)
         {
             Log.Write("ReceiveCargo - UnLoading Cargo for Typeless object");
             try
@@ -117,12 +123,11 @@ namespace BridgeVs.Shared.Serialization
 
                 IServiceSerializer serviceSerializer = CreateDeserializationStrategy(serializationOption);
 
-                return serviceSerializer?.Deserialize(byteStream);
+                return serviceSerializer?.Deserialize(byteStream, type);
             }
             catch (Exception e)
             {
-                Log.Write(e, $"ReceiveCargo - Error while deserializing");
-
+                Log.Write(e, "ReceiveCargo - Error while deserializing");
                 throw;
             }
         }
@@ -151,7 +156,14 @@ namespace BridgeVs.Shared.Serialization
                         Next = new JsonSerializer()
                     };
                     break;
+                case SerializationOption.XmlSerializer:
+                    serviceSerializer = new XmlSerializer()
+                    {
+                        Next = new JsonSerializer()
+                    };
+                    break;
             }
+            Log.Write("CreateSerializationStrategy - SerializationOption is valid : {0}", option);
 
             return serviceSerializer;
         }
@@ -170,6 +182,8 @@ namespace BridgeVs.Shared.Serialization
                     return new JsonSerializer();
                 case SerializationOption.BinarySerializer:
                     return new BinarySerializer();
+                case SerializationOption.XmlSerializer:
+                    return new XmlSerializer();
             }
 
             Log.Write("CreateDeserializationStrategy - SerializationOption is not valid Value: {0}", option);

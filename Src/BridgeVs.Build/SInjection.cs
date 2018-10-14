@@ -31,6 +31,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using BridgeVs.Build.Util;
+using BridgeVs.Shared;
 using BridgeVs.Shared.Common;
 using BridgeVs.Shared.Logging;
 using Mono.Cecil;
@@ -38,37 +39,6 @@ using Mono.Cecil.Pdb;
 
 namespace BridgeVs.Build
 {
-    /// <summary>
-    /// Type of serialization to enable
-    /// </summary>
-    [Flags]
-    public enum SerializationTypes
-    {
-        /// <summary>
-        /// BinarySerialization
-        /// </summary>
-        BinarySerialization = 0x01,
-        /// <summary>
-        /// DataContractSerialization
-        /// </summary>
-        DataContractSerialization = 0x02
-    }
-
-    /// <summary>
-    /// Type of the Patch for Debug or Release mode.
-    /// </summary>
-    public enum PatchMode
-    {
-        /// <summary>
-        /// The debug
-        /// </summary>
-        Debug,
-        /// <summary>
-        /// The release
-        /// </summary>
-        Release
-    }
-
     /// <inheritdoc />
     /// <summary>
     /// This class inject the Serializable Attribute to all public class types in a given assembly, and adds
@@ -87,15 +57,7 @@ namespace BridgeVs.Build
         /// <summary>
         /// 
         /// </summary>
-        public string SInjectVersion
-        {
-            get
-            {
-                Assembly assembly = Assembly.GetExecutingAssembly();
-                FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-                return fvi.FileVersion;
-            }
-        }
+        public string SInjectVersion => Assembly.GetExecutingAssembly().VersionNumber();
 
         private bool? _snkFileExists;
         private bool SnkFileExists
@@ -139,9 +101,8 @@ namespace BridgeVs.Build
         /// <summary>
         /// Patches the loaded assembly enabling the specified Serialization type.
         /// </summary>
-        /// <param name="types">The Serialization Type.</param>
         /// <exception cref="System.Exception"></exception>
-        public bool Patch(SerializationTypes types)
+        public bool Patch()
         {
             bool alreadySInjected = CheckIfAlreadySInjected();
 

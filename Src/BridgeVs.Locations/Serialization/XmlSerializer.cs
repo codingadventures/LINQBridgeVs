@@ -32,11 +32,14 @@ namespace BridgeVs.Shared.Serialization
 {
     public sealed class XmlSerializer : IServiceSerializer
     {
+        //hot start otherwise a thread abort exception is generated
+        private static readonly MicrosoftXml.XmlSerializer CacheXmlSerializer = new MicrosoftXml.XmlSerializer(typeof(object));
+
         public IServiceSerializer Next { get; set; }
 
         public void Serialize<T>(Stream aStream, T objToSerialize)
         {
-            MicrosoftXml.XmlSerializer xmlSerializer = new MicrosoftXml.XmlSerializer(typeof(T));
+            MicrosoftXml.XmlSerializer xmlSerializer = new MicrosoftXml.XmlSerializer(objToSerialize.GetType());
 
             xmlSerializer.Serialize(aStream, objToSerialize);
         }
@@ -55,7 +58,6 @@ namespace BridgeVs.Shared.Serialization
             MicrosoftXml.XmlSerializer xmlSerializer = new MicrosoftXml.XmlSerializer(typeof(T));
 
             return (T) xmlSerializer.Deserialize(aStream);
-
         }
 
         public T Deserialize<T>(byte[] objToDeserialize)

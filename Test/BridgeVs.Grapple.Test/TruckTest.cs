@@ -118,7 +118,7 @@ namespace BridgeVs.Grapple.Test
 
             Assert.IsTrue(serializationOption.Value == SerializationOption.JsonSerializer, "Serialization option is not JsonSerializer over non serializable type");
 
-            NonSerializableClass nonSerializableClass = Truck.ReceiveCargo(truckId, serializationOption.Value) as NonSerializableClass;
+            NonSerializableClass nonSerializableClass = Truck.ReceiveCargo(truckId, serializationOption.Value, typeof(NonSerializableClass)) as NonSerializableClass;
             Assert.IsNotNull(nonSerializableClass, "Serialization has failed");
             Assert.AreEqual("I'm Not Serializable", nonSerializableClass.AString);
         }
@@ -152,7 +152,7 @@ namespace BridgeVs.Grapple.Test
 
             Assert.IsTrue(serializationOption.Value == SerializationOption.BinarySerializer, "Serialization option is not JsonSerializer over non serializable type");
 
-            object res = Truck.ReceiveCargo(truckId, serializationOption.Value);
+            object res = Truck.ReceiveCargo(truckId, serializationOption.Value, typeof(IEnumerable<int>));
 
             Assert.IsNotNull(res);
             Assert.IsInstanceOfType(res, typeof(IEnumerable<int>));

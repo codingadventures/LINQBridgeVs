@@ -31,5 +31,6 @@ namespace BridgeVs.Shared.Options
         public const SerializationOption SerializationMethod = SerializationOption.BinarySerializer;
         public const bool ErrorTrackingEnabled = false;
         public const bool LoggingEnabled = false;
+        public const bool Map3RdPartyAssembly = false;
     }
 }

@@ -32,6 +32,12 @@
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
+   <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\Src\BridgeVs.VsPackage\Key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>  
   <ItemGroup>
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Mono.Cecil, Version=0.10.0.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">

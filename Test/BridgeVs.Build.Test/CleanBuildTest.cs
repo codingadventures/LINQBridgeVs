@@ -29,7 +29,7 @@ using System.Reflection;
 using BridgeVs.Build.Tasks;
 using BridgeVs.Build.Util;
 using BridgeVs.Model.Test;
-using BridgeVs.Shared.Locations;
+using BridgeVs.Shared.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BridgeVs.Build.Test

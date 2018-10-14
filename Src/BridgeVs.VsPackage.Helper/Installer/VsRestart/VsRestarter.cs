@@ -33,7 +33,7 @@ namespace BridgeVs.VsPackage.Helper.Installer.VsRestart
 
 
             const string commandName = "File.Exit";
-            Command closeCommand = dte.Commands.Item(commandName);
+            EnvDTE.Command closeCommand = dte.Commands.Item(commandName);
 
             CommandEvents closeCommandEvents = null;
             if (closeCommand != null)

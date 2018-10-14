@@ -16,7 +16,7 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
 // OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
 // HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
@@ -28,10 +28,10 @@ using SharpRaven;
 using SharpRaven.Data;
 using System;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace BridgeVs.Shared.Logging
 {
-
     public static class RavenWrapper
     { 
         /// <summary>
@@ -67,12 +67,12 @@ namespace BridgeVs.Shared.Logging
                 request.Packet.ServerName = LinqBridgeVs;
                 request.Packet.Contexts.Device.Name = LinqBridgeVs;
                 request.Packet.User.Username = CommonRegistryConfigurations.GetUniqueGuid(vsVersion);
-                request.Packet.Release = "1.4.6"; //read it from somewhere
+                request.Packet.Release = Assembly.GetExecutingAssembly().VersionNumber();
                 request.Packet.User.IpAddress = "0.0.0.0";
                 return request;
             });
 
-            var sentryEvent = new SentryEvent(exception)
+            SentryEvent sentryEvent = new SentryEvent(exception)
             {
                 Message = message,
                 Level = errorLevel

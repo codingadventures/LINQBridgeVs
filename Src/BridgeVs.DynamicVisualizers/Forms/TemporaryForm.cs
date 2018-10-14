@@ -31,23 +31,36 @@ namespace BridgeVs.DynamicVisualizers.Forms
 {
     internal class TemporaryForm : Form
     {
-        public TemporaryForm()
+        private Label lblException;
+        private GroupBox groupBox1;
+
+        public TemporaryForm(Exception exception = null)
         {
-            SuspendLayout();
-            FormBorderStyle = FormBorderStyle.None;
+
+            InitializeComponent();
             MaximizeBox = false;
-            Name = "TemporaryForm";
             ShowIcon = false;
             ShowInTaskbar = false;
             Location = Cursor.Position;
             StartPosition = FormStartPosition.CenterParent;
-            BackColor = Color.FromArgb(1, 0, 0);
-            WindowState = FormWindowState.Maximized;
-            Opacity = 0.01;
+            if (exception == null)
+            {
+                BackColor = Color.FromArgb(1, 0, 0);
+                Opacity = 0.01;
+                WindowState = FormWindowState.Maximized;
+                FormBorderStyle = FormBorderStyle.None;
+                ResumeLayout(false);
+            }
+            else
+            {
+                Name = "LINQBridgeVs - Error";
+                lblException.Text = exception.StackTrace;
+            }
+
             Width = Screen.PrimaryScreen.WorkingArea.Width;
             Height = Screen.PrimaryScreen.WorkingArea.Height;
-            ResumeLayout(false);
         }
+
 
         protected override void OnClick(EventArgs e)
         {
@@ -63,6 +76,45 @@ namespace BridgeVs.DynamicVisualizers.Forms
             Close();
         }
 
+        private void InitializeComponent()
+        {
+            this.lblException = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox1.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // lblException
+            // 
+            this.lblException.AutoSize = true;
+            this.lblException.Location = new System.Drawing.Point(6, 58);
+            this.lblException.Name = "lblException";
+            this.lblException.Size = new System.Drawing.Size(0, 25);
+            this.lblException.TabIndex = 0;
+            lblException.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.lblException);
+            this.groupBox1.Location = new System.Drawing.Point(12, 67);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(2165, 454);
+            this.groupBox1.TabIndex = 1;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Error";
+            // 
+            // TemporaryForm
+            // 
+            this.CausesValidation = false;
+            this.ClientSize = new System.Drawing.Size(2189, 915);
+            this.Controls.Add(this.groupBox1);
+            this.Name = "TemporaryForm";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
+            this.TopMost = true;
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.ResumeLayout(false);
 
+        }
     }
 }

@@ -30,21 +30,21 @@ using BridgeVs.Shared.Options;
 using BridgeVs.Shared.Serialization;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Windows.Forms;
+using System.Threading;
 using Message = BridgeVs.DynamicVisualizers.Template.Message;
 
 namespace BridgeVs.DynamicVisualizers
 {
     public class DynamicObjectSource : VisualizerObjectSource
-    {
-        public void BroadCastData(object target, Stream outgoingData)
+    { 
+        public override void GetData(object target, Stream outgoingData)
         {
             //configure once the vs version for logging and raven
             string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
             Log.VisualStudioVersion = vsVersion;
-
             try
             {
                 string truckId = Guid.NewGuid().ToString();
@@ -55,29 +55,23 @@ namespace BridgeVs.DynamicVisualizers
                 {
                     Message message = new Message(truckId, serializationOption.Value, target.GetType());
 
-                    BinaryFormatter binaryFormatter = new BinaryFormatter();
-                    binaryFormatter.Serialize(outgoingData, message);
+                    Serialize(outgoingData, message);
                 }
                 else
                 {
-                    //should throw an error message in a friendly way
-                    Log.Write("Serialization option returned null - Probably failed");
+                    Log.Write("Serialization option returned null");
                 }
-
-
+            }
+            catch (ThreadAbortException)
+            {
+                // Catch exception and do nothing
+                Thread.ResetAbort();
             }
             catch (Exception exception)
             {
                 Log.Write(exception, "Error in BroadCastData");
                 exception.Capture(vsVersion, message: "Error broadcasting the data to LINQPad");
-                MessageBox.Show($"There was an error sending the object to LINQPad {exception.StackTrace}", "Error!",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        public override void GetData(object target, Stream outgoingData)
-        {
-            BroadCastData(target, outgoingData);
         }
     }
 }

@@ -31,6 +31,7 @@ using System.Linq;
 using System.Windows;
 using BridgeVs.Shared.Common;
 using BridgeVs.VsPackage.Helper;
+using BridgeVs.VsPackage.Helper.Command;
 using BridgeVs.VsPackage.Helper.Configuration;
 using EnvDTE;
 using Project = EnvDTE.Project;
@@ -82,7 +83,7 @@ namespace BridgeVs.VsPackage
             }
             else
             {
-                string message = $@"Solution {SolutionName} contains one or more un-supported projects. ASP.NET Core, .NETCore, .NET standard and UAP are not supported by LINQBridgeVs.";
+                string message = $@"Solution {SolutionName} contains one or more un-supported projects. ASP.NET Core, .NET Core, .NET standard and UAP are not supported by LINQBridgeVs.";
                 MessageBox.Show(message);
             }
         }

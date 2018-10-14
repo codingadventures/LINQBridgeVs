@@ -16,24 +16,31 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
 // OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
 // HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Collections.Generic;
-
-namespace BridgeVs.VsPackage.Helper.Extension
+namespace BridgeVs.Shared.Dependency
 {
-    public static class EnumerableExtension
+    public class ProjectDependency
     {
-        public static void ForEach<T>(this IEnumerable<T> sequence, Action<T> action)
+        public DependencyType DependencyType { get; set; }
+        public string AssemblyName { get; set; }
+        public string AssemblyPath { get; set; }
+        public string SolutionName { get; set; }
+
+        public override string ToString()
         {
-            foreach (T item in sequence)
-                action(item);
+            return $"{DependencyType} {AssemblyName} {AssemblyPath}";
         }
+    }
+
+    public enum DependencyType
+    {
+        AssemblyReference,
+        ProjectReference
     }
 }

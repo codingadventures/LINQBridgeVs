@@ -48,9 +48,7 @@ namespace BridgeVs.DynamicVisualizers.Test
             List<int> r = TestQuery.SkipWhile(i => i < 45).ToList();
 
             Message message = DeserializeMessage(r);
-
-
-            Assert.AreEqual(message.FileName, "List(Int32).linq");
+            Assert.AreEqual(message.FileName, $"List(Int32)_{message.TruckId}.linq");
             Assert.AreEqual(message.TypeFullName, "System.Collections.Generic.List<System.Int32>");
             Assert.AreEqual(message.TypeName, "ListInt32");
             Assert.AreEqual(message.TypeNamespace, "System.Collections.Generic");
@@ -64,7 +62,7 @@ namespace BridgeVs.DynamicVisualizers.Test
 
             Message message = DeserializeMessage(r);
 
-            Assert.AreEqual(message.FileName, "List(Int16).linq");
+            Assert.AreEqual(message.FileName, $"List(Int16)_{message.TruckId}.linq");
             Assert.AreEqual(message.TypeFullName, "System.Collections.Generic.List<System.Int16>");
             Assert.AreEqual(message.TypeName, "ListInt16");
             Assert.AreEqual(message.TypeNamespace, "System.Collections.Generic");
@@ -78,25 +76,25 @@ namespace BridgeVs.DynamicVisualizers.Test
 
             Message message = DeserializeMessage(r);
 
-            Assert.AreEqual(message.FileName, "Dictionary(Int32, Object).linq");
+            Assert.AreEqual(message.FileName, $"Dictionary(Int32, Object)_{message.TruckId}.linq");
             Assert.AreEqual(message.TypeFullName, "System.Collections.Generic.Dictionary<System.Int32, System.Object>");
             Assert.AreEqual(message.TypeName, "DictionaryInt32Object");
             Assert.AreEqual(message.TypeNamespace, "System.Collections.Generic");
         }
         //for now
-        //[TestMethod]
-        //[TestCategory("UnitTest")]
-        //public void BroadCastData_AnonymousShouldSucceed()
-        //{
-        //    var r = TestQuery.Select(i => new { Value = i });
+        [TestMethod]
+        [TestCategory("UnitTest")]
+        public void BroadCastData_AnonymousShouldSucceed()
+        {
+            var r = TestQuery.Select(i => new { Value = i });
 
-        //    var message = DeserializeMessage(r);
+            Message message = DeserializeMessage(r);
 
-        //    Assert.AreEqual(message.FileName, "IEnumerable(AnonymousType(Int32)).linq");
-        //    Assert.AreEqual(message.TypeFullName, "System.Collections.Generic.IEnumerable<AnonymousType<System.Int32>>");
-        //    Assert.AreEqual(message.TypeName, "IEnumerableAnonymousTypeInt32");
-        //    Assert.AreEqual(message.TypeNamespace, "System.Collections.Generic");
-        //}
+            Assert.AreEqual(message.FileName, $"IEnumerable(AnonymousType(Int32))_{message.TruckId}.linq");
+            Assert.AreEqual(message.TypeFullName, "System.Collections.Generic.IEnumerable<AnonymousType<System.Int32>>");
+            Assert.AreEqual(message.TypeName, "IEnumerableAnonymousTypeInt32");
+            Assert.AreEqual(message.TypeNamespace, "System.Collections.Generic");
+        }
 
         [TestMethod]
         [TestCategory("UnitTest")]
@@ -106,7 +104,7 @@ namespace BridgeVs.DynamicVisualizers.Test
 
             Message message = DeserializeMessage(r);
 
-            Assert.AreEqual(message.FileName, "IEnumerable(BridgeVs.Model.Test.CustomType1).linq");
+            Assert.AreEqual(message.FileName, $"IEnumerable(BridgeVs.Model.Test.CustomType1)_{message.TruckId}.linq");
             Assert.AreEqual(message.TypeFullName, "System.Collections.Generic.IEnumerable<BridgeVs.Model.Test.CustomType1>");
             Assert.AreEqual(message.TypeName, "IEnumerableCustomType1");
             Assert.AreEqual(message.TypeNamespace, "System.Collections.Generic");
@@ -117,7 +115,7 @@ namespace BridgeVs.DynamicVisualizers.Test
             using (MemoryStream memoryStream = new MemoryStream())
             {
                 DynamicObjectSource dynamicObjectSource = new DynamicObjectSource();
-                dynamicObjectSource.BroadCastData(@object, memoryStream);
+                dynamicObjectSource.GetData(@object, memoryStream);
                 BinaryFormatter binaryFormatter = new BinaryFormatter();
                 memoryStream.Position = 0;
                 return (Message)binaryFormatter.Deserialize(memoryStream);

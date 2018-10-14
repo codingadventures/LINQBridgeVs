@@ -81,7 +81,14 @@ namespace BridgeVs.DynamicVisualizers.Template
             
             #line default
             #line hidden
-            this.Write(").Dump(\"");
+            this.Write(", typeof(");
+            
+            #line 25 "C:\Users\Jarvis\Documents\GitHub\LINQBridgeVs\Src\BridgeVs.DynamicVisualizers\Template\Inspection.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(_typeName));
+            
+            #line default
+            #line hidden
+            this.Write(")).Dump(\"");
             
             #line 25 "C:\Users\Jarvis\Documents\GitHub\LINQBridgeVs\Src\BridgeVs.DynamicVisualizers\Template\Inspection.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_typeToRetrieveFullName));

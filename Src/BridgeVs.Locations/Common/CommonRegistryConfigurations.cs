@@ -9,6 +9,7 @@ namespace BridgeVs.Shared.Common
     public class CommonRegistryConfigurations
     {
         private const string ErrorTrackingRegistryValue = "SentryErrorTracking";
+        private const string Map3RdPartyAssemblyRegistryValue = "Map3rdPartyAssembly";
         private const string SerializationMethodRegistryValue = "SerializationMethod";
         private const string EnabledProjectsRegistryKey = @"Software\LINQBridgeVs\{0}\Solutions\{1}";
 
@@ -108,6 +109,30 @@ namespace BridgeVs.Shared.Common
             return isTrackingEnabled;
         }
 
+        public static bool Map3RdPartyAssembly(string solutionName, string vsVersion)
+        {
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey($@"Software\LINQBridgeVs\{vsVersion}"))
+            {
+                if (key?.GetValue(Map3RdPartyAssemblyRegistryValue) is string map3RdPartyAssembly)
+                {
+                    if (!string.IsNullOrEmpty(map3RdPartyAssembly))
+                    {
+                        return Convert.ToBoolean(map3RdPartyAssembly);
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public static void SetMap3RdPartyAssembly(string vsVersion, bool value)
+        {
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey($@"Software\LINQBridgeVs\{vsVersion}"))
+            {
+                key?.SetValue(Map3RdPartyAssemblyRegistryValue, value);
+            }
+        }
+
         public static void SetErrorTracking(string vsVersion, bool enabled)
         {
             using (RegistryKey key = Registry.CurrentUser.CreateSubKey($@"Software\LINQBridgeVs\{vsVersion}"))
@@ -131,33 +156,33 @@ namespace BridgeVs.Shared.Common
 
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey(registryKeyPath))
             {
-                if (key != null)
+                if (key == null)
+                    return string.Empty;
+
+                string[] values = key.GetSubKeyNames();
+                RegistryKey registryKey = key;
+
+                foreach (string value in values)
                 {
-                    string[] values = key.GetSubKeyNames();
-                    RegistryKey registryKey = key;
+                    RegistryKey subKey = registryKey.OpenSubKey(value);
 
-                    foreach (string value in values)
+                    string name = subKey?.GetValueNames().FirstOrDefault(p =>
                     {
-                        RegistryKey subKey = registryKey.OpenSubKey(value);
+                        if (!type.IsGenericType)
+                            return p == type.Assembly.GetName().Name;
+                        Type genericType = type.GetGenericArguments()[0];
 
-                        string name = subKey?.GetValueNames().FirstOrDefault(p =>
-                        {
-                            if (!type.IsGenericType)
-                                return p == type.Assembly.GetName().Name;
-                            Type genericType = type.GetGenericArguments()[0];
+                        if (IsSystemAssembly(genericType.Assembly.GetName().Name))
+                            return false;
 
-                            if (IsSystemAssembly(genericType.Assembly.GetName().Name))
-                                return false;
+                        return p == genericType.Assembly.GetName().Name;
+                    });
 
-                            return p == genericType.Assembly.GetName().Name;
-                        });
+                    if (string.IsNullOrEmpty(name)) continue;
 
-                        if (string.IsNullOrEmpty(name)) continue;
+                    string assemblyLoc = (string)subKey.GetValue(name + "_location");
 
-                        string assemblyLoc = (string)subKey.GetValue(name + "_location");
-
-                        return assemblyLoc;
-                    }
+                    return assemblyLoc;
                 }
             }
             return string.Empty;

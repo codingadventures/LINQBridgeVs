@@ -56,7 +56,7 @@ namespace BridgeVs.DynamicVisualizers.Template
             Type targetType = GetInterfaceTypeIfIsIterator(type);
 
             SerializationOption = serializationOption;
-            FileName = $"{CalculateFileNameFromType(targetType)}.linq";
+            FileName = $"{CalculateFileNameFromType(targetType)}_{truckId}.linq";
             TypeName = CalculateTypeNameFromType(targetType).Trim();
             TypeFullName = TypeNameHelper.GetDisplayName(targetType, fullName: true);
             TypeNamespace = targetType.Namespace;

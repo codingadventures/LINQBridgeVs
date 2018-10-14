@@ -22,5 +22,5 @@
 
 void Main()
 { 
-	Truck.ReceiveCargo("<#=_truckId#>",  SerializationOption.<#= _serializationType #>).Dump("<#=_typeToRetrieveFullName#>", 2);
+	Truck.ReceiveCargo("<#=_truckId#>",  SerializationOption.<#= _serializationType #>, typeof(<#=_typeName#>)).Dump("<#=_typeToRetrieveFullName#>", 2);
 }
