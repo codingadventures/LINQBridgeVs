@@ -34,6 +34,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BridgeVs.Shared.Dependency;
+using BridgeVs.Shared.FileSystem;
 
 namespace BridgeVs.Build.Tasks
 {
@@ -114,16 +115,20 @@ namespace BridgeVs.Build.Tasks
 
                 foreach (ProjectDependency assReference in references)
                 {
-                    VisualizerAttributeInjector attributeInjector = new VisualizerAttributeInjector(_dynamicVisualizerDllAssemblyPath, VisualStudioVer);
-
-                    attributeInjector.MapTypesFromAssembly(assReference.AssemblyPath);
-
                     string assemblyName = Path.GetFileNameWithoutExtension(assReference.AssemblyPath);
                     //visualizer target name based on visual studio version
                     string targetAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(VisualStudioVer, assemblyName);
 
                     string targetInstallationFilePath = Path.Combine(VisualizerDestinationFolder, targetAssemblyName);
+                    //no need to recreate the 3rd party assembly all the time
+                    if (FileSystemFactory.FileSystem.File.Exists(targetInstallationFilePath))
+                    {
+                        continue;
+                    }
+                    VisualizerAttributeInjector attributeInjector = new VisualizerAttributeInjector(_dynamicVisualizerDllAssemblyPath, VisualStudioVer);
 
+                    attributeInjector.MapTypesFromAssembly(assReference.AssemblyPath);
+                    
                     attributeInjector.SaveDebuggerVisualizer(targetInstallationFilePath);
                 }
             }
