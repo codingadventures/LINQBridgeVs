@@ -182,7 +182,4 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9B340B3F-C600-4B71-92DC-41BCFDE468C4}
 	EndGlobalSection
-	GlobalSection(NDepend) = preSolution
-		Project = "..\Ndepend\BridgeVs.ndproj"
-	EndGlobalSection
 EndGlobal

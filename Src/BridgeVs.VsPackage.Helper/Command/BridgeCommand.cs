@@ -53,10 +53,11 @@ namespace BridgeVs.VsPackage.Helper.Command
             string vsVersion,
             string vsEdition)
         {
+            List<BridgeProjectInfo> executeParams = new List<BridgeProjectInfo>();
+
             //enable each individual project by mapping the assembly name and location to a registry entry
             foreach (Project project in projects)
             {
-
                 string path = project.Properties.Item("FullPath").Value.ToString();
                 string outputPath = project.ConfigurationManager.ActiveConfiguration.Properties.Item("OutputPath").Value
                     .ToString();
@@ -64,47 +65,36 @@ namespace BridgeVs.VsPackage.Helper.Command
                 string projectOutputPath = Path.Combine(path, outputPath, fileName);
 
                 string assemblyName = project.Properties.Item("AssemblyName").Value.ToString();
-                VSProject vsProject = project.Object as VSProject;
-                if (vsProject?.References == null)
+                IEnumerable<string> references = Enumerable.Empty<string>();
+
+                if (project.Object is VSProject vsProject && vsProject.References != null)
                 {
-                    continue;
+                    references = from Reference reference in vsProject.References
+                                 where reference.SourceProject == null //it means it's an assembly reference
+                                 where !reference.Path.Contains(".NETFramework") && !reference.Path.Contains("Microsoft") //no .net framework assembly
+                                 select reference.Path;
                 }
 
-                IEnumerable<string> references = from Reference reference in vsProject.References
-                    where reference.SourceProject == null
-                    select reference.Path;
-                
-                ExecuteParams executeParams = new ExecuteParams(action, project.FullName, solutionName, assemblyName,
-                    projectOutputPath, vsVersion, vsEdition, references.ToList());
-                Execute(executeParams);
-            }
+                executeParams.Add(new BridgeProjectInfo(project.FullName, solutionName, assemblyName,
+                    projectOutputPath, vsVersion, vsEdition, references.ToList()));
 
-            CommonRegistryConfigurations.EnableSolution(solutionName, vsVersion, action == CommandAction.Enable);
+            }
+            switch (action)
+            {
+                case CommandAction.Enable:
+                    CommonRegistryConfigurations.BridgeSolution(solutionName, vsVersion, executeParams);
+                    break;
+                case CommandAction.Disable:
+                    CommonRegistryConfigurations.UnBridgeSolution(solutionName, vsVersion);
+                    break;
+            }
 
             string result = action == CommandAction.Enable ? "Bridged" : "Un-Bridged";
             string userAction = action == CommandAction.Enable ? "Please rebuild your solution." : string.Empty;
             string message = $@"Solution {solutionName} has been {result}. {userAction}";
             MessageBox.Show(message);
         }
-
-        private static void Execute(ExecuteParams executeParams)
-        {
-            switch (executeParams.Action)
-            {
-                case CommandAction.Enable:
-                    CommonRegistryConfigurations.EnableProject(executeParams.ProjectOutput, executeParams.AssemblyName,
-                        executeParams.SolutionName,
-                        executeParams.VsVersion);
-                    CommonRegistryConfigurations.StoreProjectReferences(executeParams.AssemblyName,
-                        executeParams.SolutionName,
-                        executeParams.VsVersion, executeParams.References);
-                    break;
-                case CommandAction.Disable:
-                    CommonRegistryConfigurations.DisableProject(executeParams.AssemblyName, executeParams.SolutionName,
-                        executeParams.VsVersion);
-                    break;
-            }
-        }
+         
 
         public static bool IsEveryProjectSupported(List<Project> projects, string applicationVersion,
             string applicationEdition)

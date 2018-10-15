@@ -38,7 +38,7 @@ using BridgeVs.Shared.Options;
 namespace BridgeVs.VsPackage.Helper.Settings
 {
     /// <inheritdoc />
-    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ClassInterface(ClassInterfaceType.None)]
     [CLSCompliant(false), ComVisible(true)]
     public sealed class PackageSettings : DialogPage
     {

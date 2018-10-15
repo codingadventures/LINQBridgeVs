@@ -113,7 +113,7 @@ namespace BridgeVs.DynamicVisualizers.Helper
 
             return input;
         }
-        public static string GetDisplayName(Type type, bool fullName)
+        public static string GetDisplayName(this Type type, bool fullName)
         {
             if (type == null)
             {
@@ -221,7 +221,7 @@ namespace BridgeVs.DynamicVisualizers.Helper
                         sb.Append(", ");
                     }
 
-                    sb.Append(GetDisplayName(_generics[_index++], _fullName));
+                    sb.Append(_generics[_index++].GetDisplayName(_fullName));
                 }
 
                 sb.Append(">");

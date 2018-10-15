@@ -29,7 +29,7 @@ using Mono.Cecil;
 
 namespace BridgeVs.Build.Util
 { 
-    internal static class TypeReferenceExt
+    internal static class TypeReferenceExtension
     {
         private static MethodReference _CloneMethodWithDeclaringType(MethodDefinition methodDef, TypeReference declaringTypeRef)
         {

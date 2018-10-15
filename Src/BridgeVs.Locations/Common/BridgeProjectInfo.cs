@@ -2,11 +2,10 @@
 
 namespace BridgeVs.VsPackage.Helper.Command
 {
-    public class ExecuteParams
+    public class BridgeProjectInfo
     {
-        public ExecuteParams(CommandAction action, string projectName, string solutionName, string assemblyName, string projectOutput, string vsVersion, string vsEdition, List<string> references)
+        public BridgeProjectInfo(string projectName, string solutionName, string assemblyName, string projectOutput, string vsVersion, string vsEdition, List<string> references)
         {
-            Action = action;
             ProjectName = projectName;
             SolutionName = solutionName;
             AssemblyName = assemblyName;
@@ -15,8 +14,7 @@ namespace BridgeVs.VsPackage.Helper.Command
             VsEdition = vsEdition;
             References = references;
         }
-
-        public CommandAction Action { get; }
+         
 
         public string ProjectName { get; }
 

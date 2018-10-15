@@ -217,7 +217,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command\BridgeCommand.cs" />
-    <Compile Include="Command\BridgeCommand.ExecuteParams.cs" />
     <Compile Include="Configuration\MsBuildVersionHelper.cs" />
     <Compile Include="Configuration\PackageConfigurator.cs" />
     <Compile Include="Enums.cs" />

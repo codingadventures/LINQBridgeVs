@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\BridgeProjectInfo.cs" />
     <Compile Include="Common\CommonFolderPaths.cs" />
     <Compile Include="Common\CommonRegistryConfigurations.cs" />
     <Compile Include="Dependency\Crawler.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Serialization\Truck.cs" />
     <Compile Include="Options\Defaults.cs" />
     <Compile Include="Serialization\XmlSerializer.cs" />
+    <Compile Include="Util\TypeExtension.cs" />
     <Compile Include="Version.cs" />
   </ItemGroup>
   <ItemGroup>

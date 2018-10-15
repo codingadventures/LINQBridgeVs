@@ -49,10 +49,8 @@ namespace BridgeVs.DynamicVisualizers
     /// </summary>
     public class DynamicDebuggerVisualizer : DialogDebuggerVisualizer
     {
-        #region [ Consts ]
         private const int SwShowNormal = 1;
-        #endregion
-
+     
         private static IFileSystem FileSystem => FileSystemFactory.FileSystem;
 
         /// <summary>
@@ -128,7 +126,7 @@ namespace BridgeVs.DynamicVisualizers
         {
             string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
             Log.VisualStudioVersion = vsVersion;
-            Exception exception = null;
+
             try
             {
                 Message message = GetMessage(objectProvider);
@@ -155,10 +153,9 @@ namespace BridgeVs.DynamicVisualizers
                 const string context = "Error during LINQPad execution";
                 Log.Write(ex, context);
                 ex.Capture(vsVersion, message: context);
-                exception = ex;
             }
 
-            windowService.ShowDialog(new TemporaryForm(exception));
+            windowService.ShowDialog(new TemporaryForm());
         }
 
 #if TEST
@@ -188,11 +185,6 @@ namespace BridgeVs.DynamicVisualizers
 
             Log.Write($"Message content - \t {message}");
 
-            Type type = Type.GetType(message.AssemblyQualifiedName);
-            string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
-            string originalTypeLocation = CommonRegistryConfigurations.GetOriginalAssemblyLocation(type, vsVersion);
-
-            message.ReferencedAssemblies.AddRange(type.GetReferencedAssemblies(originalTypeLocation));
             return message;
         }
 

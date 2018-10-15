@@ -46,7 +46,7 @@
     <Compile Include="TypeMapper\VisualizerAttributeInjector.cs" />
     <Compile Include="Util\EnumerableExtension.cs" />
     <Compile Include="Util\ReflectionUtils.cs" />
-    <Compile Include="Util\TypeReferenceExt.cs" />
+    <Compile Include="Util\TypeReferenceExtension.cs" />
     <Compile Include="Util\VisualizerAssemblyNameFormat.cs" />
   </ItemGroup>
   <ItemGroup>

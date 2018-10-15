@@ -58,7 +58,7 @@ namespace BridgeVs.DynamicVisualizers.Template
             SerializationOption = serializationOption;
             FileName = $"{CalculateFileNameFromType(targetType)}_{truckId}.linq";
             TypeName = CalculateTypeNameFromType(targetType).Trim();
-            TypeFullName = TypeNameHelper.GetDisplayName(targetType, fullName: true);
+            TypeFullName = targetType.GetDisplayName(fullName: true);
             TypeNamespace = targetType.Namespace;
             AssemblyQualifiedName = targetType.AssemblyQualifiedName;
             AssemblyName = targetType.Assembly.GetName().Name;
@@ -67,7 +67,7 @@ namespace BridgeVs.DynamicVisualizers.Template
 
         private string CalculateTypeNameFromType(Type type)
         {
-            string targetTypeName = TypeNameHelper.GetDisplayName(type, fullName: false);
+            string targetTypeName = type.GetDisplayName(fullName: false);
 
             string typeName = _pattern1.Replace(targetTypeName, string.Empty);
             typeName = _pattern2.Replace(typeName, string.Empty);
@@ -95,7 +95,7 @@ namespace BridgeVs.DynamicVisualizers.Template
 
         private string CalculateFileNameFromType(Type type)
         {
-            string targetTypeFullName = TypeNameHelper.GetDisplayName(type, fullName: true);
+            string targetTypeFullName = type.GetDisplayName(fullName: true);
 
             string fileName = _pattern1.Replace(targetTypeFullName, "(");
             fileName = _pattern2.Replace(fileName, ")");

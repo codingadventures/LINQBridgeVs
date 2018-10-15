@@ -24,22 +24,21 @@
 #endregion
 
 using BridgeVs.DynamicVisualizers.Helper;
-using BridgeVs.Shared.Common;
 using BridgeVs.Shared.Logging;
 using BridgeVs.Shared.Options;
 using BridgeVs.Shared.Serialization;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using System;
-using System.Diagnostics;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+using BridgeVs.Shared.Util;
 using System.Threading;
 using Message = BridgeVs.DynamicVisualizers.Template.Message;
+using CRC = BridgeVs.Shared.Common.CommonRegistryConfigurations;
 
 namespace BridgeVs.DynamicVisualizers
 {
     public class DynamicObjectSource : VisualizerObjectSource
-    { 
+    {
         public override void GetData(object target, Stream outgoingData)
         {
             //configure once the vs version for logging and raven
@@ -49,11 +48,24 @@ namespace BridgeVs.DynamicVisualizers
             {
                 string truckId = Guid.NewGuid().ToString();
 
-                SerializationOption? serializationOption = Truck.SendCargo(target, truckId, CommonRegistryConfigurations.GetSerializationOption(vsVersion));
+                SerializationOption? serializationOption = Truck.SendCargo(target, truckId, CRC.GetSerializationOption(vsVersion));
 
                 if (serializationOption.HasValue)
                 {
                     Message message = new Message(truckId, serializationOption.Value, target.GetType());
+
+                    Type type = Type.GetType(message.AssemblyQualifiedName);
+
+                    CRC.GetAssemblySolutionAndProject(type, vsVersion, out string solutionName, out string projectName, out string refTypePath);
+
+                    if (!string.IsNullOrEmpty(solutionName) && !string.IsNullOrEmpty(projectName) && !string.IsNullOrEmpty(refTypePath))
+                    {
+                        var assemblyNames = type.FindAssemblyNames();
+                        assemblyNames.ForEach(assemblyName => message.ReferencedAssemblies.AddRange(CRC.GetReferencedAssemblies(assemblyName, solutionName, vsVersion)));
+                        string originalTypeLocation = CRC.GetOriginalAssemblyLocation(solutionName, projectName, vsVersion);
+                        message.ReferencedAssemblies.Add(originalTypeLocation);
+                        message.ReferencedAssemblies.Add(refTypePath);
+                    }
 
                     Serialize(outgoingData, message);
                 }
