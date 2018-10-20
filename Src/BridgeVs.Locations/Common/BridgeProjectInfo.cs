@@ -1,9 +1,14 @@
 ﻿using System.Collections.Generic;
 
-namespace BridgeVs.VsPackage.Helper.Command
+namespace BridgeVs.Shared.Common
 {
     public class BridgeProjectInfo
     {
+        public BridgeProjectInfo(string projectName, string solutionName, string assemblyName)
+        :this(projectName, solutionName, assemblyName, string.Empty, string.Empty, string.Empty, new List<string>())
+        {
+
+        }
         public BridgeProjectInfo(string projectName, string solutionName, string assemblyName, string projectOutput, string vsVersion, string vsEdition, List<string> references)
         {
             ProjectName = projectName;

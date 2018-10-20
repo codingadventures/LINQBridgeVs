@@ -126,7 +126,7 @@ namespace BridgeVs.DynamicVisualizers
         {
             string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
             Log.VisualStudioVersion = vsVersion;
-
+            Exception exception = null;
             try
             {
                 Message message = GetMessage(objectProvider);
@@ -153,18 +153,11 @@ namespace BridgeVs.DynamicVisualizers
                 const string context = "Error during LINQPad execution";
                 Log.Write(ex, context);
                 ex.Capture(vsVersion, message: context);
+                exception = ex;
             }
 
-            windowService.ShowDialog(new TemporaryForm());
+            windowService.ShowDialog(new TemporaryForm(exception));
         }
-
-#if TEST
-        public static void TestShowVisualizer(object objectToVisualize)
-        {
-            VisualizerDevelopmentHost visualizerHost = new VisualizerDevelopmentHost(objectToVisualize, typeof(DynamicDebuggerVisualizer));
-            visualizerHost.ShowVisualizer();
-        }
-#endif
 
         #region [ Private Static Methods ]
 

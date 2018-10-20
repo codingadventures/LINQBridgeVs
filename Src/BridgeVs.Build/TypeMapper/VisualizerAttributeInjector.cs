@@ -24,12 +24,14 @@
 #endregion
 
 using BridgeVs.Build.Util;
+using BridgeVs.Shared.Common;
 using BridgeVs.Shared.Logging;
 using Mono.Cecil;
 using Mono.Cecil.Pdb;
 using Mono.Cecil.Rocks;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -52,19 +54,16 @@ namespace BridgeVs.Build.TypeMapper
         private MethodDefinition _debuggerVisualizerAttributeCtor;
         private CustomAttributeArgument _customDebuggerVisualizerAttributeArgument;
         private CustomAttributeArgument _visualizerObjectSourceCustomAttributeArgument;
-
         private readonly int _targetVsVersion;
 
-        private readonly WriterParameters _writerParameters = new WriterParameters
-        {
-#if DEBUG
-            WriteSymbols = true,
-            SymbolWriterProvider = new PdbWriterProvider()
-#elif DEPLOY
-            WriteSymbols = false,
-#endif
-        };
+        private readonly WriterParameters _writerParameters;
 
+        private DefaultAssemblyResolver GetAssemblyResolver(string assemblyDirectoryPath)
+        {
+            DefaultAssemblyResolver assemblyResolver = new DefaultAssemblyResolver();
+            assemblyResolver.AddSearchDirectory(Path.GetDirectoryName(assemblyDirectoryPath));
+            return assemblyResolver;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VisualizerAttributeInjector"/> class.
@@ -78,16 +77,37 @@ namespace BridgeVs.Build.TypeMapper
                 throw new FileNotFoundException(
                     $"Assembly doesn't exist at location {targetVisualizerAssemblyPath}");
 
-            _debuggerVisualizerAssembly = AssemblyDefinition.ReadAssembly(targetVisualizerAssemblyPath, GetReaderParameters(targetVisualizerAssemblyPath));
 
             //usually vsVersion has this format 15.0 so I'm only interested in the first part
-            targetVsVersion = targetVsVersion.Split('.').FirstOrDefault();
-            int.TryParse(targetVsVersion, out int vsVersion);
+            string versionNumber = targetVsVersion.Split('.').FirstOrDefault();
+            int.TryParse(versionNumber, out int vsVersion);
 
             if (vsVersion == 0)
                 throw new ArgumentException($"Visual Studio version is incorrect {_targetVsVersion}");
 
             _targetVsVersion = vsVersion;
+
+            //create pdb info if logging or error tracking is enabled
+            bool createPdbInfo = CommonRegistryConfigurations.IsLoggingEnabled(targetVsVersion);
+            createPdbInfo |= CommonRegistryConfigurations.IsErrorTrackingEnabled(targetVsVersion);
+
+            _writerParameters = new WriterParameters
+            {
+                WriteSymbols = createPdbInfo,
+                SymbolWriterProvider = createPdbInfo ? new PdbWriterProvider() : null
+            };
+
+            ReaderParameters readerParameters = new ReaderParameters
+            {
+                AssemblyResolver = GetAssemblyResolver(targetVisualizerAssemblyPath),
+                ReadingMode = ReadingMode.Immediate,
+                SymbolReaderProvider = createPdbInfo ? new PdbReaderProvider() : null,
+                InMemory = true,
+                ReadSymbols = createPdbInfo,
+                ThrowIfSymbolsAreNotMatching = false
+            };
+
+            _debuggerVisualizerAssembly = AssemblyDefinition.ReadAssembly(targetVisualizerAssemblyPath, readerParameters);
 
             InitializeDebuggerAssembly();
             RemapAssembly();
@@ -198,7 +218,14 @@ namespace BridgeVs.Build.TypeMapper
             if (!File.Exists(assemblyToMapTypesFromLocation))
                 throw new FileNotFoundException($"Assembly doesn't exist at location {assemblyToMapTypesFromLocation}");
 
-            AssemblyDefinition assemblyDefinition = AssemblyDefinition.ReadAssembly(assemblyToMapTypesFromLocation, GetReaderParameters(assemblyToMapTypesFromLocation));
+            ReaderParameters readerParameters = new ReaderParameters(ReadingMode.Immediate)
+            {
+                ReadSymbols = false,
+                AssemblyResolver = GetAssemblyResolver(assemblyToMapTypesFromLocation),
+                ThrowIfSymbolsAreNotMatching = false
+            };
+
+            AssemblyDefinition assemblyDefinition = AssemblyDefinition.ReadAssembly(assemblyToMapTypesFromLocation, readerParameters);
 
             bool AbstractTypesFilter(TypeDefinition typeDef) => typeDef.IsPublic && !typeDef.IsInterface && !typeDef.IsAbstract;
 
@@ -243,23 +270,6 @@ namespace BridgeVs.Build.TypeMapper
         private static void DeployReferences(IEnumerable<string> references, string location)
         {
             references.ForEach(reference => File.Copy(reference, location, true));
-        }
-
-        private static ReaderParameters GetReaderParameters(string assemblyPath)
-        {
-            DefaultAssemblyResolver assemblyResolver = new DefaultAssemblyResolver();
-
-            string assemblyLocation = Path.GetDirectoryName(assemblyPath);
-            assemblyResolver.AddSearchDirectory(assemblyLocation);
-
-            ReaderParameters readerParameters = new ReaderParameters
-            {
-                AssemblyResolver = assemblyResolver,
-                ReadingMode = ReadingMode.Immediate,
-                InMemory = true
-            };
-
-            return readerParameters;
         }
 
         /// <summary>

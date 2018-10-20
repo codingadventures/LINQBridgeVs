@@ -27,13 +27,14 @@ using BridgeVs.DynamicVisualizers.Helper;
 using BridgeVs.Shared.Logging;
 using BridgeVs.Shared.Options;
 using BridgeVs.Shared.Serialization;
+using BridgeVs.Shared.Util;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using System;
+using System.Collections.Generic;
 using System.IO;
-using BridgeVs.Shared.Util;
 using System.Threading;
-using Message = BridgeVs.DynamicVisualizers.Template.Message;
 using CRC = BridgeVs.Shared.Common.CommonRegistryConfigurations;
+using Message = BridgeVs.DynamicVisualizers.Template.Message;
 
 namespace BridgeVs.DynamicVisualizers
 {
@@ -56,16 +57,10 @@ namespace BridgeVs.DynamicVisualizers
 
                     Type type = Type.GetType(message.AssemblyQualifiedName);
 
-                    CRC.GetAssemblySolutionAndProject(type, vsVersion, out string solutionName, out string projectName, out string refTypePath);
+                    List<string> assemblyNames = type.FindAssemblyNames();
+                    List<string> projects = CRC.GetAssemblySolutionAndProject(assemblyNames, vsVersion);
 
-                    if (!string.IsNullOrEmpty(solutionName) && !string.IsNullOrEmpty(projectName) && !string.IsNullOrEmpty(refTypePath))
-                    {
-                        var assemblyNames = type.FindAssemblyNames();
-                        assemblyNames.ForEach(assemblyName => message.ReferencedAssemblies.AddRange(CRC.GetReferencedAssemblies(assemblyName, solutionName, vsVersion)));
-                        string originalTypeLocation = CRC.GetOriginalAssemblyLocation(solutionName, projectName, vsVersion);
-                        message.ReferencedAssemblies.Add(originalTypeLocation);
-                        message.ReferencedAssemblies.Add(refTypePath);
-                    }
+                    message.ReferencedAssemblies.AddRange(projects);
 
                     Serialize(outgoingData, message);
                 }

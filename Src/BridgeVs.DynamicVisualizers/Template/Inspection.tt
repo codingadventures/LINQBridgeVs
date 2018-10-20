@@ -14,7 +14,7 @@
   <Namespace>BridgeVs.Shared</Namespace>
   <Namespace>BridgeVs.Shared.Options</Namespace>
   <Namespace><#= _typeNamespace #></Namespace>
-  <# foreach(var elem in this._assemblies.Distinct()) {
+  <# foreach(var elem in _assemblies) {
 		if (!elem.Contains("mscorlib")){#>
 <Reference><#=elem#></Reference>
 	<#}

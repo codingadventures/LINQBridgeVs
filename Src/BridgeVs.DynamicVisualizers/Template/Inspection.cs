@@ -47,7 +47,7 @@ namespace BridgeVs.DynamicVisualizers.Template
             this.Write("</Namespace>\r\n  ");
             
             #line 17 "C:\Users\Jarvis\Documents\GitHub\LINQBridgeVs\Src\BridgeVs.DynamicVisualizers\Template\Inspection.tt"
- foreach(var elem in this._assemblies.Distinct()) {
+ foreach(var elem in _assemblies) {
 		if (!elem.Contains("mscorlib")){
             
             #line default

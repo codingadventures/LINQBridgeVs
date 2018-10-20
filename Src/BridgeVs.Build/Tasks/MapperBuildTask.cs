@@ -26,6 +26,8 @@
 using BridgeVs.Build.TypeMapper;
 using BridgeVs.Build.Util;
 using BridgeVs.Shared.Common;
+using BridgeVs.Shared.Dependency;
+using BridgeVs.Shared.FileSystem;
 using BridgeVs.Shared.Logging;
 using BridgeVs.Shared.Options;
 using Microsoft.Build.Framework;
@@ -33,8 +35,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using BridgeVs.Shared.Dependency;
-using BridgeVs.Shared.FileSystem;
 
 namespace BridgeVs.Build.Tasks
 {
@@ -89,7 +89,7 @@ namespace BridgeVs.Build.Tasks
             Log.Write($"Visualizer Destination Folder Path {VisualizerDestinationFolder}");
 
 
-            Create3RdPartyVisualizers(); 
+            Create3RdPartyVisualizers();
 
             //if dot net visualizer exists already don't create it again
             if (!File.Exists(Path.Combine(VisualizerDestinationFolder, DotNetVisualizerAssemblyName)))
@@ -99,7 +99,7 @@ namespace BridgeVs.Build.Tasks
             }
 
             CreateDebuggerVisualizer();
-            
+
             return true;
 
         }
@@ -109,17 +109,29 @@ namespace BridgeVs.Build.Tasks
             try
             {
                 if (!CommonRegistryConfigurations.Map3RdPartyAssembly(SolutionName, VisualStudioVer))
-                    return;
-
-                IEnumerable<ProjectDependency> references = Crawler.FindDependencies(ProjectPath);
-
-                foreach (ProjectDependency assReference in references)
                 {
-                    string assemblyName = Path.GetFileNameWithoutExtension(assReference.AssemblyPath);
+                    return;
+                }
+
+                IEnumerable<string> assemblies = Crawler.FindDependencies(ProjectPath);
+
+                foreach (string assemblyPath in assemblies)
+                {
+                    string assemblyName;
+
+                    try
+                    {
+                        assemblyName = Path.GetFileNameWithoutExtension(assemblyPath);
+                    }
+                    catch
+                    {
+                        continue; //in case it is not a well formed path
+                    }
                     //visualizer target name based on visual studio version
                     string targetAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(VisualStudioVer, assemblyName);
 
                     string targetInstallationFilePath = Path.Combine(VisualizerDestinationFolder, targetAssemblyName);
+
                     //no need to recreate the 3rd party assembly all the time
                     if (FileSystemFactory.FileSystem.File.Exists(targetInstallationFilePath))
                     {
@@ -127,8 +139,8 @@ namespace BridgeVs.Build.Tasks
                     }
                     VisualizerAttributeInjector attributeInjector = new VisualizerAttributeInjector(_dynamicVisualizerDllAssemblyPath, VisualStudioVer);
 
-                    attributeInjector.MapTypesFromAssembly(assReference.AssemblyPath);
-                    
+                    attributeInjector.MapTypesFromAssembly(assemblyPath);
+
                     attributeInjector.SaveDebuggerVisualizer(targetInstallationFilePath);
                 }
             }

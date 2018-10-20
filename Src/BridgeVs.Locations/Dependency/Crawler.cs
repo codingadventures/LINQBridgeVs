@@ -23,49 +23,46 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using Microsoft.Build.Evaluation;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
-using Microsoft.Build.Evaluation;
 
 namespace BridgeVs.Shared.Dependency
 {
     public class Crawler
     {
         private const string MsbuildNamespace = "http://schemas.microsoft.com/developer/msbuild/2003";
+
         /// <summary>
         /// Finds the project dependencies given a csproj or vbproj file
         /// </summary>
         /// <param name="projectFilePath">Path to the CS or VB project.</param>
-        /// <returns></returns>
-        public static IEnumerable<ProjectDependency> FindDependencies(string projectFilePath)
+        /// <returns>a list of dependencies - path to the assembly</returns>
+        public static IEnumerable<string> FindDependencies(string projectFilePath)
         {
             if (string.IsNullOrEmpty(projectFilePath))
             {
-                return Enumerable.Empty<ProjectDependency>();
+                return Enumerable.Empty<string>();
             }
 
             XmlNamespaceManager namespaceManager = new XmlNamespaceManager(new NameTable());
             namespaceManager.AddNamespace("aw", MsbuildNamespace);
-
 
             Project loadedProject =
                 ProjectCollection.GlobalProjectCollection.LoadedProjects
                 .FirstOrDefault(p => CompareProjectFileName(p, projectFilePath))
                 ?? new Project(projectFilePath);
 
-            IEnumerable<ProjectDependency> assemblyReference =
+            IEnumerable<string> assemblyReference =
                 from proj in loadedProject.Items
                 where proj.ItemType.Equals("Reference") && !proj.EvaluatedInclude.Contains("Microsoft") && !proj.EvaluatedInclude.Contains("System")
-                let info = proj.DirectMetadata.Select(p => p.EvaluatedValue).FirstOrDefault()
-                where !string.IsNullOrEmpty(info)
-                select new ProjectDependency
-                {
-                    DependencyType = DependencyType.AssemblyReference,
-                    AssemblyPath = info
-                };
+                let infos = proj.DirectMetadata.Select(p => p.EvaluatedValue)
+                from info in infos
+                where !string.IsNullOrEmpty(info) && !(info.Equals("True") || info.Equals("False")) //it could be true or false for some reason
+                select info;
 
             return assemblyReference;
         }

@@ -73,9 +73,10 @@ namespace BridgeVs.Build.Tasks
             }
             catch (System.Exception exception)
             {
+                Log.Write(exception, "Error During cleanup");
+                BuildWarningEventArgs errorEvent = new BuildWarningEventArgs("Debugger Visualizer Cleanup", "", "CleanBuildTask", 0, 0, 0, 0, $"There was an error cleaning custom debugger visualizers", "", "LINQBridgeVs");
+                BuildEngine.LogWarningEvent(errorEvent);
                 exception.Capture(VisualStudioVer, message: "Error during project cleaning");
-
-                return false;
             }
 
             return true;

@@ -65,7 +65,6 @@
     <Compile Include="Common\CommonFolderPaths.cs" />
     <Compile Include="Common\CommonRegistryConfigurations.cs" />
     <Compile Include="Dependency\Crawler.cs" />
-    <Compile Include="Dependency\ProjectDependency.cs" />
     <Compile Include="FileSystem\FileSystemFactory.cs" />
     <Compile Include="Logging\Log.cs" />
     <Compile Include="Logging\RavenWrapper.cs" />
