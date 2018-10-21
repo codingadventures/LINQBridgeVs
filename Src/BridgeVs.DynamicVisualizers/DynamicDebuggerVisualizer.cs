@@ -39,6 +39,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using Win32Interop.WinHandles;
 using Message = BridgeVs.DynamicVisualizers.Template.Message;
+using FS = BridgeVs.Shared.FileSystem.FileSystemFactory;
+using System.Text;
 
 namespace BridgeVs.DynamicVisualizers
 {
@@ -49,9 +51,7 @@ namespace BridgeVs.DynamicVisualizers
     public class DynamicDebuggerVisualizer : DialogDebuggerVisualizer
     {
         private const int SwShowNormal = 1;
-
-        private static IFileSystem FileSystem => FileSystemFactory.FileSystem;
-
+        
         /// <summary>
         /// Deploys the dynamically generated linq script.
         /// </summary>
@@ -68,8 +68,10 @@ namespace BridgeVs.DynamicVisualizers
                 Log.Write("dstScriptPath: {0}", dstScriptPath);
                 string targetFolder = Path.Combine(dstScriptPath, message.AssemblyName);
 
-                if (!FileSystem.Directory.Exists(targetFolder))
-                    FileSystem.Directory.CreateDirectory(targetFolder);
+                if (!FS.FileSystem.Directory.Exists(targetFolder))
+                    FS.FileSystem.Directory.CreateDirectory(targetFolder);
+
+                string fileName = FindAvailableFileName(targetFolder, message.FileName);
 
                 string linqPadScriptFilePath = Path.Combine(targetFolder, message.FileName);
                 Log.Write("linqPadScriptPath: {0}", linqPadScriptFilePath);
@@ -77,7 +79,7 @@ namespace BridgeVs.DynamicVisualizers
                 Inspection linqQuery = new Inspection(message);
                 string linqQueryText = linqQuery.TransformText();
 
-                using (Stream memoryStream = FileSystem.File.Open(linqPadScriptFilePath, FileMode.Create))
+                using (Stream memoryStream = FS.FileSystem.File.Open(linqPadScriptFilePath, FileMode.Create))
                 using (StreamWriter streamWriter = new StreamWriter(memoryStream))
                 {
                     streamWriter.Write(linqQueryText);
@@ -93,6 +95,26 @@ namespace BridgeVs.DynamicVisualizers
                 Log.Write(e, "DynamicDebuggerVisualizer.DeployLinqScript");
                 throw;
             }
+        }
+
+        private string FindAvailableFileName(string targetFolder, string fileName)
+        {
+            int fileCount = 0;
+            string path = Path.Combine(targetFolder, fileName);
+            const string linq = ".linq";
+            const string sep = "_";
+            StringBuilder b = new StringBuilder(path + linq);
+            while (FS.FileSystem.File.Exists(b.ToString()))
+            {
+                ++fileCount;
+                b.Clear();
+                b.Append(path);
+                b.Append(sep);
+                b.Append(fileCount);
+                b.Append(linq);
+            }
+
+            return b.ToString();
         }
 
         /// <summary>

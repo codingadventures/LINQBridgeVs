@@ -26,9 +26,15 @@
 using BridgeVs.Build.Tasks;
 using BridgeVs.Build.Util;
 using BridgeVs.Model.Test;
+using BridgeVs.Shared.Common;
 using BridgeVs.Shared.Options;
+using Microsoft.Build.Framework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 using System.IO;
+using System.IO.Abstractions.TestingHelpers;
+using TypeMock.ArrangeActAssert;
+using FS = BridgeVs.Shared.FileSystem.FileSystemFactory;
 
 namespace BridgeVs.Build.Test
 {
@@ -40,7 +46,17 @@ namespace BridgeVs.Build.Test
         private const string VsVersion14 = "14.0";
         private const string VsVersion15 = "15.0";
 
+        private static readonly MockFileSystem _mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+    {
+        { DebuggerVisualizerAssemblyLocation, new MockFileData(DebuggerVisualizerAssemblyByte) }
+    });
+
         private static string AssemblyModelLocation => typeof(CustomType1).Assembly.Location;
+
+        private static string DebuggerVisualizerAssemblyLocation => typeof(DynamicVisualizers.DynamicDebuggerVisualizer).Assembly.Location;
+
+        private static byte[] DebuggerVisualizerAssemblyByte => File.ReadAllBytes(DebuggerVisualizerAssemblyLocation);
+            
 
         private static string TargetAssemblyName(string vsVersion)
         {
@@ -60,44 +76,52 @@ namespace BridgeVs.Build.Test
         [ClassInitialize]
         public static void Init(TestContext context)
         {
-            if (!Directory.Exists(TargetInstallationPath(VsVersion11)))
+            Isolate.WhenCalled(() => FS.FileSystem).WillReturn(_mockFileSystem);
+
+            Isolate.WhenCalled(() => CommonRegistryConfigurations.IsSolutionEnabled("", "")).WillReturn(true);
+            Isolate.WhenCalled(() => CommonRegistryConfigurations.IsErrorTrackingEnabled("")).WillReturn(false);
+            Isolate.WhenCalled(() => CommonRegistryConfigurations.IsLoggingEnabled("")).WillReturn(false);
+
+            if (!FS.FileSystem.Directory.Exists(TargetInstallationPath(VsVersion11)))
             {
-                Directory.CreateDirectory(TargetInstallationPath(VsVersion11));
+                FS.FileSystem.Directory.CreateDirectory(TargetInstallationPath(VsVersion11));
             }
 
-            if (!Directory.Exists(TargetInstallationPath(VsVersion12)))
+            if (!FS.FileSystem.Directory.Exists(TargetInstallationPath(VsVersion12)))
             {
-                Directory.CreateDirectory(TargetInstallationPath(VsVersion12));
+                FS.FileSystem.Directory.CreateDirectory(TargetInstallationPath(VsVersion12));
             }
 
-            if (!Directory.Exists(TargetInstallationPath(VsVersion14)))
+            if (!FS.FileSystem.Directory.Exists(TargetInstallationPath(VsVersion14)))
             {
-                Directory.CreateDirectory(TargetInstallationPath(VsVersion14));
+                FS.FileSystem.Directory.CreateDirectory(TargetInstallationPath(VsVersion14));
             }
 
-            if (!Directory.Exists(TargetInstallationPath(VsVersion15)))
+            if (!FS.FileSystem.Directory.Exists(TargetInstallationPath(VsVersion15)))
             {
-                Directory.CreateDirectory(TargetInstallationPath(VsVersion15));
+                FS.FileSystem.Directory.CreateDirectory(TargetInstallationPath(VsVersion15));
             }
         }
 
-        [ClassCleanup]
-        public static void Cleanup()
+        [TestInitialize]
+        public void Init()
         {
-            //delete the visualizers
-            File.Delete(Path.Combine(TargetInstallationPath(VsVersion11), TargetAssemblyName(VsVersion11)));
-            File.Delete(Path.Combine(TargetInstallationPath(VsVersion12), TargetAssemblyName(VsVersion12)));
-            File.Delete(Path.Combine(TargetInstallationPath(VsVersion14), TargetAssemblyName(VsVersion14)));
-            File.Delete(Path.Combine(TargetInstallationPath(VsVersion15), TargetAssemblyName(VsVersion15)));
+            Isolate.WhenCalled(() => FS.FileSystem).WillReturn(_mockFileSystem);
 
-            File.Delete(Path.Combine(TargetInstallationPath(VsVersion11), DotNetAssemblyName(VsVersion11)));
-            File.Delete(Path.Combine(TargetInstallationPath(VsVersion12), DotNetAssemblyName(VsVersion12)));
-            File.Delete(Path.Combine(TargetInstallationPath(VsVersion14), DotNetAssemblyName(VsVersion14)));
-            File.Delete(Path.Combine(TargetInstallationPath(VsVersion15), DotNetAssemblyName(VsVersion15)));
+            Isolate.WhenCalled(() => CommonRegistryConfigurations.IsSolutionEnabled("", "")).WillReturn(true);
+            Isolate.WhenCalled(() => CommonRegistryConfigurations.Map3RdPartyAssembly("", "")).WillReturn(false);
+            Isolate.WhenCalled(() => CommonRegistryConfigurations.IsErrorTrackingEnabled("")).WillReturn(false);
+            Isolate.WhenCalled(() => CommonRegistryConfigurations.IsLoggingEnabled("")).WillReturn(false);
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            Isolate.CleanUp();
         }
 
         [TestMethod]
-        [TestCategory("IntegrationTest")]
+        [TestCategory("UnitTest")]
         public void Mapper_Build_Test_V11_Should_Succeed()
         {
             MapperBuildTask mapper = new MapperBuildTask
@@ -105,16 +129,17 @@ namespace BridgeVs.Build.Test
                 Assembly = AssemblyModelLocation,
                 VisualStudioVer = VsVersion11
             };
+            mapper.BuildEngine = Isolate.Fake.Instance<IBuildEngine>(Members.ReturnRecursiveFakes);
 
             bool result = mapper.Execute();
 
             Assert.IsTrue(result, "Mapper Build Task Execute return false.");
-            Assert.IsTrue(File.Exists(Path.Combine(TargetInstallationPath(VsVersion11), TargetAssemblyName(VsVersion11))), $"Custom Debugger Visualizer {TargetAssemblyName(VsVersion11)} hasn't been created");
-            Assert.IsTrue(File.Exists(Path.Combine(TargetInstallationPath(VsVersion11), DotNetAssemblyName(VsVersion11))), $"DotNet Debugger Visualizer {DotNetAssemblyName(VsVersion11)} hasn't been created ");
+            Assert.IsTrue(FS.FileSystem.File.Exists(Path.Combine(TargetInstallationPath(VsVersion11), TargetAssemblyName(VsVersion11))), $"Custom Debugger Visualizer {TargetAssemblyName(VsVersion11)} hasn't been created");
+            Assert.IsTrue(FS.FileSystem.File.Exists(Path.Combine(TargetInstallationPath(VsVersion11), DotNetAssemblyName(VsVersion11))), $"DotNet Debugger Visualizer {DotNetAssemblyName(VsVersion11)} hasn't been created ");
         }
 
         [TestMethod]
-        [TestCategory("IntegrationTest")]
+        [TestCategory("UnitTest")]
         public void Mapper_Build_Test_V12_Should_Succeed()
         {
             MapperBuildTask mapper = new MapperBuildTask
@@ -122,15 +147,16 @@ namespace BridgeVs.Build.Test
                 Assembly = AssemblyModelLocation,
                 VisualStudioVer = VsVersion12
             };
+            mapper.BuildEngine = Isolate.Fake.Instance<IBuildEngine>(Members.ReturnRecursiveFakes);
 
             bool result = mapper.Execute();
 
             Assert.IsTrue(result, "Mapper Build Task Execute return false.");
-            Assert.IsTrue(File.Exists(Path.Combine(TargetInstallationPath(VsVersion12), TargetAssemblyName(VsVersion12))), $"Custom Debugger Visualizer {TargetAssemblyName(VsVersion12)} hasn't been created");
-            Assert.IsTrue(File.Exists(Path.Combine(TargetInstallationPath(VsVersion12), DotNetAssemblyName(VsVersion12))), $"DotNet Debugger Visualizer {DotNetAssemblyName(VsVersion12)} hasn't been created ");
+            Assert.IsTrue(FS.FileSystem.File.Exists(Path.Combine(TargetInstallationPath(VsVersion12), TargetAssemblyName(VsVersion12))), $"Custom Debugger Visualizer {TargetAssemblyName(VsVersion12)} hasn't been created");
+            Assert.IsTrue(FS.FileSystem.File.Exists(Path.Combine(TargetInstallationPath(VsVersion12), DotNetAssemblyName(VsVersion12))), $"DotNet Debugger Visualizer {DotNetAssemblyName(VsVersion12)} hasn't been created ");
         }
         [TestMethod]
-        [TestCategory("IntegrationTest")]
+        [TestCategory("UnitTest")]
         public void Mapper_Build_Test_V14_Should_Succeed()
         {
             MapperBuildTask mapper = new MapperBuildTask
@@ -138,16 +164,17 @@ namespace BridgeVs.Build.Test
                 Assembly = AssemblyModelLocation,
                 VisualStudioVer = VsVersion14
             };
+            mapper.BuildEngine = Isolate.Fake.Instance<IBuildEngine>(Members.ReturnRecursiveFakes);
 
             bool result = mapper.Execute();
 
             Assert.IsTrue(result, "Mapper Build Task Execute return false.");
 
-            Assert.IsTrue(File.Exists(Path.Combine(TargetInstallationPath(VsVersion14), TargetAssemblyName(VsVersion14))), $"Custom Debugger Visualizer {TargetAssemblyName(VsVersion14)} hasn't been created");
-            Assert.IsTrue(File.Exists(Path.Combine(TargetInstallationPath(VsVersion14), DotNetAssemblyName(VsVersion14))), $"DotNet Debugger Visualizer {DotNetAssemblyName(VsVersion14)} hasn't been created ");
+            Assert.IsTrue(FS.FileSystem.File.Exists(Path.Combine(TargetInstallationPath(VsVersion14), TargetAssemblyName(VsVersion14))), $"Custom Debugger Visualizer {TargetAssemblyName(VsVersion14)} hasn't been created");
+            Assert.IsTrue(FS.FileSystem.File.Exists(Path.Combine(TargetInstallationPath(VsVersion14), DotNetAssemblyName(VsVersion14))), $"DotNet Debugger Visualizer {DotNetAssemblyName(VsVersion14)} hasn't been created ");
         }
         [TestMethod]
-        [TestCategory("IntegrationTest")]
+        [TestCategory("UnitTest")]
         public void Mapper_Build_Test_V15_Should_Succeed()
         {
             MapperBuildTask mapper = new MapperBuildTask
@@ -155,13 +182,14 @@ namespace BridgeVs.Build.Test
                 Assembly = AssemblyModelLocation,
                 VisualStudioVer = VsVersion15
             };
+            mapper.BuildEngine = Isolate.Fake.Instance<IBuildEngine>(Members.ReturnRecursiveFakes);
 
             bool result = mapper.Execute();
 
             Assert.IsTrue(result, "Mapper Build Task Execute return false.");
 
-            Assert.IsTrue(File.Exists(Path.Combine(TargetInstallationPath(VsVersion15), TargetAssemblyName(VsVersion15))), $"Custom Debugger Visualizer {TargetAssemblyName(VsVersion15)} hasn't been created");
-            Assert.IsTrue(File.Exists(Path.Combine(TargetInstallationPath(VsVersion15), DotNetAssemblyName(VsVersion15))), $"DotNet Debugger Visualizer {DotNetAssemblyName(VsVersion15)} hasn't been created ");
+            Assert.IsTrue(FS.FileSystem.File.Exists(Path.Combine(TargetInstallationPath(VsVersion15), TargetAssemblyName(VsVersion15))), $"Custom Debugger Visualizer {TargetAssemblyName(VsVersion15)} hasn't been created");
+            Assert.IsTrue(FS.FileSystem.File.Exists(Path.Combine(TargetInstallationPath(VsVersion15), DotNetAssemblyName(VsVersion15))), $"DotNet Debugger Visualizer {DotNetAssemblyName(VsVersion15)} hasn't been created ");
         }
     }
 }

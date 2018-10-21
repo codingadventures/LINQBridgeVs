@@ -25,17 +25,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using BridgeVs.Build.Util;
 using BridgeVs.Shared;
-using BridgeVs.Shared.Common;
 using BridgeVs.Shared.Logging;
 using Mono.Cecil;
 using Mono.Cecil.Pdb;
+using FS = BridgeVs.Shared.FileSystem.FileSystemFactory;
 
 namespace BridgeVs.Build
 {
@@ -86,13 +84,15 @@ namespace BridgeVs.Build
         {
             _assemblyLocation = assemblyLocation;
             _snkCertificatePath = snkCertificatePath;
-         
+
             Log.Write("Assembly being Injected {0}", assemblyLocation);
 
-            if (!File.Exists(assemblyLocation))
+            if (!FS.FileSystem.File.Exists(assemblyLocation))
                 throw new Exception($"Assembly at location {assemblyLocation} doesn't exist");
 
-            _assemblyDefinition = AssemblyDefinition.ReadAssembly(assemblyLocation, GetReaderParameters());
+            using (Stream file = FS.FileSystem.File.Open(assemblyLocation, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                _assemblyDefinition = AssemblyDefinition.ReadAssembly(file, GetReaderParameters());
+            }
         }
         #endregion
 
@@ -154,6 +154,8 @@ namespace BridgeVs.Build
             {
                 try
                 {
+                    //typeInAssembly.AddParameterlessConstructor();
+
                     typeInAssembly.AddDefaultConstructor();
 
                     //if (!types.HasFlag(SerializationTypes.BinarySerialization)) continue;
@@ -171,7 +173,7 @@ namespace BridgeVs.Build
             }
         }
 
-        private IEnumerable<TypeDefinition> GetTypesToInject()
+        public IEnumerable<TypeDefinition> GetTypesToInject()
         {
             try
             {
@@ -247,14 +249,16 @@ namespace BridgeVs.Build
             {
                 AssemblyResolver = assemblyResolver,
                 InMemory = true,
-                ReadingMode = ReadingMode.Immediate
+                ReadingMode = ReadingMode.Immediate,
+                ReadWrite = true
             };
 
-            if (!File.Exists(PdbName))
-                 return readerParameters;
-            
+            if (!FS.FileSystem.File.Exists(PdbName))
+                return readerParameters;
+
             PdbReaderProvider symbolReaderProvider = new PdbReaderProvider();
             readerParameters.SymbolReaderProvider = symbolReaderProvider;
+            readerParameters.ReadSymbols = true;
 
             return readerParameters;
         }
@@ -262,8 +266,8 @@ namespace BridgeVs.Build
         private WriterParameters GetWriterParameters()
         {
             WriterParameters writerParameters = new WriterParameters();
-
-            if (File.Exists(PdbName))
+            
+            if (FS.FileSystem.File.Exists(PdbName))
             {
                 writerParameters.SymbolWriterProvider = new PdbWriterProvider();
                 writerParameters.WriteSymbols = true;
@@ -272,11 +276,10 @@ namespace BridgeVs.Build
             if (string.IsNullOrEmpty(_snkCertificatePath) || !SnkFileExists)
                 return writerParameters;
 
-            using (FileStream file = File.OpenRead(_snkCertificatePath))
-            {
-                writerParameters.StrongNameKeyPair = new StrongNameKeyPair(file);
-            }
-
+            byte[] snk = FS.FileSystem.File.ReadAllBytes(_snkCertificatePath);
+          
+            writerParameters.StrongNameKeyPair = new StrongNameKeyPair(snk);
+            
             return writerParameters;
         }
 
@@ -299,8 +302,6 @@ namespace BridgeVs.Build
 
         private bool WriteAssembly()
         {
-            const int retry = 3;
-
             if (string.IsNullOrEmpty(_snkCertificatePath) || !SnkFileExists)
             {
                 _assemblyDefinition.Name.HasPublicKey = false;
@@ -308,25 +309,13 @@ namespace BridgeVs.Build
                 _assemblyDefinition.MainModule.Attributes &= ~ModuleAttributes.StrongNameSigned;
             }
             for (int i = 0; i < retry; i++)
+
+            using (Stream file = FS.FileSystem.FileStream.Create(_assemblyLocation, FileMode.Open, FileAccess.ReadWrite))
             {
-                try
-                {
-                    using (FileStream s = new FileStream(_assemblyLocation, FileMode.OpenOrCreate, FileAccess.Write))
-                    {
-                        _assemblyDefinition.Write(s, GetWriterParameters());
-                    }
-
-                    return true;
-                }
-                catch (Exception e)
-                {
-                    Log.Write(e, $"Error Saving Assembly {_assemblyLocation} - Attempt #{i}");
-
-                    Thread.Sleep(25);
-                }
+                _assemblyDefinition.Write(file, GetWriterParameters());
             }
 
-            return false;
+            return true;
         }
         #endregion
 

@@ -54,7 +54,7 @@ namespace BridgeVs.DynamicVisualizers.Test
         <Namespace>System.Dynamic</Namespace>
         <Namespace>System.Runtime.Serialization.Formatters</Namespace>
         <Namespace>System.Xml.Linq</Namespace>
-        <Namespace>BridgeVs.Shared.Grapple</Namespace>
+        <Namespace>BridgeVs.Shared.Serialization</Namespace>
         <Namespace>BridgeVs.Shared</Namespace>
         <Namespace>BridgeVs.Shared.Options</Namespace>
         <Namespace>System.Collections.Generic</Namespace>
@@ -62,7 +62,7 @@ namespace BridgeVs.DynamicVisualizers.Test
 
         void Main()
         {{
-            Truck.ReceiveCargo(""{0}"", SerializationOption.BinarySerializer).Dump(""List<AnonymousType<String, String>>"", 2);
+            Truck.ReceiveCargo(""{0}"", SerializationOption.BinarySerializer, typeof(object)).Dump(""List<AnonymousType<String, String>>"", 2);
         }}";
 
         private const string IntListLinqScript = @"
@@ -71,7 +71,7 @@ namespace BridgeVs.DynamicVisualizers.Test
         <Namespace>System.Dynamic</Namespace>
         <Namespace>System.Runtime.Serialization.Formatters</Namespace>
         <Namespace>System.Xml.Linq</Namespace>
-        <Namespace>BridgeVs.Shared.Grapple</Namespace>
+        <Namespace>BridgeVs.Shared.Serialization</Namespace>
         <Namespace>BridgeVs.Shared</Namespace>
         <Namespace>BridgeVs.Shared.Options</Namespace>
         <Namespace>System.Collections.Generic</Namespace>
@@ -79,7 +79,7 @@ namespace BridgeVs.DynamicVisualizers.Test
 
         void Main()
         {{
-            Truck.ReceiveCargo<List<Int32>>(""{0}"", SerializationOption.BinarySerializer).Dump(""List<Int32>"", 2);
+            Truck.ReceiveCargo(""{0}"", SerializationOption.BinarySerializer, typeof(List<Int32>)).Dump(""List<Int32>"", 2);
         }}";
 
         [ClassInitialize]

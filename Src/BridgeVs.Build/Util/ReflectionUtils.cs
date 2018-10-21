@@ -34,6 +34,34 @@ namespace BridgeVs.Build.Util
 {
     internal static class ReflectionUtils
     {
+        public static void AddParameterlessConstructor(this TypeDefinition @this)
+        {
+            TypeReference baseType = @this.BaseType;
+            Func<MethodDefinition, bool> findCtor = new Func<MethodDefinition, bool>(definition =>
+                                                          definition.Name.Equals(".ctor") &&
+                                                          definition.Parameters.Count == 0);
+
+            bool isDefaultConstructorAlreadyDefined = @this.Methods.Any(findCtor);
+            if (isDefaultConstructorAlreadyDefined)
+                return;
+
+            const MethodAttributes methodAttributes =
+               MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName |
+               MethodAttributes.RTSpecialName;
+
+            MethodReference serializableContructor = baseType.ReferenceMethod(findCtor);
+            if (serializableContructor == null)
+                return;
+
+            MethodDefinition serializationConstr = new MethodDefinition(".ctor", methodAttributes, @this.Module.TypeSystem.Void);
+
+            serializationConstr.Body.Instructions.Add(Instruction.Create(OpCodes.Call, @this.Module.ImportReference(serializableContructor)));
+            serializationConstr.Body.Instructions.Add(Instruction.Create(OpCodes.Nop));
+            serializationConstr.Body.Instructions.Add(Instruction.Create(OpCodes.Nop));
+            serializationConstr.Body.Instructions.Add(Instruction.Create(OpCodes.Ret));
+            @this.Methods.Add(serializationConstr);
+        }
+
         /// <summary>
         /// Adds the default constructor. For Binary Deserialization for a class that inherits from a types that implements
         /// ISerializable interface must override the constructor this signature:
@@ -68,7 +96,8 @@ namespace BridgeVs.Build.Util
 
             bool isDefaultConstructorAlreadyDefined = @this.Methods.Any(findCtor);
 
-            if (isDefaultConstructorAlreadyDefined) return;
+            if (isDefaultConstructorAlreadyDefined)
+                return;
 
             const MethodAttributes methodAttributes =
                 MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName |

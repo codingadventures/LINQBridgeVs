@@ -25,13 +25,16 @@
 
 
 using System.IO;
+using System.IO.Abstractions.TestingHelpers;
 using System.Reflection;
 using BridgeVs.Build.Tasks;
 using BridgeVs.Build.Util;
 using BridgeVs.Model.Test;
+using BridgeVs.Shared.Common;
 using BridgeVs.Shared.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+using TypeMock.ArrangeActAssert;
+using FS = BridgeVs.Shared.FileSystem.FileSystemFactory;
 namespace BridgeVs.Build.Test
 {
     /// <summary>
@@ -44,11 +47,16 @@ namespace BridgeVs.Build.Test
 
         private static void CreateDllAndPdb(string visualizerFullPath, string visualizerPdbFullPath)
         {
-            using (File.Create(visualizerFullPath))
+            string path = Path.GetDirectoryName(visualizerFullPath);
+            FS.FileSystem.Directory.CreateDirectory(path);
+
+            using (FS.FileSystem.File.Create(visualizerFullPath))
             {
             }
 
-            using (File.Create(visualizerPdbFullPath))
+            path = Path.GetDirectoryName(visualizerPdbFullPath);
+            FS.FileSystem.Directory.CreateDirectory(path);
+            using (FS.FileSystem.File.Create(visualizerPdbFullPath))
             {
             }
         }
@@ -58,8 +66,23 @@ namespace BridgeVs.Build.Test
             _assemblyModel = typeof(CustomType1).Assembly;
         }
 
+        [TestInitialize]
+        public void Init()
+        {
+            Isolate.WhenCalled(() => FS.FileSystem).WillReturn(new MockFileSystem());
+            Isolate.WhenCalled(() =>CommonRegistryConfigurations.IsSolutionEnabled("", "")).WillReturn(true);
+            Isolate.WhenCalled(() =>CommonRegistryConfigurations.IsErrorTrackingEnabled("")).WillReturn(false);
+            Isolate.WhenCalled(() =>CommonRegistryConfigurations.IsLoggingEnabled("")).WillReturn(false);
+        }
+
+        [TestCleanup]
+        public void Cleanup()
+        {
+            Isolate.CleanUp();
+        }
+
         [TestMethod]
-        [TestCategory("IntegrationTest")]
+        [TestCategory("UnitTest")]
         public void Clean_BuildTask_Test_V11_Should_Succeed()
         {
             const string vsVersion = "11.0";
@@ -79,13 +102,13 @@ namespace BridgeVs.Build.Test
             bool result = cleanBuildTask.Execute();
 
             Assert.IsTrue(result, $"Clean build task V{vsVersion} failed");
-            Assert.IsFalse(File.Exists(visualizerFullPath), $"{visualizerFullPath} hasn't been deleted correctly");
-            Assert.IsFalse(File.Exists(visualizerPdbFullPath), $"{visualizerPdbFullPath} hasn't been deleted correctly");
+            Assert.IsFalse(FS.FileSystem.File.Exists(visualizerFullPath), $"{visualizerFullPath} hasn't been deleted correctly");
+            Assert.IsFalse(FS.FileSystem.File.Exists(visualizerPdbFullPath), $"{visualizerPdbFullPath} hasn't been deleted correctly");
         }
 
 
         [TestMethod]
-        [TestCategory("IntegrationTest")]
+        [TestCategory("UnitTest")]
         public void Clean_BuildTask_Test_V12_Should_Succeed()
         {
             const string vsVersion = "12.0";
@@ -104,12 +127,12 @@ namespace BridgeVs.Build.Test
             bool result = cleanBuildTask.Execute();
 
             Assert.IsTrue(result, $"Clean build task V{vsVersion} failed");
-            Assert.IsFalse(File.Exists(visualizerFullPath), $"{visualizerFullPath} hasn't been deleted correctly");
-            Assert.IsFalse(File.Exists(visualizerPdbFullPath), $"{visualizerPdbFullPath} hasn't been deleted correctly");
+            Assert.IsFalse(FS.FileSystem.File.Exists(visualizerFullPath), $"{visualizerFullPath} hasn't been deleted correctly");
+            Assert.IsFalse(FS.FileSystem.File.Exists(visualizerPdbFullPath), $"{visualizerPdbFullPath} hasn't been deleted correctly");
         }
 
         [TestMethod]
-        [TestCategory("IntegrationTest")]
+        [TestCategory("UnitTest")]
         public void Clean_BuildTask_Test_V14_Should_Succeed()
         {
             const string vsVersion = "14.0";
@@ -129,12 +152,12 @@ namespace BridgeVs.Build.Test
             bool result = cleanBuildTask.Execute();
 
             Assert.IsTrue(result, $"Clean build task V{vsVersion} failed");
-            Assert.IsFalse(File.Exists(visualizerFullPath), $"{visualizerFullPath} hasn't been deleted correctly");
-            Assert.IsFalse(File.Exists(visualizerPdbFullPath), $"{visualizerPdbFullPath} hasn't been deleted correctly");
+            Assert.IsFalse(FS.FileSystem.File.Exists(visualizerFullPath), $"{visualizerFullPath} hasn't been deleted correctly");
+            Assert.IsFalse(FS.FileSystem.File.Exists(visualizerPdbFullPath), $"{visualizerPdbFullPath} hasn't been deleted correctly");
         }
 
         [TestMethod]
-        [TestCategory("IntegrationTest")]
+        [TestCategory("UnitTest")]
         public void Clean_BuildTask_Test_V15_Should_Succeed()
         {
             const string vsVersion = "15.0";
@@ -154,8 +177,8 @@ namespace BridgeVs.Build.Test
             bool result = cleanBuildTask.Execute();
 
             Assert.IsTrue(result, $"Clean build task V{vsVersion} failed");
-            Assert.IsFalse(File.Exists(visualizerFullPath), $"{visualizerFullPath} hasn't been deleted correctly");
-            Assert.IsFalse(File.Exists(visualizerPdbFullPath), $"{visualizerPdbFullPath} hasn't been deleted correctly");
+            Assert.IsFalse(FS.FileSystem.File.Exists(visualizerFullPath), $"{visualizerFullPath} hasn't been deleted correctly");
+            Assert.IsFalse(FS.FileSystem.File.Exists(visualizerPdbFullPath), $"{visualizerPdbFullPath} hasn't been deleted correctly");
         }
     }
 }

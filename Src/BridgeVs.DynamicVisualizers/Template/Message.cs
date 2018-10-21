@@ -56,7 +56,7 @@ namespace BridgeVs.DynamicVisualizers.Template
             Type targetType = GetInterfaceTypeIfIsIterator(type);
 
             SerializationOption = serializationOption;
-            FileName = $"{CalculateFileNameFromType(targetType)}_{truckId}.linq";
+            FileName = CalculateFileNameFromType(targetType);
             TypeName = CalculateTypeNameFromType(targetType).Trim();
             TypeFullName = targetType.GetDisplayName(fullName: true);
             TypeNamespace = targetType.Namespace;
@@ -100,7 +100,7 @@ namespace BridgeVs.DynamicVisualizers.Template
             string fileName = _pattern1.Replace(targetTypeFullName, "(");
             fileName = _pattern2.Replace(fileName, ")");
 
-            return TypeNameHelper.RemoveSystemNamespaces(fileName);
+            return fileName;
         }
 
         public override string ToString()

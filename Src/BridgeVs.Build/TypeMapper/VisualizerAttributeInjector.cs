@@ -31,10 +31,10 @@ using Mono.Cecil.Pdb;
 using Mono.Cecil.Rocks;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using FS = BridgeVs.Shared.FileSystem.FileSystemFactory;
 
 namespace BridgeVs.Build.TypeMapper
 {
@@ -73,7 +73,7 @@ namespace BridgeVs.Build.TypeMapper
         /// <exception cref="System.IO.FileNotFoundException"></exception>
         public VisualizerAttributeInjector(string targetVisualizerAssemblyPath, string targetVsVersion)
         {
-            if (!File.Exists(targetVisualizerAssemblyPath))
+            if (!FS.FileSystem.File.Exists(targetVisualizerAssemblyPath))
                 throw new FileNotFoundException(
                     $"Assembly doesn't exist at location {targetVisualizerAssemblyPath}");
 
@@ -107,7 +107,11 @@ namespace BridgeVs.Build.TypeMapper
                 ThrowIfSymbolsAreNotMatching = false
             };
 
-            _debuggerVisualizerAssembly = AssemblyDefinition.ReadAssembly(targetVisualizerAssemblyPath, readerParameters);
+            //using a stream is better for testing
+            using (Stream file = FS.FileSystem.File.OpenRead(targetVisualizerAssemblyPath))
+            {
+                _debuggerVisualizerAssembly = AssemblyDefinition.ReadAssembly(file, readerParameters);
+            }
 
             InitializeDebuggerAssembly();
             RemapAssembly();
@@ -243,33 +247,23 @@ namespace BridgeVs.Build.TypeMapper
         /// <param name="references">The Assembly references</param>
         public void SaveDebuggerVisualizer(string debuggerVisualizerDst, IEnumerable<string> references = null)
         {
-            bool success = false;
-            const int maxCount = 3;
-            int i = 0;
             string fileName = Path.GetFileNameWithoutExtension(debuggerVisualizerDst);
 
-            while (!success && i++ < maxCount)
+            using (Stream file = FS.FileSystem.File.Create(debuggerVisualizerDst))
             {
-                try
-                {
-                    _debuggerVisualizerAssembly.Name.Name = fileName;
-                    _debuggerVisualizerAssembly.Write(debuggerVisualizerDst, _writerParameters);
-                    success = true;
-                }
-                catch (IOException ioe)
-                {
-                    Log.Write(ioe);
-                    Thread.Sleep(75);
-                }
+                _debuggerVisualizerAssembly.Name.Name = fileName;
+                _debuggerVisualizerAssembly.Write(file, _writerParameters);
             }
 
             if (references != null)
+            {
                 DeployReferences(references, debuggerVisualizerDst);
+            }
         }
 
         private static void DeployReferences(IEnumerable<string> references, string location)
         {
-            references.ForEach(reference => File.Copy(reference, location, true));
+            references.ForEach(reference => FS.FileSystem.File.Copy(reference, location, true));
         }
 
         /// <summary>

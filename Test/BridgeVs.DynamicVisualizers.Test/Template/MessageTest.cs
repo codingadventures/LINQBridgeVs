@@ -23,7 +23,7 @@ namespace BridgeVs.DynamicVisualizers.Test.Template
             Message message = new Message(Guid.NewGuid().ToString(), SerializationOption.BinarySerializer, res.GetType());
 
             Assert.IsTrue(message.AssemblyName.Equals("mscorlib"));
-            Assert.IsTrue(message.FileName.Equals("List(AnonymousType(String, String)).linq"));
+            Assert.IsTrue(message.FileName.Equals("List(AnonymousType(String, String))"));
         }
 
         [TestMethod]
@@ -36,7 +36,7 @@ namespace BridgeVs.DynamicVisualizers.Test.Template
             Message message = new Message(Guid.NewGuid().ToString(), SerializationOption.BinarySerializer, res.GetType());
 
             Assert.IsTrue(message.AssemblyName.Equals("mscorlib"));
-            Assert.AreEqual(message.FileName, "List(Int32).linq", "List of int should return List(Int32).linq");
+            Assert.AreEqual(message.FileName, "List(Int32)", "List of int should return List(Int32)");
         }
 
 
@@ -49,7 +49,7 @@ namespace BridgeVs.DynamicVisualizers.Test.Template
             Message result = new Message("truckId", SerializationOption.XmlSerializer, typeof(object));
 
             // assert
-            Assert.AreEqual("FileName: Object_truckId.linq\r\nTypeFullName: System.Object\r\nTypeName: Object\r\nTyp" +
+            Assert.AreEqual("FileName: Object\r\nTypeFullName: System.Object\r\nTypeName: Object\r\nTyp" +
                             "eNamespace: System\r\nTruckId: truckId\r\nSerializationType: XmlSerializer", result.ToString());
         }
 

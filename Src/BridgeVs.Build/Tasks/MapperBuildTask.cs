@@ -27,7 +27,6 @@ using BridgeVs.Build.TypeMapper;
 using BridgeVs.Build.Util;
 using BridgeVs.Shared.Common;
 using BridgeVs.Shared.Dependency;
-using BridgeVs.Shared.FileSystem;
 using BridgeVs.Shared.Logging;
 using BridgeVs.Shared.Options;
 using Microsoft.Build.Framework;
@@ -35,6 +34,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using FS = BridgeVs.Shared.FileSystem.FileSystemFactory;
 
 namespace BridgeVs.Build.Tasks
 {
@@ -92,7 +92,7 @@ namespace BridgeVs.Build.Tasks
             Create3RdPartyVisualizers();
 
             //if dot net visualizer exists already don't create it again
-            if (!File.Exists(Path.Combine(VisualizerDestinationFolder, DotNetVisualizerAssemblyName)))
+            if (!FS.FileSystem.File.Exists(Path.Combine(VisualizerDestinationFolder, DotNetVisualizerAssemblyName)))
             {
                 //it creates a mapping for all of the .net types that are worth exporting
                 CreateDotNetFrameworkVisualizer();
@@ -133,7 +133,7 @@ namespace BridgeVs.Build.Tasks
                     string targetInstallationFilePath = Path.Combine(VisualizerDestinationFolder, targetAssemblyName);
 
                     //no need to recreate the 3rd party assembly all the time
-                    if (FileSystemFactory.FileSystem.File.Exists(targetInstallationFilePath))
+                    if (FS.FileSystem.File.Exists(targetInstallationFilePath))
                     {
                         continue;
                     }
@@ -199,8 +199,8 @@ namespace BridgeVs.Build.Tasks
                 MapDotNetFrameworkTypes(targetDotNetAssemblyVisualizerFilePath);
 
                 //delete the temporary visualizer to avoid it dangling in the output folder (Debug/Release)
-                File.Delete(sourceDotNetAssemblyVisualizerFilePath);
-                File.Delete(Path.ChangeExtension(sourceDotNetAssemblyVisualizerFilePath, "pdb"));
+                FS.FileSystem.File.Delete(sourceDotNetAssemblyVisualizerFilePath);
+                FS.FileSystem.File.Delete(Path.ChangeExtension(sourceDotNetAssemblyVisualizerFilePath, "pdb"));
             }
             catch (Exception exception)
             {

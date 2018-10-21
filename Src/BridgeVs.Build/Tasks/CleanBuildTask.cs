@@ -29,6 +29,8 @@ using BridgeVs.Shared.Common;
 using BridgeVs.Shared.Logging;
 using BridgeVs.Shared.Options;
 using Microsoft.Build.Framework;
+using FS = BridgeVs.Shared.FileSystem.FileSystemFactory;
+
 
 namespace BridgeVs.Build.Tasks
 {
@@ -62,14 +64,14 @@ namespace BridgeVs.Build.Tasks
 
                 string visualizerFullPath = Path.Combine(targetInstallationPath, visualizerAssemblyName);
 
-                if (File.Exists(visualizerFullPath))
-                    File.Delete(visualizerFullPath);
+                if (FS.FileSystem.File.Exists(visualizerFullPath))
+                    FS.FileSystem.File.Delete(visualizerFullPath);
 
                 //check if pdb also exists and delete it
                 string visualizerPdbFullPath = Path.ChangeExtension(visualizerFullPath, "pdb");
 
-                if (File.Exists(visualizerPdbFullPath))
-                    File.Delete(visualizerPdbFullPath);
+                if (FS.FileSystem.File.Exists(visualizerPdbFullPath))
+                    FS.FileSystem.File.Delete(visualizerPdbFullPath);
             }
             catch (System.Exception exception)
             {
