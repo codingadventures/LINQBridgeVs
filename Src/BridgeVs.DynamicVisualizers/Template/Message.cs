@@ -95,7 +95,7 @@ namespace BridgeVs.DynamicVisualizers.Template
 
         private string CalculateFileNameFromType(Type type)
         {
-            string targetTypeFullName = type.GetDisplayName(fullName: true);
+            string targetTypeFullName = type.GetDisplayName(false);
 
             string fileName = _pattern1.Replace(targetTypeFullName, "(");
             fileName = _pattern2.Replace(fileName, ")");

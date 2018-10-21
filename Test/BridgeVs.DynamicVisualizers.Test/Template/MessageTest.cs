@@ -39,5 +39,20 @@ namespace BridgeVs.DynamicVisualizers.Test.Template
             Assert.AreEqual(message.FileName, "List(Int32).linq", "List of int should return List(Int32).linq");
         }
 
+
+
+        [TestMethod]
+        [TestCategory("UnitTest")]
+        public void CalculateFileNameFromTypeByCallingBridgeVsDynamicVisualizersTemplateMessage_ctor_ReturnsToStringIsFileNameObject_truck()
+        {
+            // act
+            Message result = new Message("truckId", SerializationOption.XmlSerializer, typeof(object));
+
+            // assert
+            Assert.AreEqual("FileName: Object_truckId.linq\r\nTypeFullName: System.Object\r\nTypeName: Object\r\nTyp" +
+                            "eNamespace: System\r\nTruckId: truckId\r\nSerializationType: XmlSerializer", result.ToString());
+        }
+
+
     }
 }

@@ -144,25 +144,7 @@ namespace BridgeVs.DynamicVisualizers.Test
             bool linqIsEqual = CompareNormalisedString(linqQueryText, linqToCompare);
             Assert.IsTrue(linqIsEqual);
         }
-
-        [TestMethod]
-        [TestCategory("IntegrationTest")]
-        public void SpawnDynamicDebuggerVisualizer()
-        {
-            Message msg;
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                DynamicObjectSource dynamicObjectSource = new DynamicObjectSource();
-                dynamicObjectSource.GetData(new XmlClass(), memoryStream);
-               
-                BinaryFormatter binaryFormatter = new BinaryFormatter();
-                memoryStream.Position = 0;
-                msg = (Message)binaryFormatter.Deserialize(memoryStream);
-            }
-
-            DynamicDebuggerVisualizer.TestShowVisualizer(msg);
-        }
-
+        
         private static bool CompareNormalisedString(string str1, string str2)
         {
             string normalized1 = Regex.Replace(str1, @"\s", "");

@@ -58,7 +58,7 @@ namespace BridgeVs.Build.Test
         public static void Init(TestContext testContext)
         {
             SInjection sInjection = new SInjection(SInjectTestModelPath);
-            _patchResult = sInjection.Patch(SerializationTypes.BinarySerialization);
+            _patchResult = sInjection.Patch();
             AppDomain.CurrentDomain.AssemblyResolve += HandleAssemblyResolve;
             _modelAssembly = AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName(SInjectTestModelPath));
         }

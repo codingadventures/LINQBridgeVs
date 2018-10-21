@@ -37,7 +37,6 @@ using System.IO.Abstractions;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
-using System.Windows.Forms;
 using Win32Interop.WinHandles;
 using Message = BridgeVs.DynamicVisualizers.Template.Message;
 
@@ -50,7 +49,7 @@ namespace BridgeVs.DynamicVisualizers
     public class DynamicDebuggerVisualizer : DialogDebuggerVisualizer
     {
         private const int SwShowNormal = 1;
-     
+
         private static IFileSystem FileSystem => FileSystemFactory.FileSystem;
 
         /// <summary>
@@ -101,7 +100,7 @@ namespace BridgeVs.DynamicVisualizers
         /// </summary>
         /// <returns></returns>
         public void OpenLinqPad(string linqQueryFileName, string linqPadInstallationPath)
-        { 
+        {
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 WindowStyle = ProcessWindowStyle.Normal,
@@ -118,7 +117,7 @@ namespace BridgeVs.DynamicVisualizers
                 process.WaitForInputIdle(-1);
                 process.Dispose();
             }
-            
+
             Log.Write("LINQPad Successfully started");
         }
 
@@ -208,5 +207,13 @@ namespace BridgeVs.DynamicVisualizers
         [DllImport("user32")]
         private static extern bool SetForegroundWindow(IntPtr hwnd);
         #endregion
+
+#if TEST
+        internal static void TestShowVisualizer(Message msg)
+        {
+            VisualizerDevelopmentHost visualizerHost = new VisualizerDevelopmentHost(msg, typeof(DynamicDebuggerVisualizer));
+            visualizerHost.ShowVisualizer();
+        }
+#endif
     }
 }

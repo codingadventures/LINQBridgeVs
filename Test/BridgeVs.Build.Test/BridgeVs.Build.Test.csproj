@@ -32,12 +32,12 @@
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
-   <PropertyGroup>
+  <PropertyGroup>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>..\..\Src\BridgeVs.VsPackage\Key.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>  
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Mono.Cecil, Version=0.10.0.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
@@ -57,7 +57,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="CrawlerUnitTest.cs" />
-    <Compile Include="ProjectUnitTest.cs" />
     <Compile Include="SerializationTest.cs" />
     <Compile Include="SInjectionBuildTest.cs" />
     <Compile Include="MapperBuildTest.cs" />

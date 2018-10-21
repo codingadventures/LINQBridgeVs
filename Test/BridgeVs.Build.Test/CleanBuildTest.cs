@@ -34,6 +34,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BridgeVs.Build.Test
 {
+    /// <summary>
+    /// This should become unit test and using the system.io.abstractions
+    /// </summary>
     [TestClass]
     public class CleanBuildTest
     {
@@ -63,7 +66,7 @@ namespace BridgeVs.Build.Test
             string visualizerAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(vsVersion, _assemblyModel.Location);
             string targetInstallationPath = VisualStudioOption.GetVisualizerDestinationFolder(vsVersion);
             string visualizerFullPath = Path.Combine(targetInstallationPath, visualizerAssemblyName);
-            string visualizerPdbFullPath = visualizerFullPath.Replace(".dll", ".pdb");
+            string visualizerPdbFullPath = Path.ChangeExtension(visualizerFullPath,"pdb");
             CreateDllAndPdb(visualizerFullPath, visualizerPdbFullPath);
 
 
