@@ -91,6 +91,7 @@ namespace BridgeVs.Build
                 throw new Exception($"Assembly at location {assemblyLocation} doesn't exist");
 
             using (Stream file = FS.FileSystem.File.Open(assemblyLocation, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
                 _assemblyDefinition = AssemblyDefinition.ReadAssembly(file, GetReaderParameters());
             }
         }
@@ -308,7 +309,6 @@ namespace BridgeVs.Build
                 _assemblyDefinition.Name.PublicKey = new byte[0];
                 _assemblyDefinition.MainModule.Attributes &= ~ModuleAttributes.StrongNameSigned;
             }
-            for (int i = 0; i < retry; i++)
 
             using (Stream file = FS.FileSystem.FileStream.Create(_assemblyLocation, FileMode.Open, FileAccess.ReadWrite))
             {
