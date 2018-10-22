@@ -27,13 +27,11 @@ using BridgeVs.DynamicVisualizers.Forms;
 using BridgeVs.DynamicVisualizers.Helper;
 using BridgeVs.DynamicVisualizers.Template;
 using BridgeVs.Shared.Common;
-using BridgeVs.Shared.FileSystem;
 using BridgeVs.Shared.Logging;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.IO.Abstractions;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
@@ -79,14 +77,8 @@ namespace BridgeVs.DynamicVisualizers
                 Inspection linqQuery = new Inspection(message);
                 string linqQueryText = linqQuery.TransformText();
 
-                using (Stream memoryStream = FS.FileSystem.File.Open(linqPadScriptFilePath, FileMode.Create))
-                using (StreamWriter streamWriter = new StreamWriter(memoryStream))
-                {
-                    streamWriter.Write(linqQueryText);
-                    streamWriter.Flush();
-                    memoryStream.Flush();
-                }
-
+                FS.FileSystem.File.WriteAllText(linqPadScriptFilePath, linqQueryText);
+                
                 Log.Write("LinqQuery Successfully deployed");
             }
             catch (Exception e)

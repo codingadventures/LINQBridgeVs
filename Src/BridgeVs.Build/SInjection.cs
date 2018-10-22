@@ -46,7 +46,8 @@ namespace BridgeVs.Build
     {
         #region [ Private Properties ]
         private readonly string _assemblyLocation;
-        private readonly AssemblyDefinition _assemblyDefinition;
+        private readonly ModuleDefinition _moduleDefinition;
+
         private static readonly Func<string, bool> IsSystemAssembly = name => name.Contains("Microsoft") || name.Contains("System") || name.Contains("mscorlib");
 
         private const string Marker = "SInjected";
@@ -89,10 +90,10 @@ namespace BridgeVs.Build
 
             if (!FS.FileSystem.File.Exists(assemblyLocation))
                 throw new Exception($"Assembly at location {assemblyLocation} doesn't exist");
-
+             
             using (Stream file = FS.FileSystem.File.Open(assemblyLocation, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                _assemblyDefinition = AssemblyDefinition.ReadAssembly(file, GetReaderParameters());
+                _moduleDefinition = ModuleDefinition.ReadModule(file, GetReaderParameters());
             }
         }
         #endregion
@@ -124,7 +125,7 @@ namespace BridgeVs.Build
             Log.Write(success
                     ? "Assembly {0} has been correctly Injected"
                     : "Assembly {0} was not correctly Injected",
-                _assemblyDefinition.FullName);
+                _moduleDefinition.FullyQualifiedName);
             return success;
         }
 
@@ -135,8 +136,7 @@ namespace BridgeVs.Build
         public IEnumerable<string> GetSerializableTypes()
         {
             return
-           _assemblyDefinition
-               .MainModule
+                _moduleDefinition
                .Types
                .Where(typeInAssembly => typeInAssembly.IsSerializable)
                .Select(definition => definition.FullName);
@@ -178,8 +178,7 @@ namespace BridgeVs.Build
         {
             try
             {
-                return _assemblyDefinition
-                    .MainModule
+                return _moduleDefinition
                     .Types
                     .Where(
                         typeInAssembly =>
@@ -199,11 +198,11 @@ namespace BridgeVs.Build
         {
             try
             {
-                TypeReference stringType = _assemblyDefinition.MainModule.TypeSystem.String;
-                AssemblyNameReference corlib = (AssemblyNameReference)_assemblyDefinition.MainModule.TypeSystem.CoreLibrary;
+                TypeReference stringType = _moduleDefinition.TypeSystem.String;
+                AssemblyNameReference corlib = (AssemblyNameReference)_moduleDefinition.TypeSystem.CoreLibrary;
 
                 AssemblyDefinition system =
-                    _assemblyDefinition.MainModule.AssemblyResolver.Resolve(
+                    _moduleDefinition.AssemblyResolver.Resolve(
                         new AssemblyNameReference("System", corlib.Version)
                         {
                             PublicKeyToken = corlib.PublicKeyToken,
@@ -213,11 +212,11 @@ namespace BridgeVs.Build
 
                 MethodDefinition generatedCodeCtor = generatedCodeAttribute.Methods.First(m => m.IsConstructor && m.Parameters.Count == 2);
 
-                CustomAttribute result = new CustomAttribute(_assemblyDefinition.MainModule.ImportReference(generatedCodeCtor));
+                CustomAttribute result = new CustomAttribute(_moduleDefinition.ImportReference(generatedCodeCtor));
                 result.ConstructorArguments.Add(new CustomAttributeArgument(stringType, Marker));
                 result.ConstructorArguments.Add(new CustomAttributeArgument(stringType, SInjectVersion));
 
-                _assemblyDefinition.MainModule.Assembly.CustomAttributes.Add(result);
+                _moduleDefinition.Assembly.CustomAttributes.Add(result);
             }
             catch (Exception e)
             {
@@ -228,8 +227,8 @@ namespace BridgeVs.Build
 
         private bool CheckIfAlreadySInjected()
         {
-            return _assemblyDefinition.HasCustomAttributes
-                   && _assemblyDefinition.CustomAttributes
+            return _moduleDefinition.HasCustomAttributes
+                   && _moduleDefinition.CustomAttributes
                        .Any(attribute => attribute.HasConstructorArguments
                                          &&
                                          attribute.ConstructorArguments
@@ -305,14 +304,14 @@ namespace BridgeVs.Build
         {
             if (string.IsNullOrEmpty(_snkCertificatePath) || !SnkFileExists)
             {
-                _assemblyDefinition.Name.HasPublicKey = false;
-                _assemblyDefinition.Name.PublicKey = new byte[0];
-                _assemblyDefinition.MainModule.Attributes &= ~ModuleAttributes.StrongNameSigned;
+                _moduleDefinition.Assembly.Name.HasPublicKey = false;
+                _moduleDefinition.Assembly.Name.PublicKey = new byte[0];
+                _moduleDefinition.Attributes &= ~ModuleAttributes.StrongNameSigned;
             }
 
             using (Stream file = FS.FileSystem.FileStream.Create(_assemblyLocation, FileMode.Open, FileAccess.ReadWrite))
             {
-                _assemblyDefinition.Write(file, GetWriterParameters());
+                _moduleDefinition.Write(file, GetWriterParameters());
             }
 
             return true;
@@ -321,7 +320,7 @@ namespace BridgeVs.Build
 
         public void Dispose()
         {
-            _assemblyDefinition?.Dispose();
+            _moduleDefinition?.Dispose();
         }
     }
 }
