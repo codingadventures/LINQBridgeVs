@@ -57,10 +57,12 @@
       <HintPath>..\..\Src\packages\System.IO.Abstractions.TestingHelpers.2.1.0.256\lib\net40\System.IO.Abstractions.TestingHelpers.dll</HintPath>
     </Reference>
     <Reference Include="TypeMock, Version=8.6.2.0, Culture=neutral, PublicKeyToken=3dae460033b8d8e2, processorArchitecture=MSIL">
-      <HintPath>..\..\Src\packages\Typemock.Isolator.8.6.2.0\lib\TypeMock.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\Typemock\AutoDeploy\TypeMock.Dll</HintPath>
     </Reference>
     <Reference Include="Typemock.ArrangeActAssert, Version=8.6.2.0, Culture=neutral, PublicKeyToken=3dae460033b8d8e2, processorArchitecture=MSIL">
-      <HintPath>..\..\Src\packages\Typemock.Isolator.8.6.2.0\lib\Typemock.ArrangeActAssert.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\Typemock\AutoDeploy\Typemock.ArrangeActAssert.Dll</HintPath>
     </Reference>
   </ItemGroup>
   <Choose>
