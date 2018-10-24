@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Profilers xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ShowOnlyAvailableProfilers>false</ShowOnlyAvailableProfilers>
+  <ProfilerList>
+    <Profiler Name="NCover4.5" Clsid="{7D35BD6E-BC90-44D2-9DC7-4E555B643072}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>
+    <Profiler Name="Typemock Racer" Clsid="{EDBF1A50-6FF3-49C7-902B-D9CF20D44ACC}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>
+    <Profiler Name="DevPartner.Coverage" Clsid="TM-COV{372DC2B6-0A34-4f22-BC34-BE7A18DE9137}" DirectLaunch="false">
+      <EnvironmentList>
+        <ProfilerEnvronment Name="NM_DISABLE_DA" TheValue="1" />
+        <ProfilerEnvronment Name="NM_DOING_COVERAGE" TheValue="1" />
+        <ProfilerEnvronment Name="NM_ANALYSIS" TheValue="cov" />
+      </EnvironmentList>
+    </Profiler>
+    <Profiler Name="DevPartner.Profiler" Clsid="TM-PRF{372DC2B6-0A34-4f22-BC34-BE7A18DE9137}" DirectLaunch="false">
+      <EnvironmentList>
+        <ProfilerEnvronment Name="NM_DISABLE_DA" TheValue="1" />
+        <ProfilerEnvronment Name="NM_DOING_COVERAGE" TheValue="" />
+        <ProfilerEnvronment Name="NM_ANALYSIS" TheValue="perf" />
+      </EnvironmentList>
+    </Profiler>
+    <Profiler Name="DevPartner.Memory" Clsid="{B723FCCB-3F7B-4727-BB89-B875DD02E290}" DirectLaunch="false">
+      <EnvironmentList>
+        <ProfilerEnvronment Name="NM_ANALYSIS" TheValue="mem" />
+      </EnvironmentList>
+    </Profiler>
+    <Profiler Name="CoverageEye" Clsid="{18656C37-035D-41CD-82C2-85DEF2DD5F7B}" DirectLaunch="true">
+      <EnvironmentList />
+    </Profiler>
+
+    <Profiler Name="MightyMoose 32bit " Clsid="{36C8D782-F697-45C4-856A-92D05C061A39}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>
+    <Profiler Name="MightyMoose 64bit " Clsid="{5D789D88-EEE7-46C4-909F-E39D5606544D}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>
+
+    <Profiler Name="NCover4.1" Clsid="{3E8C918E-5A84-4971-A6AF-20B97F48B6B3}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>
+    <Profiler Name="NCover3.0" Clsid="{9721F7EB-5F92-447c-9F75-79278052B7BA}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>
+    <Profiler Name="NCover2.0" Clsid="{9721F7EB-5F92-447c-9F75-79278052B7BA}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>
+    <Profiler Name="NCover" Clsid="{6287B5F9-08A1-45E7-9498-B5B2E7B02995}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>
+    <Profiler Name="NCover1.3" Clsid="{4BD66EB5-1F60-4bbd-8820-5E13080D49BE}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>
+    <Profiler Name="Partcover" Clsid="{717FF691-2ADF-4AC0-985F-1DD3C42FDF90}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>
+    <Profiler Name="Pex0.14" Clsid="{90763fbf-1e8b-48c3-a133-c29318d18944}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>
+    <Profiler Name="Pex0.12" Clsid="{34fec432-bea6-44bd-a5de-6c52714ea977}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>
+    <Profiler Name="Pex0.10" Clsid="{9DBDCF0E-CB79-49FA-882C-E489199980C0}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>
+    <Profiler Name="TestRunner" Clsid="{BC0AFDDB-7093-4752-A891-F15BA4FCFB0D}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>
+    <Profiler Name="AQtime" Clsid="{9AC77151-B894-482B-B9C0-F14DD28B80FA}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>
+    <!--<Profiler Name="AQtime6" Clsid="{B146457E-9AED-4624-B1E5-968D274416EC}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>-->
+    <Profiler Name="dotTrace1.1" Clsid="{D37A1B72-6DC3-46FC-BC31-F7C4D5A11C9C}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>
+    <Profiler Name="dotTrace.Performace" Clsid="{D37A1B73-6DC3-46FC-BC31-F7C4D5A11C9C}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>
+    <Profiler Name="dotTrace.Memory" Clsid="{D37A1B73-6DC4-46FC-BC31-F7C4D5A11C9C}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>
+    <Profiler Name="dotTrace3.0" Clsid="{D37A1B74-6DC5-46FC-BC31-F7C4D5A11C9C}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>
+    <Profiler Name="dotTrace3.0.Performace" Clsid="{D37A1B74-6DC3-46FC-BC31-F7C4D5A11C9C}" DirectLaunch="false">
+      <EnvironmentList>
+        <ProfilerEnvronment Name="profile" TheValue="cpu" />
+      </EnvironmentList>
+    </Profiler>
+    <Profiler Name="dotTrace4.0.Performace" Clsid="{D37A1B76-6DC4-46FC-BC31-F7C4D5A11C9C}" DirectLaunch="false">
+      <EnvironmentList />
+      <EnvironmentList>
+        <ProfilerEnvronment Name="profile" TheValue="cpu" />
+      </EnvironmentList>
+    </Profiler>
+    <Profiler Name="dotTrace3.0.Memory" Clsid="{D37A1B74-6DC4-46FC-BC31-F7C4D5A11C9C}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>
+    <Profiler Name="dotTrace3.1.Performace" Clsid="{D37A1B75-6DC3-46FC-BC31-F7C4D5A11C9C}" DirectLaunch="false">
+      <EnvironmentList>
+        <ProfilerEnvronment Name="profile" TheValue="cpu" />
+      </EnvironmentList>
+    </Profiler>
+    <Profiler Name="dotTrace3.1.Memory" Clsid="{D37A1B75-6DC4-46FC-BC31-F7C4D5A11C9C}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>
+    <Profiler Name="Visual Studio 2010 Profilers" Clsid="{301EC75B-AD5A-459C-A4C4-911C878FA196}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>
+    <Profiler Name="Visual Studio 2012 Profilers" Clsid="{B19F184A-CC62-4137-9A6F-AF0F91730165}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>
+    <Profiler Name="Phoenix" Clsid="{13BC4E68-A00B-43B9-A55D-4D0CB1D7018B}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>
+    <Profiler Name="OpenCover" Clsid="{1542C21D-80C3-45E6-A56C-A9C1E4BEB7B8}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>
+    <Profiler Name="OpenCover4" Clsid="{1542C21D-80C3-45E6-A56C-A9C1E4BEB7BF}" DirectLaunch="false">
+      <EnvironmentList />
+    </Profiler>
+  </ProfilerList>
+</Profilers>

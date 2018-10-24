@@ -1,0 +1,877 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TypeMock.Integration</name>
+    </assembly>
+    <members>
+        <member name="T:TypeMock.Integration.IntegrationException">
+            <summary>
+            Base class for all exceptions thrown from <see cref="T:TypeMock.Integration.Service"/>
+            </summary>
+        </member>
+        <member name="M:TypeMock.Integration.IntegrationException.#ctor(System.String)">
+            <summary>
+            Base class for all exceptions thrown from <see cref="T:TypeMock.Integration.Service"/>
+            </summary>
+            <param name="message">Reason of exception</param>
+        </member>
+        <member name="M:TypeMock.Integration.IntegrationException.#ctor">
+            <summary>
+            Base class for all exceptions thrown from <see cref="T:TypeMock.Integration.Service"/>
+            </summary>
+        </member>
+        <member name="M:TypeMock.Integration.IntegrationException.#ctor(System.String,System.Exception)">
+            <summary>
+            Base class for all exceptions thrown from <see cref="T:TypeMock.Integration.Service"/>
+            </summary>
+            <param name="message">Reason of exception</param>
+            <param name="innerException">Inner Exception</param>
+        </member>
+        <member name="M:TypeMock.Integration.IntegrationException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the IntegrationException class with serialized data
+            </summary>
+            <param name="info">The SerializationInfo that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The StreamingContext that contains contextual information about the source or destination.</param>
+        </member>
+        <member name="T:TypeMock.Integration.IntegrationLicenseException">
+            <summary>
+            IntegrationLicenseException is thrown when trying to use Typemock Isolator feature without a proper license installed on the machine
+            </summary>
+            <example>
+            The machine has a community license and and the application is trying to link with coverage tool.
+            </example>
+        </member>
+        <member name="M:TypeMock.Integration.IntegrationLicenseException.#ctor(System.String)">
+            <summary>
+            IntegrationLicenseException is thrown when trying to use Typemock Isolator feature without a proper license installed on the machine
+            </summary>
+            <param name="message">Reason of exception</param>
+        </member>
+        <member name="M:TypeMock.Integration.IntegrationLicenseException.#ctor">
+            <summary>
+            IntegrationLicenseException is thrown when trying to use Typemock Isolator feature without a proper license installed on the machine
+            </summary>
+        </member>
+        <member name="M:TypeMock.Integration.IntegrationLicenseException.#ctor(System.String,System.Exception)">
+            <summary>
+            IntegrationLicenseException is thrown when trying to use Typemock Isolator feature without a proper license installed on the machine
+            </summary>
+            <param name="message">Reason of exception</param>
+            <param name="innerException">Inner Exception</param>
+        </member>
+        <member name="M:TypeMock.Integration.IntegrationLicenseException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the IntegrationLicenseException class with serialized data.
+            </summary>
+            <param name="info">The SerializationInfo that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The StreamingContext that contains contextual information about the source or destination.</param>
+        </member>
+        <member name="T:TypeMock.Integration.IntegrationLinkingException">
+            <summary>
+            IntegrationLinkingException is thrown when there is problem in linking coverage tool with Typemock Isolator
+            </summary>
+            <example>
+            When trying to link with coverage tool that is not installed on the machine
+            </example>
+        </member>
+        <member name="M:TypeMock.Integration.IntegrationLinkingException.#ctor(System.String)">
+            <summary>
+            IntegrationLinkingException is thrown when there is problem in linking coverage tool with Typemock Isolator
+            </summary>
+            <param name="message">Reason of exception</param>
+        </member>
+        <member name="M:TypeMock.Integration.IntegrationLinkingException.#ctor">
+            <summary>
+            IntegrationLinkingException is thrown when there is problem in linking coverage tool with Typemock Isolator
+            </summary>
+        </member>
+        <member name="M:TypeMock.Integration.IntegrationLinkingException.#ctor(System.String,System.Exception)">
+            <summary>
+            IntegrationLinkingException is thrown when there is problem in linking coverage tool with TypeMock
+            </summary>
+            <param name="message">Reason of exception</param>
+            <param name="innerException">Inner Exception</param>
+        </member>
+        <member name="M:TypeMock.Integration.IntegrationLinkingException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the IntegrationLinkingException class with serialized data.
+            </summary>
+            <param name="info">The SerializationInfo that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The StreamingContext that contains contextual information about the source or destination.</param>
+        </member>
+        <member name="T:TypeMock.Integration.IntegrationMissingFileException">
+            <summary>
+            IntegrationMissingFileException is thrown when using the Auto Deploy feature and one of the files needed by Typemock Isolator is missing
+            </summary>
+            <example>
+            The Auto Deploy directory is missing TypeMock.dll file
+            </example>
+        </member>
+        <member name="M:TypeMock.Integration.IntegrationMissingFileException.#ctor(System.String)">
+            <summary>
+            IntegrationMissingFileException is thrown when using the Auto Deploy feature and one of the files needed by Typemock Isolator is missing
+            </summary>
+            <param name="message">Reason of exception</param>
+        </member>
+        <member name="M:TypeMock.Integration.IntegrationMissingFileException.#ctor">
+            <summary>
+            IntegrationMissingFileException is thrown when using the Auto Deploy feature and one of the files needed by Typemock Isolator is missing
+            </summary>
+        </member>
+        <member name="M:TypeMock.Integration.IntegrationMissingFileException.#ctor(System.String,System.Exception)">
+            <summary>
+            IntegrationMissingFileException is thrown when using the Auto Deploy feature and one of the files needed by Typemock Isolator is missing
+            </summary>
+            <param name="message">Reason of exception</param>
+            <param name="innerException">Inner Exception</param>
+        </member>
+        <member name="M:TypeMock.Integration.IntegrationMissingFileException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the IntegrationMissingFileException class with serialized data.
+            </summary>
+            <param name="info">The SerializationInfo that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The StreamingContext that contains contextual information about the source or destination.</param>
+        </member>
+        <member name="T:TypeMock.Integration.IntegrationNotInstalledException">
+            <summary>
+            IntegrationNotInstalledException is thrown when Typemock Isolator installation directory can not be found
+            </summary>
+        </member>
+        <member name="M:TypeMock.Integration.IntegrationNotInstalledException.#ctor(System.String)">
+            <summary>
+            IntegrationNotInstalledException is thrown when Typemock Isolator installation directory can not be found
+            </summary>
+            <param name="message">Reason of exception</param>
+        </member>
+        <member name="M:TypeMock.Integration.IntegrationNotInstalledException.#ctor">
+            <summary>
+            IntegrationNotInstalledException is thrown when Typemock Isolator installation directory can not be found
+            </summary>
+        </member>
+        <member name="M:TypeMock.Integration.IntegrationNotInstalledException.#ctor(System.String,System.Exception)">
+            <summary>
+            IntegrationNotInstalledException is thrown when Typemock Isolator installation directory can not be found
+            </summary>
+            <param name="message">Reason of exception</param>
+            <param name="innerException">Inner Exception</param>
+        </member>
+        <member name="M:TypeMock.Integration.IntegrationNotInstalledException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the IntegrationNotInstalledException class with serialized data.
+            </summary>
+            <param name="info">The SerializationInfo that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The StreamingContext that contains contextual information about the source or destination.</param>
+        </member>
+        <member name="T:TypeMock.Integration.LicenseStatus">
+            <summary>
+            Result values of the <see cref="M:TypeMock.Integration.Packs.CheckLicense(System.String)"/> method. 
+            </summary>
+        </member>
+        <member name="F:TypeMock.Integration.LicenseStatus.Expired">
+            <summary>
+            The license key is valid but has expired
+            </summary>
+        </member>
+        <member name="F:TypeMock.Integration.LicenseStatus.Valid">
+            <summary>
+            The license key is valid and has not expire yet
+            </summary>
+        </member>
+        <member name="F:TypeMock.Integration.LicenseStatus.Invalid">
+            <summary>
+            The license key in invalid
+            </summary>
+        </member>
+        <member name="T:TypeMock.Integration.LicenseScope">
+            <summary>
+            License scope . 
+            </summary>
+        </member>
+        <member name="F:TypeMock.Integration.LicenseScope.CurrentUser">
+            <summary>
+            The license if for current user only
+            </summary>
+        </member>
+        <member name="F:TypeMock.Integration.LicenseScope.AllUsers">
+            <summary>
+            The license key is for all users - requires correct privaleges
+            </summary>
+        </member>
+        <member name="T:TypeMock.Integration.Packs">
+            <summary>
+            The Packs class is used to allow extending Isolator with additional functionality.
+            </summary>
+            <remarks>
+            This class in the entry point for integrating Typemock Isolator with other applications.
+            For example, it allows registering and unregistering new packages, set, check and remove licenses.
+            <para>As this assembly is used for integration, it is version agnostic and is both backward and forward compatible.
+            This assembly does not require other Typemock Isolator assemblies and can be deployed separately</para>
+            </remarks>
+        </member>
+        <member name="M:TypeMock.Integration.Packs.SetLicense(System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            Set a license key for a specific package
+            </summary>
+            <param name="productName">Package name</param>
+            <param name="licenseKey">License key</param>
+            <param name="companyName">The company that received the license key</param>
+            <param name="allUser">Set license for all users or current user</param>
+            <exception cref="T:TypeMock.Integration.IntegrationLicenseException">Will be thrown in the following conditions:
+            <list type="bullet">
+            <item>One of the string arguments is either null or an empty string</item>
+            <item>The license key argument is not valid</item>
+            </list>
+            </exception>
+            <remarks>
+            <para>
+            <example>
+            Example of using Packs.SetLicense:
+            <code>
+            void SetLicense(string licenseKey, string clientCompanyName)
+            {
+                Packs.SetLicense("MyPackName", licenseKey, clientCompanyName);
+            }
+            </code>
+            </example>
+            </para>
+            </remarks>
+        </member>
+        <member name="M:TypeMock.Integration.Packs.Register(System.String,TypeMock.Integration.LicenseScope)">
+            <summary>
+            Register a package. If you would like to build your own package for Typemock Isolator, contact us at www.typemock.com.
+            </summary>
+            <param name="productName">Package name</param>
+            <param name="scope">Scope of the package license</param>
+            <exception cref="T:TypeMock.Integration.IntegrationLicenseException">Will be thrown if the productName argument is either null or an empty string.</exception>
+            <remarks>
+            <para>
+            <example>
+            Example of using Packs.Register:
+            <code>
+            Packs.Register("MyPackName");
+            </code>
+            </example>
+            </para>
+            </remarks>
+        </member>
+        <member name="M:TypeMock.Integration.Packs.CheckLicense(System.String)">
+            <summary>
+            Checks the validity of the license and returns the license status as LicenseStatus enum
+            </summary>
+            <param name="productName">Package name</param>
+            <returns>License status as <see cref="T:TypeMock.Integration.LicenseStatus"/> enum type</returns>
+            <remarks>
+            The results can be:
+            <list type="bullet">
+            <item>LicenseStatus.Valid   - The license is valid and did not expire yet</item>
+            <item>LicenseStatus.Invalid - The license key in invalid.</item>
+            <item>LicenseStatus.Expired - The license key is valid but has expired</item>
+            </list>
+            <example>
+            <para>
+            Example of using Packs.CheckLicense:
+            <code>
+            void WriteLicenseKeyStatus(string licenseKey)
+            {
+                LicenseStatus licenseStatus = Packs.CheckLicense("MyPackName");
+            
+                switch (licenseStatus)
+                {
+                    case LicenseStatus.Valid:
+                        Console.WriteLine("license key {0} is ok.", licenseKey);
+                        break;
+                    case LicenseStatus.Expired:
+                        Console.WriteLine("license key {0} has expired.", licenseKey);
+                        break;
+                    default:
+                        Console.WriteLine("license key {0} is invalid.", licenseKey);
+                        break;                
+                }
+            }
+            </code>
+            </para>
+            </example>
+            </remarks>
+        </member>
+        <member name="M:TypeMock.Integration.Packs.Unregister(System.String,TypeMock.Integration.LicenseScope)">
+            <summary>
+            Unregister a package. If you would like to build your own package for Typemock Isolator, contact us at www.typemock.com.
+            </summary>
+            <param name="productName">Package name</param>
+            <param name="scope">Scope of the package license</param>
+            <exception cref="T:TypeMock.Integration.IntegrationLicenseException">Will be thrown if the productName argument is either null or an empty string.</exception>
+            <remarks>
+            <para>
+            <example>
+            Example of using Packs.Unregister:
+            <code>
+            Packs.Unregister("MyPackName");
+            </code>
+            </example>
+            </para>
+            </remarks>
+        </member>
+        <member name="T:TypeMock.Integration.Service">
+            <summary>
+            The main class used to integrate Typemock Isolator with other applications.
+            </summary>
+            <remarks>
+            This class in the entry point to integrate Typemock Isolator with other applications.
+            For example retrieving information about the installed Typemock Isolator, setting up processes to run with Typemock Isolator and
+            to link coverage tools
+            <para>As this assembly is used for integration, it is version agnostic and is both backward and forward compatible.
+            This assembly does not require other Typemock Isolator assemblies and can be deployed separately</para>
+            <example>
+            Example of using the Auto deploy feature of Typemock Isolator with TypeMock.Integration API
+            <code lang="cs">
+            public void DoAutoDeploy(string path)
+            {
+                if(!Service.HasLicenseForAutodeploy())
+                {
+                    Console.WriteLine("You don't have license for Auto Deploy TypeMock");
+                    return;
+                }
+            
+                Service.InstallFrom(path);
+            }
+            </code>
+            </example>
+            </remarks>
+        </member>
+        <member name="P:TypeMock.Integration.Service.InstallDirectory">
+            <summary>
+            Retrieve the Typemock Isolator installation directory
+            </summary>
+            <returns>Full path of Typemock Isolator installation directory. Returns null if TypeMock is not installed</returns>
+            <remarks>
+            <para>        
+            <example>
+            Example using Service.InstallDirectory
+            <code lang="cs">
+            public void PrintTypeMockInstallationPath()
+            {
+                Console.WriteLine("TypeMock installed at:");
+                Console.WriteLine(Service.InstallDirectory);
+            }
+            </code>
+            </example>
+            </para>
+            </remarks>
+        </member>
+        <member name="M:TypeMock.Integration.Service.InstallFrom(System.String)">
+            <summary>
+            Install (AutoDeploy) Typemock Isolator from a specific directory. (This requires an Enterprise License)
+            </summary>
+            <param name="path">Path to Typemock Isolator deployed directory</param>
+            <remarks>
+            <para>
+            <example>
+            Example of using Service.InstallFrom
+            <code lang="cs">        
+             public void DoAutoDeploy(string path)
+             {
+                 if(! Service.HasLicenseForAutodeploy())
+                 {
+                     Console.WriteLine("You don't have license for Auto Deploy TypeMock");
+                     return;
+                 }
+             
+                 Service.InstallFrom(path);
+             }
+            </code>
+            </example>
+            </para>
+            </remarks>
+        </member>
+        <member name="P:TypeMock.Integration.Service.IsInstalled">
+            <summary>
+            Check if Typemock Isolator is installed on the machine
+            </summary>
+            <returns>True if Typemock Isolator is installed otherwise returns false</returns>
+            <remarks>
+            <para>
+            <example>
+            Example of using Service.IsInstalled
+            <code lang="cs">
+            static void Main(string[] args)
+            {
+                if(! Service.IsInstalled)
+                {
+                    Console.WriteLine("TypeMock is not installed on this machine");
+                }
+            }
+            </code>
+            </example>
+            </para>
+            </remarks>
+        </member>
+        <member name="M:TypeMock.Integration.Service.HasLicenseToLink">
+            <summary>
+            Check if the running machine has license for linking TypeMock with coverage tool
+            </summary>
+            <returns>True if the machine has Enterprise license otherwise returns false</returns>
+            <remarks>
+            <para>
+            <example>
+            Example of using Service.HasLicenseToLink
+            <code lang="cs">
+            public void RunTest(string profilerName)
+            {
+                if (!Service.HasLicenseToLink())
+                {
+                    Console.WriteLine("In order to link TypeMock you need a valid licence");
+                    return;
+                }
+                // ....
+            }        
+            </code>
+            </example>
+            </para>
+            </remarks>
+        </member>
+        <member name="M:TypeMock.Integration.Service.HasLicenseForAutodeploy">
+            <summary>
+            Check if the running machine has license for Auto Deploying TypeMock
+            </summary>
+            <returns>True if the machine has Enterprise license otherwise returns false</returns>
+            <remarks>
+            <para>
+            <example>
+            Example of using Service.HasLicenseForAutodeploy
+            <code lang="cs">        
+            public void DoAutoDeploy(string path)
+            {
+                if(! Service.HasLicenseForAutodeploy())
+                {
+                    Console.WriteLine("You don't have license for Auto Deploy TypeMock");
+                    return;
+                }
+            
+                Service.InstallFrom(path);
+            }
+            </code>
+            </example>
+            </para>
+            </remarks>
+        </member>
+        <member name="M:TypeMock.Integration.Service.GetCoverageTools(System.Boolean)">
+            <summary>
+            Get list of profilers available to link with Typemock Isolator
+            </summary>
+            <param name="installedOnly">set to true to get list of only available profilers on the machine
+            set to false to get all the profilers supported by Typemock Isolator</param>
+            <returns>list of profilers</returns>
+            <remarks>
+            <para>
+            <example>
+            Example of using Service.GetCoverageTools
+            <code lang="cs">        
+            Console.WriteLine("Available profilers on this machine:");
+            foreach (string profiler in Service.GetCoverageTools(true))
+            {
+                Console.WriteLine(profiler);
+            }
+            </code>
+            </example>
+            </para>
+            </remarks>
+        </member>
+        <member name="T:TypeMock.Integration.TypeMockProcess">
+            <summary>
+            This class manages Processes running with Typemock Isolator.
+            </summary>
+            <remarks>
+            Using TypeMockProcess developers can enable running Processes with Typemock Isolator,
+            Check if Typemock Isolator is enabled on Process and link Typemock Isolator with coverage tool.
+            <note>
+            All actions that are on process object should be before
+            the process starts running</note>
+            <example>
+            Example using TypeMockProcess
+            <code lang="cs">
+            public void RunTest()
+            {
+                ProcessStartInfo info = new ProcessStartInfo(UnitTestRunner, UnitTestRunnerParams); 
+                using(typeMockProcess.Start(info))
+                {                
+                }
+            }    
+            </code>
+            </example>
+            </remarks>
+        </member>
+        <member name="M:TypeMock.Integration.TypeMockProcess.#ctor">
+            <summary>        
+            Deriving class should override this constructor when it needs to create
+            process instance with Typemock Isolator enabled
+            </summary>
+        </member>
+        <member name="M:TypeMock.Integration.TypeMockProcess.#ctor(System.Diagnostics.ProcessStartInfo)">
+            <summary>
+            Create a new process with Typemock Isolator enabled
+            </summary>
+            <param name="info">the ProcessStartInfo of the process</param>
+            <remarks>
+            <para>
+            <example>
+            Example of using TypeMockProcess.TypeMockProcess(ProcessStartInfo info)
+            <code lang="cs">
+            public void RunTest()
+            {
+                ProcessStartInfo info = new ProcessStartInfo(UnitTestRunner, UnitTestRunnerParams);
+                TypeMockProcess typeMockProcess = new TypeMockProcess(info);
+            }
+            </code>
+            </example>
+            </para>
+            </remarks>
+        </member>
+        <member name="M:TypeMock.Integration.TypeMockProcess.#ctor(System.Diagnostics.ProcessStartInfo,System.Boolean)">
+            <summary>
+            Create a new process with Typemock Isolator enabled
+            </summary>
+            <param name="info">the ProcessStartInfo of the process</param>
+            <param name="blocking">Set to false when you want to start unblocking process. The default mode is blocking</param>
+            <remarks>
+            <para>
+            <example>
+            Example of using TypeMockProcess.TypeMockProcess(ProcessStartInfo info)
+            The process will be run in un-blocking mode
+            <code lang="cs">
+            public void RunTest()
+            {
+                ProcessStartInfo info = new ProcessStartInfo(UnitTestRunner, UnitTestRunnerParams);
+                TypeMockProcess typeMockProcess = new TypeMockProcess(info, false);
+            }
+            </code>
+            </example>
+            </para>
+            </remarks>
+        </member>
+        <member name="M:TypeMock.Integration.TypeMockProcess.#ctor(System.Diagnostics.ProcessStartInfo,System.String)">
+            <summary>
+            Create a new process with Typemock Isolator enabled and 
+            a code coverage tool linked
+            </summary>
+            <param name="info">the ProcessStartInfo of the process</param>
+            <param name="profilerName">the name of the coverage profiler to link with Typemock Isolator</param>
+            <remarks>
+            <para>
+            <example>
+            Example of using TypeMockProcess.TypeMockProcess(ProcessStartInfo info, string profilerName)
+            <code lang="cs">
+            public void RunTest()
+            {
+                ProcessStartInfo info = new ProcessStartInfo(UnitTestRunner, UnitTestRunnerParams);
+                TypeMockProcess typeMockProcess = new TypeMockProcess(info, "NCover");
+            }
+            </code>
+            </example>
+            </para>
+            </remarks>        
+        </member>
+        <member name="M:TypeMock.Integration.TypeMockProcess.Start">
+            <summary>
+            Starts new process with Typemock Isolator enabled
+            </summary>
+            <returns>TypeMockProcess instance</returns>
+            <remarks>
+            <para>
+            <example>
+            Example of using TypeMockProcess.Start()
+            <code lang="cs">
+            public void RunTest()
+            {
+                ProcessStartInfo info = new ProcessStartInfo(UnitTestRunner, UnitTestRunnerParams);
+                TypeMockProcess typeMockProcess = new TypeMockProcess(info);
+            
+                using(typeMockProcess.Start())
+                {                
+                }
+            }
+            </code>
+            </example>
+            </para>
+            </remarks>                
+        </member>
+        <member name="M:TypeMock.Integration.TypeMockProcess.Start(System.Diagnostics.ProcessStartInfo)">
+            <summary>
+            Starts new process with Typemock Isolator enabled
+            </summary>
+            <param name="info">ProcessStartInfo with information to start the process</param>
+            <returns>TypeMockProcess instance</returns>
+            <remarks>
+            <para>
+            <example>
+            Example of using TypeMockProcess.Start(ProcessStartInfo info)
+            <code lang="cs">
+            public void RunTest()
+            {
+                ProcessStartInfo info = new ProcessStartInfo(UnitTestRunner, UnitTestRunnerParams);        
+                using(typeMockProcess.Start(info))
+                {                
+                }
+            }
+            </code>
+            </example>
+            </para>
+            </remarks>                
+        </member>
+        <member name="M:TypeMock.Integration.TypeMockProcess.Start(System.Diagnostics.ProcessStartInfo,System.String)">
+            <summary>
+            Starts new process with Typemock Isolator enabled and a coverage profiler linked
+            </summary>
+            <param name="info">ProcessStartInfo with information to start the process</param>
+            <param name="profilerName">Coverage profiler name to link with TypeMock</param>
+            <returns>TypeMockProcess instance</returns>
+            <remarks>
+            <para>
+            <example>
+            Example of using TypeMockProcess.Start(ProcessStartInfo info, string profilerName)
+            <code lang="cs">
+            public void RunTest(string profilerName)
+            {
+                ProcessStartInfo info = new ProcessStartInfo(UnitTestRunner, UnitTestRunnerParams);        
+                using(typeMockProcess.Start(info, profilerName))
+                {                
+                }
+            }
+            </code>
+            </example>
+            </para>
+            </remarks>                
+        </member>
+        <member name="M:TypeMock.Integration.TypeMockProcess.Start(System.String)">
+            <summary>
+            Starts new process with Typemock Isolator enabled.
+            </summary>
+            <param name="fileName">The name of a document or application file to run in the process.</param>
+            <returns>TypeMockProcess instance.</returns>
+            <remarks>
+            <para>
+            <example>
+            Example of using TypeMockProcess.Start(string fileName)
+            <code>
+            public void RunTest()
+            {
+                TypeMockProcess.Start(UnitTestRunner);
+            }
+            </code>
+            </example>
+            </para>
+            </remarks>
+        </member>
+        <member name="M:TypeMock.Integration.TypeMockProcess.Start(System.String,System.String)">
+            <summary>
+            Starts new process with Typemock Isolator enabled.
+            </summary>
+            <param name="fileName">The name of an application file to run in the process.</param>
+            <param name="arguments">Command-line arguments to pass when starting the process. </param>
+            <returns>TypeMockProcess instance.</returns>
+            <remarks>
+            <para>
+            <example>
+            Example of using TypeMockProcess.Start(string fileName, string arguments)
+            <code>
+            public void RunTest()
+            {
+                TypeMockProcess.Start(UnitTestRunner, UnitTestRunnerParams);
+            }
+            </code>
+            </example>
+            </para>
+            </remarks>
+        </member>
+        <member name="M:TypeMock.Integration.TypeMockProcess.DisableTypeMockOnProcess">
+            <summary>
+            Disable Typemock Isolator on process
+            </summary>
+            <returns>TypeMockProcess with Typemock Isolator disabled</returns>
+            <remarks>
+            <para>
+            <example>
+            Example of using TypeMockProcess.DisableTypeMockOnProcess()
+            <code lang="cs">
+            public void RunTest()
+            {            
+                //set the process to run and its command line arguments
+                ProcessStartInfo info = new ProcessStartInfo(UnitTestRunner, UnitTestRunnerParams);
+                //create process with Typemock Isolator enabled
+                TypeMockProcess typeMockProcess = new TypeMockProcess(info);
+            
+                //run the process
+                typeMockProcess.Start();
+                typeMockProcess.DisableTypeMockOnProcess();
+                //run the process without Typemock Isolator
+                typeMockProcess.Start();
+            }
+            </code>
+            </example>
+            </para>
+            </remarks>                        
+        </member>
+        <member name="M:TypeMock.Integration.TypeMockProcess.DisableTypeMockOnProcess(System.Diagnostics.Process)">
+            <summary>
+            Disable Typemock Isolator on process
+            </summary>
+            <param name="proc">Process object to disable Typemock Isolator</param>
+            <returns>Process with Typemock Isolator disabled</returns>
+            <remarks>
+            <para>
+            <example>
+            Example of using TypeMockProcess.DisableTypeMockOnProcess(Process proc)
+            <code lang="cs">
+            public void RunTest()
+            {            
+                //create process
+                Process proc = new Process();
+            
+                //enable Typemock Isolator
+                proc = TypeMockProcess.PrepareTypeMockProcess(proc)
+                //run the process
+                proc.Start();
+                proc = TypeMockProcess.DisableTypeMockOnProcess(proc);
+                //run the process without Typemock Isolator
+                proc.Start();
+            }
+            </code>
+            </example>
+            </para>
+            </remarks>                                
+        </member>
+        <member name="M:TypeMock.Integration.TypeMockProcess.PrepareTypeMockProcess">
+            <summary>
+            Enable Typemock Isolator on process
+            </summary>
+            <remarks>
+            <para>
+            <example>
+            Example of using TypeMockProcess.PrepareTypeMockProcess()
+            <code>
+            public void RunTest()
+            {            
+                //set the process to run and its command line arguments
+                ProcessStartInfo info = new ProcessStartInfo(UnitTestRunner, UnitTestRunnerParams);
+                //create process with Typemock Isolator enabled
+                TypeMockProcess typeMockProcess = new TypeMockProcess(info);
+            
+                //run the process without Typemock Isolator
+                typeMockProcess.DisableTypeMockOnProcess();
+                typeMockProcess.Start();
+                
+                typeMockProcess.PrepareTypeMockProcess();
+                //run the process with Typemock Isolator
+                typeMockProcess.Start();
+            }
+            </code>
+            </example>
+            </para>
+            </remarks>                        
+        </member>
+        <member name="M:TypeMock.Integration.TypeMockProcess.PrepareTypeMockProcess(System.Diagnostics.Process)">
+            <summary>
+            Enables Typemock Isolator on process
+            </summary>
+            <param name="process">Process to enable Typemock Isolator on</param>
+            <returns>Process with Typemock Isolator enabled</returns>
+            <remarks>
+            <para>
+            <example>
+            Example of using TypeMockProcess.PrepareTypeMockProcess(Process process)
+            <code lang="cs">     
+            public void Run(Process process)
+            {
+                if(! TypeMockProcess.IsEnabled(process))
+                {
+                    TypeMockProcess.PrepareTypeMockProcess(process);
+                }
+                process.Start();
+            }
+            </code>
+            </example>
+            </para>
+            </remarks>                                                        
+        </member>
+        <member name="M:TypeMock.Integration.TypeMockProcess.UnlinkWithCovarage">
+            <summary>
+            Unlinks coverage profiler
+            </summary>
+            <remarks>
+            <para>
+            <example>
+            Example of using TypeMockProcess.UnlinkWithCovarage()
+            <code lang="cs">
+            public void RunTestLinked(string profilerName)
+            {
+                //First unlink Typemock Isolator with any previous profiler
+                TypeMockProcess.UnlinkWithCovarage();
+            
+                //set the process to run and its command line arguments
+                ProcessStartInfo info = new ProcessStartInfo(UnitTestRunner, UnitTestRunnerParams);
+            
+                //run the process with TypeMockEnabled and link with profiler
+                using (TypeMockProcess.Start(info, profilerName))
+                {
+                }            
+            }
+            </code>
+            </example>
+            </para>
+            </remarks>                                
+        </member>
+        <member name="M:TypeMock.Integration.TypeMockProcess.IsEnabled">
+            <summary>
+            Use to determain if Typemock Isolator is enabled on process
+            </summary>
+            <returns>true if Typemock Isolator is enabled on process otherwise returns false</returns>
+            <remarks>
+            <para>
+            <example>
+            Example of using TypeMockProcess.IsEnabled()
+            <code lang="cs">        
+            public void Run(TypeMockProcess typeMockProcess)
+            {
+                if (!typeMockProcess.IsEnabled())
+                {
+                    TypeMockProcess.PrepareTypeMockProcess(typeMockProcess);
+                }
+                typeMockProcess.Start();
+            }
+            </code>
+            </example>
+            </para>
+            </remarks>                                        
+        </member>
+        <member name="M:TypeMock.Integration.TypeMockProcess.IsEnabled(System.Diagnostics.Process)">
+            <summary>
+            Use to determain if Typemock Isolator is enabled on process
+            </summary>
+            <param name="proc">The process we want to check</param>
+            <returns>true if Typemock Isolator is enabled on the process otherwise returns false</returns>
+            <remarks>
+            <para>
+            <example>
+            Example of using TypeMockProcess.IsEnabled(Process proc)
+            <code lang="cs">   
+            public void Run(Process process)
+            {
+                if(! TypeMockProcess.IsEnabled(process))
+                {
+                    TypeMockProcess.PrepareTypeMockProcess(process);
+                }
+                process.Start();
+            }
+            </code>
+            </example>
+            </para>
+            </remarks>                                                
+        </member>
+        <member name="M:TypeMock.Integration.TypeMockProcess.Dispose(System.Boolean)">
+            <summary>
+            Note: Dispose is already implemented by Process base class
+            </summary>
+            <param name="disposing">true when called from user code. false when called by runtime from Finalize method</param>
+        </member>
+    </members>
+</doc>
