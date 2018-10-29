@@ -1,0 +1,27 @@
+version: 1.4.7.{build}
+pull_requests:
+  do_not_increment_build_number: true
+branches:
+  only:
+  - master
+  - Refactor
+image: Visual Studio 2017
+configuration:
+- Debug
+- Test
+- Deploy
+platform: Any CPU
+install:
+- cmd: git submodule update --init --recursive
+before_build:
+- ps: nuget restore c:\projects\linqbridgevs\src\BridgeVs.Tests.sln
+build:
+  project: src\BridgeVs.Tests.sln
+  parallel: true
+  verbosity: normal
+test_script:
+- ps: |
+    if ($env:CONFIGURATION -eq "Test") 
+    {
+       c:\projects\linqbridgevs\Lib\Typemock\TMockRunner.exe -deploy Lib\Typemock\AutoDeploy vstest.console.exe "Test\BridgeVs.Build.Test\bin\Test\BridgeVs.Build.Test.dll" "Test\BridgeVs.DynamicVisualizers.Test\bin\Test\BridgeVs.DynamicVisualizers.Test.dll" "Test\BridgeVs.Grapple.Test\bin\Test\BridgeVs.Grapple.Test.dll" "Test\BridgeVs.VsExtension.Helper.Test\bin\Test\BridgeVs.VsPackage.Helper.Test.dll" /logger:Appveyor /TestCaseFilter:"TestCategory=UnitTest"'
+    }
