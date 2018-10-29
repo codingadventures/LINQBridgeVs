@@ -23,5 +23,5 @@ test_script:
 - ps: |
     if ($env:CONFIGURATION -eq "Test") 
     {
-       c:\projects\linqbridgevs\Lib\Typemock\TMockRunner.exe -deploy Lib\Typemock\AutoDeploy vstest.console.exe "Test\BridgeVs.Build.Test\bin\Test\BridgeVs.Build.Test.dll" "Test\BridgeVs.DynamicVisualizers.Test\bin\Test\BridgeVs.DynamicVisualizers.Test.dll" "Test\BridgeVs.Grapple.Test\bin\Test\BridgeVs.Grapple.Test.dll" "Test\BridgeVs.VsExtension.Helper.Test\bin\Test\BridgeVs.VsPackage.Helper.Test.dll" /logger:Appveyor /TestCaseFilter:"TestCategory=UnitTest"'
+       c:\projects\linqbridgevs\Lib\Typemock\TMockRunner.exe -deploy Lib\Typemock\AutoDeploy vstest.console.exe "Test\BridgeVs.Build.Test\bin\Test\BridgeVs.Build.Test.dll" "Test\BridgeVs.DynamicVisualizers.Test\bin\Test\BridgeVs.DynamicVisualizers.Test.dll" "Test\BridgeVs.Grapple.Test\bin\Test\BridgeVs.Grapple.Test.dll" "Test\BridgeVs.VsExtension.Helper.Test\bin\Test\BridgeVs.VsPackage.Helper.Test.dll" /logger:Appveyor /TestCaseFilter:"TestCategory=UnitTest"
     }
