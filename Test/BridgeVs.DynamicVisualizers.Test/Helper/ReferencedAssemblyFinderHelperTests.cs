@@ -1,49 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO.Abstractions.TestingHelpers;
-using BridgeVs.AnotherModel.Test;
-using BridgeVs.DynamicVisualizers.Helper;
+﻿using BridgeVs.AnotherModel.Test;
 using BridgeVs.Model.Test;
+using BridgeVs.Shared.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using System.Linq;
+using TypeMock.ArrangeActAssert;
 
 namespace BridgeVs.DynamicVisualizers.Test.Helper
 {
     [TestClass]
     public class ReferencedAssemblyFinderHelperTests
     {
-        //private CustomType4 _customType4;
         private Dictionary<string, CustomType4> _dictionary;
-        private const string SourcePath = @"c:\Root1\Version1\A\AnotherModel.Test.dll";
-        private const string registryKeyPath = @"Software\LINQBridgeVs\0.0\Solutions";
-        [ClassInitialize]
+        private const string SourcePath = @"BridgeVs.Model.Test";
+
+
         [TestCategory("UnitTest")]
-        public static void Initialize(TestContext c)
+        [TestCleanup]
+        public void Cleanup()
         {
-
-            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
-                                                        {
-                                                            {
-                                                               SourcePath ,
-                                                                new MockFileData(string.Empty)
-                                                                    {
-                                                                        LastAccessTime =   DateTime.Now
-                                                                    }
-                                                            }
-                                                        });
-
-
-
-
-            AssemblyFinderHelper.FileSystem = mockFileSystem;
+            Isolate.CleanUp();
         }
 
         [TestInitialize]
         [TestCategory("UnitTest")]
         public void Init()
         {
-            var customType4 = new CustomType4 { { "1", new AnotherModelTest() } };
-
-
+            CustomType4 customType4 = new CustomType4 { { "1", new AnotherModelTest() } };
             _dictionary = new Dictionary<string, CustomType4> { { "2", customType4 } };
         }
 
@@ -51,10 +34,10 @@ namespace BridgeVs.DynamicVisualizers.Test.Helper
         [TestCategory("UnitTest")]
         public void FindReferencedAssembliesTest()
         {
-            var refAss = _dictionary.GetType().GetReferencedAssemblies(SourcePath);
+            List<string> refAss = _dictionary.GetType().FindAssemblyNames();
 
             Assert.IsTrue(refAss.Count > 0);
-            Assert.AreEqual(refAss[0], SourcePath);
+            Assert.IsTrue(refAss.Any(p => p.Equals(SourcePath)));
         }
     }
 }

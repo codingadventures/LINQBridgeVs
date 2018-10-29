@@ -31,9 +31,13 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Optimize>true</Optimize>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\BridgeVs.VsPackage\Key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Dependency\Crawler.cs" />
-    <Compile Include="Dependency\ProjectDependency.cs" />
     <Compile Include="SInjection.cs" />
     <Compile Include="Tasks\CleanBuildTask.cs" />
     <Compile Include="Tasks\MapperBuildTask.cs" />
@@ -42,12 +46,12 @@
     <Compile Include="TypeMapper\VisualizerAttributeInjector.cs" />
     <Compile Include="Util\EnumerableExtension.cs" />
     <Compile Include="Util\ReflectionUtils.cs" />
-    <Compile Include="Util\TypeReferenceExt.cs" />
+    <Compile Include="Util\TypeReferenceExtension.cs" />
     <Compile Include="Util\VisualizerAssemblyNameFormat.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Lib\SharpRaven\src\app\SharpRaven\SharpRaven.csproj">
-      <Project>{d472fc40-284f-4532-a269-be7bdac2b153}</Project>
+      <Project>{36fcaf4d-911d-41a8-8303-e31527d3149f}</Project>
       <Name>SharpRaven</Name>
     </ProjectReference>
     <ProjectReference Include="..\BridgeVs.Locations\BridgeVs.Shared.csproj">
@@ -74,11 +78,14 @@
       <HintPath>..\packages\Mono.Cecil.0.10.0\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Abstractions, Version=2.1.0.256, Culture=neutral, PublicKeyToken=96bf224d23c43e59, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Abstractions.2.1.0.256\lib\net40\System.IO.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>

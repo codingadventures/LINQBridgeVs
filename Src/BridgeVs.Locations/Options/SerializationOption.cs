@@ -23,11 +23,15 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
+
 namespace BridgeVs.Shared.Options
 {
+    [Serializable]
     public enum SerializationOption
     {
-        JSON,
-        Binary
+        JsonSerializer,
+        BinarySerializer,
+        XmlSerializer
     }
 }

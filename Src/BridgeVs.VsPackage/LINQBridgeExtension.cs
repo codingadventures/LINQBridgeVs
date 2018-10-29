@@ -28,7 +28,10 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
+using System.Windows;
+using BridgeVs.Shared.Common;
 using BridgeVs.VsPackage.Helper;
+using BridgeVs.VsPackage.Helper.Command;
 using BridgeVs.VsPackage.Helper.Configuration;
 using EnvDTE;
 using Project = EnvDTE.Project;
@@ -73,7 +76,16 @@ namespace BridgeVs.VsPackage
             if (projects.Count == 0)
                 return;
 
-            BridgeCommand.ActivateBridgeVsOnSolution(action, projects, SolutionName, _application.Version, _application.Edition);
+            if (BridgeCommand.IsEveryProjectSupported(projects, _application.Version, _application.Edition))
+            {
+                BridgeCommand.ActivateBridgeVsOnSolution(action, projects, SolutionName, _application.Version,
+                    _application.Edition);
+            }
+            else
+            {
+                string message = $@"Solution {SolutionName} contains one or more un-supported projects. ASP.NET Core, .NET Core, .NET standard and UAP are not supported by LINQBridgeVs.";
+                MessageBox.Show(message);
+            }
         }
 
         public void UpdateCommand(MenuCommand cmd, CommandAction action)
@@ -92,7 +104,7 @@ namespace BridgeVs.VsPackage
             if (!isBridgeVsConfigured)
                 return result; //just show it as visible
 
-            bool isSolutionEnabled = BridgeCommand.IsSolutionEnabled(SolutionName, _application.Version);
+            bool isSolutionEnabled = CommonRegistryConfigurations.IsSolutionEnabled(SolutionName, _application.Version);
 
             if (isSolutionEnabled && action == CommandAction.Disable || !isSolutionEnabled && action == CommandAction.Enable)
                 result |= CommandStates.Enabled;

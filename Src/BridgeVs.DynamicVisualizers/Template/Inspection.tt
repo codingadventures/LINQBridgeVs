@@ -10,21 +10,17 @@
   <Namespace>System.Dynamic</Namespace>
   <Namespace>System.Runtime.Serialization.Formatters</Namespace>
   <Namespace>System.Xml.Linq</Namespace>
-  <Namespace>BridgeVs.Grapple</Namespace>
+  <Namespace>BridgeVs.Shared.Serialization</Namespace>
   <Namespace>BridgeVs.Shared</Namespace>
   <Namespace>BridgeVs.Shared.Options</Namespace>
   <Namespace><#= _typeNamespace #></Namespace>
-  <# foreach(var elem in this._assemblies){
-    if (!elem.Contains("mscorlib")) {
-  #>
-  <Reference><#=elem#></Reference>
-  <#}}#> 
-</Query>
+  <# foreach(var elem in _assemblies) {
+		if (!elem.Contains("mscorlib")){#>
+<Reference><#=elem#></Reference>
+	<#}
+}#></Query>
 
 void Main()
-{
-    Truck truck = new Truck("LINQBridgeVsTruck", SerializationOption.<#=_serializationOption#>);
-	truck.WaitDelivery("<#= _typeName #>").Wait();
-    var @object = truck.UnLoadCargo<<#=_typeToRetrieveFullName#>>();
-    @object.Dump("<#=_typeToRetrieveFullName#>", 2);
+{ 
+	Truck.ReceiveCargo("<#=_truckId#>",  SerializationOption.<#= _serializationType #>, typeof(<#=_typeName#>)).Dump("<#=_typeToRetrieveFullName#>", 2);
 }

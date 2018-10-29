@@ -121,10 +121,20 @@ namespace BridgeVs.VsPackage.Package
             mcs.AddCommand(menuItemGettingStarted);
             mcs.AddCommand(menuItemSendFeedback);
             //Initialize Object Exporter settings
-            _packageSettings = (PackageSettings)GetDialogPage(typeof(PackageSettings));
+
+            Package:
+            try
+            {
+                _packageSettings = (PackageSettings)GetDialogPage(typeof(PackageSettings));
+            }
+            catch
+            {
+                goto Package;
+            }
 
             try
-            {   //if first time user 
+            { 
+                //if first time user 
                 if (isLinqBridgeVsConfigured)
                 {
                     return;

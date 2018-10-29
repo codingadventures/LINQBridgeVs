@@ -48,12 +48,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Src\BridgeVs.Grapple\BridgeVs.Grapple.csproj">
-      <Project>{79c0c9ed-d22c-4855-97c1-f6bd0127a531}</Project>
-      <Name>BridgeVs.Grapple</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

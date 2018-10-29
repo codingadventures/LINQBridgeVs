@@ -23,100 +23,62 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Collections;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text.RegularExpressions;
 using BridgeVs.DynamicVisualizers.Helper;
-using BridgeVs.DynamicVisualizers.Template;
-using BridgeVs.Grapple;
-using Microsoft.VisualStudio.DebuggerVisualizers;
-using BridgeVs.Shared.Common;
 using BridgeVs.Shared.Logging;
 using BridgeVs.Shared.Options;
+using BridgeVs.Shared.Serialization;
+using BridgeVs.Shared.Util;
+using Microsoft.VisualStudio.DebuggerVisualizers;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading;
+using CRC = BridgeVs.Shared.Common.CommonRegistryConfigurations;
+using Message = BridgeVs.DynamicVisualizers.Template.Message;
 
 namespace BridgeVs.DynamicVisualizers
 {
     public class DynamicObjectSource : VisualizerObjectSource
     {
-        internal const string FileNameFormat = "{0}.linq";
-
-        public void BroadCastData(object target, Stream outgoingData)
+        public override void GetData(object target, Stream outgoingData)
         {
-            //configure once the vs version
+            //configure once the vs version for logging and raven
             string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
             Log.VisualStudioVersion = vsVersion;
-
             try
             {
-                Type targetType = GetInterfaceTypeIfIsIterator(target);
-                string targetTypeFullName = TypeNameHelper.GetDisplayName(targetType, fullName: true);
-                string targetTypeName = TypeNameHelper.GetDisplayName(targetType, fullName: false);
-                //I'm lazy I know...
-                Regex pattern1 = new Regex("[<]");
-                Regex pattern2 = new Regex("[>]");
-                Regex pattern3 = new Regex("[,]");
-                Regex pattern4 = new Regex("[`]");
-                Regex pattern5 = new Regex("[ ]");
+                string truckId = Guid.NewGuid().ToString();
 
-                string fileName = pattern1.Replace(targetTypeFullName, "(");
-                fileName = pattern2.Replace(fileName, ")");
+                SerializationOption? serializationOption = Truck.SendCargo(target, truckId, CRC.GetSerializationOption(vsVersion));
 
-                string typeName = pattern1.Replace(targetTypeName, string.Empty);
-                typeName = pattern2.Replace(typeName, string.Empty);
-                typeName = pattern3.Replace(typeName, string.Empty);
-                typeName = pattern4.Replace(typeName, string.Empty);
-                typeName = pattern5.Replace(typeName, string.Empty);
-
-                fileName = TypeNameHelper.RemoveSystemNamespaces(fileName);
-
-                Message message = new Message
+                if (serializationOption.HasValue)
                 {
-                    FileName = string.Format(FileNameFormat, fileName),
-                    TypeName = typeName.Trim(),
-                    TypeFullName = targetTypeFullName,
-                    TypeNamespace = targetType.Namespace,
-                    AssemblyQualifiedName = targetType.AssemblyQualifiedName,
-                    AssemblyName = targetType.Assembly.GetName().Name
-                };
+                    Message message = new Message(truckId, serializationOption.Value, target.GetType());
 
-                BinaryFormatter binaryFormatter = new BinaryFormatter();
-                binaryFormatter.Serialize(outgoingData, message);
+                    Type type = Type.GetType(message.AssemblyQualifiedName);
 
-                Log.Write("BroadCastData to LINQBridgeVsTruck");
-                SerializationOption serializationOption = CommonRegistryConfigurations.GetSerializationOption(vsVersion);
-                Truck truck = new Truck("LINQBridgeVsTruck", serializationOption);
-                truck.LoadCargo(target);
-                bool res = truck.DeliverTo(typeName);
-                Log.Write("Data Succesfully Shipped to Grapple");
+                    List<string> assemblyNames = type.FindAssemblyNames();
+                    List<string> projects = CRC.GetAssemblySolutionAndProject(assemblyNames, vsVersion);
 
+                    message.ReferencedAssemblies.AddRange(projects);
+
+                    Serialize(outgoingData, message);
+                }
+                else
+                {
+                    Log.Write("Serialization option returned null");
+                }
+            }
+            catch (ThreadAbortException)
+            {
+                // Catch exception and do nothing
+                Thread.ResetAbort();
             }
             catch (Exception exception)
             {
                 Log.Write(exception, "Error in BroadCastData");
-                exception.Capture(vsVersion, message: "Error broadcasting the data to linqpad");
-                throw;
+                exception.Capture(vsVersion, message: "Error broadcasting the data to LINQPad");
             }
-        }
-
-        private static Type GetInterfaceTypeIfIsIterator(object o)
-        {
-            Type @type = o.GetType();
-
-            if (!@type.IsNestedPrivate || !@type.Name.Contains("Iterator") ||
-                !@type.FullName.Contains("System.Linq.Enumerable") || !(o is IEnumerable)) return @type;
-
-            if (@type.BaseType == null || @type.BaseType.FullName.Contains("Object"))
-                return @type.GetInterface("IEnumerable`1");
-
-            Log.Write("Iterator type, LINQ Query found {0}", @type.BaseType.ToString());
-            return @type.BaseType.GetInterface("IEnumerable`1");
-        }
-
-        public override void GetData(object target, Stream outgoingData)
-        {
-            BroadCastData(target, outgoingData);
         }
     }
 }

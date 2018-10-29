@@ -23,12 +23,12 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using BridgeVs.Shared.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using BridgeVs.Shared.Common;
 
-namespace BridgeVs.Shared.Locations
+namespace BridgeVs.Shared.Options
 {
     internal class Settings
     {

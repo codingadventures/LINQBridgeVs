@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright (c) 2013 Coding Adventures
+// Copyright (c) 2013 - 2018 Coding Adventures
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -16,7 +16,7 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
 // OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
 // HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
@@ -35,28 +35,28 @@ namespace BridgeVs.VsPackage.Helper.Test
         [TestCategory("UnitTest")]
         public void VS_Version_11_Should_Return_MsBuild_Version_V11()
         {
-            var msBuildVersion = MsBuildVersionHelper.GetMsBuildVersion("11.0");
+            string msBuildVersion = MsBuildVersionHelper.GetMsBuildVersion("11.0");
             Assert.IsTrue(msBuildVersion == "v4.0");
         }
         [TestMethod]
         [TestCategory("UnitTest")]
         public void VS_Version_12_Should_Return_MsBuild_Version_V12()
         {
-            var msBuildVersion = MsBuildVersionHelper.GetMsBuildVersion("12.0");
+            string msBuildVersion = MsBuildVersionHelper.GetMsBuildVersion("12.0");
             Assert.IsTrue(msBuildVersion == "v12.0");
         }
         [TestMethod]
         [TestCategory("UnitTest")]
         public void VS_Version_14_Should_Return_MsBuild_Version_V14()
         {
-            var msBuildVersion = MsBuildVersionHelper.GetMsBuildVersion("14.0");
+            string msBuildVersion = MsBuildVersionHelper.GetMsBuildVersion("14.0");
             Assert.IsTrue(msBuildVersion == "v14.0");
         }
         [TestMethod]
         [TestCategory("UnitTest")]
         public void VS_Version_15_Should_Return_MsBuild_Version_V15()
         {
-            var msBuildVersion = MsBuildVersionHelper.GetMsBuildVersion("15.0");
+            string msBuildVersion = MsBuildVersionHelper.GetMsBuildVersion("15.0");
             Assert.IsTrue(msBuildVersion == "v15.0");
         }
     }

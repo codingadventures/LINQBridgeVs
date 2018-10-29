@@ -16,80 +16,47 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
 // OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
 // HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.IO.Abstractions;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Threading;
-using System.Windows.Forms;
 using BridgeVs.DynamicVisualizers.Forms;
 using BridgeVs.DynamicVisualizers.Helper;
 using BridgeVs.DynamicVisualizers.Template;
-using Message = BridgeVs.DynamicVisualizers.Template.Message;
-using SharpRaven;
-using Microsoft.VisualStudio.DebuggerVisualizers;
-using BridgeVs.Shared.Logging;
 using BridgeVs.Shared.Common;
-using BridgeVs.Shared.Options;
+using BridgeVs.Shared.Logging;
+using Microsoft.VisualStudio.DebuggerVisualizers;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading;
+using Win32Interop.WinHandles;
+using Message = BridgeVs.DynamicVisualizers.Template.Message;
+using FS = BridgeVs.Shared.FileSystem.FileSystemFactory;
+using System.Text;
 
 namespace BridgeVs.DynamicVisualizers
 {
     /// <summary>
     /// Core of Dynamic Visualizer. This class is used by all four DynamicVisualizerVx (for VS2012, VS2013, VS2015, VS2017)
-    /// It opens LINQPad and create dynamically a linqscript.
+    /// It opens LINQPad and create dynamically a linq script.
     /// </summary>
     public class DynamicDebuggerVisualizer : DialogDebuggerVisualizer
     {
-        private static IFileSystem _fileSystem;
-        internal static IFileSystem FileSystem
-        {
-            get => _fileSystem ?? (_fileSystem = new FileSystem());
-            set => _fileSystem = value;
-        }
-
-        #region [ Consts ]
-        private const UInt32 WmKeydown = 0x0100;
-        private const int VkF5 = 0x74;
-        private const int SwShownormal = 1;
-        #endregion
-
-        #region [ Constructors ]
-        public DynamicDebuggerVisualizer()
-        {
-            AssemblyFinderHelper.FileSystem = FileSystem;
-        }
-
+        private const int SwShowNormal = 1;
+        
         /// <summary>
-        /// Initializes a new instance of the <see cref="DynamicDebuggerVisualizer"/> class. Internal for testing purpose only.
-        /// </summary>
-        /// <param name="fileSystem">The file system. System.IO.Abstraction can be used to Mock the file System. </param>
-        internal DynamicDebuggerVisualizer(IFileSystem fileSystem)
-        {
-            FileSystem = fileSystem;
-            AssemblyFinderHelper.FileSystem = FileSystem;
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Deploys the dynamically generated linqscript.
+        /// Deploys the dynamically generated linq script.
         /// </summary>
         /// <param name="message">The message.</param>
-        internal void DeployLinqScript(Message message)
+        /// <param name="vsVersion">The visual studio version</param>
+        internal void DeployLinqScript(Message message, string vsVersion)
         {
-            string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
-           
             try
             {
                 Log.Write("Entered in DeployLinqScript");
@@ -99,75 +66,61 @@ namespace BridgeVs.DynamicVisualizers
                 Log.Write("dstScriptPath: {0}", dstScriptPath);
                 string targetFolder = Path.Combine(dstScriptPath, message.AssemblyName);
 
-                if (!FileSystem.Directory.Exists(targetFolder))
-                    FileSystem.Directory.CreateDirectory(targetFolder);
+                if (!FS.FileSystem.Directory.Exists(targetFolder))
+                    FS.FileSystem.Directory.CreateDirectory(targetFolder);
 
-                string linqPadScriptPath = Path.Combine(targetFolder, message.FileName);
-                Log.Write("linqPadScriptPath: {0}", linqPadScriptPath);
+                string fileName = FindAvailableFileName(targetFolder, message.FileName);
 
-                List<string> refAssemblies = new List<string>();
-                refAssemblies.AddRange(message.ReferencedAssemblies);
-                SerializationOption serializationOption = CommonRegistryConfigurations.GetSerializationOption(vsVersion);
-                Inspection linqQuery = new Inspection(refAssemblies, message.TypeFullName, message.TypeNamespace, message.TypeName, serializationOption);
+                string linqPadScriptFilePath = Path.Combine(targetFolder, message.FileName);
+                Log.Write("linqPadScriptPath: {0}", linqPadScriptFilePath);
+
+                Inspection linqQuery = new Inspection(message);
                 string linqQueryText = linqQuery.TransformText();
 
-                Log.Write("LinqQuery file Transformed");
-
-                using (Stream memoryStream = FileSystem.File.Open(linqPadScriptPath, FileMode.Create))
-                using (StreamWriter streamWriter = new StreamWriter(memoryStream))
-                {
-                    streamWriter.Write(linqQueryText);
-                    streamWriter.Flush();
-                    memoryStream.Flush();
-                }
-                Log.Write("LinqQuery file Generated");
+                FS.FileSystem.File.WriteAllText(linqPadScriptFilePath, linqQueryText);
+                
+                Log.Write("LinqQuery Successfully deployed");
             }
             catch (Exception e)
             {
-                e.Capture(vsVersion, message: "Error deploying the linqpad script");
-
+                e.Capture(vsVersion, message: "Error deploying the LINQPad script");
                 Log.Write(e, "DynamicDebuggerVisualizer.DeployLinqScript");
                 throw;
             }
         }
 
+        private string FindAvailableFileName(string targetFolder, string fileName)
+        {
+            int fileCount = 0;
+            string path = Path.Combine(targetFolder, fileName);
+            const string linq = ".linq";
+            const string sep = "_";
+            StringBuilder b = new StringBuilder(path + linq);
+            while (FS.FileSystem.File.Exists(b.ToString()))
+            {
+                ++fileCount;
+                b.Clear();
+                b.Append(path);
+                b.Append(sep);
+                b.Append(fileCount);
+                b.Append(linq);
+            }
+
+            return b.ToString();
+        }
+
         /// <summary>
         /// Shows the visualizer.
         /// </summary>
-        /// <param name="inData">The in data.</param>
-        /// <param name="vsVersion">The vs version.</param>
         /// <returns></returns>
-        public Form ShowLINQPad(Stream inData, string vsVersion)
+        public void OpenLinqPad(string linqQueryFileName, string linqPadInstallationPath)
         {
-            Log.Write("ShowVisualizer Started...");
-
-            Log.Write("Vs Targeted Version ", vsVersion);
-
-            BinaryFormatter formatter = new BinaryFormatter();
-            Message message = (Message)formatter.Deserialize(inData);
-
-            Log.Write("Message deserialized");
-            Log.Write($"Message content /n {message}");
-
-            Type type = Type.GetType(message.AssemblyQualifiedName);
-
-            string originalTypeLocation = CommonRegistryConfigurations.GetOriginalAssemblyLocation(type, vsVersion);
-
-            List<string> referencedAssemblies = type.GetReferencedAssemblies(originalTypeLocation);
-
-            message.ReferencedAssemblies.AddRange(referencedAssemblies);
-
-            DeployLinqScript(message);
-            Log.Write("LinqQuery Successfully deployed");
-
-            string linqQueryfileName = Path.Combine(CommonFolderPaths.DefaultLinqPadQueryFolder, message.AssemblyName, message.FileName);
-            string linqPadInstallationPath = CommonRegistryConfigurations.GetLINQPadInstallationPath(vsVersion);
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 WindowStyle = ProcessWindowStyle.Normal,
                 FileName = "LINQPad.exe",
                 WorkingDirectory = Path.GetFullPath(linqPadInstallationPath),
-                Arguments = linqQueryfileName + " -run"
+                Arguments = linqQueryFileName + " -run"
             };
 
             Log.Write("About to start LINQPad with these parameters: {0}, {1}", startInfo.FileName, startInfo.Arguments);
@@ -178,75 +131,80 @@ namespace BridgeVs.DynamicVisualizers
                 process.WaitForInputIdle(-1);
                 process.Dispose();
             }
-            string linqPadExePath = Path.Combine(linqPadInstallationPath, "LINQPad.exe");
-            string linqPadVersion = FileVersionInfo.GetVersionInfo(linqPadExePath).FileDescription;
-
-            Process foundProcess = Process.GetProcessesByName("LINQPad").FirstOrDefault(p => linqPadVersion.Equals(p.MainWindowTitle));
-
-            SendInputToProcess(foundProcess ?? process);
 
             Log.Write("LINQPad Successfully started");
-
-            return new TemporaryForm();
         }
 
         protected override void Show(IDialogVisualizerService windowService, IVisualizerObjectProvider objectProvider)
         {
             string vsVersion = VisualStudioVersionHelper.FindCurrentVisualStudioVersion();
             Log.VisualStudioVersion = vsVersion;
-
+            Exception exception = null;
             try
             {
-                Stream dataStream = objectProvider.GetData();
+                Message message = GetMessage(objectProvider);
 
-                if (dataStream.Length == 0)
-                    return;
+                DeployLinqScript(message, vsVersion);
 
-                Form formToShow = ShowLINQPad(dataStream, vsVersion);
+                string linqQueryFileName = Path.Combine(CommonFolderPaths.DefaultLinqPadQueryFolder, message.AssemblyName, message.FileName);
+                string linqPadInstallationPath = CommonRegistryConfigurations.GetLINQPadInstallationPath(vsVersion);
 
-#if !TEST
-                windowService.ShowDialog(formToShow);
-#endif
+                OpenLinqPad(linqQueryFileName, linqPadInstallationPath);
+
+                string linqPadExePath = Path.Combine(linqPadInstallationPath, "LINQPad.exe");
+                string linqPadVersion = FileVersionInfo.GetVersionInfo(linqPadExePath).FileDescription;
+
+                SendInputToLinqPad(linqPadVersion);
             }
-            catch (Exception exception)
+            catch (ThreadAbortException)
+            {
+                // Catch exception and do nothing
+                Thread.ResetAbort();
+            }
+            catch (Exception ex)
             {
                 const string context = "Error during LINQPad execution";
-                Log.Write(exception, context);
-
-                exception.Capture(vsVersion, message: context);
+                Log.Write(ex, context);
+                ex.Capture(vsVersion, message: context);
+                exception = ex;
             }
+
+            windowService.ShowDialog(new TemporaryForm(exception));
         }
 
         #region [ Private Static Methods ]
 
+        /// <summary>
+        /// Retrieves the message data from the object provider
+        /// </summary>
+        /// <param name="objectProvider"></param>
+        /// <returns></returns>
+        private static Message GetMessage(IVisualizerObjectProvider objectProvider)
+        {
+            Stream dataStream = objectProvider.GetData();
+
+            if (dataStream.Length == 0)
+                return null;
+
+            BinaryFormatter formatter = new BinaryFormatter();
+            Message message = (Message)formatter.Deserialize(dataStream);
+
+            Log.Write($"Message content - \t {message}");
+
+            return message;
+        }
 
         /// <summary>
-        /// Sends the input to LINQPad. Simulates key inputs to run a linqscript (F5)
+        /// Sends the input to LINQPad. Simulates key inputs to run a linq script (F5)
         /// </summary>
-        private static void SendInputToProcess(Process process)
+        private static void SendInputToLinqPad(string linqPadVersion)
         {
             try
             {
-                int index = 0;
-                while (process.MainWindowHandle == IntPtr.Zero && index < 3)
-                {
-                    // Discard cached information about the process
-                    // because MainWindowHandle might be cached.
-
-                    Log.Write("Waiting MainWindowHandle... - Iteration: {0}", ++index);
-                    process.Refresh();
-                    index++;
-                    Thread.Sleep(10);
-                }
-
-                ShowWindowAsync(process.MainWindowHandle, SwShownormal);
-                Log.Write("LINQPad ShowWindowAsync {0}", process.MainWindowHandle);
-
-                SetForegroundWindow(process.MainWindowHandle);
-
-                PostMessage(process.MainWindowHandle, WmKeydown, VkF5, 0);
-
-                Log.Write("LINQPad PostMessage {0}", VkF5);
+                WindowHandle linqPad = TopLevelWindowUtils.FindWindow(wh => wh.GetWindowText().Contains($"LINQPad {linqPadVersion}"));
+                IntPtr intPtr = linqPad.RawPtr;
+                ShowWindowAsync(intPtr, SwShowNormal);
+                SetForegroundWindow(intPtr);
             }
             catch (Exception e)
             {
@@ -262,9 +220,14 @@ namespace BridgeVs.DynamicVisualizers
 
         [DllImport("user32")]
         private static extern bool SetForegroundWindow(IntPtr hwnd);
-
-        [DllImport("user32.dll")]
-        private static extern bool PostMessage(IntPtr hWnd, UInt32 msg, int wParam, int lParam);
         #endregion
+
+#if TEST
+        internal static void TestShowVisualizer(Message msg)
+        {
+            VisualizerDevelopmentHost visualizerHost = new VisualizerDevelopmentHost(msg, typeof(DynamicDebuggerVisualizer));
+            visualizerHost.ShowVisualizer();
+        }
+#endif
     }
 }

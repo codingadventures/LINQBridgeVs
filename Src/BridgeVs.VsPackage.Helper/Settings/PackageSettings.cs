@@ -34,12 +34,11 @@ using System.IO;
 using System.Linq;
 using BridgeVs.Shared.Common;
 using BridgeVs.Shared.Options;
-using BridgeVs.Shared.Settings;
 
 namespace BridgeVs.VsPackage.Helper.Settings
 {
     /// <inheritdoc />
-    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ClassInterface(ClassInterfaceType.None)]
     [CLSCompliant(false), ComVisible(true)]
     public sealed class PackageSettings : DialogPage
     {
@@ -55,7 +54,7 @@ namespace BridgeVs.VsPackage.Helper.Settings
         {
             get
             {
-                var dte = (DTE)GetService(typeof(SDTE));
+                DTE dte = (DTE)GetService(typeof(SDTE));
                 if (dte != null)
                 {
                     return CommonRegistryConfigurations.GetUniqueGuid(dte.Version);
@@ -70,13 +69,10 @@ namespace BridgeVs.VsPackage.Helper.Settings
         [Description("Sets the path to the LINQPad exe")]
         public string LINQPadInstallationPath
         {
-            get
-            {
-                return _linqPadInstallationPath;
-            }
+            get => _linqPadInstallationPath;
             set
             {
-                var dte = (DTE)GetService(typeof(SDTE));
+                DTE dte = (DTE)GetService(typeof(SDTE));
                 if (dte != null)
                 {
                     bool isPathInValid = string.IsNullOrEmpty(value)
@@ -91,9 +87,9 @@ namespace BridgeVs.VsPackage.Helper.Settings
                     //check the inserted path is a valid directory that contains linqpad.exe
                     //if the inserted value is a file then check for its directory otherwise a directory
                     //has been inserted
-                    var insertedDirectory = File.Exists(value) ? Path.GetDirectoryName(value) : value;
+                    string insertedDirectory = File.Exists(value) ? Path.GetDirectoryName(value) : value;
 
-                    var isInvalidDirectory =
+                    bool isInvalidDirectory =
                         !Directory.Exists(insertedDirectory)
                         || !Directory.GetFiles(insertedDirectory, "*.exe", SearchOption.TopDirectoryOnly)
                              .Any(p => p.Contains("LINQPad.exe"));
@@ -111,28 +107,45 @@ namespace BridgeVs.VsPackage.Helper.Settings
             }
         }
 
+        private bool _map3RdPartyAssembly = Defaults.Map3RdPartyAssembly;
+
+        [Category("Visualization")]
+        [DisplayName("Map 3rd Party Assemblies")]
+        [Description("When enabled, LINQBridgeVs will create custom debugger visualizers " +
+                     "for 3rd party assemblies referenced by the project being built. This includes NuGet assemblies" +
+                     "but excludes any Microsoft or System assembly.")]
+        public bool Map3RdPartyAssembly
+        {
+            get => _map3RdPartyAssembly;
+            set
+            {
+                DTE dte = (DTE) GetService(typeof(SDTE));
+                if (dte == null)
+                    return;
+
+                CommonRegistryConfigurations.SetMap3RdPartyAssembly(dte.Version, value);
+                _map3RdPartyAssembly = value;
+            }
+        }
 
         private bool _isErrorTrackingEnabled = Defaults.ErrorTrackingEnabled;
 
         [Category("Feedback")]
         [DisplayName("Enable Error Tracking")]
         [Description("When enabled, LINQBridgeVs will send anonymous exception errors to Sentry. " +
-                     "This will allow the improvement of LINQBridgeVs and keep it bug free. NO IP address, NO machine name and NO other personal data are in any way sent. " +
+                     "This will allow the improvement of LINQBridgeVs and keep it bug free. NO IP address, NO machine name and NO other personal data are in no way sent. " +
                      "If you're still concerned, you can turn off this feature at any time.")]
         public bool ErrorTrackingEnabled
         {
-            get
-            {
-                return _isErrorTrackingEnabled;
-            }
+            get => _isErrorTrackingEnabled;
             set
             {
-                var dte = (DTE)GetService(typeof(SDTE));
-                if (dte != null)
-                {
-                    CommonRegistryConfigurations.SetErrorTracking(dte.Version, value);
-                    _isErrorTrackingEnabled = value;
-                }
+                DTE dte = (DTE)GetService(typeof(SDTE));
+                if (dte == null)
+                    return;
+
+                CommonRegistryConfigurations.SetErrorTracking(dte.Version, value);
+                _isErrorTrackingEnabled = value;
             }
         }
 
@@ -143,18 +156,14 @@ namespace BridgeVs.VsPackage.Helper.Settings
         [Description(@"Enable diagnostic logging for this extension. Logs will be saved in %LOCALAPPDATA%\BridgeVs\logs.txt")]
         public bool LoggingEnabled
         {
-            get
-            {
-                return _isLoggingEnabled;
-            }
+            get => _isLoggingEnabled;
             set
             {
-                var dte = (DTE)GetService(typeof(SDTE));
-                if (dte != null)
-                {
-                    CommonRegistryConfigurations.SetLogging(dte.Version, value);
-                    _isLoggingEnabled = value;
-                }
+                DTE dte = (DTE)GetService(typeof(SDTE));
+                if (dte == null)
+                    return;
+                CommonRegistryConfigurations.SetLogging(dte.Version, value);
+                _isLoggingEnabled = value;
             }
         }
 
@@ -165,13 +174,10 @@ namespace BridgeVs.VsPackage.Helper.Settings
         [Description("Sets the serialization method used to transmits the variable to LINQPad. Binary or Json.Net")]
         public SerializationOption SerializationMethod
         {
-            get
-            {
-                return _serializationOption;
-            }
+            get => _serializationOption;
             set
             {
-                var dte = (DTE)GetService(typeof(SDTE));
+                DTE dte = (DTE)GetService(typeof(SDTE));
                 if (dte != null)
                 {
                     CommonRegistryConfigurations.SetSerializationMethod(dte.Version, value.ToString());

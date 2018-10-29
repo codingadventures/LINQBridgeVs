@@ -32,14 +32,11 @@ namespace BridgeVs.Model.Test
 {
     public interface INotSerializable
     {
-        void Do();
+        
     }
     public class AClass : INotSerializable
     {
-        public void Do()
-        {
-   
-        }
+
     }
 
     public enum Enum1
@@ -56,7 +53,6 @@ namespace BridgeVs.Model.Test
     public class NotSerializableObject
     {
         public Enum1 Prop1 { get; set; }
-        public NotSerializableList NotSerializableClass { get; set; }
         public int Int { get; set; }
         public Dictionary<string, RandomStruct> Dictionary { get; set; }
         public INotSerializable NotSerializable { get; set; }

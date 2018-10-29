@@ -23,10 +23,11 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.IO;
+using BridgeVs.Shared.Common;
 using BridgeVs.Shared.Logging;
 using Microsoft.Build.Framework;
+using System;
+using System.IO;
 
 namespace BridgeVs.Build.Tasks
 {
@@ -41,25 +42,35 @@ namespace BridgeVs.Build.Tasks
         [Required]
         public string Snk { get; set; }
 
+        [Required]
+        public string SolutionName { get; set; }
+
         public bool Execute()
         {
             Log.VisualStudioVersion = VisualStudioVer;
 
+            if (!CommonRegistryConfigurations.IsSolutionEnabled(SolutionName, VisualStudioVer))
+            {
+                return true;
+            }
+
             try
             {
                 string snkCertificate = File.Exists(Snk) ? Snk : null;
-                var sInjection = new SInjection(Assembly, mode: PatchMode.Debug, snkCertificatePath: snkCertificate);
-                return sInjection.Patch(SerializationTypes.BinarySerialization);
+                using (SInjection sInjection = new SInjection(Assembly, snkCertificate))
+                {
+                    return sInjection.Patch();
+                }
             }
             catch (Exception e)
             {
                 const string errorMessage = "Error Executing MSBuild Task SInjectionBuildTask";
                 Log.Write(e, errorMessage);
-
                 e.Capture(VisualStudioVer, message: errorMessage);
-
-                return false;
+                BuildWarningEventArgs errorEvent = new BuildWarningEventArgs("Debugger Visualizer Creator", "", "SInjectionBuildTask", 0, 0, 0, 0, $"There was an error adding the serializable attributes to type of the project {Assembly}. Please change serialization method from Binary to Json or Xml in Tools->Options->BridgeVs->SerializationOption. ", "", "LINQBridgeVs");
+                BuildEngine.LogWarningEvent(errorEvent);
             }
+            return true;
         }
 
         public IBuildEngine BuildEngine { get; set; }

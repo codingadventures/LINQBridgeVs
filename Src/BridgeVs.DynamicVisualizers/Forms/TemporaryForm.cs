@@ -31,8 +31,11 @@ namespace BridgeVs.DynamicVisualizers.Forms
 {
     internal class TemporaryForm : Form
     {
-        public TemporaryForm()
+        private readonly Exception _exception;
+
+        public TemporaryForm(Exception exception = null)
         {
+
             SuspendLayout();
             FormBorderStyle = FormBorderStyle.None;
             MaximizeBox = false;
@@ -47,6 +50,17 @@ namespace BridgeVs.DynamicVisualizers.Forms
             Width = Screen.PrimaryScreen.WorkingArea.Width;
             Height = Screen.PrimaryScreen.WorkingArea.Height;
             ResumeLayout(false);
+            Shown += Form1_Shown;
+            _exception = exception;
+        }
+
+        private void Form1_Shown(object sender, EventArgs e)
+        {
+            if (_exception != null)
+            {
+                MessageBox.Show(_exception.Message, "Error in LINQBridgeVs", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
         protected override void OnClick(EventArgs e)
@@ -61,8 +75,6 @@ namespace BridgeVs.DynamicVisualizers.Forms
             base.OnMouseClick(e);
             Invalidate();
             Close();
-        }
-
-
+        } 
     }
 }

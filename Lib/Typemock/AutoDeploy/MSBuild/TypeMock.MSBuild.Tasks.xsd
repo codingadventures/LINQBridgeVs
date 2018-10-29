@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:msb="http://schemas.microsoft.com/developer/msbuild/2003" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/developer/msbuild/2003" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\MSBuild\Microsoft.Build.Commontypes.xsd" />
+  <xs:element name="TypeMockRegister" substitutionGroup="msb:Task">
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="License" type="msb:non_empty_string" use="required" />
+          <xs:attribute name="Company" type="msb:non_empty_string" use="required" />
+          <xs:attribute name="AutoDeploy" />
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TypeMockStart" substitutionGroup="msb:Task">
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="LogLevel" type="xs:string" />
+          <xs:attribute name="LogPath" type="xs:string" />
+          <xs:attribute name="Link" type="xs:string" />
+          <xs:attribute name="ProfilerLaunchedFirst" />
+          <xs:attribute name="Version" type="xs:string" />
+          <xs:attribute name="Target" type="xs:string" />
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TypeMockStop" substitutionGroup="msb:Task">
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="Undeploy" />
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

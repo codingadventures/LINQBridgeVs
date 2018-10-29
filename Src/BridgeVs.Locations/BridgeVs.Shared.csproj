@@ -46,27 +46,47 @@
     <AssemblyOriginatorKeyFile>..\BridgeVs.VsPackage\Key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Build" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Abstractions, Version=2.1.0.256, Culture=neutral, PublicKeyToken=96bf224d23c43e59, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Abstractions.2.1.0.256\lib\net40\System.IO.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\BridgeProjectInfo.cs" />
     <Compile Include="Common\CommonFolderPaths.cs" />
     <Compile Include="Common\CommonRegistryConfigurations.cs" />
+    <Compile Include="Dependency\Crawler.cs" />
+    <Compile Include="FileSystem\FileSystemFactory.cs" />
     <Compile Include="Logging\Log.cs" />
     <Compile Include="Logging\RavenWrapper.cs" />
-    <Compile Include="ObsoleteXmlConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Options\SerializationOption.cs" />
     <Compile Include="Options\VisualStudioOption.cs" />
-    <Compile Include="Settings\Defaults.cs" />
+    <Compile Include="Serialization\BinarySerializer.cs" />
+    <Compile Include="Serialization\IServiceSerializer.cs" />
+    <Compile Include="Serialization\JsonSerializer.cs" />
+    <Compile Include="Serialization\Truck.cs" />
+    <Compile Include="Options\Defaults.cs" />
+    <Compile Include="Serialization\XmlSerializer.cs" />
+    <Compile Include="Util\TypeExtension.cs" />
+    <Compile Include="Version.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Lib\SharpRaven\src\app\SharpRaven\SharpRaven.csproj">
-      <Project>{d472fc40-284f-4532-a269-be7bdac2b153}</Project>
+      <Project>{36fcaf4d-911d-41a8-8303-e31527d3149f}</Project>
       <Name>SharpRaven</Name>
     </ProjectReference>
   </ItemGroup>

@@ -23,6 +23,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\BridgeVs.VsPackage\Key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Test|AnyCPU' ">
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -48,14 +54,15 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.IO.Abstractions, Version=2.1.0.178, Culture=neutral, PublicKeyToken=96bf224d23c43e59, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.IO.Abstractions.2.1.0.178\lib\net40\System.IO.Abstractions.dll</HintPath>
+    <Reference Include="System.IO.Abstractions, Version=2.1.0.256, Culture=neutral, PublicKeyToken=96bf224d23c43e59, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Abstractions.2.1.0.256\lib\net40\System.IO.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -66,7 +73,6 @@
     <Compile Include="Forms\TemporaryForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Helper\AssemblyFinderHelper.cs" />
     <Compile Include="Helper\VisualStudioVersionHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Template\Inspection.cs">
@@ -75,9 +81,14 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Template\Message.cs" />
-    <Compile Include="Template\Template.cs" />
-    <Compile Include="Helper\ReferencedAssemblyFinderHelper.cs" />
+    <Compile Include="Template\Inspection.Template.cs">
+      <DependentUpon>Inspection.tt</DependentUpon>
+    </Compile>
     <Compile Include="Helper\TypeNameHelper.cs" />
+    <Compile Include="Win32Interop.WinHandles\Internal\NativeMethods.cs" />
+    <Compile Include="Win32Interop.WinHandles\TopLevelWindowUtils.cs" />
+    <Compile Include="Win32Interop.WinHandles\WindowHandle.cs" />
+    <Compile Include="Win32Interop.WinHandles\WindowHandleExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -97,20 +108,21 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Lib\SharpRaven\src\app\SharpRaven\SharpRaven.csproj">
-      <Project>{d472fc40-284f-4532-a269-be7bdac2b153}</Project>
+      <Project>{36fcaf4d-911d-41a8-8303-e31527d3149f}</Project>
       <Name>SharpRaven</Name>
     </ProjectReference>
     <ProjectReference Include="..\BridgeVs.Locations\BridgeVs.Shared.csproj">
       <Project>{bc10f93a-5da2-44f8-ae5e-5603cb46b548}</Project>
       <Name>BridgeVs.Shared</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BridgeVs.Grapple\BridgeVs.Grapple.csproj">
-      <Project>{79c0c9ed-d22c-4855-97c1-f6bd0127a531}</Project>
-      <Name>BridgeVs.Grapple</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties Typemock="{&quot;UnitTestProject&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;}" />
+    </VisualStudio>
+  </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

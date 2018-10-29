@@ -1,23 +1,32 @@
-﻿using System;
+﻿using BridgeVs.Shared.Options;
 using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using BridgeVs.Shared.Options;
 
 namespace BridgeVs.Shared.Common
 {
     public class CommonRegistryConfigurations
     {
         private const string ErrorTrackingRegistryValue = "SentryErrorTracking";
+        private const string Map3RdPartyAssemblyRegistryValue = "Map3rdPartyAssembly";
         private const string SerializationMethodRegistryValue = "SerializationMethod";
+        private const string EnabledProjectsRegistryKey = @"Software\LINQBridgeVs\{0}\Solutions\{1}";
+        private static readonly string ProjectReferencesRegistryKey = $@"{EnabledProjectsRegistryKey}\{{2}}";
+
         public const string LoggingRegistryValue = "Logging";
 
         // ReSharper disable once InconsistentNaming
         private const string LINQPadInstallationPathRegistryValue = "LINQPadInstallationPath";
         // ReSharper disable once InconsistentNaming
-        private const string LINQPadVersionPathRegistryValue = "LINQPadVersion";
 
         public const string InstallationGuidRegistryValue = "UniqueId";
 
+        public static string GetRegistryKey(string key, params object[] argStrings)
+        {
+            return string.Format(key, argStrings);
+        }
 
         // ReSharper disable once InconsistentNaming
         public static string GetLINQPadInstallationPath(string vsVersion)
@@ -35,6 +44,56 @@ namespace BridgeVs.Shared.Common
             }
         }
 
+        private static void StoreProjectAssemblyPath(string assemblyPath, string assemblyName, string solutionName, string vsVersion)
+        {
+            string keyPath = string.Format(GetRegistryKey(EnabledProjectsRegistryKey, vsVersion, solutionName));
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(keyPath))
+            {
+                key?.SetValue($"{assemblyName}", Path.GetFullPath(assemblyPath), RegistryValueKind.String);
+            }
+        }
+
+        public static bool IsSolutionEnabled(string solutionName, string vsVersion)
+        {
+            string keyPath = string.Format(GetRegistryKey(EnabledProjectsRegistryKey, vsVersion, solutionName));
+
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(keyPath, false))
+            {
+                if (key == null) return false;
+                string value = (string)key.GetValue("SolutionEnabled");
+                return value != null && Convert.ToBoolean(value);
+            }
+        }
+
+        public static void BridgeSolution(string solutionName, string vsVersion, List<BridgeProjectInfo> parameters)
+        {
+            string keyPath = string.Format(GetRegistryKey(EnabledProjectsRegistryKey, vsVersion, solutionName));
+
+            //now create a general solution flag to mark the current solution as activated
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(keyPath))
+            {
+                key?.SetValue("SolutionEnabled", "True", RegistryValueKind.String);
+            }
+
+            foreach (BridgeProjectInfo executeParams in parameters)
+            {
+                StoreProjectAssemblyPath(executeParams.ProjectOutput, executeParams.AssemblyName,
+                                executeParams.SolutionName,
+                                executeParams.VsVersion);
+                StoreProjectReferences(executeParams.AssemblyName,
+                    executeParams.SolutionName,
+                    executeParams.VsVersion, executeParams.References);
+            }
+        }
+
+        public static void UnBridgeSolution(string solutionName, string vsVersion)
+        {
+            string keyPath = string.Format(GetRegistryKey(EnabledProjectsRegistryKey, vsVersion, solutionName));
+
+            //to invalidate the cache I delete the value
+            Registry.CurrentUser.DeleteSubKeyTree(keyPath, false);
+        }
+
         public static bool IsErrorTrackingEnabled(string vsVersion)
         {
             bool isTrackingEnabled = false;
@@ -49,6 +108,30 @@ namespace BridgeVs.Shared.Common
             return isTrackingEnabled;
         }
 
+        public static bool Map3RdPartyAssembly(string solutionName, string vsVersion)
+        {
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey($@"Software\LINQBridgeVs\{vsVersion}"))
+            {
+                if (key?.GetValue(Map3RdPartyAssemblyRegistryValue) is string map3RdPartyAssembly)
+                {
+                    if (!string.IsNullOrEmpty(map3RdPartyAssembly))
+                    {
+                        return Convert.ToBoolean(map3RdPartyAssembly);
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public static void SetMap3RdPartyAssembly(string vsVersion, bool value)
+        {
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey($@"Software\LINQBridgeVs\{vsVersion}"))
+            {
+                key?.SetValue(Map3RdPartyAssemblyRegistryValue, value);
+            }
+        }
+
         public static void SetErrorTracking(string vsVersion, bool enabled)
         {
             using (RegistryKey key = Registry.CurrentUser.CreateSubKey($@"Software\LINQBridgeVs\{vsVersion}"))
@@ -57,53 +140,87 @@ namespace BridgeVs.Shared.Common
             }
         }
 
-        /// <summary>
-        /// Gets the assembly location. If an assembly is loaded at Runtime or it's loaded within IIS context, Assembly.Location property could be null
-        /// This method reads the original location of the assembly that was Bridged
-        /// </summary>
-        /// <param name="type">The Type.</param>
-        /// <param name="vsVersion">The Visual Studio version.</param>
-        /// <returns></returns>
-        public static string GetOriginalAssemblyLocation(Type @type, string vsVersion)
+        
+        //public static string GetOriginalAssemblyLocation(string projectName, string solutionName, string vsVersion)
+        //{
+        //    string registryKeyPath = $@"Software\LINQBridgeVs\{vsVersion}\Solutions\{solutionName}";
+
+        //    using (RegistryKey key = Registry.CurrentUser.OpenSubKey(registryKeyPath))
+        //    {
+        //        return key == null ? string.Empty : (string)key.GetValue(projectName);
+        //    }
+        //}
+
+        ///// <summary>
+        ///// Get the location for a given list of assemblies. If an assembly is loaded at Runtime or it's loaded within IIS context, 
+        ///// Assembly.Location property could be null so all the original locations are stored in the registry during Bridging
+        ///// This method reads the original location of the assembly and its references
+        ///// </summary>
+        ///// <returns>the paths to the assemblies</returns>
+        public static List<string> GetAssemblySolutionAndProject(List<string> assemblies, string vsVersion)
         {
-            bool isSystemAssembly(string name) => name.Contains("Microsoft") || name.Contains("System") || name.Contains("mscorlib");
-
             string registryKeyPath = $@"Software\LINQBridgeVs\{vsVersion}\Solutions";
+            List<string> referencedAssemblyPaths = new List<string>();
 
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(registryKeyPath))
+            if (assemblies.Count == 0)
+                return referencedAssemblyPaths;
+
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(registryKeyPath)) //E.g. Software\LINQBridgeVs\15.0\Solutions
             {
-                if (key != null)
+                if (key == null)
                 {
-                    string[] values = key.GetSubKeyNames();
-                    RegistryKey registryKey = key;
+                    return referencedAssemblyPaths;
+                }
 
-                    foreach (string value in values)
+                string[] solutions = key.GetSubKeyNames(); //get all of the solutions enabled
+                //reads every solution and project to check if the assembly has a path
+                foreach (string solution in solutions)
+                {
+                    using (RegistryKey projectsKey = key.OpenSubKey(solution)) //E.g. Software\LINQBridgeVs\15.0\Solutions\VsSolution1
                     {
-                        RegistryKey subKey = registryKey.OpenSubKey(value);
+                        if (projectsKey == null)
+                            continue;
 
-                        string name = subKey?.GetValueNames().FirstOrDefault(p =>
+                        string[] projects = projectsKey.GetValueNames(); //get SolutionEnabled and the project path
+                        foreach (string project in projects)
                         {
-                            if (!@type.IsGenericType)
-                                return p == @type.Assembly.GetName().Name;
-                            Type genericType = @type.GetGenericArguments()[0];
+                            string originalAssemblyLocation = projectsKey.GetValue(project).ToString();
+                            string originalAssemblyName = Path.GetFileNameWithoutExtension(originalAssemblyLocation);
 
-                            if (isSystemAssembly(genericType.Assembly.GetName().Name))
-                                return false;
+                            //if any assemblies contains the project assembly associated then add the original reference
+                            bool originalAssemblyFound = assemblies.Any(assembly =>
+                                Path.GetFileNameWithoutExtension(assembly) == originalAssemblyName);
 
-                            return p == genericType.Assembly.GetName().Name;
-                        });
+                            if (originalAssemblyFound)
+                            {
+                                referencedAssemblyPaths.Add(originalAssemblyLocation);
+                            }
 
-                        if (string.IsNullOrEmpty(name)) continue;
+                            using (RegistryKey referenceAssemblyKey = projectsKey.OpenSubKey(project)
+                            ) // e.g. Software\LINQBridgeVs\15.0\Solutions\VsSolution1\Project1
+                            {
+                                //this sub-key contains all of the references to the project
+                                if (referenceAssemblyKey == null)
+                                    continue;
 
-                        string assemblyLoc = (string)subKey.GetValue(name + "_location");
+                                string[] references = referenceAssemblyKey.GetValueNames();
 
-                        return assemblyLoc;
+                                referencedAssemblyPaths.AddRange(
+                                    from reference in references
+                                    where originalAssemblyFound || assemblies.Any(assembly => Path.GetFileNameWithoutExtension(assembly) == Path.GetFileNameWithoutExtension(reference))
+                                    select referenceAssemblyKey.GetValue(reference) 
+                                    into assemblyValue
+                                    where assemblyValue != null
+                                    select assemblyValue.ToString());
+                            }
+                        }
                     }
                 }
             }
-            return string.Empty;
-        }
 
+            return referencedAssemblyPaths;
+        }
+        
         public static void SetSerializationMethod(string vsVersion, string value)
         {
             using (RegistryKey key = Registry.CurrentUser.CreateSubKey($@"Software\LINQBridgeVs\{vsVersion}"))
@@ -122,7 +239,7 @@ namespace BridgeVs.Shared.Common
                     return (SerializationOption)Enum.Parse(typeof(SerializationOption), serializationOption);
                 }
 
-                return SerializationOption.Binary;
+                return SerializationOption.BinarySerializer;
             }
         }
 
@@ -162,6 +279,20 @@ namespace BridgeVs.Shared.Common
             using (RegistryKey key = Registry.CurrentUser.CreateSubKey($@"Software\LINQBridgeVs\{vsVersion}"))
             {
                 key?.SetValue(InstallationGuidRegistryValue, guid);
+            }
+        }
+
+        private static void StoreProjectReferences(string assemblyName, string solutionName, string vsVersion, IEnumerable<string> references)
+        {
+            string keyPath = string.Format(GetRegistryKey(ProjectReferencesRegistryKey, vsVersion, solutionName, assemblyName));
+            Registry.CurrentUser.DeleteSubKeyTree(keyPath, false); //clean first
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(keyPath))
+            {
+                foreach (string reference in references)
+                {
+                    string refAssemblyName = Path.GetFileNameWithoutExtension(reference);
+                    key?.SetValue(refAssemblyName, reference);
+                }
             }
         }
     }

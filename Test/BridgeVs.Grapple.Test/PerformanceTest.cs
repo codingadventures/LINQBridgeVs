@@ -29,6 +29,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using BridgeVs.Shared.Options;
+using BridgeVs.Shared.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BridgeVs.Grapple.Test
@@ -50,16 +52,15 @@ namespace BridgeVs.Grapple.Test
 
         [TestMethod]
         public void BinaryStressTest()
-        {
-            Truck b = new Truck("MAN");
-
+        { 
             double upper = Math.Pow(10, 3);
+            string truckId = Guid.NewGuid().ToString();
 
             Stopwatch sw = new Stopwatch();
 
             sw.Start();
              
-            b.LoadCargo(BinaryTestModels.ToList());
+            Truck.SendCargo(BinaryTestModels.ToList(), truckId, SerializationOption.JsonSerializer);
             
             sw.Stop();
 
@@ -67,18 +68,17 @@ namespace BridgeVs.Grapple.Test
 
             Trace.WriteLine(string.Format("Put on the Channel {1} items. Time Elapsed: {0}", secondElapsedToAdd, upper));
             sw.Reset();
-            sw.Start();
+            sw.Start(); 
 
-            b.DeliverTo("Dad");
             sw.Stop();
 
             long secondElapsedToBroadcast = sw.ElapsedMilliseconds ;
 
             Trace.WriteLine(string.Format("Broadcast on the Channel {1} items. Time Elapsed: {0}", secondElapsedToBroadcast, upper));
 
-            List<BinaryTestModel> elem = b.UnLoadCargo<List<BinaryTestModel>>().First();
+            List<BinaryTestModel> elem = Truck.ReceiveCargo<List<BinaryTestModel>>(truckId, SerializationOption.JsonSerializer);
 
-            Assert.AreEqual(elem.Count(), 1000, "Not every elements have been broadcasted");
+            Assert.AreEqual(elem.Count(), 1000, "Not every elements have been broadcast");
             Assert.IsTrue(secondElapsedToAdd < 5000, "Add took more than 5 second. Review the logic, performance must be 10000 elems in less than 5 sec");
             Assert.IsTrue(secondElapsedToBroadcast < 3000, "Broadcast took more than 3 second. Review the logic, performance must be 10000 elems in less than 5 sec");
         }
@@ -86,15 +86,13 @@ namespace BridgeVs.Grapple.Test
         [TestMethod]
         public void BsonStressTest()
         {
-            Truck b = new Truck("MAN", Shared.Options.SerializationOption.JSON);
-
             double upper = Math.Pow(10, 3);
-
+            string truckId = Guid.NewGuid().ToString();
             Stopwatch sw = new Stopwatch();
 
             sw.Start();
              
-            b.LoadCargo(BsonTestModels.ToList());
+            Truck.SendCargo(BsonTestModels.ToList(), truckId, SerializationOption.JsonSerializer);
             
             sw.Stop();
 
@@ -103,18 +101,16 @@ namespace BridgeVs.Grapple.Test
             Trace.WriteLine(string.Format("Put on the Channel {1} items. Time Elapsed: {0}", secondElapsedToAdd, upper));
             sw.Reset();
             sw.Start();
-
-            b.DeliverTo("Mom");
+             
             sw.Stop();
 
             long secondElapsedToBroadcast = sw.ElapsedMilliseconds;
 
             Trace.WriteLine(string.Format("Broadcast on the Channel {1} items. Time Elapsed: {0}", secondElapsedToBroadcast, upper));
-            b.WaitDelivery("Mom").Wait();
+            
+            var elem = Truck.ReceiveCargo<List<BsonTestModel>>(truckId, SerializationOption.JsonSerializer);
 
-            var elem = b.UnLoadCargo<List<BsonTestModel>>().First();
-
-            Assert.AreEqual(elem.Count(), 1000, "Not every elements have been broadcasted");
+            Assert.AreEqual(elem.Count(), 1000, "Not every elements have been broadcast");
             Assert.IsTrue(secondElapsedToAdd < 5000, "Add took more than 5 second. Review the logic, performance must be 10000 elems in less than 5 sec");
             Assert.IsTrue(secondElapsedToBroadcast < 3000, "Broadcast took more than 3 second. Review the logic, performance must be 10000 elems in less than 5 sec");
         }

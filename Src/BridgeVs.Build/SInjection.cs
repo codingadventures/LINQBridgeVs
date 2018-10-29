@@ -25,60 +25,29 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using BridgeVs.Build.Util;
-using BridgeVs.Shared.Common;
+using BridgeVs.Shared;
 using BridgeVs.Shared.Logging;
 using Mono.Cecil;
 using Mono.Cecil.Pdb;
+using FS = BridgeVs.Shared.FileSystem.FileSystemFactory;
 
 namespace BridgeVs.Build
 {
-    /// <summary>
-    /// Type of serialization to enable
-    /// </summary>
-    [Flags]
-    public enum SerializationTypes
-    {
-        /// <summary>
-        /// BinarySerialization
-        /// </summary>
-        BinarySerialization = 0x01,
-        /// <summary>
-        /// DataContractSerialization
-        /// </summary>
-        DataContractSerialization = 0x02
-    }
-
-    /// <summary>
-    /// Type of the Patch for Debug or Release mode.
-    /// </summary>
-    public enum PatchMode
-    {
-        /// <summary>
-        /// The debug
-        /// </summary>
-        Debug,
-        /// <summary>
-        /// The release
-        /// </summary>
-        Release
-    }
-
+    /// <inheritdoc />
     /// <summary>
     /// This class inject the Serializable Attribute to all public class types in a given assembly, and adds
     /// default deserialization constructor for those type which implement ISerializable interface
     /// </summary>
-    internal class SInjection
+    internal class SInjection : IDisposable
     {
         #region [ Private Properties ]
         private readonly string _assemblyLocation;
-        private readonly PatchMode _mode;
-        private readonly AssemblyDefinition _assemblyDefinition;
+        private readonly ModuleDefinition _moduleDefinition;
+
         private static readonly Func<string, bool> IsSystemAssembly = name => name.Contains("Microsoft") || name.Contains("System") || name.Contains("mscorlib");
 
         private const string Marker = "SInjected";
@@ -87,15 +56,7 @@ namespace BridgeVs.Build
         /// <summary>
         /// 
         /// </summary>
-        public string SInjectVersion
-        {
-            get
-            {
-                Assembly assembly = Assembly.GetExecutingAssembly();
-                FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-                return fvi.FileVersion;
-            }
-        }
+        public string SInjectVersion => Assembly.GetExecutingAssembly().VersionNumber();
 
         private bool? _snkFileExists;
         private bool SnkFileExists
@@ -119,20 +80,21 @@ namespace BridgeVs.Build
         /// </summary>
         /// <param name="assemblyLocation">The assembly location.</param>
         /// <param name="snkCertificatePath">The location of snk certificate</param>
-        /// <param name="mode">The mode.</param>
         /// <exception cref="System.Exception"></exception>
-        public SInjection(string assemblyLocation, string snkCertificatePath = null, PatchMode mode = PatchMode.Release)
+        public SInjection(string assemblyLocation, string snkCertificatePath = null)
         {
             _assemblyLocation = assemblyLocation;
             _snkCertificatePath = snkCertificatePath;
-            _mode = mode;
 
             Log.Write("Assembly being Injected {0}", assemblyLocation);
 
-            if (!File.Exists(assemblyLocation))
+            if (!FS.FileSystem.File.Exists(assemblyLocation))
                 throw new Exception($"Assembly at location {assemblyLocation} doesn't exist");
-
-            _assemblyDefinition = AssemblyDefinition.ReadAssembly(assemblyLocation, GetReaderParameters());
+             
+            using (Stream file = FS.FileSystem.File.Open(assemblyLocation, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                _moduleDefinition = ModuleDefinition.ReadModule(file, GetReaderParameters());
+            }
         }
         #endregion
 
@@ -141,19 +103,18 @@ namespace BridgeVs.Build
         /// <summary>
         /// Patches the loaded assembly enabling the specified Serialization type.
         /// </summary>
-        /// <param name="types">The Serialization Type.</param>
         /// <exception cref="System.Exception"></exception>
-        public bool Patch(SerializationTypes types)
+        public bool Patch()
         {
-            bool isAlreadySinjected = CheckIfAlreadySinjected();
-#if !DEBUG
-            if (isAlreadySinjected)
+            bool alreadySInjected = CheckIfAlreadySInjected();
+
+            if (alreadySInjected)
             {
-                Log.Write("Assembly already Sinjected");
+                Log.Write("Assembly already SInjected");
 
                 return true;
             }
-#endif
+
             List<TypeDefinition> typeToInjects = GetTypesToInject().ToList();
 
             InjectSerialization(typeToInjects);
@@ -164,7 +125,7 @@ namespace BridgeVs.Build
             Log.Write(success
                     ? "Assembly {0} has been correctly Injected"
                     : "Assembly {0} was not correctly Injected",
-                _assemblyDefinition.FullName);
+                _moduleDefinition.FullyQualifiedName);
             return success;
         }
 
@@ -175,8 +136,7 @@ namespace BridgeVs.Build
         public IEnumerable<string> GetSerializableTypes()
         {
             return
-           _assemblyDefinition
-               .MainModule
+                _moduleDefinition
                .Types
                .Where(typeInAssembly => typeInAssembly.IsSerializable)
                .Select(definition => definition.FullName);
@@ -195,6 +155,8 @@ namespace BridgeVs.Build
             {
                 try
                 {
+                    //typeInAssembly.AddParameterlessConstructor();
+
                     typeInAssembly.AddDefaultConstructor();
 
                     //if (!types.HasFlag(SerializationTypes.BinarySerialization)) continue;
@@ -212,12 +174,11 @@ namespace BridgeVs.Build
             }
         }
 
-        private IEnumerable<TypeDefinition> GetTypesToInject()
+        public IEnumerable<TypeDefinition> GetTypesToInject()
         {
             try
             {
-                return _assemblyDefinition
-                    .MainModule
+                return _moduleDefinition
                     .Types
                     .Where(
                         typeInAssembly =>
@@ -237,11 +198,11 @@ namespace BridgeVs.Build
         {
             try
             {
-                TypeReference stringType = _assemblyDefinition.MainModule.TypeSystem.String;
-                AssemblyNameReference corlib = (AssemblyNameReference)_assemblyDefinition.MainModule.TypeSystem.CoreLibrary;
+                TypeReference stringType = _moduleDefinition.TypeSystem.String;
+                AssemblyNameReference corlib = (AssemblyNameReference)_moduleDefinition.TypeSystem.CoreLibrary;
 
                 AssemblyDefinition system =
-                    _assemblyDefinition.MainModule.AssemblyResolver.Resolve(
+                    _moduleDefinition.AssemblyResolver.Resolve(
                         new AssemblyNameReference("System", corlib.Version)
                         {
                             PublicKeyToken = corlib.PublicKeyToken,
@@ -251,11 +212,11 @@ namespace BridgeVs.Build
 
                 MethodDefinition generatedCodeCtor = generatedCodeAttribute.Methods.First(m => m.IsConstructor && m.Parameters.Count == 2);
 
-                CustomAttribute result = new CustomAttribute(_assemblyDefinition.MainModule.ImportReference(generatedCodeCtor));
+                CustomAttribute result = new CustomAttribute(_moduleDefinition.ImportReference(generatedCodeCtor));
                 result.ConstructorArguments.Add(new CustomAttributeArgument(stringType, Marker));
                 result.ConstructorArguments.Add(new CustomAttributeArgument(stringType, SInjectVersion));
 
-                _assemblyDefinition.MainModule.Assembly.CustomAttributes.Add(result);
+                _moduleDefinition.Assembly.CustomAttributes.Add(result);
             }
             catch (Exception e)
             {
@@ -264,10 +225,10 @@ namespace BridgeVs.Build
             }
         }
 
-        private bool CheckIfAlreadySinjected()
+        private bool CheckIfAlreadySInjected()
         {
-            return _assemblyDefinition.HasCustomAttributes
-                   && _assemblyDefinition.CustomAttributes
+            return _moduleDefinition.HasCustomAttributes
+                   && _moduleDefinition.CustomAttributes
                        .Any(attribute => attribute.HasConstructorArguments
                                          &&
                                          attribute.ConstructorArguments
@@ -288,14 +249,16 @@ namespace BridgeVs.Build
             {
                 AssemblyResolver = assemblyResolver,
                 InMemory = true,
-                ReadingMode = ReadingMode.Immediate
+                ReadingMode = ReadingMode.Immediate,
+                ReadWrite = true
             };
 
-            if (!File.Exists(PdbName))
-                 return readerParameters;
-            
+            if (!FS.FileSystem.File.Exists(PdbName))
+                return readerParameters;
+
             PdbReaderProvider symbolReaderProvider = new PdbReaderProvider();
             readerParameters.SymbolReaderProvider = symbolReaderProvider;
+            readerParameters.ReadSymbols = true;
 
             return readerParameters;
         }
@@ -303,8 +266,8 @@ namespace BridgeVs.Build
         private WriterParameters GetWriterParameters()
         {
             WriterParameters writerParameters = new WriterParameters();
-
-            if (_mode == PatchMode.Debug && File.Exists(PdbName))
+            
+            if (FS.FileSystem.File.Exists(PdbName))
             {
                 writerParameters.SymbolWriterProvider = new PdbWriterProvider();
                 writerParameters.WriteSymbols = true;
@@ -313,11 +276,10 @@ namespace BridgeVs.Build
             if (string.IsNullOrEmpty(_snkCertificatePath) || !SnkFileExists)
                 return writerParameters;
 
-            using (FileStream file = File.OpenRead(_snkCertificatePath))
-            {
-                writerParameters.StrongNameKeyPair = new StrongNameKeyPair(file);
-            }
-
+            byte[] snk = FS.FileSystem.File.ReadAllBytes(_snkCertificatePath);
+          
+            writerParameters.StrongNameKeyPair = new StrongNameKeyPair(snk);
+            
             return writerParameters;
         }
 
@@ -340,36 +302,25 @@ namespace BridgeVs.Build
 
         private bool WriteAssembly()
         {
-            const int retry = 3;
-
             if (string.IsNullOrEmpty(_snkCertificatePath) || !SnkFileExists)
             {
-                _assemblyDefinition.Name.HasPublicKey = false;
-                _assemblyDefinition.Name.PublicKey = new byte[0];
-                _assemblyDefinition.MainModule.Attributes &= ~ModuleAttributes.StrongNameSigned;
+                _moduleDefinition.Assembly.Name.HasPublicKey = false;
+                _moduleDefinition.Assembly.Name.PublicKey = new byte[0];
+                _moduleDefinition.Attributes &= ~ModuleAttributes.StrongNameSigned;
             }
-            for (int i = 0; i < retry; i++)
+
+            using (Stream file = FS.FileSystem.FileStream.Create(_assemblyLocation, FileMode.Open, FileAccess.ReadWrite))
             {
-                try
-                {
-                    using (FileStream s = new FileStream(_assemblyLocation, FileMode.OpenOrCreate, FileAccess.Write))
-                    {
-                        _assemblyDefinition.Write(s, GetWriterParameters());
-                       
-                    }
-
-                    return true;
-                }
-                catch (Exception e)
-                {
-                    Log.Write(e, $"Error Saving Assembly {_assemblyLocation} - Attempt #{i}");
-
-                    Thread.Sleep(25);
-                }
+                _moduleDefinition.Write(file, GetWriterParameters());
             }
 
-            return false;
+            return true;
         }
         #endregion
+
+        public void Dispose()
+        {
+            _moduleDefinition?.Dispose();
+        }
     }
 }

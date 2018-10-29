@@ -31,7 +31,6 @@ using System.Reflection;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Windows.Forms;
-using BridgeVs.Locations;
 using BridgeVs.Shared.Common;
 using Microsoft.Win32;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
@@ -44,12 +43,9 @@ namespace BridgeVs.VsPackage.Helper.Configuration
 
         private const string VersionRegistryValue = "LINQBridgeVsVersion";
         private const string InstallFolderPathRegistryValue = "InstallFolderPath";
-        private const string LinqPad5 = "LINQPad 5";
-        private const string LinqPad4 = "LINQPad 4";
 
         public static List<string> Dependencies => new List<string>
         {
-            "BridgeVs.Grapple.dll",
             "BridgeVs.Shared.dll",
             "Newtonsoft.Json.dll",
             "System.IO.Abstractions.dll",
@@ -60,7 +56,7 @@ namespace BridgeVs.VsPackage.Helper.Configuration
 
         private static string InstalledExtensionVersion(string vsVersion)
         {
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(GetRegistryKey(Resources.ProductVersion, vsVersion)))
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(CommonRegistryConfigurations.GetRegistryKey(Resources.ProductVersion, vsVersion)))
             {
                 if (key == null) return string.Empty;
 
@@ -76,8 +72,8 @@ namespace BridgeVs.VsPackage.Helper.Configuration
         // ReSharper disable once InconsistentNaming
         private static bool IsLINQPadInstalled(string vsVersion)
         {
-            var currentInstalledVersionPath = CommonRegistryConfigurations.GetLINQPadInstallationPath(vsVersion);
-            var alreadyInstalled = !string.IsNullOrEmpty(currentInstalledVersionPath);
+            string currentInstalledVersionPath = CommonRegistryConfigurations.GetLINQPadInstallationPath(vsVersion);
+            bool alreadyInstalled = !string.IsNullOrEmpty(currentInstalledVersionPath);
 
             if (alreadyInstalled && Directory.Exists(currentInstalledVersionPath))
                 return true;
@@ -128,16 +124,21 @@ namespace BridgeVs.VsPackage.Helper.Configuration
         private static void DeployMsBuildTargets(string vsVersion, string vsEdition)
         {
             string msBuildDir = CreateMsBuildTargetDirectory(vsVersion, vsEdition);
-            //Copy the CustomAfter and CustomBefore to the default MSbuild v4.0 location
+            //Copy the CustomAfter and CustomBefore to the default MSBuild v4.0 location
             File.Copy(CommonFolderPaths.CustomAfterTargetFileNamePath, Path.Combine(msBuildDir, CommonFolderPaths.CustomAfterTargetFileName), true);
 
-            File.Copy(CommonFolderPaths.CustomBeforeTargetFileNamePath, Path.Combine(msBuildDir, CommonFolderPaths.CustomBeforeTargetFileName), true);
+            string customBeforeTarget = Path.Combine(msBuildDir, CommonFolderPaths.CustomBeforeTargetFileName);
+            if (File.Exists(customBeforeTarget)) //old before target, now obsolete
+            {
+                File.Delete(customBeforeTarget);
+            }
+               
         }
 
         private static void SetInstallationFolder(string vsVersion)
         {
             //Set in the registry the installer location if it is has changed
-            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(GetRegistryKey(Resources.ProductRegistryKey, vsVersion)))
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(CommonRegistryConfigurations.GetRegistryKey(Resources.ProductRegistryKey, vsVersion)))
             {
                 if (key == null) return;
 
@@ -153,16 +154,11 @@ namespace BridgeVs.VsPackage.Helper.Configuration
         private static string GetInstallationFolder(string vsVersion)
         {
             //Set in the registry the installer location if it is has changed
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(GetRegistryKey(Resources.ProductRegistryKey, vsVersion)))
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(CommonRegistryConfigurations.GetRegistryKey(Resources.ProductRegistryKey, vsVersion)))
             {
                 object value = key?.GetValue(InstallFolderPathRegistryValue);
                 return value?.ToString();
             }
-        }
-
-        public static string GetRegistryKey(string key, params object[] argStrings)
-        {
-            return string.Format(key, argStrings);
         }
 
         private static string CreateMsBuildTargetDirectory(string vsVersion, string vsEdition)
@@ -214,7 +210,7 @@ namespace BridgeVs.VsPackage.Helper.Configuration
         }
         private static void SetBridgeVsAssemblyVersion(string vsVersion)
         {
-            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(GetRegistryKey(Resources.ProductVersion, vsVersion)))
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(CommonRegistryConfigurations.GetRegistryKey(Resources.ProductVersion, vsVersion)))
             {
                 key?.SetValue(VersionRegistryValue, CurrentAssemblyVersion);
             }
@@ -226,8 +222,6 @@ namespace BridgeVs.VsPackage.Helper.Configuration
                 return false;
             }
 
-            ObsoleteXmlConfiguration.RemoveOldTargets();
-
             SetBridgeVsAssemblyVersion(vsVersion);
 
             CreateLinqPadQueryFolder();
@@ -235,8 +229,6 @@ namespace BridgeVs.VsPackage.Helper.Configuration
             CreateLinqPadPluginFolders();
 
             CreateVisualizerFolder(vsVersion);
-
-            CreateGrappleFolder();
 
             CreateLogFolder();
 
@@ -277,7 +269,7 @@ namespace BridgeVs.VsPackage.Helper.Configuration
                 File.Copy(sourceFile, targetFile, true);
 
                 //it copies the plugins to all the folders found in either custom locations and default
-                foreach (var targetPluginFolder in CommonFolderPaths.AllLinqPadPluginFolders)
+                foreach (string targetPluginFolder in CommonFolderPaths.AllLinqPadPluginFolders)
                 {
                     string targetFileLinqPadPluginFolder = Path.Combine(targetPluginFolder, dependency);
                     File.Copy(sourceFile, targetFileLinqPadPluginFolder, true);
@@ -344,7 +336,7 @@ namespace BridgeVs.VsPackage.Helper.Configuration
 
         private static void CreateLinqPadPluginFolders()
         {
-            foreach (var pluginFolder in CommonFolderPaths.AllLinqPadPluginFolders)
+            foreach (string pluginFolder in CommonFolderPaths.AllLinqPadPluginFolders)
             {
                 if (Directory.Exists(pluginFolder))
                     continue;
@@ -367,15 +359,6 @@ namespace BridgeVs.VsPackage.Helper.Configuration
             SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
             sec.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
             Directory.CreateDirectory(debuggerVisualizerTargetFolder, sec);
-        }
-
-        private static void CreateGrappleFolder()
-        {
-            if (Directory.Exists(CommonFolderPaths.GrappleFolder))
-                return;
-
-            //no need for security access
-            Directory.CreateDirectory(CommonFolderPaths.GrappleFolder);
         }
 
         private static void CreateLogFolder()
