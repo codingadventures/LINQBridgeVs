@@ -19,9 +19,12 @@ build:
   project: src\BridgeVs.Tests.sln
   parallel: true
   verbosity: normal
+environment:
+  brambala:
+    secure: TE/EpwbShGrtiWBvkYKzNTl58UnsSun7XvN/tTYxninc47fB4gbyIeq1eSQ+PW6il0CvR1PLnd81twEbvgPEYA==
 test_script:
 - ps: |
     if ($env:CONFIGURATION -eq "Test") 
     {
-       c:\projects\linqbridgevs\Lib\Typemock\TMockRunner.exe -deploy Lib\Typemock\AutoDeploy vstest.console.exe "Test\BridgeVs.Build.Test\bin\Test\BridgeVs.Build.Test.dll" "Test\BridgeVs.DynamicVisualizers.Test\bin\Test\BridgeVs.DynamicVisualizers.Test.dll" "Test\BridgeVs.Grapple.Test\bin\Test\BridgeVs.Grapple.Test.dll" "Test\BridgeVs.VsExtension.Helper.Test\bin\Test\BridgeVs.VsPackage.Helper.Test.dll" /logger:Appveyor /TestCaseFilter:"TestCategory=UnitTest"
+       c:\projects\linqbridgevs\Lib\Typemock\TMockRunner.exe -deploy Lib\Typemock\AutoDeploy -register $env:brambala vstest.console.exe "Test\BridgeVs.Build.Test\bin\Test\BridgeVs.Build.Test.dll" "Test\BridgeVs.DynamicVisualizers.Test\bin\Test\BridgeVs.DynamicVisualizers.Test.dll" "Test\BridgeVs.Grapple.Test\bin\Test\BridgeVs.Grapple.Test.dll" "Test\BridgeVs.VsExtension.Helper.Test\bin\Test\BridgeVs.VsPackage.Helper.Test.dll" /logger:Appveyor /TestCaseFilter:"TestCategory=UnitTest"
     }
