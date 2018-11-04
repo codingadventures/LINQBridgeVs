@@ -9,10 +9,17 @@
 
 <img width="250" src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Src/BridgeVs.VsPackage/LINQBridgeLogo.png?raw=true" align="right"/>
 
-LINQBridgeVs is a Visual Studio Extension compatible with Visual Studio 2012/2013/2015/2017.
-It is a bridge between a Visual Studio debugging session and [LINQPad](http://www.linqpad.net). It creates, at compile time, a Custom Debugger Visualizer making the magnifying glass available for all of the public classes and structs. By clicking on the magnifying glass on an object instance, this will be transmitted over a
-bus and 'Dumped' out by LINQPad.
+LINQBridgeVs is a Visual Studio Extension compatible with Visual Studio from 2012 through 2017.
+It is a bridge between a Visual Studio debugging session and [LINQPad](http://www.linqpad.net). It creates, at compile time, a Custom Debugger Visualizer making the magnifying glass available for all of the public classes and structs. By clicking on the magnifying glass on an object instance, this will be transmitted over a bus and 'Dumped' out by LINQPad.
 <br><br>
+
+## Release Notes 1.4.7
+* Visualizer generation for third party assemblies [#25](https://github.com/codingadventures/LINQBridgeVs/issues/25). When enabled (it's off by default) LINQBridgeVs will map types in every referenced dlls for every project in a solution.
+* Error message for unsupported solutions [#52](https://github.com/codingadventures/LINQBridgeVs/issues/52). .NET Core, .NET Standard and UWP are not supported because of a Visual Studio limitations. LINQBridgeVs will now display an error message for unsupported solutions.
+* Added XmlSerialization [#50](https://github.com/codingadventures/LINQBridgeVs/issues/50). XmlSerialization has been added to the serialization methods used to transmit variables to LINQPad. This is useful to serialize objects with xml (XElement, XmlDocument etc).
+* Added support for AnonymousType [#46](https://github.com/codingadventures/LINQBridgeVs/issues/46) AnonymousType inside are now supported. 
+* Added Json.NET failover serialization [#56](https://github.com/codingadventures/LINQBridgeVs/issues/56) Should LINQBridgeVs fail to to transmit the object using the chosen serialization (Binary, Json, Xml)  it will try again using Json.NET. If Json.NET is set as the primary method, it will instead use Binary serialization.
+* Bug fixing [#41](https://github.com/codingadventures/LINQBridgeVs/issues/41) [#49](https://github.com/codingadventures/LINQBridgeVs/issues/49) [#55](https://github.com/codingadventures/LINQBridgeVs/issues/55) [#58](https://github.com/codingadventures/LINQBridgeVs/issues/58) 
 
 ## Getting Started
 
@@ -33,8 +40,7 @@ Run the solution, set a breakpoint and hover the mouse pointer on any object ins
 
 ## Compatibility
 
-LINQBridgeVs is compatible with any Visual Studio edition from 2012 through 2017. It works only for **.NET Framework 4.0 onwards**. There is no support for .NET Framework 3.5 downwards. LINQPad 4 and 5 are both supported.
-Due to a Visual Studio limitation, ASP.NET Core does not support debugger visualizers as of yet (April 2018), hence this extension does not support .NET Core. 
+LINQBridgeVs is compatible with any Visual Studio edition from 2012 through 2017. It works only for **.NET Framework 4.0 onwards**. There is no support for .NET Framework 3.5 downwards, .NET Core or .NET Standard. This issue is due to a Visual Studio limitation hence this extension does not support .NET Core. 
 There is a feature request in the Visual Studio [Uservoice](https://visualstudio.uservoice.com/forums/121579-visual-studio-ide/suggestions/33344638-custom-debugger-visualizer-for-net-core-apps-in-v).
 
 ### Visual Studio 2017 Preview
@@ -52,13 +58,17 @@ Only for the first time, Visual Studio must be run with Administrator privileges
 
 Once Visual Studio is restarted as Administrator, the configuration will complete and the form will never appear again. 
 
-During this process two custom MsBuild Targets, [Custom.After.Microsoft.Common.targets](https://github.com/codingadventures/LINQBridgeVs/blob/master/Src/VsExtension/Targets/Custom.After.Microsoft.Common.targets) and [Custom.Before.Microsoft.Common.targets](https://github.com/codingadventures/LINQBridgeVs/blob/master/Src/VsExtension/Targets/Custom.Before.Microsoft.Common.targets), are needed to extend the MsBuild process. They are copied into a specific Visual Studio version and edition's folder:
+During this process one custom MsBuild Target, [Custom.After.Microsoft.Common.targets](https://github.com/codingadventures/LINQBridgeVs/blob/master/Src/BridgeVs.VsPackage/Targets/Custom.After.Microsoft.Common.targets) is needed to extend the MsBuild process. It is copied into a specific Visual Studio version and edition's folder:
 * Visual Studio 2017 - C:\Program Files (x86)\Microsoft Visual Studio\2017\\**Edition**\MSBuild\v15.0
 * Visual Studio 2015 - C:\Program Files (x86)\MSBuild\v14.0
 * Visual Studio 2013 - C:\Program Files (x86)\MSBuild\v12.0
 * Visual Studio 2012 - C:\Program Files (x86)\MSBuild\v4.0
 
 You can skip this process but you will not be able to use the extension until you complete the configuration.
+
+## Uninstall
+
+This extension can be uninstalled from Visual Studio. Go to "Tools/Extensions and Updates..." select LINQBridgeVs and then click on Uninstall. There is also a manual step involved: delete [Custom.After.Microsoft.Common.targets](https://github.com/codingadventures/LINQBridgeVs/blob/master/Src/BridgeVs.VsPackage/Targets/Custom.After.Microsoft.Common.targets) from the corresponding MSBuild folder as explained in [Configuration](#Configuration) and delete the registry entry *\HKEY_CURRENT_USER\Software\LINQBridgeVs*. I will create a ps script at some stage to automate it.
 
 ### LINQPad
 
@@ -102,7 +112,7 @@ The BridgeVs Option menu offers four options:
 </p>
 
 The error tracking feature, as explained in the [Error Tracking](#error-tracking) section, can be switched on or off at any time. 
-To enable diagnostic logging set Enable Logging to true. Logs will be saved in *%LOCALAPPDATA%\BridgeVs\logs.txt*. Be careful, logging is synchronous so it will slow down the extension.
+To enable diagnostic logging set Enable Logging to true. Logs will be saved in *%TEMP%\BridgeVs\logs.txt*. Be careful, logging is synchronous so it will slow down the transmission process.
 
 The LINQPad installation path can also be changed should you prefer to use a portable version after the configuration is completed. Bear in mind that the folder provided must contain the LINQPad.exe, otherwise it won't change the path.
 The Serialization Type is the method used to transmit debugging variables to LINQPad. Binary serialization is set by default. Json.NET is also available.

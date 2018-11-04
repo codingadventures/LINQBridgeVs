@@ -20,12 +20,15 @@ build:
   parallel: true
   verbosity: normal
 environment:
-  brambala:
-    secure: TE/EpwbShGrtiWBvkYKzNTl58UnsSun7XvN/tTYxninc47fB4gbyIeq1eSQ+PW6il0CvR1PLnd81twEbvgPEYA==
+  TM_INSTALLDIR: c:\projects\linqbridgevs
+  TMOCK_NO_REGISTRY: 0x1
+  TM_LICENSE:
+    secure: Xt89zh3/sBkKjzrExB+Qhyc6zuRNB0lQhj7RuPHrJ4s=
+  TM_COMPANY_NAME:
+    secure: TE/EpwbShGrtiWBvkYKzNakaXglte8G723mXWPDjtP0=
 test_script:
 - ps: |
     if ($env:CONFIGURATION -eq "Test") 
     {
-       $reg = Get-ChildItem env:brambala
-       c:\projects\linqbridgevs\Lib\Typemock\TMockRunner.exe -register $reg -deploy c:\projects\linqbridgevs\Lib\Typemock\AutoDeploy vstest.console.exe "Test\BridgeVs.Build.Test\bin\Test\BridgeVs.Build.Test.dll" "Test\BridgeVs.DynamicVisualizers.Test\bin\Test\BridgeVs.DynamicVisualizers.Test.dll" "Test\BridgeVs.Grapple.Test\bin\Test\BridgeVs.Grapple.Test.dll" "Test\BridgeVs.VsExtension.Helper.Test\bin\Test\BridgeVs.VsPackage.Helper.Test.dll" /logger:Appveyor /TestCaseFilter:"TestCategory=UnitTest"
+       c:\projects\linqbridgevs\Lib\Typemock\TMockRunner.exe -deploy c:\projects\linqbridgevs\Lib\Typemock\AutoDeploy vstest.console.exe "Test\BridgeVs.Build.Test\bin\Test\BridgeVs.Build.Test.dll" "Test\BridgeVs.DynamicVisualizers.Test\bin\Test\BridgeVs.DynamicVisualizers.Test.dll" "Test\BridgeVs.Grapple.Test\bin\Test\BridgeVs.Grapple.Test.dll" "Test\BridgeVs.VsExtension.Helper.Test\bin\Test\BridgeVs.VsPackage.Helper.Test.dll" /logger:Appveyor /TestCaseFilter:"TestCategory=UnitTest"
     }
