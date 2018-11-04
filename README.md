@@ -112,7 +112,7 @@ The BridgeVs Option menu offers four options:
 </p>
 
 The error tracking feature, as explained in the [Error Tracking](#error-tracking) section, can be switched on or off at any time. 
-To enable diagnostic logging set Enable Logging to true. Logs will be saved in *%LOCALAPPDATA%\BridgeVs\logs.txt*. Be careful, logging is synchronous so it will slow down the extension.
+To enable diagnostic logging set Enable Logging to true. Logs will be saved in *%TEMP%\BridgeVs\logs.txt*. Be careful, logging is synchronous so it will slow down the transmission process.
 
 The LINQPad installation path can also be changed should you prefer to use a portable version after the configuration is completed. Bear in mind that the folder provided must contain the LINQPad.exe, otherwise it won't change the path.
 The Serialization Type is the method used to transmit debugging variables to LINQPad. Binary serialization is set by default. Json.NET is also available.
