@@ -114,7 +114,7 @@ namespace BridgeVs.VsPackage.Package
             OleMenuCommand menuItemGettingStarted = new OleMenuCommand((s, e) => System.Diagnostics.Process.Start("https://github.com/codingadventures/LINQBridgeVs#getting-started"), gettingStarted);
 
             CommandID sendFeedback = new CommandID(GuidList.GuidBridgeVsExtensionCmdSet, (int)PkgCmdIdList.CmdIdFeedback);
-            OleMenuCommand menuItemSendFeedback = new OleMenuCommand((s, e) => System.Diagnostics.Process.Start("https://github.com/codingadventures/LINQBridgeVs/issues"), sendFeedback);
+            OleMenuCommand menuItemSendFeedback = new OleMenuCommand((s, e) => System.Diagnostics.Process.Start("https://marketplace.visualstudio.com/items?itemName=codingadventures.linqbridgevs#review-details"), sendFeedback);
 
             mcs.AddCommand(menuItemEnable);
             mcs.AddCommand(menuItemDisable);
@@ -156,9 +156,10 @@ namespace BridgeVs.VsPackage.Package
             }
             catch (Exception e)
             {
-                _error = new Error();
-                _error.Body = $"{e.Message} %0A {e.StackTrace}";
-                _error.Title = "Error during installation. 1.4.6";
+                _error = new Error
+                {
+                    Body = $"{e.Message} %0A {e.StackTrace}", Title = "Error during installation. 1.4.6"
+                };
                 Exception innerException = e.InnerException;
                 while (innerException != null)
                 {
@@ -175,7 +176,7 @@ namespace BridgeVs.VsPackage.Package
 
             if (_error != null)
             {
-                var boxresult = MessageBox.Show($"Configuration unsuccessful. Do you want to open an issue on GitHub?", "LINQBridgeVs: Error during the configuration", MessageBoxButton.YesNo);
+                MessageBoxResult boxresult = MessageBox.Show($"Configuration unsuccessful. Do you want to open an issue on GitHub?", "LINQBridgeVs: Error during the configuration", MessageBoxButton.YesNo);
                 if (boxresult == MessageBoxResult.Yes)
                 {
                     System.Diagnostics.Process.Start($"https://github.com/codingadventures/LINQBridgeVs/issues/new?title={_error.Title}&body={_error.Body}");
@@ -186,7 +187,7 @@ namespace BridgeVs.VsPackage.Package
             if (_installationResult == null)
                 return;
 
-            var messageResult = MessageBox.Show("Do you want to send anonymous error reports to LINQBridgeVs?", "LINQBridgeVs: Error Tracking", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+            MessageBoxResult messageResult = MessageBox.Show("Do you want to send anonymous error reports to LINQBridgeVs?", "LINQBridgeVs: Error Tracking", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
 
             _packageSettings.ErrorTrackingEnabled = messageResult == MessageBoxResult.Yes;
             _packageSettings.SaveSettingsToStorage();
