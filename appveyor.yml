@@ -29,5 +29,5 @@ test_script:
     if ($env:CONFIGURATION -eq "Test") 
     {
        $args = c:\projects\linqbridgevs\Lib\Typemock\TMockRunner.exe -deploy c:\projects\linqbridgevs\Lib\Typemock\AutoDeploy -register $env:TM_COMPANY_NAME $env:TM_LICENSE vstest.console.exe "Test\BridgeVs.Build.Test\bin\Test\BridgeVs.Build.Test.dll" "Test\BridgeVs.DynamicVisualizers.Test\bin\Test\BridgeVs.DynamicVisualizers.Test.dll" "Test\BridgeVs.Grapple.Test\bin\Test\BridgeVs.Grapple.Test.dll" "Test\BridgeVs.VsExtension.Helper.Test\bin\Test\BridgeVs.VsPackage.Helper.Test.dll" /logger:Appveyor /TestCaseFilter:"TestCategory=UnitTest"
-       Start-Process powershell -Verb runAs -ArgumentList $args
+       Start-Process powershell -Verb runAs -argument $args
     }
