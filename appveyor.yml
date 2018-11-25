@@ -28,6 +28,6 @@ test_script:
 - ps: |
     if ($env:CONFIGURATION -eq "Test") 
     {
-       $args = c:\projects\linqbridgevs\Lib\Typemock\TMockRunner.exe -deploy c:\projects\linqbridgevs\Lib\Typemock\AutoDeploy -register $env:COMPANY_NAME $env:LICENSE vstest.console.exe "Test\BridgeVs.Build.Test\bin\Test\BridgeVs.UnitTest.dll" /logger:Appveyor /TestCaseFilter:"TestCategory=UnitTest"
+       $args = c:\projects\linqbridgevs\Lib\Typemock\TMockRunner.exe -deploy c:\projects\linqbridgevs\Lib\Typemock\AutoDeploy -register $env:COMPANY_NAME $env:LICENSE vstest.console.exe "Test\BridgeVs.UnitTest\bin\Test\BridgeVs.UnitTest.dll" /logger:Appveyor /TestCaseFilter:"TestCategory=UnitTest"
        Start-Process powershell -Verb runAs -ArgumentList '$args'
     }
