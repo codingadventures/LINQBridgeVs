@@ -15,10 +15,10 @@ It is a bridge between a Visual Studio debugging session and [LINQPad](http://ww
 
 ## Release Notes 1.4.7
 * Visualizer generation for third party assemblies [#25](https://github.com/codingadventures/LINQBridgeVs/issues/25). When enabled (it's off by default) LINQBridgeVs will map types in every referenced dlls for every project in a solution.
-* Error message for unsupported solutions [#52](https://github.com/codingadventures/LINQBridgeVs/issues/52). .NET Core, .NET Standard and UWP are not supported because of a Visual Studio limitations. LINQBridgeVs will now display an error message for unsupported solutions.
-* Added XmlSerialization [#50](https://github.com/codingadventures/LINQBridgeVs/issues/50). XmlSerialization has been added to the serialization methods used to transmit variables to LINQPad. This is useful to serialize objects with xml (XElement, XmlDocument etc).
-* Added support for AnonymousType [#46](https://github.com/codingadventures/LINQBridgeVs/issues/46) AnonymousType inside are now supported. 
-* Added Json.NET failover serialization [#56](https://github.com/codingadventures/LINQBridgeVs/issues/56) Should LINQBridgeVs fail to to transmit the object using the chosen serialization (Binary, Json, Xml)  it will try again using Json.NET. If Json.NET is set as the primary method, it will instead use Binary serialization.
+* LINQBridgeVs will now display an error message for unsupported solutions. [#52](https://github.com/codingadventures/LINQBridgeVs/issues/52). .NET Core, .NET Standard and UWP are not supported because of a Visual Studio limitation. 
+* Added XmlSerialization [#50](https://github.com/codingadventures/LINQBridgeVs/issues/50). XmlSerialization has been added to the serialization methods used to transmit variables to LINQPad. This is useful to serialize objects that have xml content (XElement, XmlDocument etc).
+* Added support for AnonymousType [#46 Are anonymous types supported when used inside a list?](https://github.com/codingadventures/LINQBridgeVs/issues/46) and private nested classes.
+* Added Json.NET failover serialization [#56](https://github.com/codingadventures/LINQBridgeVs/issues/56) Should LINQBridgeVs fail to transmit the object using the chosen serialization method (Binary, Json or Xml)  it will try again using Json.NET. If Json.NET is set as the primary method, it will instead use Binary serialization.
 * Bug fixing [#41](https://github.com/codingadventures/LINQBridgeVs/issues/41) [#49](https://github.com/codingadventures/LINQBridgeVs/issues/49) [#55](https://github.com/codingadventures/LINQBridgeVs/issues/55) [#58](https://github.com/codingadventures/LINQBridgeVs/issues/58) 
 
 ## Getting Started
