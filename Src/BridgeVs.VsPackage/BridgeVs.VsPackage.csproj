@@ -156,12 +156,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BridgeVs.Locations\BridgeVs.Shared.csproj">
-      <Project>{BC10F93A-5DA2-44F8-AE5E-5603CB46B548}</Project>
-      <Name>BridgeVs.Shared</Name>
-      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3bDebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
-    </ProjectReference>
     <ProjectReference Include="..\BridgeVs.DynamicVisualizers\BridgeVs.DynamicVisualizers.csproj">
       <Project>{B84FBD50-0B10-4C25-8430-680FC6FC3FEA}</Project>
       <Name>BridgeVs.DynamicVisualizers</Name>
@@ -173,6 +167,10 @@
       <Project>{276f3935-e0ca-450f-a55f-aed56dc2024e}</Project>
       <Name>BridgeVs.Build</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\BridgeVs.Shared\BridgeVs.Shared.csproj">
+      <Project>{bc10f93a-5da2-44f8-ae5e-5603cb46b548}</Project>
+      <Name>BridgeVs.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="..\BridgeVs.VsPackage.Helper\BridgeVs.VsPackage.Helper.csproj">
       <Project>{0fa0053b-ab53-40df-a060-6dcc22568a23}</Project>

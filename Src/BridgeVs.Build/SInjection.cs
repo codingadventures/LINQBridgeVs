@@ -23,16 +23,16 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using BridgeVs.Build.Util;
 using BridgeVs.Shared;
 using BridgeVs.Shared.Logging;
 using Mono.Cecil;
 using Mono.Cecil.Pdb;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using FS = BridgeVs.Shared.FileSystem.FileSystemFactory;
 
 namespace BridgeVs.Build
@@ -46,6 +46,7 @@ namespace BridgeVs.Build
     {
         #region [ Private Properties ]
         private readonly string _assemblyLocation;
+        private readonly Stream _assemblyStream;
         private readonly ModuleDefinition _moduleDefinition;
 
         private static readonly Func<string, bool> IsSystemAssembly = name => name.Contains("Microsoft") || name.Contains("System") || name.Contains("mscorlib");
@@ -90,11 +91,12 @@ namespace BridgeVs.Build
 
             if (!FS.FileSystem.File.Exists(assemblyLocation))
                 throw new Exception($"Assembly at location {assemblyLocation} doesn't exist");
-             
-            using (Stream file = FS.FileSystem.File.Open(assemblyLocation, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            {
-                _moduleDefinition = ModuleDefinition.ReadModule(file, GetReaderParameters());
-            }
+
+            _assemblyStream =
+                FS.FileSystem.File.Open(assemblyLocation, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+
+            _moduleDefinition = ModuleDefinition.ReadModule(_assemblyStream, GetReaderParameters());
+
         }
         #endregion
 
@@ -266,7 +268,7 @@ namespace BridgeVs.Build
         private WriterParameters GetWriterParameters()
         {
             WriterParameters writerParameters = new WriterParameters();
-            
+
             if (FS.FileSystem.File.Exists(PdbName))
             {
                 writerParameters.SymbolWriterProvider = new PdbWriterProvider();
@@ -277,9 +279,9 @@ namespace BridgeVs.Build
                 return writerParameters;
 
             byte[] snk = FS.FileSystem.File.ReadAllBytes(_snkCertificatePath);
-          
+
             writerParameters.StrongNameKeyPair = new StrongNameKeyPair(snk);
-            
+
             return writerParameters;
         }
 
@@ -310,9 +312,11 @@ namespace BridgeVs.Build
             }
 
             using (Stream file = FS.FileSystem.FileStream.Create(_assemblyLocation, FileMode.Open, FileAccess.ReadWrite))
+            using (Stream file = FS.FileSystem.File.OpenWrite(_assemblyLocation))
             {
                 _moduleDefinition.Write(file, GetWriterParameters());
             }
+            _assemblyStream?.Dispose();
 
             return true;
         }

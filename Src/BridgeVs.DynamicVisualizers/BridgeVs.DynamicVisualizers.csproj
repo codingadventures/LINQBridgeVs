@@ -112,7 +112,7 @@
       <Project>{36fcaf4d-911d-41a8-8303-e31527d3149f}</Project>
       <Name>SharpRaven</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BridgeVs.Locations\BridgeVs.Shared.csproj">
+    <ProjectReference Include="..\BridgeVs.Shared\BridgeVs.Shared.csproj">
       <Project>{bc10f93a-5da2-44f8-ae5e-5603cb46b548}</Project>
       <Name>BridgeVs.Shared</Name>
     </ProjectReference>

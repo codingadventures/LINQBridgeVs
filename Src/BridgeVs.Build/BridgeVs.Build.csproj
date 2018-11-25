@@ -56,13 +56,13 @@
       <Project>{36fcaf4d-911d-41a8-8303-e31527d3149f}</Project>
       <Name>SharpRaven</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BridgeVs.Locations\BridgeVs.Shared.csproj">
-      <Project>{bc10f93a-5da2-44f8-ae5e-5603cb46b548}</Project>
-      <Name>BridgeVs.Shared</Name>
-    </ProjectReference>
     <ProjectReference Include="..\BridgeVs.DynamicVisualizers\BridgeVs.DynamicVisualizers.csproj">
       <Project>{b84fbd50-0b10-4c25-8430-680fc6fc3fea}</Project>
       <Name>BridgeVs.DynamicVisualizers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BridgeVs.Shared\BridgeVs.Shared.csproj">
+      <Project>{bc10f93a-5da2-44f8-ae5e-5603cb46b548}</Project>
+      <Name>BridgeVs.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -101,6 +101,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties Typemock="{&quot;UnitTestProject&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;}" />
+    </VisualStudio>
+  </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

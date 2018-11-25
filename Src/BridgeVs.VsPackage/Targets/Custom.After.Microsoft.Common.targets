@@ -24,12 +24,12 @@
   <UsingTask TaskName="MapperBuildTask" AssemblyFile="$([MSBuild]::Unescape('$(InstallFolderPath)'))\BridgeVs.Build.dll" />
   <UsingTask TaskName="CleanBuildTask" AssemblyFile="$([MSBuild]::Unescape('$(InstallFolderPath)'))\BridgeVs.Build.dll" />
 
-  <Target Name="LINQBridgeAfterBuild" DependsOnTargets="CoreCompile" >
+  <Target Name="LINQBridgeAfterBuild" DependsOnTargets="CoreCompile" Condition="'True' == 'False'" >
     <SInjectionBuildTask Assembly="@(MainAssembly->'%(FullPath)')" SolutionName="$(SolutionName)" VisualStudioVer="$(VisualStudioVersion)" Snk="$(MSBuildProjectDirectory)\$(AssemblyOriginatorKeyFile)"  />
     <MapperBuildTask Assembly="@(MainAssembly->'%(FullPath)')" ProjectPath="$(MSBuildProjectFullPath)" SolutionName="$(SolutionName)" VisualStudioVer="$(VisualStudioVersion)"   />
   </Target>
 
-  <Target Name="LINQBridgeAfterClean" DependsOnTargets="AfterClean">
+  <Target Name="LINQBridgeAfterClean" DependsOnTargets="AfterClean" Condition="'True' == 'False'">
     <CleanBuildTask Assembly="$(AssemblyName)" SolutionName="$(SolutionName)" VisualStudioVer="$(VisualStudioVersion)"/>
   </Target>
 
