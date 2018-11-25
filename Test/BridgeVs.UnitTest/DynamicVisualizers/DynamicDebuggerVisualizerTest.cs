@@ -80,8 +80,8 @@ namespace BridgeVs.UnitTest.DynamicVisualizers
             Truck.ReceiveCargo(""{0}"", SerializationOption.BinarySerializer, typeof(List<Int32>)).Dump(""List<Int32>"", 2);
         }}";
 
-        [ClassInitialize]
-        public static void Init(TestContext ctx)
+        [TestInitialize]
+        public void Init()
         {
             string dstScriptPath = CommonFolderPaths.DefaultLinqPadQueryFolder;
 
