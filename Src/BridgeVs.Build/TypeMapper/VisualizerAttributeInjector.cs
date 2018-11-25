@@ -25,7 +25,6 @@
 
 using BridgeVs.Build.Util;
 using BridgeVs.Shared.Common;
-using BridgeVs.Shared.Logging;
 using Mono.Cecil;
 using Mono.Cecil.Pdb;
 using Mono.Cecil.Rocks;
@@ -33,7 +32,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using FS = BridgeVs.Shared.FileSystem.FileSystemFactory;
 
 namespace BridgeVs.Build.TypeMapper
@@ -58,7 +56,9 @@ namespace BridgeVs.Build.TypeMapper
 
         private readonly WriterParameters _writerParameters;
 
-        private DefaultAssemblyResolver GetAssemblyResolver(string assemblyDirectoryPath)
+        private readonly Stream _assemblyStream;
+
+        private static DefaultAssemblyResolver GetAssemblyResolver(string assemblyDirectoryPath)
         {
             DefaultAssemblyResolver assemblyResolver = new DefaultAssemblyResolver();
             assemblyResolver.AddSearchDirectory(Path.GetDirectoryName(assemblyDirectoryPath));
@@ -104,15 +104,14 @@ namespace BridgeVs.Build.TypeMapper
                 SymbolReaderProvider = createPdbInfo ? new PdbReaderProvider() : null,
                 InMemory = true,
                 ReadSymbols = createPdbInfo,
-                ThrowIfSymbolsAreNotMatching = false
+                ThrowIfSymbolsAreNotMatching = false,
             };
 
             //using a stream is better for testing
-            using (Stream file = FS.FileSystem.File.OpenRead(targetVisualizerAssemblyPath))
-            {
-                _debuggerVisualizerAssembly = AssemblyDefinition.ReadAssembly(file, readerParameters);
-            }
+            _assemblyStream = FS.FileSystem.File.OpenRead(targetVisualizerAssemblyPath);
 
+            _debuggerVisualizerAssembly = AssemblyDefinition.ReadAssembly(_assemblyStream, readerParameters);
+            
             InitializeDebuggerAssembly();
             RemapAssembly();
         }
@@ -249,7 +248,7 @@ namespace BridgeVs.Build.TypeMapper
         {
             string fileName = Path.GetFileNameWithoutExtension(debuggerVisualizerDst);
 
-            using (Stream file = FS.FileSystem.File.Create(debuggerVisualizerDst))
+            using (Stream file = FS.FileSystem.File.OpenWrite(debuggerVisualizerDst))
             {
                 _debuggerVisualizerAssembly.Name.Name = fileName;
                 _debuggerVisualizerAssembly.Write(file, _writerParameters);
@@ -280,6 +279,8 @@ namespace BridgeVs.Build.TypeMapper
 
         public void Dispose()
         {
+            _assemblyStream.Dispose();
+
             _debuggerVisualizerAssembly?.Dispose();
         }
     }

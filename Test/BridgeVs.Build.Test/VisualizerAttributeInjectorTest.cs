@@ -23,14 +23,14 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using BridgeVs.Build.TypeMapper;
 using BridgeVs.DynamicVisualizers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mono.Cecil;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace BridgeVs.Build.Test
 {
@@ -73,18 +73,20 @@ namespace BridgeVs.Build.Test
         {
             string debuggerVisualizerTargetName = Path.Combine(_thisAssemblyDirectoryName, "TestB.dll");
             string visualizerLocation = typeof(DynamicObjectSource).Assembly.Location;
-            VisualizerAttributeInjector injector = new VisualizerAttributeInjector(visualizerLocation, "11.0");
-            injector.MapType(typeof(IList<>));
-            injector.SaveDebuggerVisualizer(debuggerVisualizerTargetName);
+            using (VisualizerAttributeInjector injector = new VisualizerAttributeInjector(visualizerLocation, "11.0"))
+            {
+                injector.MapType(typeof(IList<>));
+                injector.SaveDebuggerVisualizer(debuggerVisualizerTargetName);
 
-            AssemblyDefinition generatedAssembly = AssemblyDefinition.ReadAssembly(debuggerVisualizerTargetName);
-            IEnumerable<object> mappedTypeNames = generatedAssembly
-                .CustomAttributes
-                .SelectMany(p =>
-                    p.Properties.Where(n => n.Name.Equals("TargetTypeName"))
-                    .Select(l => l.Argument.Value));
+                AssemblyDefinition generatedAssembly = AssemblyDefinition.ReadAssembly(debuggerVisualizerTargetName);
+                IEnumerable<object> mappedTypeNames = generatedAssembly
+                    .CustomAttributes
+                    .SelectMany(p =>
+                        p.Properties.Where(n => n.Name.Equals("TargetTypeName"))
+                            .Select(l => l.Argument.Value));
 
-            Assert.IsTrue(mappedTypeNames.Contains(typeof(IList<>).AssemblyQualifiedName), "Mapping was not successful");
+                Assert.IsTrue(mappedTypeNames.Contains(typeof(IList<>).AssemblyQualifiedName), "Mapping was not successful");
+            }
         }
 
 
@@ -100,7 +102,7 @@ namespace BridgeVs.Build.Test
             injector.SaveDebuggerVisualizer(debuggerVisualizerTargetName);
 
             AssemblyDefinition generatedAssembly = AssemblyDefinition.ReadAssembly(debuggerVisualizerTargetName);
-            IEnumerable<Type> currentAssemblytypes = 
+            IEnumerable<Type> currentAssemblytypes =
                 GetType()
                 .Assembly
                 .GetTypes()

@@ -65,4 +65,3 @@ using System.Runtime.InteropServices;
 #endif
 
 [assembly: AssemblyVersion("1.4.7.*")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
