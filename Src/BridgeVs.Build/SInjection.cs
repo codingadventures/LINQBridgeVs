@@ -46,7 +46,6 @@ namespace BridgeVs.Build
     {
         #region [ Private Properties ]
         private readonly string _assemblyLocation;
-        private readonly Stream _assemblyStream;
         private readonly ModuleDefinition _moduleDefinition;
 
         private static readonly Func<string, bool> IsSystemAssembly = name => name.Contains("Microsoft") || name.Contains("System") || name.Contains("mscorlib");
@@ -92,10 +91,7 @@ namespace BridgeVs.Build
             if (!FS.FileSystem.File.Exists(assemblyLocation))
                 throw new Exception($"Assembly at location {assemblyLocation} doesn't exist");
 
-            _assemblyStream =
-                FS.FileSystem.File.Open(assemblyLocation, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-
-            _moduleDefinition = ModuleDefinition.ReadModule(_assemblyStream, GetReaderParameters());
+            _moduleDefinition = ModuleDefinition.ReadModule(assemblyLocation, GetReaderParameters());
 
         }
         #endregion
@@ -315,7 +311,7 @@ namespace BridgeVs.Build
             {
                 _moduleDefinition.Write(file, GetWriterParameters());
             }
-            _assemblyStream?.Dispose();
+            //_assemblyStream?.Dispose();
 
             return true;
         }
