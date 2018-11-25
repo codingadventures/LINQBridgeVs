@@ -55,7 +55,7 @@ namespace BridgeVs.DynamicVisualizers
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="vsVersion">The visual studio version</param>
-        internal void DeployLinqScript(Message message, string vsVersion)
+        internal string DeployLinqScript(Message message, string vsVersion)
         {
             try
             {
@@ -79,6 +79,8 @@ namespace BridgeVs.DynamicVisualizers
                 FS.FileSystem.File.WriteAllText(fileName, linqQueryText);
                 
                 Log.Write("LinqQuery Successfully deployed");
+
+                return fileName;
             }
             catch (Exception e)
             {
@@ -143,9 +145,8 @@ namespace BridgeVs.DynamicVisualizers
             {
                 Message message = GetMessage(objectProvider);
 
-                DeployLinqScript(message, vsVersion);
+                string linqQueryFileName = DeployLinqScript(message, vsVersion);
 
-                string linqQueryFileName = Path.Combine(CommonFolderPaths.DefaultLinqPadQueryFolder, message.AssemblyName, message.FileName);
                 string linqPadInstallationPath = CommonRegistryConfigurations.GetLINQPadInstallationPath(vsVersion);
 
                 OpenLinqPad(linqQueryFileName, linqPadInstallationPath);

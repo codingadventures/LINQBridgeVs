@@ -46,7 +46,8 @@ namespace BridgeVs.DynamicVisualizers.Template
             _typeName = message.TypeName;
             _assemblies = message.ReferencedAssemblies;
             _typeToRetrieveFullName = TypeNameHelper.RemoveSystemNamespaces(message.TypeFullName);
-            _typeName = _typeToRetrieveFullName.Contains("AnonymousType") ? "object" : _typeToRetrieveFullName;
+            //if the type is anonymous or it's a nested class then use the generic object
+            _typeName = _typeToRetrieveFullName.Contains("AnonymousType") || _typeToRetrieveFullName.Contains("+") ? "object" : _typeToRetrieveFullName;
             _serializationType = message.SerializationOption;
         }
     }
