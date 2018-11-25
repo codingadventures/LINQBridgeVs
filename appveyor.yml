@@ -14,9 +14,9 @@ platform: Any CPU
 install:
 - cmd: git submodule update --init --recursive
 before_build:
-- ps: nuget restore c:\projects\linqbridgevs\src\BridgeVs.Tests.sln
+- ps: nuget restore c:\projects\linqbridgevs\src\BridgeVs.sln
 build:
-  project: src\BridgeVs.Tests.sln
+  project: src\BridgeVs.sln
   parallel: true
   verbosity: normal
 environment:
@@ -28,6 +28,6 @@ test_script:
 - ps: |
     if ($env:CONFIGURATION -eq "Test") 
     {
-       $args = c:\projects\linqbridgevs\Lib\Typemock\TMockRunner.exe -deploy c:\projects\linqbridgevs\Lib\Typemock\AutoDeploy -register $env:COMPANY_NAME $env:LICENSE vstest.console.exe "Test\BridgeVs.Build.Test\bin\Test\BridgeVs.Build.Test.dll" "Test\BridgeVs.DynamicVisualizers.Test\bin\Test\BridgeVs.DynamicVisualizers.Test.dll" "Test\BridgeVs.Grapple.Test\bin\Test\BridgeVs.Grapple.Test.dll" "Test\BridgeVs.VsExtension.Helper.Test\bin\Test\BridgeVs.VsPackage.Helper.Test.dll" /logger:Appveyor /TestCaseFilter:"TestCategory=UnitTest"
+       $args = c:\projects\linqbridgevs\Lib\Typemock\TMockRunner.exe -deploy c:\projects\linqbridgevs\Lib\Typemock\AutoDeploy -register $env:COMPANY_NAME $env:LICENSE vstest.console.exe "Test\BridgeVs.Build.Test\bin\Test\BridgeVs.UnitTest.dll" /logger:Appveyor /TestCaseFilter:"TestCategory=UnitTest"
        Start-Process powershell -Verb runAs -ArgumentList '$args'
     }
