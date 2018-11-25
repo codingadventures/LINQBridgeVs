@@ -311,7 +311,6 @@ namespace BridgeVs.Build
                 _moduleDefinition.Attributes &= ~ModuleAttributes.StrongNameSigned;
             }
 
-            using (Stream file = FS.FileSystem.FileStream.Create(_assemblyLocation, FileMode.Open, FileAccess.ReadWrite))
             using (Stream file = FS.FileSystem.File.OpenWrite(_assemblyLocation))
             {
                 _moduleDefinition.Write(file, GetWriterParameters());
