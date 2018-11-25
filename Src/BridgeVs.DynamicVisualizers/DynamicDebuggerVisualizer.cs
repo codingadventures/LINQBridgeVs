@@ -70,14 +70,13 @@ namespace BridgeVs.DynamicVisualizers
                     FS.FileSystem.Directory.CreateDirectory(targetFolder);
 
                 string fileName = FindAvailableFileName(targetFolder, message.FileName);
-
-                string linqPadScriptFilePath = Path.Combine(targetFolder, message.FileName);
-                Log.Write("linqPadScriptPath: {0}", linqPadScriptFilePath);
+                 
+                Log.Write("linqPadScriptPath: {0}", fileName);
 
                 Inspection linqQuery = new Inspection(message);
                 string linqQueryText = linqQuery.TransformText();
 
-                FS.FileSystem.File.WriteAllText(linqPadScriptFilePath, linqQueryText);
+                FS.FileSystem.File.WriteAllText(fileName, linqQueryText);
                 
                 Log.Write("LinqQuery Successfully deployed");
             }
@@ -89,7 +88,7 @@ namespace BridgeVs.DynamicVisualizers
             }
         }
 
-        private string FindAvailableFileName(string targetFolder, string fileName)
+        private static string FindAvailableFileName(string targetFolder, string fileName)
         {
             int fileCount = 0;
             string path = Path.Combine(targetFolder, fileName);

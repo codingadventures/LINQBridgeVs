@@ -48,9 +48,9 @@ namespace BridgeVs.UnitTest.Build.Tasks
         private const string VsVersion15 = "15.0";
 
         private static readonly MockFileSystem MockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
-    {
-        { DebuggerVisualizerAssemblyLocation, new MockFileData(DebuggerVisualizerAssemblyByte) }
-    });
+        {
+            {DebuggerVisualizerAssemblyLocation, new MockFileData(DebuggerVisualizerAssemblyByte)}
+        });
 
         private static string AssemblyModelLocation => typeof(CustomType1).Assembly.Location;
 
@@ -110,13 +110,7 @@ namespace BridgeVs.UnitTest.Build.Tasks
             Isolate.WhenCalled(() => CommonRegistryConfigurations.IsErrorTrackingEnabled("")).WillReturn(false);
             Isolate.WhenCalled(() => CommonRegistryConfigurations.IsLoggingEnabled("")).WillReturn(false);
         }
-
-        //[TestCleanup]
-        //public void TestCleanup()
-        //{
-            
-        //}
-
+        
         [TestMethod]
         [TestCategory("UnitTest")]
         public void Mapper_Build_Test_V11_Should_Succeed()

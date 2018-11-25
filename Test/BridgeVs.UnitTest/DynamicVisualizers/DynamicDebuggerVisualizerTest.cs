@@ -23,31 +23,29 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.IO.Abstractions;
-using System.IO.Abstractions.TestingHelpers;
-using System.Linq;
-using System.Text.RegularExpressions;
 using BridgeVs.DynamicVisualizers;
 using BridgeVs.DynamicVisualizers.Template;
 using BridgeVs.Shared.Common;
-using BridgeVs.Shared.FileSystem;
 using BridgeVs.Shared.Options;
 using BridgeVs.UnitTest.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.IO.Abstractions.TestingHelpers;
+using System.Linq;
+using System.Text.RegularExpressions;
 using TypeMock.ArrangeActAssert;
+using FS = BridgeVs.Shared.FileSystem.FileSystemFactory;
 
 namespace BridgeVs.UnitTest.DynamicVisualizers
 {
     [TestClass]
+    [Isolated]
     public class DynamicDebuggerVisualizerTest
     {
-        private readonly Message _message = new Message(Guid.NewGuid().ToString(), SerializationOption.BinarySerializer, typeof(CustomType1));
-
-        private static IFileSystem _fileSystem;
-
+        private static readonly Message Message = new Message(Guid.NewGuid().ToString(), SerializationOption.BinarySerializer, typeof(CustomType1));
+        private static readonly MockFileSystem MockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>());
         private const string AnonymousListLinqScript = @"
         <Query Kind=""Program"">
         <Namespace>System</Namespace>
@@ -85,13 +83,12 @@ namespace BridgeVs.UnitTest.DynamicVisualizers
         [ClassInitialize]
         public static void Init(TestContext ctx)
         {
-            _fileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
-            {
-                { @"c:\myfile.txt", new MockFileData("Testing is meh.") },
-                { @"c:\demo\jQuery.js", new MockFileData("some js") },
-                { @"c:\demo\image.gif", new MockFileData(new byte[] { 0x12, 0x34, 0x56, 0xd2 }) }
-            });
-            Isolate.WhenCalled(() => FileSystemFactory.FileSystem).WillReturn(_fileSystem);
+            string dstScriptPath = CommonFolderPaths.DefaultLinqPadQueryFolder;
+
+            string targetFolder = Path.Combine(dstScriptPath, Message.AssemblyName);
+            MockFileSystem.AddDirectory(targetFolder);
+
+            Isolate.WhenCalled(() => FS.FileSystem).WillReturn(MockFileSystem);
         }
 
         [TestMethod]
@@ -99,13 +96,30 @@ namespace BridgeVs.UnitTest.DynamicVisualizers
         public void DeployLinqScriptTest()
         {
             DynamicDebuggerVisualizer cVisualizerObjectSource = new DynamicDebuggerVisualizer();
-            cVisualizerObjectSource.DeployLinqScript(_message, "15.0");
+            cVisualizerObjectSource.DeployLinqScript(Message, "15.0");
 
             string dstScriptPath = CommonFolderPaths.DefaultLinqPadQueryFolder;
 
-            string fileNamePath = Path.Combine(dstScriptPath, _message.AssemblyName, _message.FileName);
+            string fileNamePath = Path.Combine(dstScriptPath, Message.AssemblyName, Message.FileName);
 
-            Assert.IsTrue(_fileSystem.File.Exists(fileNamePath));
+            Assert.IsTrue(FS.FileSystem.File.Exists(fileNamePath + ".linq"));
+        }
+
+        [TestMethod]
+        [TestCategory("UnitTest")]
+        public void DeployLinqScriptTest_Duplicate()
+        {
+
+            string dstScriptPath = CommonFolderPaths.DefaultLinqPadQueryFolder;
+            string targetFolder = Path.Combine(dstScriptPath, Message.AssemblyName);
+            MockFileSystem.AddFile(Path.Combine(targetFolder, Message.FileName + ".linq"), new MockFileData(""));
+
+            DynamicDebuggerVisualizer cVisualizerObjectSource = new DynamicDebuggerVisualizer();
+            cVisualizerObjectSource.DeployLinqScript(Message, "15.0");
+
+            string fileNamePath = Path.Combine(dstScriptPath, Message.AssemblyName, Message.FileName);
+
+            Assert.IsTrue(FS.FileSystem.File.Exists(fileNamePath + "_1.linq"));
         }
 
         [TestMethod]
@@ -124,7 +138,7 @@ namespace BridgeVs.UnitTest.DynamicVisualizers
             Inspection linqQuery = new Inspection(message);
             string linqQueryText = linqQuery.TransformText();
 
-            bool linqIsEqual = CompareNormalisedString(linqQueryText, linqToCompare);
+            bool linqIsEqual = CompareNormalizedString(linqQueryText, linqToCompare);
             Assert.IsTrue(linqIsEqual);
         }
 
@@ -141,11 +155,11 @@ namespace BridgeVs.UnitTest.DynamicVisualizers
             Inspection linqQuery = new Inspection(message);
             string linqQueryText = linqQuery.TransformText();
 
-            bool linqIsEqual = CompareNormalisedString(linqQueryText, linqToCompare);
+            bool linqIsEqual = CompareNormalizedString(linqQueryText, linqToCompare);
             Assert.IsTrue(linqIsEqual);
         }
-        
-        private static bool CompareNormalisedString(string str1, string str2)
+
+        private static bool CompareNormalizedString(string str1, string str2)
         {
             string normalized1 = Regex.Replace(str1, @"\s", "");
             string normalized2 = Regex.Replace(str2, @"\s", "");
