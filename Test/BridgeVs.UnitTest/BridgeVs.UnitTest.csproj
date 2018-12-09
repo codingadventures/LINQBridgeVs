@@ -95,6 +95,10 @@
     <Compile Include="Build\Tasks\CleanBuildTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Src\BridgeVs.AsyncVsPackage\BridgeVs.VisualStudio.AsyncExtension.csproj">
+      <Project>{2280f0c6-14f2-47c1-ade8-bfa1864c1288}</Project>
+      <Name>BridgeVs.VisualStudio.AsyncExtension</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Src\BridgeVs.Build\BridgeVs.Build.csproj">
       <Project>{276f3935-e0ca-450f-a55f-aed56dc2024e}</Project>
       <Name>BridgeVs.Build</Name>
@@ -106,10 +110,6 @@
     <ProjectReference Include="..\..\Src\BridgeVs.Shared\BridgeVs.Shared.csproj">
       <Project>{bc10f93a-5da2-44f8-ae5e-5603cb46b548}</Project>
       <Name>BridgeVs.Shared</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Src\BridgeVs.VsPackage.Helper\BridgeVs.VsPackage.Helper.csproj">
-      <Project>{0fa0053b-ab53-40df-a060-6dcc22568a23}</Project>
-      <Name>BridgeVs.VsPackage.Helper</Name>
     </ProjectReference>
     <ProjectReference Include="..\BridgeVs.UnitTest.Model\BridgeVs.UnitTest.Model.csproj">
       <Project>{bf2d610c-bd8f-4c1c-a23d-6b213e6699f3}</Project>

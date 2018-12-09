@@ -78,6 +78,13 @@ namespace BridgeVs.Shared.Options
                         MsBuildVersion = "v15.0",
                         CommonReferenceAssembliesLocation =new List<string> {  Path.Combine(CommonFolderPaths.VisualStudio2017CommPath, CommonFolderPaths.CommonReferenceAssembliesPath), Path.Combine(CommonFolderPaths.VisualStudio2017EntPath, CommonFolderPaths.CommonReferenceAssembliesPath), Path.Combine(CommonFolderPaths.VisualStudio2017ProPath, CommonFolderPaths.CommonReferenceAssembliesPath)}
                     }
+                },
+                {
+                    "16.0", new Settings
+                    {
+                        DebuggerVisualizerDestinationFolder = CommonFolderPaths.Vs2019DebuggerVisualizerDestinationFolder,
+                        MsBuildVersion = "v16.0"
+                    }
                 }
             };
         }

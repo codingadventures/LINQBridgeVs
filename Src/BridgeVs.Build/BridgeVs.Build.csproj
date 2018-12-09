@@ -53,7 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Lib\SharpRaven\src\app\SharpRaven\SharpRaven.csproj">
-      <Project>{36fcaf4d-911d-41a8-8303-e31527d3149f}</Project>
+      <Project>{31fe81f8-6e49-432c-b0b2-658e76f96983}</Project>
       <Name>SharpRaven</Name>
     </ProjectReference>
     <ProjectReference Include="..\BridgeVs.DynamicVisualizers\BridgeVs.DynamicVisualizers.csproj">

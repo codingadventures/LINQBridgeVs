@@ -77,6 +77,7 @@ namespace BridgeVs.Shared.Common
         public static readonly string Vs2013DebuggerVisualizerDestinationFolder = Documents + @"\Visual Studio 2013\Visualizers\";
         public static readonly string Vs2015DebuggerVisualizerDestinationFolder = Documents + @"\Visual Studio 2015\Visualizers\";
         public static readonly string Vs2017DebuggerVisualizerDestinationFolder = Documents + @"\Visual Studio 2017\Visualizers\";
+        public static readonly string Vs2019DebuggerVisualizerDestinationFolder = Documents + @"\Visual Studio 2019\Visualizers\";
 
         public static string DefaultLinqPadQueryFolder
         {
@@ -108,7 +109,7 @@ namespace BridgeVs.Shared.Common
                 return folders;
             }
         }
-
+        
         static CommonFolderPaths()
         {
 
