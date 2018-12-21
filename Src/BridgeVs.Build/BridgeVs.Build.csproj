@@ -44,6 +44,9 @@
     <AssemblyOriginatorKeyFile>..\BridgeVs.AsyncVsPackage\Key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\BridgeVs.Shared\Properties\SharedAssemblyProperties.cs">
+      <Link>Properties\SharedAssemblyProperties.cs</Link>
+    </Compile>
     <Compile Include="SInjection.cs" />
     <Compile Include="Tasks\CleanBuildTask.cs" />
     <Compile Include="Tasks\MapperBuildTask.cs" />

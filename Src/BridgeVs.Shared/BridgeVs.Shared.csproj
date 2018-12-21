@@ -75,6 +75,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Options\SerializationOption.cs" />
     <Compile Include="Options\VisualStudioOption.cs" />
+    <Compile Include="Properties\SharedAssemblyProperties.cs" />
     <Compile Include="Serialization\BinarySerializer.cs" />
     <Compile Include="Serialization\IServiceSerializer.cs" />
     <Compile Include="Serialization\JsonSerializer.cs" />

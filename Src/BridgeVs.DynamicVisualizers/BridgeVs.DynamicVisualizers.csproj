@@ -79,6 +79,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\BridgeVs.Shared\Properties\SharedAssemblyProperties.cs">
+      <Link>Properties\SharedAssemblyProperties.cs</Link>
+    </Compile>
     <Compile Include="DynamicObjectSource.cs" />
     <Compile Include="DynamicDebuggerVisualizer.cs" />
     <Compile Include="Forms\TemporaryForm.cs">
