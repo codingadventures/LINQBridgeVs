@@ -28,7 +28,6 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
-using BridgeVs.Shared.Common;
 using BridgeVs.VsPackage.Helper;
 using BridgeVs.VsPackage.Helper.Command;
 using BridgeVs.VsPackage.Helper.Configuration;
@@ -56,6 +55,7 @@ namespace BridgeVs.VisualStudio.AsyncExtension
         {
             get
             {
+                Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
                 Projects projects = _application.Solution.Projects;
                 if (projects == null)
                     return Enumerable.Empty<Project>();
@@ -97,6 +97,8 @@ namespace BridgeVs.VisualStudio.AsyncExtension
 
         private CommandStates GetStatus(CommandAction action)
         {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+
             CommandStates result = CommandStates.Visible;
 
             bool isBridgeVsConfigured = PackageConfigurator.IsBridgeVsConfigured(_application.Version);
@@ -104,7 +106,9 @@ namespace BridgeVs.VisualStudio.AsyncExtension
             if (!isBridgeVsConfigured)
                 return result; //just show it as visible
 
-            bool isSolutionEnabled = CommonRegistryConfigurations.IsSolutionEnabled(SolutionName, _application.Version);
+            string solutionDir = Path.GetDirectoryName(_application.Solution.FileName);
+            string directoryTarget = Path.Combine(solutionDir, "Directory.Build.targets");
+            bool isSolutionEnabled = File.Exists(directoryTarget);
 
             if (isSolutionEnabled && action == CommandAction.Disable || !isSolutionEnabled && action == CommandAction.Enable)
                 result |= CommandStates.Enabled;

@@ -48,12 +48,7 @@ namespace BridgeVs.Build.Tasks
         public bool Execute()
         {
             Log.VisualStudioVersion = VisualStudioVer;
-
-            if (!CommonRegistryConfigurations.IsSolutionEnabled(SolutionName, VisualStudioVer))
-            {
-                return true;
-            }
-
+            
             try
             {
                 string snkCertificate = File.Exists(Snk) ? Snk : null;

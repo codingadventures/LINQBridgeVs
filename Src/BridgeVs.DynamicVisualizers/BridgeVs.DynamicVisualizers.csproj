@@ -13,6 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,12 +23,13 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\BridgeVs.VsPackage\Key.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\BridgeVs.AsyncVsPackage\Key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Test|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -37,6 +39,7 @@
     <DefineConstants>TRACE;DEBUG;TEST</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Deploy|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -46,6 +49,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DebugSymbols>true</DebugSymbols>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -64,6 +68,12 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Abstractions, Version=2.1.0.256, Culture=neutral, PublicKeyToken=96bf224d23c43e59, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.Abstractions.2.1.0.256\lib\net40\System.IO.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.3.0\lib\portable-net45+win8+wp8+wpa81\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.3.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -111,6 +121,7 @@
     <ProjectReference Include="..\..\Lib\SharpRaven\src\app\SharpRaven\SharpRaven.csproj">
       <Project>{36fcaf4d-911d-41a8-8303-e31527d3149f}</Project>
       <Name>SharpRaven</Name>
+      <AdditionalProperties>TargetFramework=net40</AdditionalProperties>
     </ProjectReference>
     <ProjectReference Include="..\BridgeVs.Shared\BridgeVs.Shared.csproj">
       <Project>{bc10f93a-5da2-44f8-ae5e-5603cb46b548}</Project>

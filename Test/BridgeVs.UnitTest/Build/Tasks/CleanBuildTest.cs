@@ -71,7 +71,6 @@ namespace BridgeVs.UnitTest.Build.Tasks
         public void Init()
         {
             Isolate.WhenCalled(() => FS.FileSystem).WillReturn(new MockFileSystem());
-            Isolate.WhenCalled(() =>CommonRegistryConfigurations.IsSolutionEnabled("", "")).WillReturn(true);
             Isolate.WhenCalled(() =>CommonRegistryConfigurations.IsErrorTrackingEnabled("")).WillReturn(false);
             Isolate.WhenCalled(() =>CommonRegistryConfigurations.IsLoggingEnabled("")).WillReturn(false);
         }

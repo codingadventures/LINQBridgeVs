@@ -35,7 +35,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BridgeVs.VisualStudio.AsyncExtension</RootNamespace>
     <AssemblyName>BridgeVs.VisualStudio.AsyncExtension</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <GeneratePkgDefFile>true</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
     <IncludeDebugSymbolsInVSIXContainer>true</IncludeDebugSymbolsInVSIXContainer>
@@ -283,6 +283,12 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Lib\SharpRaven\src\app\SharpRaven\SharpRaven.csproj">
+      <Project>{31fe81f8-6e49-432c-b0b2-658e76f96983}</Project>
+      <Name>SharpRaven</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <AdditionalProperties>TargetFramework=net40</AdditionalProperties>
+    </ProjectReference>
     <ProjectReference Include="..\BridgeVs.Build\BridgeVs.Build.csproj">
       <Project>{276f3935-e0ca-450f-a55f-aed56dc2024e}</Project>
       <Name>BridgeVs.Build</Name>

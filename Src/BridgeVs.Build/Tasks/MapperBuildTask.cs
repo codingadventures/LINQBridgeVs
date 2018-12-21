@@ -81,27 +81,16 @@ namespace BridgeVs.Build.Tasks
         {
             Log.VisualStudioVersion = VisualStudioVer;
 
-            if (!CommonRegistryConfigurations.IsSolutionEnabled(SolutionName, VisualStudioVer))
-            {
-                return true;
-            }
-
             Log.Write($"Visualizer Destination Folder Path {VisualizerDestinationFolder}");
-
 
             Create3RdPartyVisualizers();
 
-            //if dot net visualizer exists already don't create it again
-            if (!FS.FileSystem.File.Exists(Path.Combine(VisualizerDestinationFolder, DotNetVisualizerAssemblyName)))
-            {
-                //it creates a mapping for all of the .net types that are worth exporting
-                CreateDotNetFrameworkVisualizer();
-            }
+            //it creates a mapping for all of the .net types that are worth exporting
+            CreateDotNetFrameworkVisualizer();
 
             CreateDebuggerVisualizer();
 
             return true;
-
         }
 
         private void Create3RdPartyVisualizers()
@@ -183,6 +172,12 @@ namespace BridgeVs.Build.Tasks
 
         private void CreateDotNetFrameworkVisualizer()
         {
+
+            //if dot net visualizer exists already don't create it again
+            if (FS.FileSystem.File.Exists(Path.Combine(VisualizerDestinationFolder, DotNetVisualizerAssemblyName)))
+            {
+                return;
+            }
             try
             {
                 //this is where the current assembly being built is saved

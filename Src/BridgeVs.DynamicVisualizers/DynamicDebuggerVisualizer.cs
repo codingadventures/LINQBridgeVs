@@ -49,7 +49,7 @@ namespace BridgeVs.DynamicVisualizers
     public class DynamicDebuggerVisualizer : DialogDebuggerVisualizer
     {
         private const int SwShowNormal = 1;
-        
+
         /// <summary>
         /// Deploys the dynamically generated linq script.
         /// </summary>
@@ -70,14 +70,14 @@ namespace BridgeVs.DynamicVisualizers
                     FS.FileSystem.Directory.CreateDirectory(targetFolder);
 
                 string fileName = FindAvailableFileName(targetFolder, message.FileName);
-                 
+
                 Log.Write("linqPadScriptPath: {0}", fileName);
 
                 Inspection linqQuery = new Inspection(message);
                 string linqQueryText = linqQuery.TransformText();
 
                 FS.FileSystem.File.WriteAllText(fileName, linqQueryText);
-                
+
                 Log.Write("LinqQuery Successfully deployed");
 
                 return fileName;
@@ -186,9 +186,9 @@ namespace BridgeVs.DynamicVisualizers
             if (dataStream.Length == 0)
                 return null;
 
-            BinaryFormatter formatter = new BinaryFormatter();
-            Message message = (Message)formatter.Deserialize(dataStream);
-
+            BinaryFormatter f = new BinaryFormatter();
+            Message message = (Message)f.Deserialize(dataStream);
+          
             Log.Write($"Message content - \t {message}");
 
             return message;

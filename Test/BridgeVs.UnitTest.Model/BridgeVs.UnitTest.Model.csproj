@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test|AnyCPU'">
     <OutputPath>bin\Test\</OutputPath>
@@ -29,12 +30,13 @@
     <DebugType>full</DebugType>
     <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
     <PlatformTarget>x86</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\..\Src\BridgeVs.VsPackage\Key.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\Src\BridgeVs.AsyncVsPackage\Key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.Core" />

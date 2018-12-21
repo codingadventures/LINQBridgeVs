@@ -76,6 +76,7 @@ namespace BridgeVs.VsPackage.Helper.Command
                 if (project.Object is VSProject vsProject && vsProject.References != null)
                 {
                     references = from Reference reference in vsProject.References
+                                 where reference.Path != null
                                  where reference.SourceProject == null //it means it's an assembly reference
                                  where !reference.Path.Contains(".NETFramework") && !reference.Path.Contains("Microsoft") //no .net framework assembly
                                  select reference.Path;
