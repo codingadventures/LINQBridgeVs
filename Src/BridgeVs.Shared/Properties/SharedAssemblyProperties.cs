@@ -22,18 +22,10 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
-
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-// General Information about an assembly is controlled through the following 
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
-[assembly: AssemblyTitle("BridgeVs.DynamicVisualizers")]
-[assembly: AssemblyDescription("LINQBridgeVs Dynamic Visualizer")] 
-[assembly: AssemblyProduct("BridgeVs.DynamicVisualizers")] 
- 
-#if TEST
-[assembly: InternalsVisibleTo("BridgeVs.UnitTest, PublicKey=0024000004800000940000000602000000240000525341310004000001000100f575ceee4c0b7992660f21a6c2a09c93eac56d9dad2f20caa2d48bf5d904c9b2af5800ba01cae7b37299bff9486a8b97047959c3fbe16de730cf3397f4bafaefc745dba1ce34cedf27698f2dc96159eaa27eef4093f6c35236f30239a4841b864ea734ed3582478cc4214d76497ceb974ac920f35043de0913a149d1107bd3a1")]
-#endif
+[assembly: AssemblyCopyright("Copyright © Coding Adventures 2013 - 2018")]
+[assembly: AssemblyCompany("Coding Adventures")]
+[assembly: ComVisible(false)]
+[assembly: AssemblyVersion("2.0.*")]

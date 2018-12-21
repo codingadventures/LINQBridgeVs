@@ -23,17 +23,29 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
+using System;
 
-// General Information about an assembly is controlled through the following 
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
-[assembly: AssemblyTitle("BridgeVs.DynamicVisualizers")]
-[assembly: AssemblyDescription("LINQBridgeVs Dynamic Visualizer")] 
-[assembly: AssemblyProduct("BridgeVs.DynamicVisualizers")] 
- 
-#if TEST
-[assembly: InternalsVisibleTo("BridgeVs.UnitTest, PublicKey=0024000004800000940000000602000000240000525341310004000001000100f575ceee4c0b7992660f21a6c2a09c93eac56d9dad2f20caa2d48bf5d904c9b2af5800ba01cae7b37299bff9486a8b97047959c3fbe16de730cf3397f4bafaefc745dba1ce34cedf27698f2dc96159eaa27eef4093f6c35236f30239a4841b864ea734ed3582478cc4214d76497ceb974ac920f35043de0913a149d1107bd3a1")]
-#endif
+namespace BridgeVs.VsPackage.Helper.Configuration
+{
+    internal static class MsBuildVersionHelper
+    {
+        public static string GetMsBuildVersion(string vsVersion)
+        {
+            switch (vsVersion)
+            {
+                case "11.0":
+                    return "v4.0";
+                case "12.0":
+                    return "v12.0";
+                case "14.0":
+                    return "v14.0";
+                case "15.0":
+                    return "v15.0";
+                case "16.0":
+                    return "v16.0";
+                default :
+                    throw new ArgumentException("Visual Studio Version not Supported", nameof(vsVersion));
+            }
+        }
+    }
+}

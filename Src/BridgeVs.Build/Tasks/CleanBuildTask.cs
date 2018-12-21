@@ -51,12 +51,7 @@ namespace BridgeVs.Build.Tasks
         public bool Execute()
         {
             Log.VisualStudioVersion = VisualStudioVer;
-
-            if (!CommonRegistryConfigurations.IsSolutionEnabled(SolutionName, VisualStudioVer))
-            {
-                return true;
-            }
-
+             
             try
             {
                 string visualizerAssemblyName = VisualizerAssemblyNameFormat.GetTargetVisualizerAssemblyName(VisualStudioVer, Assembly);

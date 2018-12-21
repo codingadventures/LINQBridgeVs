@@ -53,18 +53,6 @@ namespace BridgeVs.Shared.Common
             }
         }
 
-        public static bool IsSolutionEnabled(string solutionName, string vsVersion)
-        {
-            string keyPath = string.Format(GetRegistryKey(EnabledProjectsRegistryKey, vsVersion, solutionName));
-
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(keyPath, false))
-            {
-                if (key == null) return false;
-                string value = (string)key.GetValue("SolutionEnabled");
-                return value != null && Convert.ToBoolean(value);
-            }
-        }
-
         public static void BridgeSolution(string solutionName, string vsVersion, List<BridgeProjectInfo> parameters)
         {
             string keyPath = string.Format(GetRegistryKey(EnabledProjectsRegistryKey, vsVersion, solutionName));

@@ -23,17 +23,15 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
+using System;
 
-// General Information about an assembly is controlled through the following 
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
-[assembly: AssemblyTitle("BridgeVs.DynamicVisualizers")]
-[assembly: AssemblyDescription("LINQBridgeVs Dynamic Visualizer")] 
-[assembly: AssemblyProduct("BridgeVs.DynamicVisualizers")] 
- 
-#if TEST
-[assembly: InternalsVisibleTo("BridgeVs.UnitTest, PublicKey=0024000004800000940000000602000000240000525341310004000001000100f575ceee4c0b7992660f21a6c2a09c93eac56d9dad2f20caa2d48bf5d904c9b2af5800ba01cae7b37299bff9486a8b97047959c3fbe16de730cf3397f4bafaefc745dba1ce34cedf27698f2dc96159eaa27eef4093f6c35236f30239a4841b864ea734ed3582478cc4214d76497ceb974ac920f35043de0913a149d1107bd3a1")]
-#endif
+namespace BridgeVs.VisualStudio.AsyncExtension
+{
+    public static class GuidList
+    {
+        public const string GuidBridgeVsExtensionPkgString = "fa136bfd-0b1d-4721-9159-1dbefcb5c4fc";
+        private const string GuidBridgeVsExtensionCmdSetString = "d30046ec-11cc-48e5-bcfa-ca67686f0a45";
+
+        public static readonly Guid GuidBridgeVsExtensionCmdSet = new Guid(GuidBridgeVsExtensionCmdSetString);
+    };
+}

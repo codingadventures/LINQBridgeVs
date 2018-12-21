@@ -41,8 +41,7 @@ namespace BridgeVs.UnitTest.Build.Tasks
             Isolate.NonPublic.WhenCalled(typeof(ModuleDefinition), "GetFileStream")
                 .WithExactArguments(args)
                 .WillReturn(access); 
-
-            Isolate.WhenCalled(() => CommonRegistryConfigurations.IsSolutionEnabled("", "")).WillReturn(true);
+            
             Isolate.WhenCalled(() => CommonRegistryConfigurations.Map3RdPartyAssembly("", "")).WillReturn(false);
             Isolate.WhenCalled(() => CommonRegistryConfigurations.IsErrorTrackingEnabled("")).WillReturn(false);
             Isolate.WhenCalled(() => CommonRegistryConfigurations.IsLoggingEnabled("")).WillReturn(false);
