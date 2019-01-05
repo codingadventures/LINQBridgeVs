@@ -19,7 +19,7 @@
     </Installation>
     <Dependencies>
         <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
-        <Dependency Id="Microsoft.VisualStudio.MPF.16.0" DisplayName="Visual Studio MPF 16.0" d:Source="Installed" Version="[16.0,17.0)" />
+        <Dependency Id="Microsoft.VisualStudio.MPF.14.0" DisplayName="Visual Studio MPF 14.0" d:Source="Installed" Version="[14.0,17.0)" />
     </Dependencies>
     <Prerequisites>
         <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,17.0)" DisplayName="Visual Studio core editor" />
@@ -29,5 +29,6 @@
         <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
         <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="Libs\Newtonsoft.Json.dll" AssemblyName="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed" TargetVersion="11.0.0.0" />
         <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="BridgeVs.Shared" Path="|BridgeVs.Shared|" AssemblyName="|BridgeVs.Shared;AssemblyName|" />
+        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="SharpRaven" Path="|SharpRaven|" AssemblyName="|SharpRaven;AssemblyName|" />
     </Assets>
 </PackageManifest>
