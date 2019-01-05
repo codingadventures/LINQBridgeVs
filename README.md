@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=@linqbridgevs&url=https://github.com/codingadventures/LINQBridgeVs&hashtags=VisualStudio,LINQPad,csharp,developers)
 
-<img width="250" src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Src/BridgeVs.VsPackage/LINQBridgeLogo.png?raw=true" align="right"/>
+<img width="250" src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Src/BridgeVs.AsyncVsPackage/LINQBridgeLogo.png?raw=true" align="right"/>
 
 LINQBridgeVs is a Visual Studio Extension compatible with Visual Studio from 2012 through 2017.
 It is a bridge between a Visual Studio debugging session and [LINQPad](http://www.linqpad.net). It creates, at compile time, a Custom Debugger Visualizer making the magnifying glass available for all of the public classes and structs. By clicking on the magnifying glass on an object instance, this will be transmitted over a bus and 'Dumped' out by LINQPad.
