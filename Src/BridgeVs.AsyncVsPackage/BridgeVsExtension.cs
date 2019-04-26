@@ -26,12 +26,14 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using BridgeVs.VsPackage.Helper;
 using BridgeVs.VsPackage.Helper.Command;
 using BridgeVs.VsPackage.Helper.Configuration;
 using EnvDTE;
+using Microsoft.VisualStudio;
 using Project = EnvDTE.Project;
 
 namespace BridgeVs.VisualStudio.AsyncExtension
@@ -55,17 +57,71 @@ namespace BridgeVs.VisualStudio.AsyncExtension
         {
             get
             {
+                List<Project> projects = new List<Project>();//AllProjects.ToList();
+                foreach (Project proj in _application.Solution.Projects)
+                {
+                    _findProjects(projects, proj);
+                }
                 Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
-                Projects projects = _application.Solution.Projects;
-                if (projects == null)
+                if (projects.Count == 0)
                     return Enumerable.Empty<Project>();
 
                 return from project in projects.Cast<Project>()
-                       where IsSupported(project.UniqueName)
+                       where (IsSupported(project.UniqueName) || IsSupported(project.FullName))
                        select project;
             }
         }
-        
+
+        IEnumerable<Project> _findProjects(IList<Project> projects, Object projectItem)
+        {
+            var proj = projectItem as Project;
+            var projItm = projectItem as ProjectItem;
+            if (proj != null)
+            {
+                Debug.WriteLine($"Project => {proj.Name} {proj.Kind}");
+            }
+
+            if (projItm != null)
+            {
+                Debug.WriteLine($"ProjectItem => {projItm.Name} {projItm.Kind}");
+            }
+            if (proj == null && projItm != null)
+            {
+                proj = projItm.SubProject;
+            }
+            if (proj != null)
+            {
+                Debug.WriteLine($"Resolved Project => {proj.Name} {proj.Kind}");
+            }
+            if (proj != null && (proj.Kind == VSConstants.UICONTEXT.CSharpProject_string
+                                 || proj.Kind == VSConstants.UICONTEXT.VBProject_string
+                                 || IsSupported(proj.UniqueName)))
+            {
+                projects.Add(proj);
+                return projects;
+            }
+            else if (proj != null && (proj.Kind == VSConstants.ItemTypeGuid.VirtualFolder_string
+                                      || proj.Kind == "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}")
+            )
+            {
+                foreach (ProjectItem itm in proj.ProjectItems)
+                {
+                    _findProjects(projects, itm);
+                }
+
+                return projects;
+            }
+            else if (proj == null && projItm != null && projItm.ProjectItems != null)
+            {
+                foreach (ProjectItem pi in projItm.ProjectItems)
+                {
+                    _findProjects(projects, pi);
+                }
+            }
+
+            return projects;
+        }
+
         private string SolutionName => Path.GetFileNameWithoutExtension(_application.Solution.FileName);
 
         public void Execute(CommandAction action)
