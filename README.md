@@ -9,17 +9,24 @@
 
 <img width="250" src="https://github.com/codingadventures/LINQBridgeVs/blob/master/Src/BridgeVs.AsyncVsPackage/LINQBridgeLogo.png?raw=true" align="right"/>
 
-LINQBridgeVs is a Visual Studio Extension compatible with Visual Studio from 2012 through 2017.
+LINQBridgeVs is a Visual Studio Extension compatible with Visual Studio from 2012 through 2019.
 It is a bridge between a Visual Studio debugging session and [LINQPad](http://www.linqpad.net). It creates, at compile time, a Custom Debugger Visualizer making the magnifying glass available for all of the public classes and structs. By clicking on the magnifying glass on an object instance, this will be transmitted over a bus and 'Dumped' out by LINQPad.
 <br><br>
 
-## Release Notes 1.4.7
-* Visualizer generation for third party assemblies [#25](https://github.com/codingadventures/LINQBridgeVs/issues/25). When enabled (it's off by default) LINQBridgeVs will map types in every referenced dlls for every project in a solution.
-* LINQBridgeVs will now display an error message for unsupported solutions. [#52](https://github.com/codingadventures/LINQBridgeVs/issues/52). .NET Core, .NET Standard and UWP are not supported because of a Visual Studio limitation. 
-* Added XmlSerialization [#50](https://github.com/codingadventures/LINQBridgeVs/issues/50). XmlSerialization has been added to the serialization methods used to transmit variables to LINQPad. This is useful to serialize objects that have xml content (XElement, XmlDocument etc).
-* Added support for AnonymousType [#46 Are anonymous types supported when used inside a list?](https://github.com/codingadventures/LINQBridgeVs/issues/46) and private nested classes.
-* Added Json.NET failover serialization [#56](https://github.com/codingadventures/LINQBridgeVs/issues/56) Should LINQBridgeVs fail to transmit the object using the chosen serialization method (Binary, Json or Xml)  it will try again using Json.NET. If Json.NET is set as the primary method, it will instead use Binary serialization.
-* Bug fixing [#41](https://github.com/codingadventures/LINQBridgeVs/issues/41) [#49](https://github.com/codingadventures/LINQBridgeVs/issues/49) [#55](https://github.com/codingadventures/LINQBridgeVs/issues/55) [#58](https://github.com/codingadventures/LINQBridgeVs/issues/58) 
+
+## Release Notes
+* _2.0_
+  * Adds support for Visual Studio 2019
+  * Drops support for Visual Studio 2012 to 2015
+  * Adds async loading to speed up Visual Studio loading times
+  
+* _1.4.7_
+  * Visualizer generation for third party assemblies [#25](https://github.com/codingadventures/LINQBridgeVs/issues/25). When enabled (it's off by default) LINQBridgeVs will map types in every referenced dlls for every project in a solution.
+  * LINQBridgeVs will now display an error message for unsupported solutions. [#52](https://github.com/codingadventures/LINQBridgeVs/issues/52). .NET Core, .NET Standard and UWP are not supported because of a Visual Studio limitation. 
+  * Added XmlSerialization [#50](https://github.com/codingadventures/LINQBridgeVs/issues/50). XmlSerialization has been added to the serialization methods used to transmit variables to LINQPad. This is useful to serialize objects that have xml content (XElement, XmlDocument etc).
+  * Added support for AnonymousType [#46 Are anonymous types supported when used inside a list?](https://github.com/codingadventures/LINQBridgeVs/issues/46) and private nested classes.
+  * Added Json.NET failover serialization [#56](https://github.com/codingadventures/LINQBridgeVs/issues/56) Should LINQBridgeVs fail to transmit the object using the chosen serialization method (Binary, Json or Xml)  it will try again using Json.NET. If Json.NET is set as the primary method, it will instead use Binary serialization.
+  * Bug fixing [#41](https://github.com/codingadventures/LINQBridgeVs/issues/41) [#49](https://github.com/codingadventures/LINQBridgeVs/issues/49) [#55](https://github.com/codingadventures/LINQBridgeVs/issues/55) [#58](https://github.com/codingadventures/LINQBridgeVs/issues/58) 
 
 ## Getting Started
 
@@ -40,16 +47,16 @@ Run the solution, set a breakpoint and hover the mouse pointer on any object ins
 
 ## Compatibility
 
-LINQBridgeVs is compatible with any Visual Studio edition from 2012 through 2017. It works only for **.NET Framework 4.0 onwards**. There is no support for .NET Framework 3.5 downwards, .NET Core or .NET Standard. This issue is due to a Visual Studio limitation hence this extension does not support .NET Core. 
+LINQBridgeVs is compatible with any Visual Studio edition from 2012 through 2019. The latest version 2.0 is only compatible with Visual Studio 2017 and 2019. It works only for **.NET Framework 4.0 onwards**. There is no support for .NET Framework 3.5 downwards, .NET Core or .NET Standard. This issue is due to a Visual Studio limitation hence this extension does not support .NET Core. 
 There is a feature request in the Visual Studio [Uservoice](https://visualstudio.uservoice.com/forums/121579-visual-studio-ide/suggestions/33344638-custom-debugger-visualizer-for-net-core-apps-in-v).
 
 ### Visual Studio 2017 Preview
 
-LINQBridgeVs is compatible with the preview version of Visual Studio 2017, but it needs a workaround in order to work. Please refer to my last comment on this issue [#47](https://github.com/codingadventures/LINQBridgeVs/issues/47#issuecomment-403206501).
+LINQBridgeVs 1.4.7 is compatible with the preview version of Visual Studio 2017, but it needs a workaround in order to work. Please refer to my last comment on this issue [#47](https://github.com/codingadventures/LINQBridgeVs/issues/47#issuecomment-403206501). This issue doesn't affect the latest version 2.0.
 
-## Configuration
+## Configuration up to Version 1.4.7
 
-Unfortunately an installer is not available yet, therefore Visual Studio needs to be configured in order to run the extension. This is done only once by the extension itself. 
+This steps is necessary for versions of LINQBridgeVs up to 1.4.7 and thus is no longer needed for LINQBridgeVS 2.0. Visual Studio needs to be configured in order to run the extension. This is done only once by the extension itself. 
 Only for the first time, Visual Studio must be run with Administrator privileges. If not, a form will appear asking to restart Visual Studio: 
 <br><br>
 <p align="center">
